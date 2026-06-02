@@ -1,0 +1,155 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Home" description="Wiki collectif : droits, opsec, résistance pour pratiques culturelles alternatives">
+  <!-- HERO -->
+  <section class="mb-16 relative">
+    <div class="absolute -inset-4 bg-gradient-to-r from-neon-green/10 via-transparent to-neon-pink/10 blur-3xl"></div>
+    
+    <div class="relative">
+      <div class="ascii-box mb-6 text-neon-green opacity-80">
+{`╔══════════════════════════════════════════════════════════════╗
+║                                                              ║
+║   ███████╗ ██████╗ ██╗   ██╗███╗   ██╗██████╗               ║
+║   ██╔════╝██╔═══██╗██║   ██║████╗  ██║██╔══██╗              ║
+║   ███████╗██║   ██║██║   ██║██╔██╗ ██║██║  ██║              ║
+║   ╚════██║██║   ██║██║   ██║██║╚██╗██║██║  ██║              ║
+║   ███████║╚██████╔╝╚██████╔╝██║ ╚████║██████╔╝              ║
+║   ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═══╝╚═════╝               ║
+║                                                              ║
+║   ███████╗██╗   ██╗███████╗████████╗███████╗███╗   ███╗     ║
+║   ██╔════╝╚██╗ ██╔╝██╔════╝╚══██╔══╝██╔════╝████╗ ████║     ║
+║   ███████╗ ╚████╔╝ ███████╗   ██║   █████╗  ██╔████╔██║     ║
+║   ╚════██║  ╚██╔╝  ╚════██║   ██║   ██╔══╝  ██║╚██╔╝██║     ║
+║   ███████║   ██║   ███████║   ██║   ███████╗██║ ╚═╝ ██║     ║
+║   ╚══════╝   ╚═╝   ╚══════╝   ╚═╝   ╚══════╝╚═╝     ╚═╝     ║
+║                                                              ║
+║       H A R D E N I N G   //   R E S I S T A N C E          ║
+║                                                              ║
+╚══════════════════════════════════════════════════════════════╝`}
+      </div>
+
+      <div class="text-sm font-mono text-dedsec-muted mb-2">
+        ▸ <span class="text-neon-cyan">INIT.SYSTEM</span> &nbsp;|&nbsp; <span class="text-neon-pink">v1.0.0</span> &nbsp;|&nbsp; <span class="text-neon-green">● ONLINE</span>
+      </div>
+
+      <p class="text-xl text-dedsec-text leading-relaxed mb-6 max-w-3xl">
+        Le <span class="text-neon-green font-bold">cerveau collectif</span> du mouvement free party. Ressources techniques, juridiques et stratégiques pour <span class="text-neon-pink">documenter</span>, <span class="text-neon-cyan">protéger</span> et <span class="text-neon-green">défendre</span> les droits des pratiques culturelles alternatives.
+      </p>
+
+      <div class="flex flex-wrap gap-3 mt-8">
+        <a href="/wiki/Urgence-immédiate" class="btn-neon no-underline">
+          🚨 URGENCE IMMÉDIATE
+        </a>
+        <a href="/wiki/Strategie-contre-ripost" class="btn-neon no-underline" style="border-color: #ff006e; color: #ff006e;">
+          ⚖️ CONTRE RIPOST
+        </a>
+        <a href="/wiki/Sécurite-Numerique" class="btn-neon no-underline" style="border-color: #00d9ff; color: #00d9ff;">
+          🔐 OPSEC
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS / MANIFEST -->
+  <section class="mb-16">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12">
+      <div class="card-neon">
+        <div class="text-3xl font-bold text-neon-green mb-1">48</div>
+        <div class="text-xs text-dedsec-muted uppercase tracking-widest">Pages Wiki</div>
+      </div>
+      <div class="card-neon">
+        <div class="text-3xl font-bold text-neon-pink mb-1">337</div>
+        <div class="text-xs text-dedsec-muted uppercase tracking-widest">Free parties / an</div>
+      </div>
+      <div class="card-neon">
+        <div class="text-3xl font-bold text-neon-cyan mb-1">30+</div>
+        <div class="text-xs text-dedsec-muted uppercase tracking-widest">Ans de mouvement</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- NAVIGATION CARDS -->
+  <section class="mb-16">
+    <h2 class="mb-6">▸ PARCOURS D'UTILISATION</h2>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <a href="/wiki/Urgence-immédiate" class="card-neon no-underline group">
+        <div class="text-2xl mb-2">🚨</div>
+        <h3 class="text-neon-pink mb-2 group-hover:text-neon-green transition-colors">Urgence immédiate</h3>
+        <p class="text-sm text-dedsec-muted">GAV, saisie, contrôle. Procédures à suivre maintenant.</p>
+      </a>
+
+      <a href="/wiki/Strategie-contre-ripost" class="card-neon no-underline group">
+        <div class="text-2xl mb-2">⚖️</div>
+        <h3 class="text-neon-cyan mb-2 group-hover:text-neon-green transition-colors">Contre RIPOST</h3>
+        <p class="text-sm text-dedsec-muted">Loi mai 2026 : 2 ans prison + 30K€. Comment contester.</p>
+      </a>
+
+      <a href="/wiki/Sécurite-Numerique" class="card-neon no-underline group">
+        <div class="text-2xl mb-2">🔐</div>
+        <h3 class="text-neon-green mb-2 group-hover:text-neon-cyan transition-colors">Sécurité numérique</h3>
+        <p class="text-sm text-dedsec-muted">Signal, métadonnées, anonymisation. Les 4 règles critiques.</p>
+      </a>
+
+      <a href="/wiki/Modus-Operandi" class="card-neon no-underline group">
+        <div class="text-2xl mb-2">🎯</div>
+        <h3 class="text-neon-pink mb-2 group-hover:text-neon-green transition-colors">Modus Operandi</h3>
+        <p class="text-sm text-dedsec-muted">Failles légales, zones grises, techniques de contournement.</p>
+      </a>
+
+      <a href="/wiki/Histoire-&-Culture" class="card-neon no-underline group">
+        <div class="text-2xl mb-2">📜</div>
+        <h3 class="text-neon-cyan mb-2 group-hover:text-neon-green transition-colors">Histoire & Culture</h3>
+        <p class="text-sm text-dedsec-muted">Chronologie 1988-2026, sound systems, patrimoine.</p>
+      </a>
+
+      <a href="/wiki/Mobilisation" class="card-neon no-underline group">
+        <div class="text-2xl mb-2">📣</div>
+        <h3 class="text-neon-green mb-2 group-hover:text-neon-cyan transition-colors">Mobilisation</h3>
+        <p class="text-sm text-dedsec-muted">Templates de recours, argumentaires, contacts alliés.</p>
+      </a>
+    </div>
+  </section>
+
+  <!-- MANIFESTO -->
+  <section class="mb-16">
+    <div class="terminal">
+      <div class="text-neon-green mb-4 font-bold">▸ MANIFESTO.txt</div>
+      <p class="text-dedsec-text mb-4">
+        Le mouvement de la fête libre est confronté à une <span class="text-neon-pink">asymétrie de moyens sans précédent</span>. Face à une surveillance technologique de masse et un arsenal juridique qui se durcit, <span class="text-neon-green">l'ignorance est notre plus grande faiblesse</span>.
+      </p>
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+        <div class="border-l-2 border-neon-green pl-4">
+          <div class="text-neon-green font-bold mb-1 text-sm">[01] OUTILLER</div>
+          <div class="text-xs text-dedsec-muted">Méthodes concrètes pour se protéger des saisies, infiltrations et intimidation.</div>
+        </div>
+        <div class="border-l-2 border-neon-cyan pl-4">
+          <div class="text-neon-cyan font-bold mb-1 text-sm">[02] DOCUMENTER</div>
+          <div class="text-xs text-dedsec-muted">Archive factuelle et sourcée des pratiques répressives.</div>
+        </div>
+        <div class="border-l-2 border-neon-pink pl-4">
+          <div class="text-neon-pink font-bold mb-1 text-sm">[03] STRUCTURER</div>
+          <div class="text-xs text-dedsec-muted">Harmoniser les pratiques de résistance entre collectifs.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WARNING -->
+  <section class="mb-8">
+    <div class="warning-box">
+      <strong class="text-neon-pink">Note sur la sécurité :</strong> Ce wiki contient des informations sensibles. Ne publie jamais de données nominatives. Anonymise systématiquement les témoignages. Privilégie les faits sourcés.
+    </div>
+  </section>
+
+  <!-- QUOTE -->
+  <section class="text-center py-12">
+    <div class="text-2xl font-display italic text-dedsec-muted">
+      "<span class="text-neon-green">Free music</span> for <span class="text-neon-pink">free people</span>"
+    </div>
+    <div class="text-xs text-dedsec-muted mt-2 font-mono">▸ SPIRAL TRIBE</div>
+  </section>
+</Layout>

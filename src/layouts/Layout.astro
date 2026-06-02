@@ -1,0 +1,304 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+  category?: string;
+}
+
+const { title, description, category } = Astro.props;
+const currentPath = Astro.url.pathname;
+
+// Structure de navigation complète
+const navigation = [
+  {
+    section: 'ACCUEIL',
+    icon: '🏠',
+    links: [
+      { href: '/', label: 'Home', emoji: '◆' },
+      { href: '/wiki/Urgence-immédiate', label: 'Urgence immédiate', emoji: '🚨' },
+      { href: '/wiki/L\'esprit-des-teufeurs', label: 'L\'esprit des teufeurs', emoji: '✊' },
+    ]
+  },
+  {
+    section: 'CONTRE RIPOST',
+    icon: '⚖️',
+    links: [
+      { href: '/wiki/Strategie-contre-ripost', label: 'Stratégie contre RIPOST', emoji: '🛡️' },
+      { href: '/wiki/Contestation', label: 'Contester les amendes', emoji: '📋' },
+    ]
+  },
+  {
+    section: 'STRATÉGIE',
+    icon: '🎯',
+    links: [
+      { href: '/wiki/Stratégie-résistance', label: 'Vue d\'ensemble', emoji: '◇' },
+      { href: '/wiki/Juridique', label: 'Axe juridique', emoji: '⚖️' },
+      { href: '/wiki/Politique', label: 'Axe politique', emoji: '📢' },
+      { href: '/wiki/Sanitaire', label: 'Axe sanitaire', emoji: '🏥' },
+      { href: '/wiki/Organisationnel', label: 'Axe organisationnel', emoji: '🔧' },
+      { href: '/wiki/Culturel', label: 'Axe culturel', emoji: '🎵' },
+      { href: '/wiki/Coalitions', label: 'Coalitions', emoji: '🤝' },
+    ]
+  },
+  {
+    section: 'HISTOIRE & CULTURE',
+    icon: '📜',
+    links: [
+      { href: '/wiki/Histoire-&-Culture', label: 'Vue d\'ensemble', emoji: '◇' },
+      { href: '/wiki/Chronologie', label: 'Chronologie 1988-2026', emoji: '📅' },
+      { href: '/wiki/Sound-System', label: 'Sound Systems', emoji: '🔊' },
+      { href: '/wiki/Incidents-répressifs', label: 'Incidents répressifs', emoji: '⚠️' },
+      { href: '/wiki/Patrimoine-culturel', label: 'Patrimoine culturel', emoji: '🎨' },
+    ]
+  },
+  {
+    section: 'MOBILISATION',
+    icon: '📣',
+    links: [
+      { href: '/wiki/Mobilisation', label: 'Vue d\'ensemble', emoji: '◇' },
+      { href: '/wiki/Manifesto', label: 'Manifesto', emoji: '📜' },
+      { href: '/wiki/Templates-Recours', label: 'Templates de recours', emoji: '📝' },
+      { href: '/wiki/Contacts-Allies', label: 'Contacts et alliés', emoji: '📞' },
+      { href: '/wiki/Argumentaires', label: 'Argumentaires', emoji: '💬' },
+    ]
+  },
+  {
+    section: 'MODUS OPERANDI',
+    icon: '🎯',
+    links: [
+      { href: '/wiki/Modus-Operandi', label: 'Vue d\'ensemble', emoji: '◇' },
+    ]
+  },
+  {
+    section: '› Zones grises',
+    icon: '',
+    links: [
+      { href: '/wiki/ZAD-Pourquoi-État-Evite', label: 'ZAD', emoji: '🌳' },
+      { href: '/wiki/Propriete-Privee-Fermee', label: 'Propriété privée', emoji: '🔒' },
+      { href: '/wiki/Terrains-Abandonnes', label: 'Terrains abandonnés', emoji: '🏚️' },
+      { href: '/wiki/Espaces-Semi-Publics', label: 'Espaces semi-publics', emoji: '🏛️' },
+      { href: '/wiki/Zones-Limitrophes', label: 'Zones limitrophes', emoji: '↔️' },
+    ]
+  },
+  {
+    section: '› Failles légales',
+    icon: '',
+    links: [
+      { href: '/wiki/Definition-Ambigue-Organisateur', label: 'Définition organisateur', emoji: '❓' },
+      { href: '/wiki/Seuil-250-500-Personnes', label: 'Seuil 250-500', emoji: '👥' },
+      { href: '/wiki/Rassemblement-vs-Manifestation', label: 'Rassemblement vs Manifestation', emoji: '⚖️' },
+      { href: '/wiki/Declaration-Preuve-Legitimite', label: 'Déclaration légitimité', emoji: '📋' },
+      { href: '/wiki/Prescription-et-Delais', label: 'Prescription', emoji: '⏰' },
+    ]
+  },
+  {
+    section: '› Failles opérationnelles',
+    icon: '',
+    links: [
+      { href: '/wiki/Manque-de-Ressources', label: 'Manque de ressources', emoji: '📉' },
+      { href: '/wiki/Coordination-Defaillante', label: 'Coordination défaillante', emoji: '⚙️' },
+    ]
+  },
+  {
+    section: '› Contournement',
+    icon: '',
+    links: [
+      { href: '/wiki/Camouflage-Evenement', label: 'Camouflage', emoji: '🎭' },
+      { href: '/wiki/Fragmentation-Geographique', label: 'Fragmentation', emoji: '🗺️' },
+      { href: '/wiki/Coordination-Decentralisee', label: 'Coordination décentralisée', emoji: '🔗' },
+      { href: '/wiki/Documentation-Preemptive', label: 'Documentation préemptive', emoji: '📸' },
+    ]
+  },
+  {
+    section: 'VEILLE',
+    icon: '📡',
+    links: [
+      { href: '/wiki/Vue-d\'ensemble-veille', label: 'Vue d\'ensemble', emoji: '◇' },
+      { href: '/wiki/Lois-En-Cours', label: 'Lois en cours', emoji: '📜' },
+      { href: '/wiki/Actualites-Repressions', label: 'Actualités répression', emoji: '📰' },
+      { href: '/wiki/Sources-Fiables', label: 'Sources fiables', emoji: '📚' },
+      { href: '/wiki/Changelog', label: 'Changelog', emoji: '📝' },
+    ]
+  },
+  {
+    section: 'CYBER-OPSEC',
+    icon: '🔐',
+    links: [
+      { href: '/wiki/Sécurite-Numerique', label: 'Sécurité numérique', emoji: '🛡️' },
+      { href: '/wiki/Sécurité-des-communications', label: 'Communications sécurisées', emoji: '💬' },
+      { href: '/wiki/Repression', label: 'Répression', emoji: '⚠️' },
+    ]
+  },
+];
+---
+
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description || "Centralisation de ressources techniques, juridiques et stratégiques pour les pratiques culturelles alternatives."} />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title} | SoundSystemHardening</title>
+    
+    <!-- Favicon SVG -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%230a0a0f'/%3E%3Ctext y='75' font-size='80' fill='%2300ff9f' font-family='monospace' font-weight='bold'%3E◆%3C/text%3E%3C/svg%3E" />
+  </head>
+  <body>
+    <!-- Mobile menu button -->
+    <button 
+      id="menu-toggle"
+      class="fixed top-4 left-4 z-50 lg:hidden bg-dedsec-darker border border-neon-green p-2 rounded text-neon-green"
+      aria-label="Toggle menu"
+    >
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="3" y1="12" x2="21" y2="12"/>
+        <line x1="3" y1="6" x2="21" y2="6"/>
+        <line x1="3" y1="18" x2="21" y2="18"/>
+      </svg>
+    </button>
+
+    <div class="flex min-h-screen">
+      <!-- Sidebar -->
+      <aside 
+        id="sidebar"
+        class="fixed lg:sticky top-0 left-0 h-screen w-72 bg-dedsec-darker border-r border-dedsec-border overflow-y-auto transition-transform duration-300 z-40 -translate-x-full lg:translate-x-0"
+      >
+        <!-- Header sidebar -->
+        <div class="sticky top-0 bg-dedsec-darker border-b border-dedsec-border p-4 z-10">
+          <a href="/" class="block no-underline">
+            <div class="font-display font-bold text-neon-green text-lg leading-tight">
+              <span class="glitch-text" data-text="SOUNDSYSTEM">SOUNDSYSTEM</span>
+            </div>
+            <div class="font-display font-bold text-neon-pink text-lg leading-tight mt-0.5">
+              HARDENING
+            </div>
+            <div class="text-[10px] text-dedsec-muted mt-2 font-mono uppercase tracking-widest">
+              ▸ Resistance Toolkit
+            </div>
+          </a>
+        </div>
+
+        <!-- Navigation -->
+        <nav class="p-3 pb-20">
+          {navigation.map((section) => (
+            <div class="mb-4">
+              <div class="sidebar-section-title">
+                {section.icon && <span class="mr-1">{section.icon}</span>}
+                {section.section}
+              </div>
+              {section.links.map((link) => (
+                <a 
+                  href={link.href}
+                  class={`sidebar-link ${currentPath === link.href ? 'active' : ''}`}
+                >
+                  <span class="text-neon-cyan/50 mr-2 text-xs">{link.emoji}</span>
+                  {link.label}
+                </a>
+              ))}
+            </div>
+          ))}
+          
+          <!-- Footer sidebar -->
+          <div class="mt-8 pt-4 border-t border-dedsec-border px-3">
+            <div class="text-[10px] text-dedsec-muted space-y-1">
+              <div>VERSION ▸ 1.0.0</div>
+              <div>STATUT ▸ <span class="text-neon-green">● ACTIF</span></div>
+              <div>LICENSE ▸ CC BY-SA 4.0</div>
+              <div class="pt-2">
+                <a href="https://github.com/KernelRequiem/SoundSystemHardening" target="_blank" class="text-neon-cyan text-[10px]">
+                  ▸ github.com/KernelRequiem
+                </a>
+              </div>
+            </div>
+          </div>
+        </nav>
+      </aside>
+
+      <!-- Overlay mobile -->
+      <div 
+        id="overlay"
+        class="fixed inset-0 bg-black/80 z-30 lg:hidden hidden"
+      ></div>
+
+      <!-- Main content -->
+      <main class="flex-1 min-w-0 lg:ml-0">
+        <!-- Top bar -->
+        <div class="sticky top-0 z-20 bg-dedsec-black/80 backdrop-blur-md border-b border-dedsec-border">
+          <div class="px-6 py-3 flex items-center justify-between">
+            <div class="flex items-center gap-2 text-xs font-mono text-dedsec-muted ml-12 lg:ml-0">
+              <span class="text-neon-green">◆</span>
+              <span>{category || 'WIKI'}</span>
+              <span class="text-dedsec-muted">/</span>
+              <span class="text-dedsec-text truncate max-w-xs">{title}</span>
+            </div>
+            <div class="flex items-center gap-3 text-[10px] font-mono text-dedsec-muted">
+              <span class="hidden md:inline">▸ SECURE.CONNECTION</span>
+              <span class="text-neon-green">●</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Content -->
+        <article class="px-6 py-8 lg:px-12 lg:py-12 max-w-4xl mx-auto prose-dedsec animate-fade-in">
+          <slot />
+        </article>
+
+        <!-- Footer -->
+        <footer class="border-t border-dedsec-border mt-16 px-6 lg:px-12 py-8">
+          <div class="max-w-4xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs font-mono">
+              <div>
+                <div class="text-neon-green font-bold mb-2">▸ PROJECT</div>
+                <div class="space-y-1 text-dedsec-muted">
+                  <div><a href="https://github.com/KernelRequiem/SoundSystemHardening" class="text-dedsec-text">GitHub Repo</a></div>
+                  <div><a href="https://github.com/KernelRequiem/SoundSystemHardening/wiki" class="text-dedsec-text">Wiki source</a></div>
+                  <div><a href="/wiki/Changelog" class="text-dedsec-text">Changelog</a></div>
+                </div>
+              </div>
+              <div>
+                <div class="text-neon-cyan font-bold mb-2">▸ RESOURCES</div>
+                <div class="space-y-1 text-dedsec-muted">
+                  <div><a href="https://ssd.eff.org/fr" class="text-dedsec-text" target="_blank">EFF Surveillance</a></div>
+                  <div><a href="https://tails.net/doc/index.fr.html" class="text-dedsec-text" target="_blank">Tails OS</a></div>
+                  <div><a href="https://signal.org/docs/" class="text-dedsec-text" target="_blank">Signal Protocol</a></div>
+                </div>
+              </div>
+              <div>
+                <div class="text-neon-pink font-bold mb-2">▸ LEGAL</div>
+                <div class="space-y-1 text-dedsec-muted">
+                  <div>CC BY-SA 4.0</div>
+                  <div>Pas de tracking</div>
+                  <div>Pas de cookies</div>
+                </div>
+              </div>
+            </div>
+            <div class="mt-8 pt-4 border-t border-dedsec-border text-[10px] text-dedsec-muted text-center font-mono">
+              FREE PARTY · FREE INFO · FREE PEOPLE ▸ MAJ : MAI 2026
+            </div>
+          </div>
+        </footer>
+      </main>
+    </div>
+
+    <script>
+      const toggle = document.getElementById('menu-toggle');
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('overlay');
+
+      if (toggle && sidebar && overlay) {
+        toggle.addEventListener('click', () => {
+          sidebar.classList.toggle('-translate-x-full');
+          overlay.classList.toggle('hidden');
+        });
+
+        overlay.addEventListener('click', () => {
+          sidebar.classList.add('-translate-x-full');
+          overlay.classList.add('hidden');
+        });
+      }
+    </script>
+  </body>
+</html>

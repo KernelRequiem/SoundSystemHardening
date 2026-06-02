@@ -1,0 +1,206 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { readFileSync, readdirSync } from 'node:fs';
+import { join } from 'node:path';
+
+export function getStaticPaths() {
+  const wikiDir = join(process.cwd(), 'src/content/wiki');
+  let files: string[] = [];
+  
+  try {
+    files = readdirSync(wikiDir).filter((f: string) => f.endsWith('.md') && !f.startsWith('_'));
+  } catch (e) {
+    return [];
+  }
+  
+  return files.map((file: string) => {
+    const slug = file.replace('.md', '');
+    return {
+      params: { slug },
+      props: { filename: file, slug }
+    };
+  });
+}
+
+const { filename, slug } = Astro.props;
+
+const wikiDir = join(process.cwd(), 'src/content/wiki');
+let rawContent = '';
+
+try {
+  rawContent = readFileSync(join(wikiDir, filename), 'utf-8');
+} catch (e) {
+  rawContent = '# Page non trouvée\n\nCe contenu n\'est pas encore disponible.';
+}
+
+// Extract title from first H1
+const titleMatch = rawContent.match(/^#\s+(.+)$/m);
+const title = titleMatch ? titleMatch[1].replace(/[🏠⚠️🎯⚖️📜🔐🎵✊◆◇▸]/g, '').trim() : slug.replace(/-/g, ' ');
+
+// Simple Markdown to HTML renderer
+function renderMarkdown(md: string): string {
+  let html = md;
+  
+  // Escape HTML in code blocks first (preserve them)
+  const codeBlocks: string[] = [];
+  html = html.replace(/```([\s\S]*?)```/g, (match, code) => {
+    codeBlocks.push(code);
+    return `__CODEBLOCK_${codeBlocks.length - 1}__`;
+  });
+  
+  const inlineCodes: string[] = [];
+  html = html.replace(/`([^`]+)`/g, (match, code) => {
+    inlineCodes.push(code);
+    return `__INLINECODE_${inlineCodes.length - 1}__`;
+  });
+  
+  // Headers
+  html = html.replace(/^######\s+(.+)$/gm, '<h6>$1</h6>');
+  html = html.replace(/^#####\s+(.+)$/gm, '<h5>$1</h5>');
+  html = html.replace(/^####\s+(.+)$/gm, '<h4>$1</h4>');
+  html = html.replace(/^###\s+(.+)$/gm, '<h3>$1</h3>');
+  html = html.replace(/^##\s+(.+)$/gm, '<h2>$1</h2>');
+  html = html.replace(/^#\s+(.+)$/gm, '<h1>$1</h1>');
+  
+  // Bold, italic
+  html = html.replace(/\*\*\*(.+?)\*\*\*/g, '<strong><em>$1</em></strong>');
+  html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+  html = html.replace(/\*(.+?)\*/g, '<em>$1</em>');
+  
+  // Links
+  html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
+  
+  // Images
+  html = html.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1" />');
+  
+  // Horizontal rules
+  html = html.replace(/^---+$/gm, '<hr />');
+  
+  // Blockquotes
+  html = html.replace(/^>\s+(.+)$/gm, '<blockquote>$1</blockquote>');
+  
+  // Lists
+  html = html.replace(/^(\s*)[-*+]\s+(.+)$/gm, (match, indent, content) => {
+    const level = indent.length / 2;
+    return `<li data-level="${level}">${content}</li>`;
+  });
+  html = html.replace(/^(\s*)\d+\.\s+(.+)$/gm, '<oli>$2</oli>');
+  
+  // Wrap lists
+  html = html.replace(/(<li[^>]*>.*?<\/li>(\n|$))+/gs, (match) => {
+    return '<ul>' + match.replace(/\n/g, '') + '</ul>';
+  });
+  html = html.replace(/(<oli>.*?<\/oli>(\n|$))+/gs, (match) => {
+    return '<ol>' + match.replace(/<oli>/g, '<li>').replace(/<\/oli>/g, '</li>').replace(/\n/g, '') + '</ol>';
+  });
+  
+  // Tables (basic)
+  const tableRegex = /^\|(.+)\|\s*\n\|[\s\-:|]+\|\s*\n((?:\|.+\|\s*\n?)+)/gm;
+  html = html.replace(tableRegex, (match, header, rows) => {
+    const headers = header.split('|').map((h: string) => h.trim()).filter(Boolean);
+    const headerRow = '<tr>' + headers.map((h: string) => `<th>${h}</th>`).join('') + '</tr>';
+    const bodyRows = rows.trim().split('\n').map((row: string) => {
+      const cells = row.split('|').map(c => c.trim()).filter((_, i, arr) => i > 0 && i < arr.length - 1);
+      return '<tr>' + cells.map(c => `<td>${c}</td>`).join('') + '</tr>';
+    }).join('');
+    return `<table><thead>${headerRow}</thead><tbody>${bodyRows}</tbody></table>`;
+  });
+  
+  // Paragraphs (lines that aren't already wrapped)
+  html = html.split('\n\n').map(block => {
+    block = block.trim();
+    if (!block) return '';
+    if (block.match(/^<(h[1-6]|ul|ol|li|blockquote|hr|table|pre|div|img)/)) return block;
+    return `<p>${block}</p>`;
+  }).join('\n\n');
+  
+  // Restore code blocks
+  html = html.replace(/__CODEBLOCK_(\d+)__/g, (match, i) => {
+    const code = codeBlocks[parseInt(i)];
+    const lines = code.split('\n');
+    const lang = lines[0].trim();
+    const codeContent = lang.match(/^[a-z]+$/) ? lines.slice(1).join('\n') : code;
+    return `<pre><code>${codeContent.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</code></pre>`;
+  });
+  
+  html = html.replace(/__INLINECODE_(\d+)__/g, (match, i) => {
+    return `<code>${inlineCodes[parseInt(i)].replace(/</g, '&lt;').replace(/>/g, '&gt;')}</code>`;
+  });
+  
+  // Convert internal wiki links [[Page]] or wiki-style links
+  html = html.replace(/\[\[([^\]]+)\]\]/g, (match, page) => {
+    const slug = page.replace(/\s+/g, '-');
+    return `<a href="/wiki/${slug}">${page}</a>`;
+  });
+  
+  return html;
+}
+
+const htmlContent = renderMarkdown(rawContent);
+
+// Get category from slug
+function getCategory(slug: string): string {
+  const categories: Record<string, string> = {
+    'Strategie': 'STRATÉGIE',
+    'Juridique': 'JURIDIQUE',
+    'Politique': 'POLITIQUE',
+    'Sanitaire': 'SANITAIRE',
+    'Histoire': 'HISTOIRE',
+    'Modus': 'MODUS OPERANDI',
+    'Camouflage': 'MODUS OPERANDI',
+    'Fragmentation': 'MODUS OPERANDI',
+    'Coordination': 'MODUS OPERANDI',
+    'Mobilisation': 'MOBILISATION',
+    'Contacts': 'MOBILISATION',
+    'Templates': 'MOBILISATION',
+    'Manifesto': 'MOBILISATION',
+    'Lois': 'VEILLE',
+    'Actualites': 'VEILLE',
+    'Changelog': 'VEILLE',
+    'Sécurit': 'OPSEC',
+    'Repression': 'OPSEC',
+    'Urgence': 'URGENCE',
+  };
+  
+  for (const [key, value] of Object.entries(categories)) {
+    if (slug.startsWith(key)) return value;
+  }
+  return 'WIKI';
+}
+
+const category = getCategory(slug);
+---
+
+<Layout title={title} description={`${title} - SoundSystemHardening Wiki`} category={category}>
+  <article class="prose-dedsec" set:html={htmlContent} />
+
+  <!-- Article footer -->
+  <div class="mt-16 pt-8 border-t border-dedsec-border">
+    <div class="flex flex-wrap items-center justify-between gap-4 text-xs font-mono text-dedsec-muted">
+      <div>
+        ▸ <span class="text-neon-cyan">SOURCE</span> : <a href={`https://github.com/KernelRequiem/SoundSystemHardening/wiki/${slug}`} target="_blank">Wiki GitHub</a>
+      </div>
+      <div>
+        ▸ <span class="text-neon-green">LICENSE</span> : CC BY-SA 4.0
+      </div>
+      <div>
+        ▸ <a href="/" class="text-neon-pink">← Retour accueil</a>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  /* Wiki content specific styles */
+  article :global(h1) {
+    @apply text-3xl mb-6 mt-0;
+  }
+  
+  article :global(table) {
+    @apply text-sm;
+  }
+  
+  article :global(img) {
+    @apply max-w-full h-auto rounded-lg my-4 border border-dedsec-border;
+  }
+</style>

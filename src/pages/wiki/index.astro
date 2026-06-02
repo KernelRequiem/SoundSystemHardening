@@ -1,0 +1,93 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { readdirSync } from 'node:fs';
+import { join } from 'node:path';
+
+const wikiDir = join(process.cwd(), 'src/content/wiki');
+let files: string[] = [];
+
+try {
+  files = readdirSync(wikiDir)
+    .filter(f => f.endsWith('.md') && !f.startsWith('_'))
+    .map(f => f.replace('.md', ''))
+    .sort();
+} catch (e) {
+  files = [];
+}
+
+// Categorize pages
+const categories: Record<string, string[]> = {
+  '🚨 URGENCE': ['Urgence-immédiate', 'Contestation'],
+  '⚖️ CONTRE RIPOST': ['Strategie-contre-ripost'],
+  '🎯 STRATÉGIE DE RÉSISTANCE': ['Stratégie-résistance', 'Juridique', 'Politique', 'Sanitaire', 'Axe-sanitaire', 'Organisationnel', 'Culturel', 'Coalitions'],
+  '📜 HISTOIRE & CULTURE': ['Histoire-&-Culture', 'Chronologie', 'Sound-System', 'Incidents-répressifs', 'Patrimoine-culturel', 'L\'esprit-des-teufeurs'],
+  '📣 MOBILISATION': ['Mobilisation', 'Manifesto', 'Templates-Recours', 'Contacts-Allies', 'Argumentaires'],
+  '🎯 MODUS OPERANDI': ['Modus-Operandi'],
+  '🗺️ Zones grises': ['ZAD-Pourquoi-État-Evite', 'Propriete-Privee-Fermee', 'Terrains-Abandonnes', 'Espaces-Semi-Publics', 'Zones-Limitrophes'],
+  '⚖️ Failles légales': ['Definition-Ambigue-Organisateur', 'Seuil-250-500-Personnes', 'Rassemblement-vs-Manifestation', 'Declaration-Preuve-Legitimite', 'Prescription-et-Delais'],
+  '⚙️ Failles opérationnelles': ['Manque-de-Ressources', 'Coordination-Defaillante'],
+  '🎭 Contournement': ['Camouflage-Evenement', 'Fragmentation-Geographique', 'Coordination-Decentralisee', 'Documentation-Preemptive'],
+  '📡 VEILLE': ['Vue-d\'ensemble-veille', 'Lois-En-Cours', 'Actualites-Repressions', 'Sources-Fiables', 'Changelog'],
+  '🔐 SÉCURITÉ': ['Sécurite-Numerique', 'Sécurité-des-communications', 'Repression'],
+};
+
+// Pages not in any category
+const allCategorizedPages = Object.values(categories).flat();
+const otherPages = files.filter(f => !allCategorizedPages.includes(f) && f !== 'Home');
+if (otherPages.length > 0) {
+  categories['📄 AUTRES'] = otherPages;
+}
+---
+
+<Layout title="Index Wiki" description="Index complet du wiki SoundSystemHardening" category="WIKI">
+  <h1>Index du Wiki</h1>
+
+  <p class="text-lg text-dedsec-muted mb-8">
+    {files.length} pages documentées. Toutes les ressources techniques, juridiques et stratégiques classées par catégorie.
+  </p>
+
+  <div class="terminal mb-8">
+    <div class="text-neon-green text-sm mb-2">▸ stats.wiki</div>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-xs">
+      <div>
+        <div class="text-2xl text-neon-green font-bold">{files.length}</div>
+        <div class="text-dedsec-muted uppercase">Pages</div>
+      </div>
+      <div>
+        <div class="text-2xl text-neon-cyan font-bold">{Object.keys(categories).length}</div>
+        <div class="text-dedsec-muted uppercase">Catégories</div>
+      </div>
+      <div>
+        <div class="text-2xl text-neon-pink font-bold">CC</div>
+        <div class="text-dedsec-muted uppercase">BY-SA 4.0</div>
+      </div>
+      <div>
+        <div class="text-2xl text-neon-green font-bold">●</div>
+        <div class="text-dedsec-muted uppercase">Live</div>
+      </div>
+    </div>
+  </div>
+
+  {Object.entries(categories).map(([cat, pages]) => {
+    const existingPages = pages.filter(p => files.includes(p));
+    if (existingPages.length === 0) return null;
+    
+    return (
+      <section class="mb-10">
+        <h2>{cat}</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-2 mt-4">
+          {existingPages.map(page => (
+            <a href={`/wiki/${page}`} class="card-neon py-3 px-4 no-underline group">
+              <div class="flex items-center gap-2">
+                <span class="text-neon-green text-xs">▸</span>
+                <span class="text-dedsec-text group-hover:text-neon-green transition-colors">
+                  {page.replace(/-/g, ' ').replace(/'/g, '\'')}
+                </span>
+              </div>
+            </a>
+          ))}
+        </div>
+      </section>
+    );
+  })}
+</Layout>
