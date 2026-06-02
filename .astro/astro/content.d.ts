@@ -502,9 +502,79 @@ declare module 'astro:content' {
   collection: "wiki";
   data: any
 } & { render(): Render[".md"] };
+"messagerie-chiffree.md": {
+	id: "messagerie-chiffree.md";
+  slug: "messagerie-chiffree";
+  body: string;
+  collection: "wiki";
+  data: any
+} & { render(): Render[".md"] };
 "recours-juridiques.md": {
 	id: "recours-juridiques.md";
   slug: "recours-juridiques";
+  body: string;
+  collection: "wiki";
+  data: any
+} & { render(): Render[".md"] };
+"reseau-anonymisation.md": {
+	id: "reseau-anonymisation.md";
+  slug: "reseau-anonymisation";
+  body: string;
+  collection: "wiki";
+  data: any
+} & { render(): Render[".md"] };
+"surveillance-mobile.md": {
+	id: "surveillance-mobile.md";
+  slug: "surveillance-mobile";
+  body: string;
+  collection: "wiki";
+  data: any
+} & { render(): Render[".md"] };
+"wiki-opsec.md": {
+	id: "wiki-opsec.md";
+  slug: "wiki-opsec";
+  body: string;
+  collection: "wiki";
+  data: any
+} & { render(): Render[".md"] };
+"wiki-opsec_1.md": {
+	id: "wiki-opsec_1.md";
+  slug: "wiki-opsec_1";
+  body: string;
+  collection: "wiki";
+  data: any
+} & { render(): Render[".md"] };
+"wiki-ports-reseau.md": {
+	id: "wiki-ports-reseau.md";
+  slug: "wiki-ports-reseau";
+  body: string;
+  collection: "wiki";
+  data: any
+} & { render(): Render[".md"] };
+"wiki-ports-reseau_1.md": {
+	id: "wiki-ports-reseau_1.md";
+  slug: "wiki-ports-reseau_1";
+  body: string;
+  collection: "wiki";
+  data: any
+} & { render(): Render[".md"] };
+"wiki-ports-reseau_2.md": {
+	id: "wiki-ports-reseau_2.md";
+  slug: "wiki-ports-reseau_2";
+  body: string;
+  collection: "wiki";
+  data: any
+} & { render(): Render[".md"] };
+"wiki-ports-reseau_3.md": {
+	id: "wiki-ports-reseau_3.md";
+  slug: "wiki-ports-reseau_3";
+  body: string;
+  collection: "wiki";
+  data: any
+} & { render(): Render[".md"] };
+"wiki-ports-reseau_4.md": {
+	id: "wiki-ports-reseau_4.md";
+  slug: "wiki-ports-reseau_4";
   body: string;
   collection: "wiki";
   data: any
