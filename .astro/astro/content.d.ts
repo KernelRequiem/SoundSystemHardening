@@ -488,6 +488,27 @@ declare module 'astro:content' {
   collection: "wiki";
   data: any
 } & { render(): Render[".md"] };
+"arsenal-legislatif.md": {
+	id: "arsenal-legislatif.md";
+  slug: "arsenal-legislatif";
+  body: string;
+  collection: "wiki";
+  data: any
+} & { render(): Render[".md"] };
+"jurisprudence.md": {
+	id: "jurisprudence.md";
+  slug: "jurisprudence";
+  body: string;
+  collection: "wiki";
+  data: any
+} & { render(): Render[".md"] };
+"recours-juridiques.md": {
+	id: "recours-juridiques.md";
+  slug: "recours-juridiques";
+  body: string;
+  collection: "wiki";
+  data: any
+} & { render(): Render[".md"] };
 };
 
 	};

@@ -2,7 +2,7 @@
 
 **Comprendre comment les forces de l'ordre opèrent contre les free parties, anticiper leurs tactiques, connaître mes droits, documenter les violences et me défendre après coup.**
 
-Ce fichier est une synthèse opérationnelle sur la répression policière des rassemblements festifs. Elle est construite pour comprendre le fonctionnement réel des dispositifs de maintien de l'ordre, identifier les points où nous pouvons agir légalement, et savoir exactement quoi faire face à un contrôle, une charge ou une saisie. 
+Ce fichier est ma synthèse opérationnelle sur la répression policière des rassemblements festifs. Je l'ai construit pour comprendre le fonctionnement réel des dispositifs de maintien de l'ordre, identifier les points où je peux agir légalement, et savoir exactement quoi faire face à un contrôle, une charge ou une saisie. Tout est sourcé.
 
 L'objectif n'est pas d'affronter les forces de l'ordre. C'est de réduire les risques, de protéger mon intégrité physique, de connaître mes droits et de pouvoir documenter et contester les abus.
 
