@@ -1,0 +1,180 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Recherche" description="Recherche dans le wiki SoundSystemHardening">
+  <div class="max-w-2xl mx-auto">
+    <h1 class="mb-2">▸ RECHERCHE</h1>
+    <p class="text-dedsec-muted text-sm mb-8 font-mono">Recherche dans les {' '}<span class="text-neon-green" id="page-count">—</span> pages du wiki</p>
+
+    <!-- Barre de recherche -->
+    <div class="relative mb-8">
+      <span class="absolute left-4 top-1/2 -translate-y-1/2 text-neon-green font-mono text-sm pointer-events-none">▸</span>
+      <input
+        id="search-input"
+        type="text"
+        placeholder="GAV, saisie, Signal, RIPOST..."
+        autofocus
+        class="w-full bg-dedsec-darker border border-neon-green/50 focus:border-neon-green
+               text-dedsec-text font-mono text-sm pl-10 pr-4 py-3 rounded
+               outline-none transition-all duration-200
+               shadow-[0_0_0_transparent] focus:shadow-[0_0_15px_#00ff9f33]
+               placeholder:text-dedsec-muted"
+      />
+      <span class="absolute right-4 top-1/2 -translate-y-1/2 text-dedsec-muted font-mono text-xs" id="result-count"></span>
+    </div>
+
+    <!-- Résultats -->
+    <div id="results" class="space-y-3"></div>
+
+    <!-- État vide -->
+    <div id="empty-state" class="text-center py-16 text-dedsec-muted font-mono hidden">
+      <div class="text-4xl mb-4">◈</div>
+      <div class="text-sm">Aucun résultat pour cette recherche</div>
+    </div>
+
+    <!-- État initial -->
+    <div id="initial-state" class="text-center py-16 text-dedsec-muted font-mono">
+      <div class="text-4xl mb-4 text-neon-green/30">⌕</div>
+      <div class="text-sm">Commence à taper pour chercher</div>
+      <div class="text-xs mt-2 text-dedsec-muted/50">Recherche dans titres, contenus et sections</div>
+    </div>
+  </div>
+</Layout>
+
+<script>
+  import Fuse from 'fuse.js';
+
+  interface WikiPage {
+    slug: string;
+    title: string;
+    content: string;
+    headings: string[];
+    url: string;
+  }
+
+  let fuse: Fuse<WikiPage> | null = null;
+  let allPages: WikiPage[] = [];
+
+  const input = document.getElementById('search-input') as HTMLInputElement;
+  const resultsEl = document.getElementById('results')!;
+  const resultCount = document.getElementById('result-count')!;
+  const emptyState = document.getElementById('empty-state')!;
+  const initialState = document.getElementById('initial-state')!;
+  const pageCount = document.getElementById('page-count')!;
+
+  // Chargement de l'index
+  fetch('/search-index.json')
+    .then((r) => r.json())
+    .then((data: WikiPage[]) => {
+      allPages = data;
+      pageCount.textContent = String(data.length);
+
+      fuse = new Fuse(data, {
+        keys: [
+          { name: 'title',    weight: 0.5 },
+          { name: 'headings', weight: 0.3 },
+          { name: 'content',  weight: 0.2 },
+        ],
+        threshold: 0.35,
+        includeMatches: true,
+        includeScore: true,
+        minMatchCharLength: 2,
+      });
+
+      // Si query dans l'URL (?q=...)
+      const params = new URLSearchParams(window.location.search);
+      const q = params.get('q');
+      if (q) {
+        input.value = q;
+        runSearch(q);
+      }
+    });
+
+  function highlight(text: string, indices: readonly [number, number][]): string {
+    if (!indices || indices.length === 0) return escapeHtml(text);
+    let result = '';
+    let lastIndex = 0;
+    for (const [start, end] of indices) {
+      result += escapeHtml(text.slice(lastIndex, start));
+      result += `<mark class="bg-neon-green/20 text-neon-green rounded px-0.5">${escapeHtml(text.slice(start, end + 1))}</mark>`;
+      lastIndex = end + 1;
+    }
+    result += escapeHtml(text.slice(lastIndex));
+    return result;
+  }
+
+  function escapeHtml(s: string): string {
+    return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  function getSnippet(content: string, query: string): string {
+    const lower = content.toLowerCase();
+    const idx = lower.indexOf(query.toLowerCase().split(' ')[0]);
+    if (idx === -1) return content.slice(0, 120) + '…';
+    const start = Math.max(0, idx - 40);
+    const end = Math.min(content.length, idx + 120);
+    return (start > 0 ? '…' : '') + content.slice(start, end) + (end < content.length ? '…' : '');
+  }
+
+  function runSearch(query: string) {
+    if (!fuse || query.trim().length < 2) {
+      resultsEl.innerHTML = '';
+      resultCount.textContent = '';
+      emptyState.classList.add('hidden');
+      initialState.classList.remove('hidden');
+      return;
+    }
+
+    initialState.classList.add('hidden');
+    const results = fuse.search(query, { limit: 12 });
+    resultCount.textContent = results.length ? `${results.length} résultat${results.length > 1 ? 's' : ''}` : '';
+
+    if (results.length === 0) {
+      resultsEl.innerHTML = '';
+      emptyState.classList.remove('hidden');
+      return;
+    }
+
+    emptyState.classList.add('hidden');
+
+    resultsEl.innerHTML = results.map(({ item, matches }) => {
+      const titleMatch = matches?.find((m) => m.key === 'title');
+      const titleHtml = titleMatch
+        ? highlight(item.title, titleMatch.indices as [number, number][])
+        : escapeHtml(item.title);
+
+      const snippet = getSnippet(item.content, query);
+
+      return `
+        <a href="${item.url}" class="block card-neon no-underline group hover:border-neon-green transition-all duration-200">
+          <div class="flex items-start gap-3">
+            <span class="text-neon-green font-mono text-sm mt-0.5 shrink-0">▸</span>
+            <div class="min-w-0">
+              <div class="text-neon-green font-mono font-bold text-sm mb-1 group-hover:text-neon-cyan transition-colors">
+                ${titleHtml}
+              </div>
+              <div class="text-xs text-dedsec-muted leading-relaxed line-clamp-2">${escapeHtml(snippet)}</div>
+              <div class="text-[10px] text-dedsec-muted/50 mt-2 font-mono">${item.url}</div>
+            </div>
+          </div>
+        </a>
+      `;
+    }).join('');
+  }
+
+  // Debounce 200ms
+  let timer: ReturnType<typeof setTimeout>;
+  input.addEventListener('input', () => {
+    clearTimeout(timer);
+    timer = setTimeout(() => runSearch(input.value), 200);
+  });
+
+  // Raccourci clavier : / pour focus
+  document.addEventListener('keydown', (e) => {
+    if (e.key === '/' && document.activeElement !== input) {
+      e.preventDefault();
+      input.focus();
+    }
+  });
+</script>

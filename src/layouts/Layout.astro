@@ -246,6 +246,12 @@ const navigation = [
               ▸ Resistance Toolkit
             </div>
           </a>
+          <!-- Barre de recherche rapide -->
+          <a href="/search" class="mt-3 flex items-center gap-2 bg-dedsec-gray border border-dedsec-border hover:border-neon-green/50 rounded px-3 py-2 text-dedsec-muted hover:text-neon-green transition-all no-underline group">
+            <span class="font-mono text-sm">⌕</span>
+            <span class="font-mono text-xs">Rechercher...</span>
+            <span class="ml-auto font-mono text-[10px] text-dedsec-muted/50 group-hover:text-neon-green/50">/</span>
+          </a>
         </div>
 
         <!-- Navigation -->
@@ -321,6 +327,11 @@ const navigation = [
             </a>
             <!-- Statut droite -->
             <div class="flex items-center gap-3 text-[10px] font-mono text-dedsec-muted">
+              <a href="/search" class="hidden md:flex items-center gap-1 text-dedsec-muted hover:text-neon-green transition-colors no-underline" title="Recherche (/)">
+                <span>⌕</span>
+                <span class="text-[10px]">SEARCH</span>
+              </a>
+              <span class="hidden md:inline text-dedsec-border">|</span>
               <span class="hidden md:inline">▸ SECURE.CONNECTION</span>
               <span class="text-neon-green">●</span>
             </div>
