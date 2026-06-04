@@ -1,0 +1,666 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Que faire ?" description="Arbre de décision interactif — GAV, fouille, saisie, contrôle routier">
+  <h1 class="mb-2">▸ QUE FAIRE SI...</h1>
+  <p class="text-dedsec-muted text-sm mb-8 font-mono">Arbre de décision interactif — clique sur ta situation</p>
+
+  <div id="decision-tree" class="max-w-2xl mx-auto"></div>
+</Layout>
+
+<script>
+// ─── DONNÉES DE L'ARBRE ───────────────────────────────────────────────────
+const tree: Record<string, Node> = {
+
+  root: {
+    id: 'root',
+    text: 'Tu es dans quelle situation ?',
+    type: 'question',
+    choices: [
+      { label: '🚗  Contrôle routier / barrage', next: 'controle' },
+      { label: '🔍  Fouille de véhicule / de personne', next: 'fouille' },
+      { label: '📦  Saisie du matériel', next: 'saisie' },
+      { label: '🚔  Interpellation / Garde à vue', next: 'gav' },
+      { label: '📋  J\'ai reçu une amende (AFD)', next: 'afd' },
+      { label: '📱  Ils veulent mon téléphone / code PIN', next: 'telephone' },
+    ],
+  },
+
+  // ── CONTRÔLE ROUTIER ──
+  controle: {
+    id: 'controle',
+    text: 'Contrôle routier',
+    type: 'question',
+    choices: [
+      { label: 'Ils inspectent visuellement depuis la fenêtre', next: 'controle_visuel' },
+      { label: 'Ils demandent à ouvrir le coffre / fouiller', next: 'fouille' },
+      { label: 'Ils retiennent le véhicule plus de 30 min', next: 'controle_retenu' },
+    ],
+  },
+
+  controle_visuel: {
+    id: 'controle_visuel',
+    text: 'Inspection visuelle depuis la fenêtre',
+    type: 'result',
+    color: 'green',
+    icon: '✅',
+    actions: [
+      'Donne les documents obligatoires : permis, carte grise, assurance',
+      'Tu n\'es pas obligé d\'ouvrir le coffre sans réquisition judiciaire',
+      'Reste calme, réponds aux questions d\'identité uniquement',
+      'Note l\'heure, le lieu et le numéro de matricule des agents',
+    ],
+    rights: [
+      'Inspection visuelle ≠ fouille — tu peux refuser l\'ouverture du coffre',
+      'Si OPJ (officier de police judiciaire) présent, la fouille peut être imposée',
+    ],
+    links: [{ label: 'Modus Operandi complet', href: '/wiki/Modus-Operandi' }],
+  },
+
+  controle_retenu: {
+    id: 'controle_retenu',
+    text: 'Retenu plus de 30 minutes sans motif',
+    type: 'result',
+    color: 'orange',
+    icon: '⚠️',
+    actions: [
+      'Demande explicitement : "Suis-je libre de partir ?"',
+      'Si non : demande le motif légal de rétention',
+      'Note l\'heure exacte de début de rétention',
+      'Contacte immédiatement un avocat ou le FSJS',
+    ],
+    rights: [
+      'Sans garde à vue notifiée, tu dois être libre de partir',
+      'Une rétention sans motif est une voie de fait contestable',
+    ],
+    links: [{ label: 'Contacts & Alliés', href: '/wiki/Contacts-Allies' }],
+  },
+
+  // ── FOUILLE ──
+  fouille: {
+    id: 'fouille',
+    text: 'Quel type de fouille ?',
+    type: 'question',
+    choices: [
+      { label: 'Fouille du véhicule (coffre, habitacle)', next: 'fouille_vehicule' },
+      { label: 'Fouille corporelle / palpation', next: 'fouille_corps' },
+      { label: 'Fouille des affaires personnelles (sac, vêtements)', next: 'fouille_affaires' },
+    ],
+  },
+
+  fouille_vehicule: {
+    id: 'fouille_vehicule',
+    text: 'Fouille du véhicule',
+    type: 'result',
+    color: 'orange',
+    icon: '⚠️',
+    actions: [
+      'Ne consens PAS verbalement à la fouille — dis "Je ne consens pas à cette fouille"',
+      'Demande s\'il y a un OPJ présent et sa réquisition écrite',
+      'Ne touche rien — laisse les agents agir, ne facilite pas',
+      'Filme si possible (de façon discrète, depuis le téléphone posé)',
+      'Note les noms et matricules, l\'heure, le lieu précis',
+    ],
+    rights: [
+      'Sans OPJ : fouille illégale, contestable devant le tribunal',
+      'Avec OPJ et réquisition : fouille légale, mais tu peux exiger l\'inventaire écrit',
+      'Si matériel saisi : exige un reçu détaillé avec chaque item',
+    ],
+    links: [{ label: 'Saisie du matériel', href: '#saisie' }, { label: 'Templates recours', href: '/wiki/Templates-Recours' }],
+  },
+
+  fouille_corps: {
+    id: 'fouille_corps',
+    text: 'Fouille corporelle',
+    type: 'result',
+    color: 'red',
+    icon: '🔴',
+    actions: [
+      'Dis clairement : "Je ne consens pas à cette fouille corporelle"',
+      'La palpation de sécurité (extérieure) est légale — la fouille à corps approfondie nécessite une OPJ',
+      'Demande que la fouille se fasse en présence d\'un témoin',
+      'Note tout : agent, heure, lieu, type de fouille',
+      'Dépose plainte systématiquement si fouille à corps sans OPJ',
+    ],
+    rights: [
+      'Palpation extérieure : légale pour sécurité immédiate',
+      'Fouille approfondie : nécessite OPJ + motif légal',
+      'Fouille à nu : réservée à la garde à vue, avec encadrement strict',
+    ],
+    links: [{ label: 'Templates recours', href: '/wiki/Templates-Recours' }],
+  },
+
+  fouille_affaires: {
+    id: 'fouille_affaires',
+    text: 'Fouille des affaires personnelles',
+    type: 'result',
+    color: 'orange',
+    icon: '⚠️',
+    actions: [
+      'Refuse verbalement : "Je ne consens pas à cette fouille"',
+      'Ne vide pas ton sac volontairement',
+      'Demande le motif légal et la présence d\'un OPJ',
+      'Si fouille maintenue : laisse-les faire sans coopérer activement',
+      'Exige un inventaire écrit de ce qui est inspecté ou saisi',
+    ],
+    rights: [
+      'Sans OPJ ni réquisition : fouille illégale',
+      'Ton refus verbal doit être noté dans le PV',
+    ],
+    links: [{ label: 'Modus Operandi', href: '/wiki/Modus-Operandi' }],
+  },
+
+  // ── SAISIE ──
+  saisie: {
+    id: 'saisie',
+    text: 'Qu\'est-ce qui est en cours de saisie ?',
+    type: 'question',
+    choices: [
+      { label: 'Matériel son (enceintes, amplis, câbles...)', next: 'saisie_son' },
+      { label: 'Véhicule (camion, van, voiture)', next: 'saisie_vehicule' },
+      { label: 'Téléphone / ordinateur', next: 'telephone' },
+      { label: 'Documents / argent liquide', next: 'saisie_docs' },
+    ],
+  },
+
+  saisie_son: {
+    id: 'saisie_son',
+    text: 'Saisie du matériel son',
+    type: 'result',
+    color: 'red',
+    icon: '🔴',
+    actions: [
+      'NE T\'OPPOSE PAS PHYSIQUEMENT — c\'est le piège, ça aggrave',
+      'Filme tout : chaque item saisi, les agents, le véhicule de transport',
+      'Exige un INVENTAIRE ÉCRIT détaillé signé par un agent',
+      'Refuse de signer quoi que ce soit sans l\'avoir lu entièrement',
+      'Note : numéro de saisie, service saisissant, heure, lieu',
+      'Contacte immédiatement FSJS ou un avocat spécialisé',
+      'Dépose un référé-liberté dans les 48h si saisie illégale',
+    ],
+    rights: [
+      'Tout objet saisi doit faire l\'objet d\'un reçu de saisie détaillé',
+      'Si saisie conservatoire sans ordonnance : contestable en référé',
+      'La valeur du matériel doit être estimée contradictoirement',
+    ],
+    links: [
+      { label: 'Templates recours', href: '/wiki/Templates-Recours' },
+      { label: 'Contacts & Alliés', href: '/wiki/Contacts-Allies' },
+      { label: 'Stratégie contre RIPOST', href: '/wiki/Strategie-contre-ripost' },
+    ],
+  },
+
+  saisie_vehicule: {
+    id: 'saisie_vehicule',
+    text: 'Saisie / immobilisation du véhicule',
+    type: 'result',
+    color: 'red',
+    icon: '🔴',
+    actions: [
+      'Demande la décision judiciaire ou administrative autorisant la saisie',
+      'Filme la mise en fourrière : état du véhicule, agents présents',
+      'Note le numéro de fourrière, l\'adresse, le numéro de dossier',
+      'Contacte un avocat immédiatement — délai court pour contester',
+      'Demande un reçu avec l\'état du véhicule à la remise',
+    ],
+    rights: [
+      'Saisie de véhicule = mesure judiciaire ou administrative, pas décision de terrain seule',
+      'Tu peux contester la valeur estimée du véhicule',
+      'Frais de fourrière non dus si saisie illégale',
+    ],
+    links: [{ label: 'Templates recours', href: '/wiki/Templates-Recours' }],
+  },
+
+  saisie_docs: {
+    id: 'saisie_docs',
+    text: 'Saisie de documents / argent',
+    type: 'result',
+    color: 'orange',
+    icon: '⚠️',
+    actions: [
+      'Exige un inventaire détaillé et signé de chaque document saisi',
+      'Pour l\'argent liquide : exige un comptage contradictoire et un reçu',
+      'Ne signe aucun document attestant de la "remise volontaire"',
+      'Contacte un avocat dans les 24h',
+    ],
+    rights: [
+      'Argent saisi sans saisie judiciaire formelle : contestable',
+      'Documents professionnels : protection spécifique possible',
+    ],
+    links: [{ label: 'Templates recours', href: '/wiki/Templates-Recours' }],
+  },
+
+  // ── GAV ──
+  gav: {
+    id: 'gav',
+    text: 'Interpellation / Garde à vue',
+    type: 'question',
+    choices: [
+      { label: 'Je viens d\'être interpellé, pas encore en GAV', next: 'gav_interpel' },
+      { label: 'Je suis en GAV (droits lus)', next: 'gav_droits' },
+      { label: 'Un ami / proche est en GAV', next: 'gav_proche' },
+    ],
+  },
+
+  gav_interpel: {
+    id: 'gav_interpel',
+    text: 'Interpellation — avant la GAV',
+    type: 'result',
+    color: 'red',
+    icon: '🔴',
+    actions: [
+      'SILENCE TOTAL — ne dis rien sauf ton identité (nom, prénom, date de naissance)',
+      'Demande immédiatement : "Suis-je en garde à vue ?"',
+      'Si oui : demande que tes droits te soient lus',
+      'Si non : "Suis-je libre de partir ?"',
+      'METS TON TÉLÉPHONE EN MODE AVION maintenant',
+      'Ne donne pas ton code PIN — tu n\'y es pas obligé en France',
+    ],
+    rights: [
+      'Droit au silence : tu peux refuser de répondre à toutes questions',
+      'Droit à un avocat dès la première heure de GAV',
+      'Droit à la notification d\'un proche',
+      'Droit à un médecin si nécessaire',
+    ],
+    links: [{ label: 'Sécurité numérique', href: '/wiki/Sécurite-Numerique' }],
+  },
+
+  gav_droits: {
+    id: 'gav_droits',
+    text: 'En garde à vue — que faire',
+    type: 'result',
+    color: 'red',
+    icon: '🔴',
+    actions: [
+      '1. DEMANDE UN AVOCAT IMMÉDIATEMENT — c\'est ton droit absolu',
+      '2. EXERCICE DU SILENCE — réponds uniquement à l\'état civil',
+      '3. Refuse de signer toute déposition avant d\'avoir vu l\'avocat',
+      '4. Tu peux refuser l\'examen psychiatrique',
+      '5. Note mentalement : l\'heure de début de GAV (max 24h, prolongeable 24h sur autorisation)',
+      '6. Ne mentionne aucun nom, aucun lieu, aucune date',
+    ],
+    rights: [
+      'GAV max 24h — prolongation nécessite autorisation du procureur',
+      'Avocat commis d\'office si tu n\'en as pas : demande-le',
+      'Droit de faire prévenir un proche de ta situation',
+      'Refus de répondre = pas une infraction',
+    ],
+    links: [
+      { label: 'Contacts & Alliés (avocats)', href: '/wiki/Contacts-Allies' },
+      { label: 'Sécurité numérique', href: '/wiki/Sécurite-Numerique' },
+    ],
+  },
+
+  gav_proche: {
+    id: 'gav_proche',
+    text: 'Un proche est en GAV',
+    type: 'result',
+    color: 'orange',
+    icon: '⚠️',
+    actions: [
+      'Contacte immédiatement un avocat ou le FSJS',
+      'Note : commissariat ou gendarmerie, heure d\'interpellation, lieu',
+      'L\'avocat peut se présenter dès la 1ère heure',
+      'Ne te présente pas au commissariat sans avocat',
+      'Prépare les infos : identité complète, heure d\'interpellation, lieu',
+      'Documente tout pour le recours ultérieur',
+    ],
+    rights: [
+      'Un avocat peut voir son client dès la 1ère heure de GAV',
+      'La famille peut être notifiée si le gardé à vue le demande',
+    ],
+    links: [{ label: 'Contacts & Alliés (urgence)', href: '/wiki/Contacts-Allies' }],
+  },
+
+  // ── AFD ──
+  afd: {
+    id: 'afd',
+    text: 'Tu as reçu une AFD (amende forfaitaire délictuelle). Quand ?',
+    type: 'question',
+    choices: [
+      { label: 'Sur le terrain, on me la présente maintenant', next: 'afd_terrain' },
+      { label: 'Je l\'ai reçue par courrier (moins de 15 jours)', next: 'afd_15j' },
+      { label: 'Je l\'ai reçue par courrier (15 à 30 jours)', next: 'afd_30j' },
+      { label: 'Je l\'ai reçue par courrier (plus de 30 jours)', next: 'afd_tarde' },
+    ],
+  },
+
+  afd_terrain: {
+    id: 'afd_terrain',
+    text: 'AFD présentée sur le terrain',
+    type: 'result',
+    color: 'orange',
+    icon: '⚠️',
+    actions: [
+      'NE PAIE PAS sur le terrain — payer = reconnaître les faits = casier judiciaire',
+      'NE SIGNE PAS le document si tu peux l\'éviter',
+      'Dis : "Je ne reconnais pas les faits"',
+      'Demande un exemplaire papier à recevoir à domicile',
+      'Note le numéro de l\'avis, le service verbalisateur, la date',
+      'Tu as 45 jours pour décider — ne te laisse pas presser',
+    ],
+    rights: [
+      'Payer = reconnaissance de culpabilité + casier judiciaire 3 ans',
+      'Refus de payer sur terrain = légal, pas d\'infraction supplémentaire',
+      'Tu as 30 jours après réception pour contester formellement',
+    ],
+    links: [{ label: 'Stratégie complète contre RIPOST', href: '/wiki/Strategie-contre-ripost' }],
+  },
+
+  afd_15j: {
+    id: 'afd_15j',
+    text: 'AFD reçue — moins de 15 jours',
+    type: 'result',
+    color: 'orange',
+    icon: '⚠️',
+    actions: [
+      'CONSULTE UN AVOCAT avant tout — la décision engage ton casier',
+      'Option 1 : Payer avant 15j = amende minorée MAIS casier 3 ans',
+      'Option 2 : Attendre et contester dans les 30j = risque sanction plus lourde',
+      'Option 3 : Ne rien faire = majoration automatique puis poursuites',
+      'Contacte le FSJS pour évaluer ton dossier',
+      'Rejoins le réseau de résistance collective si d\'autres ont reçu la même AFD',
+    ],
+    rights: [
+      'Contester = possible dans les 30j après réception',
+      'Si tu contestes, le procureur peut poursuivre au tribunal (jusqu\'à 7 500€ / 6 mois)',
+      'Si plusieurs infractions simultanées : l\'AFD peut être illégale',
+    ],
+    links: [{ label: 'Stratégie RIPOST', href: '/wiki/Strategie-contre-ripost' }, { label: 'Contacts & Alliés', href: '/wiki/Contacts-Allies' }],
+  },
+
+  afd_30j: {
+    id: 'afd_30j',
+    text: 'AFD reçue — entre 15 et 30 jours',
+    type: 'result',
+    color: 'red',
+    icon: '🔴',
+    actions: [
+      'URGENT — il te reste peu de temps pour contester',
+      'Contacte un avocat aujourd\'hui',
+      'Rédige ta contestation écrite au procureur immédiatement',
+      'Envoie en LETTRE RECOMMANDÉE avec accusé de réception',
+      'Garde toutes les preuves : enveloppe, tampon, photocopie de l\'AFD',
+    ],
+    rights: [
+      'Délai de contestation : 30 jours après réception',
+      'Passé ce délai : AFD devient définitive et exécutoire',
+    ],
+    links: [{ label: 'Stratégie RIPOST', href: '/wiki/Strategie-contre-ripost' }, { label: 'Templates recours', href: '/wiki/Templates-Recours' }],
+  },
+
+  afd_tarde: {
+    id: 'afd_tarde',
+    text: 'AFD — plus de 30 jours',
+    type: 'result',
+    color: 'red',
+    icon: '🔴',
+    actions: [
+      'Le délai de contestation standard est dépassé',
+      'Consulte un avocat en urgence — il peut exister des recours spécifiques',
+      'Vérifie si la notification était régulière (erreur d\'adresse = point de départ décalé)',
+      'Si prélevé sans préavis sur ton compte : contestation bancaire possible',
+    ],
+    rights: [
+      'Notification irrégulière = le délai n\'a peut-être pas commencé à courir',
+      'Recours extraordinaire possible si vice de procédure grave',
+    ],
+    links: [{ label: 'Contacts & Alliés (urgence)', href: '/wiki/Contacts-Allies' }],
+  },
+
+  // ── TÉLÉPHONE ──
+  telephone: {
+    id: 'telephone',
+    text: 'Ils veulent ton téléphone',
+    type: 'question',
+    choices: [
+      { label: 'Ils demandent mon code PIN / mot de passe', next: 'tel_pin' },
+      { label: 'Ils veulent saisir physiquement le téléphone', next: 'tel_saisie' },
+      { label: 'Je suis en GAV et ils insistent', next: 'tel_gav' },
+    ],
+  },
+
+  tel_pin: {
+    id: 'tel_pin',
+    text: 'Ils demandent ton code PIN',
+    type: 'result',
+    color: 'green',
+    icon: '✅',
+    actions: [
+      'REFUSE — tu n\'es PAS obligé de donner ton code PIN en France',
+      'Dis : "Je refuse de communiquer mes codes d\'accès"',
+      'Le refus de donner son code PIN n\'est pas une infraction en lui-même',
+      'Mets le téléphone en mode avion MAINTENANT si ce n\'est pas fait',
+      'Si possible : éteins complètement (BFU = Before First Unlock, chiffrement maximal)',
+    ],
+    rights: [
+      'Article 434-15-2 du code pénal : s\'applique seulement sur réquisition judiciaire formelle',
+      'En garde à vue sans réquisition judiciaire : pas d\'obligation',
+      'Même avec réquisition : le droit au silence peut couvrir cette situation — consulte un avocat',
+    ],
+    links: [{ label: 'Sécurité numérique complète', href: '/wiki/Sécurite-Numerique' }],
+  },
+
+  tel_saisie: {
+    id: 'tel_saisie',
+    text: 'Saisie physique du téléphone',
+    type: 'result',
+    color: 'orange',
+    icon: '⚠️',
+    actions: [
+      'Ne résiste pas physiquement',
+      'Dis clairement : "Je ne consens pas à cette saisie"',
+      'ÉTEINS le téléphone avant de le remettre si tu peux (BFU = protection maximale)',
+      'Exige un reçu de saisie avec la description de l\'appareil (modèle, couleur, état)',
+      'Ne donne pas ton code PIN même après saisie',
+      'Contacte un avocat dès que possible',
+    ],
+    rights: [
+      'Saisie de téléphone nécessite une réquisition judiciaire',
+      'Saisie sur réquisition = légale mais tu peux contester la proportionnalité',
+      'Téléphone éteint = chiffrement complet, extraction de données très difficile',
+    ],
+    links: [{ label: 'Sécurité numérique', href: '/wiki/Sécurite-Numerique' }],
+  },
+
+  tel_gav: {
+    id: 'tel_gav',
+    text: 'En GAV — pression sur le code PIN',
+    type: 'result',
+    color: 'red',
+    icon: '🔴',
+    actions: [
+      'Attends ton avocat avant de répondre à toute question sur le téléphone',
+      'L\'obligation de révéler un code PIN nécessite une réquisition judiciaire formelle',
+      'Dis : "Je répondrai à cette question en présence de mon avocat"',
+      'Ne cède pas à la pression — c\'est une technique d\'interrogatoire',
+      'Ton avocat évaluera si une réquisition valide existe',
+    ],
+    rights: [
+      'Réquisition judiciaire de déchiffrement = doit être signée par un magistrat',
+      'Ton avocat a le droit de voir la réquisition avant que tu répondes',
+      'Refus injustifié face à une réquisition valide = délit (1 an / 15 000€)',
+    ],
+    links: [{ label: 'Contacts & Alliés', href: '/wiki/Contacts-Allies' }],
+  },
+};
+
+// ─── TYPES ────────────────────────────────────────────────────────────────
+interface Choice { label: string; next: string; }
+interface Node {
+  id: string;
+  text: string;
+  type: 'question' | 'result';
+  color?: 'green' | 'orange' | 'red';
+  icon?: string;
+  choices?: Choice[];
+  actions?: string[];
+  rights?: string[];
+  links?: { label: string; href: string }[];
+}
+
+// ─── ÉTAT ─────────────────────────────────────────────────────────────────
+let history: string[] = ['root'];
+
+// ─── RENDU ────────────────────────────────────────────────────────────────
+function colorClass(color?: string) {
+  if (color === 'green')  return { border: 'border-neon-green',  text: 'text-neon-green',  bg: 'bg-neon-green/10' };
+  if (color === 'orange') return { border: 'border-neon-orange', text: 'text-neon-orange', bg: 'bg-neon-orange/10' };
+  if (color === 'red')    return { border: 'border-neon-pink',   text: 'text-neon-pink',   bg: 'bg-neon-pink/10' };
+  return { border: 'border-neon-cyan', text: 'text-neon-cyan', bg: 'bg-neon-cyan/10' };
+}
+
+function renderBreadcrumb(): string {
+  if (history.length <= 1) return '';
+  return `
+    <div class="flex items-center gap-1 flex-wrap mb-6 text-[10px] font-mono text-dedsec-muted">
+      ${history.map((id, i) => {
+        const node = tree[id];
+        const label = i === 0 ? 'DÉBUT' : node.text.slice(0, 28) + (node.text.length > 28 ? '…' : '');
+        const isLast = i === history.length - 1;
+        return `
+          ${i > 0 ? '<span class="text-dedsec-border">›</span>' : ''}
+          ${isLast
+            ? `<span class="text-neon-green">${label}</span>`
+            : `<button class="hover:text-neon-cyan transition-colors underline underline-offset-2" data-goto="${i}">${label}</button>`
+          }
+        `;
+      }).join('')}
+    </div>
+  `;
+}
+
+function renderNode(id: string): string {
+  const node = tree[id];
+  if (!node) return '<p class="text-neon-pink">Nœud introuvable</p>';
+  const c = colorClass(node.color);
+
+  if (node.type === 'question') {
+    return `
+      ${renderBreadcrumb()}
+      <div class="card-neon border ${c.border} mb-6 animate-fade-in">
+        <div class="flex items-start gap-3">
+          <span class="${c.text} font-mono text-lg mt-0.5">?</span>
+          <p class="font-mono text-dedsec-text text-base font-bold">${node.text}</p>
+        </div>
+      </div>
+      <div class="space-y-3">
+        ${(node.choices || []).map(ch => `
+          <button
+            data-next="${ch.next}"
+            class="w-full text-left flex items-center gap-3 bg-dedsec-darker border border-dedsec-border
+                   hover:border-neon-green hover:text-neon-green text-dedsec-text
+                   font-mono text-sm px-5 py-4 rounded transition-all duration-200
+                   hover:shadow-[0_0_12px_#00ff9f22] hover:translate-x-1 animate-fade-in"
+          >
+            <span class="text-neon-green/50 text-xs shrink-0">▸</span>
+            <span>${ch.label}</span>
+          </button>
+        `).join('')}
+      </div>
+    `;
+  }
+
+  // Result node
+  return `
+    ${renderBreadcrumb()}
+    <div class="border ${c.border} ${c.bg} rounded p-5 mb-6 animate-fade-in">
+      <div class="flex items-center gap-3 mb-1">
+        <span class="text-2xl">${node.icon || '▸'}</span>
+        <h2 class="${c.text} font-mono text-lg font-bold m-0">${node.text}</h2>
+      </div>
+    </div>
+
+    ${node.actions ? `
+      <div class="card-neon mb-4 animate-fade-in">
+        <div class="text-neon-green font-mono text-xs font-bold mb-3 uppercase tracking-widest">▸ Que faire maintenant</div>
+        <ol class="space-y-2">
+          ${node.actions.map((a, i) => `
+            <li class="flex gap-3 text-sm text-dedsec-text">
+              <span class="text-neon-green font-mono text-xs shrink-0 mt-0.5">${String(i+1).padStart(2,'0')}.</span>
+              <span>${a}</span>
+            </li>
+          `).join('')}
+        </ol>
+      </div>
+    ` : ''}
+
+    ${node.rights ? `
+      <div class="card-neon border-neon-cyan/30 mb-4 animate-fade-in">
+        <div class="text-neon-cyan font-mono text-xs font-bold mb-3 uppercase tracking-widest">▸ Tes droits</div>
+        <ul class="space-y-2">
+          ${node.rights.map(r => `
+            <li class="flex gap-2 text-sm text-dedsec-muted">
+              <span class="text-neon-cyan/50 shrink-0">◇</span>
+              <span>${r}</span>
+            </li>
+          `).join('')}
+        </ul>
+      </div>
+    ` : ''}
+
+    ${node.links?.length ? `
+      <div class="flex flex-wrap gap-2 mb-6 animate-fade-in">
+        ${node.links.map(l => `
+          <a href="${l.href}" class="btn-neon text-xs no-underline">${l.label} →</a>
+        `).join('')}
+      </div>
+    ` : ''}
+
+    <div class="flex gap-3 mt-6 animate-fade-in">
+      <button id="btn-restart"
+        class="flex items-center gap-2 bg-dedsec-darker border border-neon-green/40 hover:border-neon-green
+               text-neon-green font-mono text-xs px-4 py-2 rounded transition-all hover:shadow-[0_0_10px_#00ff9f22]">
+        ↺ Recommencer
+      </button>
+      ${history.length > 1 ? `
+        <button id="btn-back"
+          class="flex items-center gap-2 bg-dedsec-darker border border-dedsec-border hover:border-dedsec-text
+                 text-dedsec-muted hover:text-dedsec-text font-mono text-xs px-4 py-2 rounded transition-all">
+          ← Retour
+        </button>
+      ` : ''}
+    </div>
+  `;
+}
+
+function render() {
+  const container = document.getElementById('decision-tree')!;
+  const current = history[history.length - 1];
+  container.innerHTML = renderNode(current);
+
+  // Choix
+  container.querySelectorAll<HTMLButtonElement>('[data-next]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      history.push(btn.dataset.next!);
+      render();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  });
+
+  // Breadcrumb goto
+  container.querySelectorAll<HTMLButtonElement>('[data-goto]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const idx = parseInt(btn.dataset.goto!);
+      history = history.slice(0, idx + 1);
+      render();
+    });
+  });
+
+  // Restart
+  document.getElementById('btn-restart')?.addEventListener('click', () => {
+    history = ['root'];
+    render();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  // Back
+  document.getElementById('btn-back')?.addEventListener('click', () => {
+    if (history.length > 1) history.pop();
+    render();
+  });
+}
+
+render();
+</script>
