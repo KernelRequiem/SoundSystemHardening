@@ -8,38 +8,32 @@ import Layout from '../layouts/Layout.astro';
     <div class="absolute -inset-4 bg-gradient-to-r from-neon-green/10 via-transparent to-neon-pink/10 blur-3xl"></div>
     
     <div class="relative text-center">
-      <!-- Logo centré -->
-      <div class="flex justify-center mb-8">
-        <div class="w-48 h-48 rounded-full border-3 border-neon-green overflow-hidden
-                    shadow-[0_0_30px_#00ff9f88] hover:shadow-[0_0_60px_#00ff9f]
-                    transition-all duration-300 hover:scale-105">
-          <img
-            src="/SoundSystemHardening-logo.png"
-            alt="SoundSystem Hardening"
-            class="w-full h-full object-cover"
-          />
-        </div>
-      </div>
-
       <!-- ASCII Art Hero -->
       <div class="mb-8 overflow-x-auto">
-        <pre class="text-neon-green text-[0.45rem] sm:text-[0.55rem] md:text-xs leading-tight font-mono inline-block text-left">╔══════════════════════════════════════════════════════════════╗
-║                                                              ║
-║   ███████╗ ██████╗ ██╗   ██╗███╗   ██╗██████╗               ║
-║   ██╔════╝██╔═══██╗██║   ██║████╗  ██║██╔══██╗              ║
-║   ███████╗██║   ██║██║   ██║██╔██╗ ██║██║  ██║              ║
-║   ╚════██║██║   ██║██║   ██║██║╚██╗██║██║  ██║              ║
-║   ███████║╚██████╔╝╚██████╔╝██║ ╚████║██████╔╝              ║
-║   ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═══╝╚═════╝               ║
-║                                                              ║
-║   <span class="text-neon-purple">██╗  ██╗ █████╗ ██████╗ ██████╗ ███████╗███╗   ██╗██╗███╗   ██╗ ██████╗ </span>║
-║   <span class="text-neon-purple">██║  ██║██╔══██╗██╔══██╗██╔══██╗██╔════╝████╗  ██║██║████╗  ██║██╔════╝ </span>║
-║   <span class="text-neon-purple">███████║███████║██████╔╝██║  ██║█████╗  ██╔██╗ ██║██║██╔██╗ ██║██║  ███╗</span>║
-║   <span class="text-neon-purple">██╔══██║██╔══██║██╔══██╗██║  ██║██╔══╝  ██║╚██╗██║██║██║╚██╗██║██║   ██║</span>║
-║   <span class="text-neon-purple">██║  ██║██║  ██║██║  ██║██████╔╝███████╗██║ ╚████║██║██║ ╚████║╚██████╔╝</span>║
-║   <span class="text-neon-purple">╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚═════╝ ╚══════╝╚═╝  ╚═══╝╚═╝╚═╝  ╚═══╝ ╚═════╝</span> ║
-║                                                              ║
-╚══════════════════════════════════════════════════════════════╝</pre>
+        <pre class="text-neon-green text-[0.38rem] sm:text-[0.48rem] md:text-[0.6rem] leading-tight font-mono inline-block text-left">███████╗ ██████╗ ██╗   ██╗███╗   ██╗██████╗
+██╔════╝██╔═══██╗██║   ██║████╗  ██║██╔══██╗
+███████╗██║   ██║██║   ██║██╔██╗ ██║██║  ██║
+╚════██║██║   ██║██║   ██║██║╚██╗██║██║  ██║
+███████║╚██████╔╝╚██████╔╝██║ ╚████║██████╔╝
+╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═══╝╚═════╝
+
+███████╗██╗   ██╗███████╗████████╗███████╗███╗   ███╗
+██╔════╝╚██╗ ██╔╝██╔════╝╚══██╔══╝██╔════╝████╗ ████║
+███████╗ ╚████╔╝ ███████╗   ██║   █████╗  ██╔████╔██║
+╚════██║  ╚██╔╝  ╚════██║   ██║   ██╔══╝  ██║╚██╔╝██║
+███████║   ██║   ███████║   ██║   ███████╗██║ ╚═╝ ██║
+╚══════╝   ╚═╝   ╚══════╝   ╚═╝   ╚══════╝╚═╝     ╚═╝
+
+<span class="text-neon-purple">██╗  ██╗ █████╗ ██████╗ ██████╗ ███████╗███╗   ██╗██╗███╗   ██╗ ██████╗
+██║  ██║██╔══██╗██╔══██╗██╔══██╗██╔════╝████╗  ██║██║████╗  ██║██╔════╝
+███████║███████║██████╔╝██║  ██║█████╗  ██╔██╗ ██║██║██╔██╗ ██║██║  ███╗
+██╔══██║██╔══██║██╔══██╗██║  ██║██╔══╝  ██║╚██╗██║██║██║╚██╗██║██║   ██║
+██║  ██║██║  ██║██║  ██║██████╔╝███████╗██║ ╚████║██║██║ ╚████║╚██████╔╝
+╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚═════╝ ╚══════╝╚═╝  ╚═══╝╚═╝╚═╝  ╚═══╝ ╚═════╝</span></pre>
+      </div>
+
+      <div class="text-sm font-mono text-dedsec-muted mb-6">
+        ▸ <span class="text-neon-cyan">INIT.SYSTEM</span> &nbsp;|&nbsp; <span class="text-neon-pink">v1.0.0</span> &nbsp;|&nbsp; <span class="text-neon-green">● ONLINE</span>
       </div>
 
       <p class="text-xl text-dedsec-text leading-relaxed mb-6 max-w-3xl mx-auto">
