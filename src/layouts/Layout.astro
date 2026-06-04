@@ -6,10 +6,17 @@ interface Props {
   description?: string;
   category?: string;
   categoryHref?: string;
+  ogImage?: string;
 }
 
-const { title, description, category, categoryHref } = Astro.props;
+const { title, description, category, categoryHref, ogImage } = Astro.props;
 const currentPath = Astro.url.pathname;
+
+const siteUrl = 'https://soundsystemhardening.fr';
+const defaultDescription = 'Wiki collectif : droits, opsec et résistance pour le mouvement free party. Loi RIPOST, sécurité numérique, stratégies juridiques.';
+const resolvedDescription = description || defaultDescription;
+const resolvedImage = ogImage || `${siteUrl}/SoundSystemHardening-logo.png`;
+const resolvedTitle = title === 'Home' ? 'SoundSystemHardening' : `${title} | SoundSystemHardening`;
 
 // Structure de navigation complète
 const navigation = [
@@ -150,10 +157,30 @@ const navigation = [
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content={description || "Centralisation de ressources techniques, juridiques et stratégiques pour les pratiques culturelles alternatives."} />
     <meta name="generator" content={Astro.generator} />
-    <title>{title} | SoundSystemHardening</title>
-    
+    <title>{resolvedTitle}</title>
+
+    <!-- SEO -->
+    <meta name="description" content={resolvedDescription} />
+    <link rel="canonical" href={`${siteUrl}${currentPath}`} />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={`${siteUrl}${currentPath}`} />
+    <meta property="og:title" content={resolvedTitle} />
+    <meta property="og:description" content={resolvedDescription} />
+    <meta property="og:image" content={resolvedImage} />
+    <meta property="og:image:width" content="512" />
+    <meta property="og:image:height" content="512" />
+    <meta property="og:site_name" content="SoundSystemHardening" />
+    <meta property="og:locale" content="fr_FR" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={resolvedTitle} />
+    <meta name="twitter:description" content={resolvedDescription} />
+    <meta name="twitter:image" content={resolvedImage} />
+
     <!-- Favicons -->
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
