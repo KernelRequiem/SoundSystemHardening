@@ -2,9 +2,9 @@
 import Layout from '../layouts/Layout.astro';
 ---
 
-<Layout title="Que faire ?" description="Arbre de décision interactif — GAV, fouille, saisie, contrôle routier">
+<Layout title="Que faire ?" description="Arbre de décision interactif - GAV, fouille, saisie, contrôle routier">
   <h1 class="mb-2">▸ QUE FAIRE SI...</h1>
-  <p class="text-dedsec-muted text-sm mb-8 font-mono">Arbre de décision interactif — clique sur ta situation</p>
+  <p class="text-dedsec-muted text-sm mb-8 font-mono">Arbre de décision interactif - clique sur ta situation</p>
 
   <div id="decision-tree" class="max-w-2xl mx-auto"></div>
 </Layout>
@@ -52,7 +52,7 @@ const tree: Record<string, Node> = {
       'Note l\'heure, le lieu et le numéro de matricule des agents',
     ],
     rights: [
-      'Inspection visuelle ≠ fouille — tu peux refuser l\'ouverture du coffre',
+      'Inspection visuelle ≠ fouille - tu peux refuser l\'ouverture du coffre',
       'Si OPJ (officier de police judiciaire) présent, la fouille peut être imposée',
     ],
     links: [{ label: 'Modus Operandi complet', href: '/wiki/Modus-Operandi' }],
@@ -96,9 +96,9 @@ const tree: Record<string, Node> = {
     color: 'orange',
     icon: '⚠️',
     actions: [
-      'Ne consens PAS verbalement à la fouille — dis "Je ne consens pas à cette fouille"',
+      'Ne consens PAS verbalement à la fouille - dis "Je ne consens pas à cette fouille"',
       'Demande s\'il y a un OPJ présent et sa réquisition écrite',
-      'Ne touche rien — laisse les agents agir, ne facilite pas',
+      'Ne touche rien - laisse les agents agir, ne facilite pas',
       'Filme si possible (de façon discrète, depuis le téléphone posé)',
       'Note les noms et matricules, l\'heure, le lieu précis',
     ],
@@ -118,7 +118,7 @@ const tree: Record<string, Node> = {
     icon: '🔴',
     actions: [
       'Dis clairement : "Je ne consens pas à cette fouille corporelle"',
-      'La palpation de sécurité (extérieure) est légale — la fouille à corps approfondie nécessite une OPJ',
+      'La palpation de sécurité (extérieure) est légale - la fouille à corps approfondie nécessite une OPJ',
       'Demande que la fouille se fasse en présence d\'un témoin',
       'Note tout : agent, heure, lieu, type de fouille',
       'Dépose plainte systématiquement si fouille à corps sans OPJ',
@@ -171,7 +171,7 @@ const tree: Record<string, Node> = {
     color: 'red',
     icon: '🔴',
     actions: [
-      'NE T\'OPPOSE PAS PHYSIQUEMENT — c\'est le piège, ça aggrave',
+      'NE T\'OPPOSE PAS PHYSIQUEMENT - c\'est le piège, ça aggrave',
       'Filme tout : chaque item saisi, les agents, le véhicule de transport',
       'Exige un INVENTAIRE ÉCRIT détaillé signé par un agent',
       'Refuse de signer quoi que ce soit sans l\'avoir lu entièrement',
@@ -201,7 +201,7 @@ const tree: Record<string, Node> = {
       'Demande la décision judiciaire ou administrative autorisant la saisie',
       'Filme la mise en fourrière : état du véhicule, agents présents',
       'Note le numéro de fourrière, l\'adresse, le numéro de dossier',
-      'Contacte un avocat immédiatement — délai court pour contester',
+      'Contacte un avocat immédiatement - délai court pour contester',
       'Demande un reçu avec l\'état du véhicule à la remise',
     ],
     rights: [
@@ -245,17 +245,17 @@ const tree: Record<string, Node> = {
 
   gav_interpel: {
     id: 'gav_interpel',
-    text: 'Interpellation — avant la GAV',
+    text: 'Interpellation - avant la GAV',
     type: 'result',
     color: 'red',
     icon: '🔴',
     actions: [
-      'SILENCE TOTAL — ne dis rien sauf ton identité (nom, prénom, date de naissance)',
+      'SILENCE TOTAL - ne dis rien sauf ton identité (nom, prénom, date de naissance)',
       'Demande immédiatement : "Suis-je en garde à vue ?"',
       'Si oui : demande que tes droits te soient lus',
       'Si non : "Suis-je libre de partir ?"',
       'METS TON TÉLÉPHONE EN MODE AVION maintenant',
-      'Ne donne pas ton code PIN — tu n\'y es pas obligé en France',
+      'Ne donne pas ton code PIN - tu n\'y es pas obligé en France',
     ],
     rights: [
       'Droit au silence : tu peux refuser de répondre à toutes questions',
@@ -268,20 +268,20 @@ const tree: Record<string, Node> = {
 
   gav_droits: {
     id: 'gav_droits',
-    text: 'En garde à vue — que faire',
+    text: 'En garde à vue - que faire',
     type: 'result',
     color: 'red',
     icon: '🔴',
     actions: [
-      '1. DEMANDE UN AVOCAT IMMÉDIATEMENT — c\'est ton droit absolu',
-      '2. EXERCICE DU SILENCE — réponds uniquement à l\'état civil',
+      '1. DEMANDE UN AVOCAT IMMÉDIATEMENT - c\'est ton droit absolu',
+      '2. EXERCICE DU SILENCE - réponds uniquement à l\'état civil',
       '3. Refuse de signer toute déposition avant d\'avoir vu l\'avocat',
       '4. Tu peux refuser l\'examen psychiatrique',
       '5. Note mentalement : l\'heure de début de GAV (max 24h, prolongeable 24h sur autorisation)',
       '6. Ne mentionne aucun nom, aucun lieu, aucune date',
     ],
     rights: [
-      'GAV max 24h — prolongation nécessite autorisation du procureur',
+      'GAV max 24h - prolongation nécessite autorisation du procureur',
       'Avocat commis d\'office si tu n\'en as pas : demande-le',
       'Droit de faire prévenir un proche de ta situation',
       'Refus de répondre = pas une infraction',
@@ -333,12 +333,12 @@ const tree: Record<string, Node> = {
     color: 'orange',
     icon: '⚠️',
     actions: [
-      'NE PAIE PAS sur le terrain — payer = reconnaître les faits = casier judiciaire',
+      'NE PAIE PAS sur le terrain - payer = reconnaître les faits = casier judiciaire',
       'NE SIGNE PAS le document si tu peux l\'éviter',
       'Dis : "Je ne reconnais pas les faits"',
       'Demande un exemplaire papier à recevoir à domicile',
       'Note le numéro de l\'avis, le service verbalisateur, la date',
-      'Tu as 45 jours pour décider — ne te laisse pas presser',
+      'Tu as 45 jours pour décider - ne te laisse pas presser',
     ],
     rights: [
       'Payer = reconnaissance de culpabilité + casier judiciaire 3 ans',
@@ -350,12 +350,12 @@ const tree: Record<string, Node> = {
 
   afd_15j: {
     id: 'afd_15j',
-    text: 'AFD reçue — moins de 15 jours',
+    text: 'AFD reçue - moins de 15 jours',
     type: 'result',
     color: 'orange',
     icon: '⚠️',
     actions: [
-      'CONSULTE UN AVOCAT avant tout — la décision engage ton casier',
+      'CONSULTE UN AVOCAT avant tout - la décision engage ton casier',
       'Option 1 : Payer avant 15j = amende minorée MAIS casier 3 ans',
       'Option 2 : Attendre et contester dans les 30j = risque sanction plus lourde',
       'Option 3 : Ne rien faire = majoration automatique puis poursuites',
@@ -372,12 +372,12 @@ const tree: Record<string, Node> = {
 
   afd_30j: {
     id: 'afd_30j',
-    text: 'AFD reçue — entre 15 et 30 jours',
+    text: 'AFD reçue - entre 15 et 30 jours',
     type: 'result',
     color: 'red',
     icon: '🔴',
     actions: [
-      'URGENT — il te reste peu de temps pour contester',
+      'URGENT - il te reste peu de temps pour contester',
       'Contacte un avocat aujourd\'hui',
       'Rédige ta contestation écrite au procureur immédiatement',
       'Envoie en LETTRE RECOMMANDÉE avec accusé de réception',
@@ -392,13 +392,13 @@ const tree: Record<string, Node> = {
 
   afd_tarde: {
     id: 'afd_tarde',
-    text: 'AFD — plus de 30 jours',
+    text: 'AFD - plus de 30 jours',
     type: 'result',
     color: 'red',
     icon: '🔴',
     actions: [
       'Le délai de contestation standard est dépassé',
-      'Consulte un avocat en urgence — il peut exister des recours spécifiques',
+      'Consulte un avocat en urgence - il peut exister des recours spécifiques',
       'Vérifie si la notification était régulière (erreur d\'adresse = point de départ décalé)',
       'Si prélevé sans préavis sur ton compte : contestation bancaire possible',
     ],
@@ -428,7 +428,7 @@ const tree: Record<string, Node> = {
     color: 'green',
     icon: '✅',
     actions: [
-      'REFUSE — tu n\'es PAS obligé de donner ton code PIN en France',
+      'REFUSE - tu n\'es PAS obligé de donner ton code PIN en France',
       'Dis : "Je refuse de communiquer mes codes d\'accès"',
       'Le refus de donner son code PIN n\'est pas une infraction en lui-même',
       'Mets le téléphone en mode avion MAINTENANT si ce n\'est pas fait',
@@ -437,7 +437,7 @@ const tree: Record<string, Node> = {
     rights: [
       'Article 434-15-2 du code pénal : s\'applique seulement sur réquisition judiciaire formelle',
       'En garde à vue sans réquisition judiciaire : pas d\'obligation',
-      'Même avec réquisition : le droit au silence peut couvrir cette situation — consulte un avocat',
+      'Même avec réquisition : le droit au silence peut couvrir cette situation - consulte un avocat',
     ],
     links: [{ label: 'Sécurité numérique complète', href: '/wiki/Sécurite-Numerique' }],
   },
@@ -466,7 +466,7 @@ const tree: Record<string, Node> = {
 
   tel_gav: {
     id: 'tel_gav',
-    text: 'En GAV — pression sur le code PIN',
+    text: 'En GAV - pression sur le code PIN',
     type: 'result',
     color: 'red',
     icon: '🔴',
@@ -474,7 +474,7 @@ const tree: Record<string, Node> = {
       'Attends ton avocat avant de répondre à toute question sur le téléphone',
       'L\'obligation de révéler un code PIN nécessite une réquisition judiciaire formelle',
       'Dis : "Je répondrai à cette question en présence de mon avocat"',
-      'Ne cède pas à la pression — c\'est une technique d\'interrogatoire',
+      'Ne cède pas à la pression - c\'est une technique d\'interrogatoire',
       'Ton avocat évaluera si une réquisition valide existe',
     ],
     rights: [

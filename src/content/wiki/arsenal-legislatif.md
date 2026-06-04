@@ -11,17 +11,17 @@ Ce fichier documente l'ensemble des textes de loi applicables aux free parties :
 ## Chronologie législative
 
 ```
-1995   — Circulaire Pasqua : première reconnaissance administrative des raves
-2001   — Loi Vaillant + amendement Mariani (LSQ n° 2001-1062)
+1995   - Circulaire Pasqua : première reconnaissance administrative des raves
+2001   - Loi Vaillant + amendement Mariani (LSQ n° 2001-1062)
            Texte fondateur : déclaration préalable obligatoire
-2002   — Décret d'application du 3 mai 2002
+2002   - Décret d'application du 3 mai 2002
            Seuils, délais, procédures de déclaration
-2003   — Discours Sarkozy (26/09/03) : tolérance relative, dialogue avec les médiateurs
-2012   — Recodification dans le Code de la sécurité intérieure (CSI)
+2003   - Discours Sarkozy (26/09/03) : tolérance relative, dialogue avec les médiateurs
+2012   - Recodification dans le Code de la sécurité intérieure (CSI)
            Art. 23-1 de la loi de 1995 → Art. L211-5 à L211-8 + R211-2, R211-27 CSI
-2013   — Décret n° 2013-1113 du 4 décembre 2013 : recodification définitive
-2025   — Dépôt PPL n° 1133 (mars 2025) : durcissement des sanctions
-2026   — Adoption PPL 1133 à l'Assemblée nationale (9 avril 2026)
+2013   - Décret n° 2013-1113 du 4 décembre 2013 : recodification définitive
+2025   - Dépôt PPL n° 1133 (mars 2025) : durcissement des sanctions
+2026   - Adoption PPL 1133 à l'Assemblée nationale (9 avril 2026)
            Vote RIPOST au Sénat (26 mai 2026) : durcissement supplémentaire
            Les deux textes en navette parlementaire au moment de la rédaction
 ```
@@ -42,7 +42,7 @@ La loi a été recodifiée en décembre 2013 dans le Code de la sécurité inté
 
 > *« Les rassemblements exclusivement festifs à caractère musical, organisés par des personnes privées, dans des lieux qui ne sont pas au préalable aménagés à cette fin et répondant à certaines caractéristiques fixées par décret en Conseil d'État tenant à leur importance, à leur mode d'organisation ainsi qu'aux risques susceptibles d'être encourus par les participants, font l'objet d'une déclaration des organisateurs auprès du représentant de l'État dans le département dans lequel le rassemblement doit se tenir. »*
 
-**Source :** Légifrance, art. L211-5 CSI — https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000025505145
+**Source :** Légifrance, art. L211-5 CSI - https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000025505145
 
 ### Ce que ça signifie concrètement
 
@@ -63,7 +63,7 @@ Le décret d'application précise les caractéristiques : rassemblement festif �
 
 > *« Est puni de l'amende prévue pour les contraventions de la cinquième classe le fait d'organiser un rassemblement mentionné à l'article L211-5 sans déclaration préalable ou en violation d'une interdiction prononcée par le préfet du département. Le tribunal peut prononcer la confiscation du matériel saisi. »*
 
-**Source :** Légifrance, art. R211-27 CSI — https://www.legifrance.gouv.fr/codes/section_lc/LEGITEXT000025503132/LEGISCTA000028285087/
+**Source :** Légifrance, art. R211-27 CSI - https://www.legifrance.gouv.fr/codes/section_lc/LEGITEXT000025503132/LEGISCTA000028285087/
 
 **Sanction :** contravention de 5e classe = amende jusqu'à **1 500 €** (plafond des contraventions de 5e classe selon le Code pénal).
 
@@ -83,7 +83,7 @@ Ce système de **saisie conservatoire préventive** (avant condamnation) est par
 
 ---
 
-## 3. PPL n° 1133 — Durcissement adopté à l'Assemblée nationale (9 avril 2026)
+## 3. PPL n° 1133 - Durcissement adopté à l'Assemblée nationale (9 avril 2026)
 
 ### Contexte et processus
 
@@ -91,7 +91,7 @@ La proposition de loi n° 1133 a été déposée le 18 mars 2025 par la député
 
 **Vote :** adoptée par 78 voix contre 67, avec le soutien du gouvernement, de la droite et de l'extrême droite. Opposition de la gauche et de la LDH.
 
-**Source :** Assemblée nationale — https://www.assemblee-nationale.fr/dyn/17/dossiers/penalisation_rave_party_17e
+**Source :** Assemblée nationale - https://www.assemblee-nationale.fr/dyn/17/dossiers/penalisation_rave_party_17e
 
 ### Contenu du texte adopté
 
@@ -114,17 +114,17 @@ Cette formulation couvre potentiellement :
 
 Pour la première fois, les participants peuvent être sanctionnés d'une **amende de 1 500 €**, doublée en cas de récidive.
 
-**Source :** TSUGI, 10 avril 2026 — https://www.tsugi.fr/free-party-la-repression-se-durcit-pour-les-fetes-libres/
+**Source :** TSUGI, 10 avril 2026 - https://www.tsugi.fr/free-party-la-repression-se-durcit-pour-les-fetes-libres/
 
 ### Statut au moment de la rédaction
 
 Adoptée par l'Assemblée nationale le 9 avril 2026. **En attente d'examen par le Sénat.** Si le Sénat adopte un texte différent, une commission mixte paritaire sera nécessaire.
 
-**Source :** Assemblée nationale, dossier législatif — T.A. n° 268, transmis au Sénat le 10 avril 2026.
+**Source :** Assemblée nationale, dossier législatif - T.A. n° 268, transmis au Sénat le 10 avril 2026.
 
 ---
 
-## 4. RIPOST — Projet de loi adopté au Sénat (26 mai 2026)
+## 4. RIPOST - Projet de loi adopté au Sénat (26 mai 2026)
 
 ### Contexte
 
@@ -132,7 +132,7 @@ Le projet de loi « Réponses immédiates aux phénomènes troublant l'ordre pub
 
 **Vote au Sénat :** adopté le 26 mai 2026 par 243 voix contre 33.
 
-**Source :** TSUGI, 26 mai 2026 — https://www.tsugi.fr/projet-de-loi-ripost-le-senat-enfonce-le-clou-sur-la-repression-des-free-parties/
+**Source :** TSUGI, 26 mai 2026 - https://www.tsugi.fr/projet-de-loi-ripost-le-senat-enfonce-le-clou-sur-la-repression-des-free-parties/
 
 ### Contenu concernant les free parties
 
@@ -150,7 +150,7 @@ Alternative : amende forfaitaire délictuelle (AFD) de **1 500 €**, à la disc
 
 Le seuil déclenchant l'obligation de déclaration en préfecture est abaissé de 500 à **250 personnes**.
 
-**Source :** Public Sénat — https://www.publicsenat.fr/actualites/parlementaire/projet-de-loi-ripost-contre-les-troubles-a-lordre-public-ce-que-contient-le-texte-du-senat
+**Source :** Public Sénat - https://www.publicsenat.fr/actualites/parlementaire/projet-de-loi-ripost-contre-les-troubles-a-lordre-public-ce-que-contient-le-texte-du-senat
 
 ### Statut au moment de la rédaction
 
@@ -197,15 +197,15 @@ Le préfet peut interdire un rassemblement (art. L211-7 CSI) si : il est "de nat
 
 La France ne s'inscrit pas seule dans cette évolution répressive.
 
-**Royaume-Uni — Criminal Justice Act (1994) :**
+**Royaume-Uni - Criminal Justice Act (1994) :**
 
 Premier texte anti-rave d'Europe. Interdit les rassemblements diffusant une "musique répétitive" en plein air. A historiquement poussé les sound systems britanniques à s'exiler en France, propageant la sous-culture en Europe continentale.
 
-**Italie — Decreto anti-rave (2022) :**
+**Italie - Decreto anti-rave (2022) :**
 
 Gouvernement Meloni. Jusqu'à six ans de prison et 10 000 € d'amende pour tout rassemblement festif non autorisé de plus de 50 personnes sur un terrain public ou privé. A provoqué une forte mobilisation dans plusieurs villes italiennes.
 
-**Source :** Public Sénat, mai 2026 — https://www.publicsenat.fr/actualites/politique/rave-parties-quelles-legislations-chez-nos-voisins-europeens
+**Source :** Public Sénat, mai 2026 - https://www.publicsenat.fr/actualites/politique/rave-parties-quelles-legislations-chez-nos-voisins-europeens
 
 ---
 
@@ -217,7 +217,7 @@ La LDH a officiellement dénoncé la PPL 1133 comme une "aggravation considérab
 
 > *"Elle fait également courir le risque de permettre une pénalisation des intervenant-e-s des associations de réduction des risques et des dommages ou, a minima, de dissuader ceux-ci d'exercer leur mission d'intérêt général."*
 
-**Source :** LDH, 31 mars 2026 — https://www.ldh-france.org/contre-le-renforcement-de-la-penalisation-de-lorganisation-de-rave-parties/
+**Source :** LDH, 31 mars 2026 - https://www.ldh-france.org/contre-le-renforcement-de-la-penalisation-de-lorganisation-de-rave-parties/
 
 ### Amnesty International
 
@@ -233,7 +233,7 @@ Une pétition officielle sur la plateforme de l'Assemblée nationale a demandé 
 * Stigmatisation générale d'une culture
 * Atteinte disproportionnée à la liberté d'association et de rassemblement
 
-**Source :** Pétition officielle AN — https://petitions.assemblee-nationale.fr/initiatives/i-5428
+**Source :** Pétition officielle AN - https://petitions.assemblee-nationale.fr/initiatives/i-5428
 
 ### Arguments des opposants au texte (gauche, acteurs culturels)
 
@@ -247,7 +247,7 @@ Une pétition officielle sur la plateforme de l'Assemblée nationale a demandé 
 
 ## 9. Textes connexes applicables
 
-### Code pénal — infractions de droit commun fréquemment relevées
+### Code pénal - infractions de droit commun fréquemment relevées
 
 Ces infractions s'appliquent indépendamment du régime CSI, à tout participant :
 
@@ -269,11 +269,11 @@ Ces textes fondent les recours possibles contre les interdictions préfectorales
 
 ## 10. Veille législative : points à surveiller
 
-**PPL 1133 — navette parlementaire :**
+**PPL 1133 - navette parlementaire :**
 
 Adoptée à l'AN (9 avril 2026), en attente du Sénat. Si le Sénat adopte un texte différent : commission mixte paritaire. Délai estimé : avant l'été 2026.
 
-**RIPOST — navette parlementaire :**
+**RIPOST - navette parlementaire :**
 
 Adopté au Sénat (26 mai 2026), en attente de l'Assemblée nationale. Délai estimé : rentrée 2026. Ce texte est plus sévère que la PPL 1133 sur les peines des participants.
 
@@ -286,7 +286,7 @@ RIPOST abaisse le seuil de 500 à 250 personnes. Si adopté définitivement, cel
 * Le cumul PPL 1133 + RIPOST est-il possible, ou l'un remplace-t-il l'autre ?
 * Contestation constitutionnelle possible : le Conseil constitutionnel sera-t-il saisi ?
 
-Voir `Wiki — Veille` pour le suivi en temps réel.
+Voir `Wiki - Veille` pour le suivi en temps réel.
 
 ---
 

@@ -1,6 +1,6 @@
 # Sécurité des communications
 
-> **Statut :** actif — mis à jour mai 2026  
+> **Statut :** actif - mis à jour mai 2026  
 > **Public :** techniciens et personnes avec des bases réseau souhaitant comprendre les mécanismes, pas seulement les outils  
 > **Scope :** messagerie chiffrée, gestion des identités numériques, métadonnées, réseau, sécurité physique mobile
 
@@ -399,7 +399,7 @@ Le terminal choisit automatiquement l'antenne avec le signal le plus fort. Il n'
        |
        | (signal radio fort, prioritaire)
        |
-[IMSI-catcher — fausse BTS]
+[IMSI-catcher - fausse BTS]
   |          |
   |          | → Collecte : IMSI, IMEI, numéros appelés,
   |          |   durée des appels, position géographique
@@ -644,17 +644,17 @@ Mauvaise pratique (identité unique) :
   Un seul point de compromission expose tout.
 
 Bonne pratique (identités séparées) :
-  Identité A — personnelle / pro :
+  Identité A - personnelle / pro :
     → Email Gmail lié au nom réel
     → Réseaux sociaux personnels
     → Comptes administratifs
 
-  Identité B — collectif public :
+  Identité B - collectif public :
     → Email ProtonMail sans nom réel
     → Comptes réseaux sociaux dédiés au collectif
     → Pas de lien apparent avec l'identité A
 
-  Identité C — coordination sensible :
+  Identité C - coordination sensible :
     → Compte Signal sur numéro prépayé
     → Briar
     → Aucun lien avec A ou B
@@ -746,23 +746,23 @@ La compartimentation est le principe organisationnel qui découle du threat mode
 **Modèle à cercles concentriques**
 
 ```
-Cercle 0 — coordination de cœur (3 à 5 personnes)
+Cercle 0 - coordination de cœur (3 à 5 personnes)
   Canal : Signal E2E, messages éphémères 24h
   Information : décisions critiques, informations à haute sensibilité temporelle
   Règle : aucune information de ce niveau ne sort vers le cercle 1
            avant la fenêtre temporelle définie
 
-Cercle 1 — réseau de confiance proche (10 à 30 personnes)
+Cercle 1 - réseau de confiance proche (10 à 30 personnes)
   Canal : Signal groupes fermés
   Information : informations opérationnelles générales
   Règle : information partagée à J-X seulement
 
-Cercle 2 — réseau élargi (30 à 200 personnes)
+Cercle 2 - réseau élargi (30 à 200 personnes)
   Canal : Telegram groupes avec lien d'invitation contrôlé
   Information : informations orientantes, pas opérationnelles
   Règle : pas d'information permettant une interception préventive
 
-Cercle 3 — public
+Cercle 3 - public
   Canal : Telegram canal public, réseaux sociaux
   Information : uniquement ce qui est déjà ou volontairement public
 ```
@@ -828,14 +828,14 @@ Vérification d'efficacité : appeler le terminal dans le bag
 |--------|-----------------|-------------|----------|
 | Messagerie confidentielle 1:1 | Signal | Briar | SMS, Telegram standard |
 | Messagerie confidentielle groupe | Signal | Wire | Telegram groupe |
-| Messagerie anonyme (sans numéro) | Briar | Session | — |
+| Messagerie anonyme (sans numéro) | Briar | Session | - |
 | Communication sur site hors réseau | Briar (BT/Wi-Fi) | Radio PMR | Téléphone allumé |
 | Email sécurisé | ProtonMail | Tutanota | Gmail, Outlook |
 | Navigation anonyme | Tor Browser | Mullvad VPN | VPN gratuit |
-| Environnement isolé | Tails OS | Whonix | — |
-| Nettoyage métadonnées (desktop) | ExifTool / MAT2 | — | Rien (ne pas oublier) |
-| Nettoyage métadonnées (mobile) | Scrambled Exif | Désactiver GPS photo | — |
-| Isolation terminal | Mode avion | Faraday bag | — |
+| Environnement isolé | Tails OS | Whonix | - |
+| Nettoyage métadonnées (desktop) | ExifTool / MAT2 | - | Rien (ne pas oublier) |
+| Nettoyage métadonnées (mobile) | Scrambled Exif | Désactiver GPS photo | - |
+| Isolation terminal | Mode avion | Faraday bag | - |
 | Communication courte portée | Radio PMR 446 | Briar Bluetooth | Téléphone |
 
 ---
@@ -844,21 +844,21 @@ Vérification d'efficacité : appeler le terminal dans le bag
 
 **Documentation technique de référence**
 
-* [Signal Protocol documentation](https://signal.org/docs/) — spécifications cryptographiques du protocole Signal
-* [Tor Project](https://www.torproject.org/fr/) — documentation officielle, guide OPSEC
-* [Tails documentation](https://tails.boum.org/doc/index.fr.html) — guide d'installation et d'usage
-* [ExifTool documentation](https://exiftool.org/) — référence complète des commandes
+* [Signal Protocol documentation](https://signal.org/docs/) - spécifications cryptographiques du protocole Signal
+* [Tor Project](https://www.torproject.org/fr/) - documentation officielle, guide OPSEC
+* [Tails documentation](https://tails.boum.org/doc/index.fr.html) - guide d'installation et d'usage
+* [ExifTool documentation](https://exiftool.org/) - référence complète des commandes
 
 **Guides de sécurité numérique pour militants**
 
-* [Surveillance Self-Defense (EFF)](https://ssd.eff.org/fr) — guide progressif selon le niveau de risque, disponible en français
-* [Security in a Box](https://securityinabox.org/fr/) — guides pratiques par outil et par contexte
-* [La Quadrature du Net](https://www.laquadrature.net/) — veille juridique et technique sur la surveillance en France
+* [Surveillance Self-Defense (EFF)](https://ssd.eff.org/fr) - guide progressif selon le niveau de risque, disponible en français
+* [Security in a Box](https://securityinabox.org/fr/) - guides pratiques par outil et par contexte
+* [La Quadrature du Net](https://www.laquadrature.net/) - veille juridique et technique sur la surveillance en France
 
 **Sur l'IMSI-catcher**
 
-* [SnoopSnitch](https://f-droid.org/packages/de.srlabs.snoopsnitch/) — application de détection, disponible sur F-Droid
-* [EFF — IMSI Catcher Guide](https://www.eff.org/wp/gotta-catch-em-all-understanding-how-imsi-catchers-interact-our-phones) — documentation technique anglophone
+* [SnoopSnitch](https://f-droid.org/packages/de.srlabs.snoopsnitch/) - application de détection, disponible sur F-Droid
+* [EFF - IMSI Catcher Guide](https://www.eff.org/wp/gotta-catch-em-all-understanding-how-imsi-catchers-interact-our-phones) - documentation technique anglophone
 
 ---
 

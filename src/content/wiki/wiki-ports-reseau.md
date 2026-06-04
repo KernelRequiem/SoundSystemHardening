@@ -1,4 +1,4 @@
-# Les Ports Réseau — Notes complètes
+# Les Ports Réseau - Notes complètes
 
 > Mes notes sur les ports réseau : ce qu'ils sont, pourquoi ils existent, et ce qu'ils exposent en pentest.
 > Je dois connaître les ports courants à vue, et comprendre l'attaque associée à chacun.
@@ -27,7 +27,7 @@
 
 ## C'est quoi un port exactement ?
 
-Un port est un **numéro entre 0 et 65535** qui identifie un **service réseau** sur une machine. C'est comme les numéros de maison dans une rue — l'IP (adresse) c'est la rue, le port c'est le numéro de maison.
+Un port est un **numéro entre 0 et 65535** qui identifie un **service réseau** sur une machine. C'est comme les numéros de maison dans une rue - l'IP (adresse) c'est la rue, le port c'est le numéro de maison.
 
 ```
 Adresse IP    = 192.168.1.100
@@ -61,7 +61,7 @@ Connexion 5 : 192.168.1.42:54825 → 216.239.32.10:80
 → Mon OS sait lequel des 5 navigateurs reçoit la réponse grâce à la combinaison complète
 ```
 
-C'est pour ça que les ports existent — c'est le **multiplexage** — une même machine peut avoir plusieurs conversations simultanées sur des ports différents.
+C'est pour ça que les ports existent - c'est le **multiplexage** - une même machine peut avoir plusieurs conversations simultanées sur des ports différents.
 
 ### TCP vs UDP
 
@@ -87,7 +87,7 @@ DNS, streaming, jeux utilisent UDP.
 
 **Nécessitent des privilèges root/administrateur pour être utilisés.**
 
-Un utilisateur normal ne peut pas démarrer un service sur le port 80 ou 22 — seul root peut. C'est une protection de sécurité — empêcher un utilisateur piégé de se faire passer pour un service système.
+Un utilisateur normal ne peut pas démarrer un service sur le port 80 ou 22 - seul root peut. C'est une protection de sécurité - empêcher un utilisateur piégé de se faire passer pour un service système.
 
 ```bash
 # Comme utilisateur normal
@@ -103,10 +103,10 @@ nc -l -p 22         # ✓ marche
 N'importe quel utilisateur peut les utiliser. C'est où les applications lancent leurs services.
 
 ```
-8080 — port web alternatif (développement local)
-3000 — port app Node.js par défaut
-5000 — port Flask/Python par défaut
-5432 — PostgreSQL alternatif
+8080 - port web alternatif (développement local)
+3000 - port app Node.js par défaut
+5000 - port Flask/Python par défaut
+5432 - PostgreSQL alternatif
 ```
 
 ### Plage 3 : Ports éphémères (49152-65535)
@@ -124,13 +124,13 @@ Mon navigateur → 192.168.1.42:54832 (éphémère auto-attribué par l'OS)
 
 ### Ports de management et diagnostic
 
-#### 21 — FTP (File Transfer Protocol)
+#### 21 - FTP (File Transfer Protocol)
 
 **Service** : Transfert de fichiers. Ancien, avant SFTP.
 
 **Protocole** : TCP
 
-**Raison du port** : FTP a besoin de deux connexions — une pour les commandes (port 21), une pour les données (port 20 ou dynamique). Historiquement associé au numéro 21.
+**Raison du port** : FTP a besoin de deux connexions - une pour les commandes (port 21), une pour les données (port 20 ou dynamique). Historiquement associé au numéro 21.
 
 **En pentest :**
 * Anonymous login souvent activé par défaut → accès aux fichiers
@@ -149,7 +149,7 @@ ftp target.com
 # Si ça marche → je peux télécharger tous les fichiers partagés
 ```
 
-#### 22 — SSH (Secure Shell)
+#### 22 - SSH (Secure Shell)
 
 **Service** : Accès distant sécurisé à un shell (ligne de commande).
 
@@ -173,7 +173,7 @@ nmap -sV -p 22 target.com
 ssh-audit target.com
 ```
 
-#### 23 — Telnet
+#### 23 - Telnet
 
 **Service** : Accès distant non chiffré. Ancêtre d'SSH. Plus utilisé.
 
@@ -188,17 +188,17 @@ ssh-audit target.com
 
 ### Ports web
 
-#### 80 — HTTP
+#### 80 - HTTP
 
 **Service** : Serveur web non chiffré.
 
 **Protocole** : TCP
 
-**Raison du port 80 ?** : Choix historique arbitraire. Avant qu'on utilise l'IANA, les administrateurs réseau avaient besoin d'un numéro — 80 a été choisi pour les services web.
+**Raison du port 80 ?** : Choix historique arbitraire. Avant qu'on utilise l'IANA, les administrateurs réseau avaient besoin d'un numéro - 80 a été choisi pour les services web.
 
 **En pentest :**
 * Tous les labs, CTF, applications web tourneront sur 80 ou 443
-* HTTP non chiffré — je peux sniffer le trafic en clair
+* HTTP non chiffré - je peux sniffer le trafic en clair
 * Vulnérabilités web typiques (SQLi, XSS, CSRF, IDOR)
 
 ```bash
@@ -206,7 +206,7 @@ ssh-audit target.com
 curl http://target.com
 ```
 
-#### 443 — HTTPS
+#### 443 - HTTPS
 
 **Service** : Serveur web chiffré (HTTP + TLS).
 
@@ -227,13 +227,13 @@ curl https://target.com
 testssl.sh https://target.com
 ```
 
-#### 8080 — HTTP alternatif
+#### 8080 - HTTP alternatif
 
 **Service** : Serveur web sur port alternatif (développement, applications internes).
 
 **Protocole** : TCP
 
-**Raison du port 8080 ?** : Pas de raison historique profonde. Convention — "80" suivi de "80" de nouveau. Utilisé quand le port 80 est déjà occupé.
+**Raison du port 8080 ?** : Pas de raison historique profonde. Convention - "80" suivi de "80" de nouveau. Utilisé quand le port 80 est déjà occupé.
 
 **En pentest :**
 * Beaucoup d'applications de développement tournent en local sur 8080
@@ -250,7 +250,7 @@ curl http://target.com:8080/admin
 
 ### Ports email
 
-#### 25 — SMTP (Simple Mail Transfer Protocol)
+#### 25 - SMTP (Simple Mail Transfer Protocol)
 
 **Service** : Envoi d'emails.
 
@@ -260,7 +260,7 @@ curl http://target.com:8080/admin
 
 **En pentest :**
 * Énumération d'utilisateurs valides (commandes VRFY/EXPN)
-* Open relay — envoi d'emails en tant que quelqu'un d'autre (spam, phishing)
+* Open relay - envoi d'emails en tant que quelqu'un d'autre (spam, phishing)
 * Relaying d'emails à travers la cible vers d'autres domaines
 
 ```bash
@@ -273,7 +273,7 @@ EHLO attacker.com
 VRFY admin@target.com    → "550 No such user" ou "250 user found"
 ```
 
-#### 110 — POP3 (Post Office Protocol)
+#### 110 - POP3 (Post Office Protocol)
 
 **Service** : Récupération des emails depuis un serveur.
 
@@ -286,7 +286,7 @@ VRFY admin@target.com    → "550 No such user" ou "250 user found"
 * Credentials en clair sur le réseau (pas de chiffrement)
 * Brute force possible
 
-#### 143 — IMAP (Internet Message Access Protocol)
+#### 143 - IMAP (Internet Message Access Protocol)
 
 **Service** : Accès aux emails (plus moderne et riche que POP3).
 
@@ -299,7 +299,7 @@ VRFY admin@target.com    → "550 No such user" ou "250 user found"
 * Credentials en clair
 * Brute force possible
 
-#### 587 — SMTP alternatif (submission)
+#### 587 - SMTP alternatif (submission)
 
 **Service** : Envoi d'emails pour les clients (version sécurisée de 25).
 
@@ -311,7 +311,7 @@ VRFY admin@target.com    → "550 No such user" ou "250 user found"
 * Moins de problèmes de relay ouvert qu'en 25 (chiffrement + authentification obligatoires)
 * Brute force possible si no rate limiting
 
-#### 465 — SMTPS
+#### 465 - SMTPS
 
 **Service** : SMTP chiffré (TLS dès la connexion, contrairement à 587 qui négocie le chiffrement).
 
@@ -321,7 +321,7 @@ VRFY admin@target.com    → "550 No such user" ou "250 user found"
 
 ### Ports d'accès distant
 
-#### 3389 — RDP (Remote Desktop Protocol)
+#### 3389 - RDP (Remote Desktop Protocol)
 
 **Service** : Accès à l'écran d'une machine Windows à distance.
 
@@ -348,7 +348,7 @@ hydra -l administrator -P rockyou.txt rdp://target.com
 
 ### Ports de base de données
 
-#### 3306 — MySQL
+#### 3306 - MySQL
 
 **Service** : Base de données MySQL.
 
@@ -373,7 +373,7 @@ mysql -h target.com -u root -p
 sqlmap -u "http://target.com" --dbs
 ```
 
-#### 5432 — PostgreSQL
+#### 5432 - PostgreSQL
 
 **Service** : Base de données PostgreSQL.
 
@@ -383,7 +383,7 @@ sqlmap -u "http://target.com" --dbs
 
 **En pentest :** Mêmes vecteurs que MySQL.
 
-#### 1433 — MSSQL (Microsoft SQL Server)
+#### 1433 - MSSQL (Microsoft SQL Server)
 
 **Service** : Base de données SQL Server (Microsoft).
 
@@ -393,7 +393,7 @@ sqlmap -u "http://target.com" --dbs
 
 **En pentest :** Mêmes vecteurs. Souvent dans les réseaux d'entreprise Windows.
 
-#### 27017 — MongoDB
+#### 27017 - MongoDB
 
 **Service** : Base de données NoSQL MongoDB.
 
@@ -419,7 +419,7 @@ mongodump --host target.com:27017 --out ./dump
 
 ### Ports réseau et infrastructure
 
-#### 53 — DNS (Domain Name System)
+#### 53 - DNS (Domain Name System)
 
 **Service** : Résolution de noms de domaines (example.com → 93.184.216.34).
 
@@ -445,7 +445,7 @@ dig axfr @ns1.target.com target.com
 subfinder -d target.com
 ```
 
-#### 67, 68 — DHCP (Dynamic Host Configuration Protocol)
+#### 67, 68 - DHCP (Dynamic Host Configuration Protocol)
 
 **Service** : Attribue les adresses IP automatiquement aux machines du réseau.
 
@@ -454,7 +454,7 @@ subfinder -d target.com
 **Raison des ports 67 (serveur) et 68 (client) ?** : Choix historique. "67" et "68" = séquentiel arbitraire.
 
 **En pentest :**
-* DHCP spoofing — se faire passer pour le serveur DHCP
+* DHCP spoofing - se faire passer pour le serveur DHCP
 * Man-in-the-Middle en attribuant une fausse gateway
 * Exfiltration de données en re-routant le trafic par ma machine
 
@@ -463,7 +463,7 @@ subfinder -d target.com
 sudo tcpdump -i eth0 -n 'udp port 67 or udp port 68'
 ```
 
-#### 137, 138, 139 — NetBIOS (NetBIOS Name Service, Datagram Service, Session Service)
+#### 137, 138, 139 - NetBIOS (NetBIOS Name Service, Datagram Service, Session Service)
 
 **Service** : Résolution de noms et partage de fichiers sur LAN Windows (avant DNS).
 
@@ -486,7 +486,7 @@ nbtscan target.com
 nmap -p 445 --script smb-enum-users target.com
 ```
 
-#### 445 — SMB (Server Message Block)
+#### 445 - SMB (Server Message Block)
 
 **Service** : Partage de fichiers et imprimantes sur Windows. Remplaçant moderne de NetBIOS (ports 137-139).
 
@@ -497,7 +497,7 @@ nmap -p 445 --script smb-enum-users target.com
 **En pentest :**
 * Énumération de partages partagés
 * Accès aux partages (si credentials volés)
-* EternalBlue (CVE-2017-0144) — RCE massif
+* EternalBlue (CVE-2017-0144) - RCE massif
 * Pass-the-Hash attack
 * Credential capture via Responder
 
@@ -515,7 +515,7 @@ smbclient -L //target.com -U username%password
 use exploit/windows/smb/ms17_010_eternalblue
 ```
 
-#### 123 — NTP (Network Time Protocol)
+#### 123 - NTP (Network Time Protocol)
 
 **Service** : Synchronisation de l'heure réseau.
 
@@ -541,7 +541,7 @@ Ces ports sont attribués par l'IANA pour des services spécifiques, mais n'impo
 | 3000 | Node.js (Express) par défaut | Choix arbitraire du framework |
 | 5000 | Flask/Python par défaut | Choix arbitraire du framework |
 | 8000 | Django par défaut | Choix arbitraire du framework |
-| 8080 | Proxy HTTP, dev | Convention — port 80 alternatif |
+| 8080 | Proxy HTTP, dev | Convention - port 80 alternatif |
 | 9000 | Services de monitoring | Plage haute, peu utilisée |
 | 9200 | Elasticsearch | Port de service NoSQL |
 | 6379 | Redis | In-memory datastore, choix arbitraire |
@@ -577,7 +577,7 @@ La paire (local_port, destination_port) identifie la connexion de manière uniqu
 ```
 
 **En pentest :**  
-Pas directement attaquable — les ports éphémères existent juste pour le multiplexage côté client. Je m'en fiche.
+Pas directement attaquable - les ports éphémères existent juste pour le multiplexage côté client. Je m'en fiche.
 
 ---
 
@@ -626,7 +626,7 @@ nmap -sS target.com
 ```
 
 * Envoie des SYN sans compléter le handshake (ne complète pas le ACK)
-* Furtif — pas d'entrées dans les logs d'accès de nombreux services
+* Furtif - pas d'entrées dans les logs d'accès de nombreux services
 * Nécessite root/administrateur
 
 ```
@@ -654,7 +654,7 @@ nmap -sU target.com
 ```
 
 * Scan des ports UDP (DNS, NTP, etc.)
-* Plus lent — pas de réponse confirmée pour les ports ouverts
+* Plus lent - pas de réponse confirmée pour les ports ouverts
 * Utilisé quand on cherche des services UDP
 
 ### Paramètres utiles
@@ -781,9 +781,9 @@ Réflexe en pentest :
 
 * [IANA Service Name Registry](https://www.iana.org/assignments/service-names-port-numbers/)
 * [nmap Manual](https://nmap.org/book/man.html)
-* [TCP/IP Illustrated](https://en.wikipedia.org/wiki/TCP/IP_Illustrated) — Richard Stevens
-* [HackTricks — Ports](https://book.hacktricks.xyz/)
+* [TCP/IP Illustrated](https://en.wikipedia.org/wiki/TCP/IP_Illustrated) - Richard Stevens
+* [HackTricks - Ports](https://book.hacktricks.xyz/)
 
 ---
 
-*Notes de formation — Jedha Cybersécurité, Fullstack RNCP Niveau 6.*
+*Notes de formation - Jedha Cybersécurité, Fullstack RNCP Niveau 6.*

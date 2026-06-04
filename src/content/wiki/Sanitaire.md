@@ -52,7 +52,7 @@ L'argument répressif central est celui du risque sanitaire élevé des free par
 
 **La position des associations sanitaires** est formulée explicitement dans leur communiqué collectif : "Nous, associations de réduction des risques spécialisées dans l'intervention en milieu festif, affirmons que les free parties ne posent pas plus de problèmes sanitaires que les autres événements festifs. En revanche, la gestion répressive de ces événements aggrave directement les risques sanitaires." [2]
 
-**Le prix d'accès aux festivals mainstream** a augmenté d'environ 60% entre 2015 et 2025, selon les débats parlementaires du 9 avril 2026 [3]. Les free parties restent l'un des rares espaces festifs accessibles sans sélection économique. Leur suppression ne fait pas disparaître la consommation de substances — elle la déplace vers des contextes sans RdR.
+**Le prix d'accès aux festivals mainstream** a augmenté d'environ 60% entre 2015 et 2025, selon les débats parlementaires du 9 avril 2026 [3]. Les free parties restent l'un des rares espaces festifs accessibles sans sélection économique. Leur suppression ne fait pas disparaître la consommation de substances - elle la déplace vers des contextes sans RdR.
 
 ---
 
@@ -88,7 +88,7 @@ Ce cercle vicieux est le mécanisme central que l'axe sanitaire cherche à rompr
 
 Belle-Île-en-Mer constitue le contre-exemple le plus documenté et le plus puissant disponible.
 
-**La situation :** Belle-Île-en-Mer est, selon Techno+ auditionnée par le Sénat en 2026, le seul territoire à leur connaissance qui applique encore la loi sur les Rassemblements festifs à caractère musical du 15 novembre 2001 et son décret du 2 mai 2002 — c'est-à-dire la loi dans sa version non dévoyée, avec déclarations acceptées pour les événements sous 500 personnes [4].
+**La situation :** Belle-Île-en-Mer est, selon Techno+ auditionnée par le Sénat en 2026, le seul territoire à leur connaissance qui applique encore la loi sur les Rassemblements festifs à caractère musical du 15 novembre 2001 et son décret du 2 mai 2002 - c'est-à-dire la loi dans sa version non dévoyée, avec déclarations acceptées pour les événements sous 500 personnes [4].
 
 **Ce qui se passe là-bas :** en 2025, Techno+ a été interpellée par les communes de Belle-Île-en-Mer pour mener un diagnostic interventionnel saisonnier sur l'ensemble des espaces festifs d'accès public de l'île : rue, bars, fêtes locales, festivals et free parties [4].
 
@@ -170,10 +170,10 @@ Le refus de dénoncer n'est pas un acte de défi symbolique. C'est la condition 
 | Keep Smiling | Lyon et région | RdR terrain | keepsmiling.fr |
 | Spiritek | Lille et Nord | RdR terrain | spiritek.fr |
 | Bus 31/32 | Toulouse | RdR terrain | bus3132.com |
-| L'Orange Bleue | Rennes | RdR terrain | — |
-| Agoratek | Montpellier | RdR terrain | — |
-| Planet Parade | Paris | RdR + plaidoyer | — |
-| PlaySafe Paris | Paris | RdR + plaidoyer | — |
+| L'Orange Bleue | Rennes | RdR terrain | - |
+| Agoratek | Montpellier | RdR terrain | - |
+| Planet Parade | Paris | RdR + plaidoyer | - |
+| PlaySafe Paris | Paris | RdR + plaidoyer | - |
 
 **Trouver une association near you :** technoplus.org/trouver-une-asso
 
@@ -181,19 +181,19 @@ Le refus de dénoncer n'est pas un acte de défi symbolique. C'est la condition 
 
 Techno+ propose deux formations accessibles :
 
-**Forma'SON** (pour les organisateurs) : formation aux bases de la RdR pour les sound systems qui souhaitent intégrer une dimension sanitaire dans leurs événements — technoplus.org/formason/
+**Forma'SON** (pour les organisateurs) : formation aux bases de la RdR pour les sound systems qui souhaitent intégrer une dimension sanitaire dans leurs événements - technoplus.org/formason/
 
-**Forma'PAIRS** (pour les teufeurs) : formation aux bases de la RdR pour les participants — technoplus.org/formapairs/
+**Forma'PAIRS** (pour les teufeurs) : formation aux bases de la RdR pour les participants - technoplus.org/formapairs/
 
 Ces formations constituent un outil concret pour les collectifs qui veulent réduire leur surface d'attaque argumentative sur les nuisances sanitaires.
 
 ### Les outils disponibles
 
-**Application Techno+** : informations substances, Drug Mix, accès rapide aux ressources — technoplus.org/services/application-techno-sur-ton-smarphone/
+**Application Techno+** : informations substances, Drug Mix, accès rapide aux ressources - technoplus.org/services/application-techno-sur-ton-smarphone/
 
-**Analyse de produits** : service d'analyse de substances avant consommation — technoplus.org/faire-analyser-ses-prods/
+**Analyse de produits** : service d'analyse de substances avant consommation - technoplus.org/faire-analyser-ses-prods/
 
-**Matériel de prévention** : boutique en ligne (bouchons d'oreille, kits, préservatifs) — technoplus.org/boutique/
+**Matériel de prévention** : boutique en ligne (bouchons d'oreille, kits, préservatifs) - technoplus.org/boutique/
 
 ---
 
@@ -227,16 +227,16 @@ Sur la base de tout ce qui précède, les revendications sanitaires minimales à
 
 ## Sources
 
-[1] Techno+ — Dossier de presse : la répression en free party (référentiel AFR / DGS et études DRAMES) — https://technoplus.org/dossier-de-presse/
+[1] Techno+ - Dossier de presse : la répression en free party (référentiel AFR / DGS et études DRAMES) - https://technoplus.org/dossier-de-presse/
 
-[2] Techno+ — Les associations sanitaires en espace festif condamnent la répression envers les free parties — https://technoplus.org/les-associations-sanitaires-en-espace-festif-condamnent-la-repression-envers-les-free-parties/
+[2] Techno+ - Les associations sanitaires en espace festif condamnent la répression envers les free parties - https://technoplus.org/les-associations-sanitaires-en-espace-festif-condamnent-la-repression-envers-les-free-parties/
 
-[3] Assemblée nationale — Compte rendu de la deuxième séance du 9 avril 2026 (débats loi 1133) — https://www.assemblee-nationale.fr/dyn/17/comptes-rendus/seance/session-ordinaire-de-2025-2026/deuxieme-seance-du-jeudi-09-avril-2026
+[3] Assemblée nationale - Compte rendu de la deuxième séance du 9 avril 2026 (débats loi 1133) - https://www.assemblee-nationale.fr/dyn/17/comptes-rendus/seance/session-ordinaire-de-2025-2026/deuxieme-seance-du-jeudi-09-avril-2026
 
-[4] Techno+ — Rapport 2026 du Sénat sur les raves-parties illégales : Techno+ auditionnée, avril 2026 — https://technoplus.org/fete-libre/9142-rapport-2026-du-senat-sur-les-raves-parties-illegales-techno-auditionnee/
+[4] Techno+ - Rapport 2026 du Sénat sur les raves-parties illégales : Techno+ auditionnée, avril 2026 - https://technoplus.org/fete-libre/9142-rapport-2026-du-senat-sur-les-raves-parties-illegales-techno-auditionnee/
 
-[5] Rebellyon — Manifestive Tekno Anti Rep 2025 (chiffres saisies 2024) — https://rebellyon.info/Lyon-Manifestive-Tekno-Anti-Rep-28095
+[5] Rebellyon - Manifestive Tekno Anti Rep 2025 (chiffres saisies 2024) - https://rebellyon.info/Lyon-Manifestive-Tekno-Anti-Rep-28095
 
-[6] Techno+ — Signalement ANSM MDMA, juin 2025 — https://technoplus.org/actualites/
+[6] Techno+ - Signalement ANSM MDMA, juin 2025 - https://technoplus.org/actualites/
 
-[7] Techno+ — Chronologie de la résistance festive des free parties — https://technoplus.org/chronologie-de-la-resistance-festive-des-free-parties/
+[7] Techno+ - Chronologie de la résistance festive des free parties - https://technoplus.org/chronologie-de-la-resistance-festive-des-free-parties/

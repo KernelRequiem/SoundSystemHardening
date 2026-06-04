@@ -158,7 +158,7 @@ Sound system britannique fondé en 1990, à l'origine du mouvement free party en
 
 ### Hérétik
 
-L'un des sound systems français les plus reconnus, fondé dans les années 1990, basé initialement en région parisienne. Présents sur les grandes dates de la chronologie française (Port-la-Nouvelle 1997, teknivals du 1er mai, etc.). Leur son — dark tekno, hardtekno — est une des esthétiques les plus représentatives du mouvement underground français.
+L'un des sound systems français les plus reconnus, fondé dans les années 1990, basé initialement en région parisienne. Présents sur les grandes dates de la chronologie française (Port-la-Nouvelle 1997, teknivals du 1er mai, etc.). Leur son - dark tekno, hardtekno - est une des esthétiques les plus représentatives du mouvement underground français.
 
 ### TNT (TeknoNomad Tribe / Teknozine)
 
@@ -191,7 +191,7 @@ Présent au premier teknival de Beauvais en juillet 1993 aux côtés de Spiral T
 
 ### Le sound system comme unité culturelle
 
-Le sound system est plus qu'une sono mobile. C'est une unité sociale, économique et culturelle. Il appartient collectivement à ses membres, qui en assurent eux-mêmes la construction, la maintenance, le transport et l'installation. Cette maîtrise technique complète — électronique, acoustique, mécanique — constitue un savoir-faire transmis de génération en génération au sein des collectifs.
+Le sound system est plus qu'une sono mobile. C'est une unité sociale, économique et culturelle. Il appartient collectivement à ses membres, qui en assurent eux-mêmes la construction, la maintenance, le transport et l'installation. Cette maîtrise technique complète - électronique, acoustique, mécanique - constitue un savoir-faire transmis de génération en génération au sein des collectifs.
 
 ### Les genres musicaux
 
@@ -203,7 +203,7 @@ La tekno française a développé un vocabulaire sonore autonome :
 * **Dark / Darkcore** : ambiances sombres, sonorités industrielles
 * **Psytrance** (arrivée plus tard) : influence psychédélique, tempo entre 140 et 150 BPM
 
-Ces genres ne sont pas faits pour les charts — ils sont conçus pour la durée, pour le corps en mouvement pendant des heures, pour l'espace sonore collectif.
+Ces genres ne sont pas faits pour les charts - ils sont conçus pour la durée, pour le corps en mouvement pendant des heures, pour l'espace sonore collectif.
 
 ### L'autogestion comme pratique culturelle
 
@@ -226,26 +226,26 @@ Les free parties et la French Touch commerciale ne sont pas deux mondes séparé
 
 ## Sources
 
-[1] Lucydelic — Spiral Tribe : l'histoire de la légendaire free party — https://lucydelic.fr/spiral-tribe-la-techno-en-liberte/
+[1] Lucydelic - Spiral Tribe : l'histoire de la légendaire free party - https://lucydelic.fr/spiral-tribe-la-techno-en-liberte/
 
-[2] Wikipedia EN — Spiral Tribe — https://en.wikipedia.org/wiki/Spiral_Tribe
+[2] Wikipedia EN - Spiral Tribe - https://en.wikipedia.org/wiki/Spiral_Tribe
 
-[3] Last.fm — Spiral Tribe biographie — https://www.last.fm/fr/music/Spiral+Tribe/+wiki
+[3] Last.fm - Spiral Tribe biographie - https://www.last.fm/fr/music/Spiral+Tribe/+wiki
 
-[4] Wikipedia FR — Spiral Tribe — https://fr.wikipedia.org/wiki/Spiral_Tribe
+[4] Wikipedia FR - Spiral Tribe - https://fr.wikipedia.org/wiki/Spiral_Tribe
 
-[5] NeTribe — L'histoire secrète des free parties — http://netribe.org/party/culture/histoire-secrete-free-party/
+[5] NeTribe - L'histoire secrète des free parties - http://netribe.org/party/culture/histoire-secrete-free-party/
 
-[6] Wikipedia FR — Chronologie des teknivals en France — https://fr.wikipedia.org/wiki/Chronologie_des_teknivals_en_France
+[6] Wikipedia FR - Chronologie des teknivals en France - https://fr.wikipedia.org/wiki/Chronologie_des_teknivals_en_France
 
-[7] Techno+ — Chronologie de la résistance festive des free parties — https://technoplus.org/chronologie-de-la-resistance-festive-des-free-parties/
+[7] Techno+ - Chronologie de la résistance festive des free parties - https://technoplus.org/chronologie-de-la-resistance-festive-des-free-parties/
 
-[8] Cheperz — Chronologie des principaux teknivals et free parties en France (1993-2025) — https://www.cheperz.org/chronologie-teknivals-free-parties-france.html
+[8] Cheperz - Chronologie des principaux teknivals et free parties en France (1993-2025) - https://www.cheperz.org/chronologie-teknivals-free-parties-france.html
 
-[9] Etilik Wear — Les teknivals du 1er mai les plus mémorables de l'histoire — https://www.etilik-wear.com/en/blogs/le-magazine/les-teknivals-du-1er-mai-les-plus-memorables-de-lhistoire
+[9] Etilik Wear - Les teknivals du 1er mai les plus mémorables de l'histoire - https://www.etilik-wear.com/en/blogs/le-magazine/les-teknivals-du-1er-mai-les-plus-memorables-de-lhistoire
 
-[10] BBC — Steve Maia Caniço rally: French police clashes erupt in Nantes — https://feeds.bbci.co.uk/news/world-europe-49221066
+[10] BBC - Steve Maia Caniço rally: French police clashes erupt in Nantes - https://feeds.bbci.co.uk/news/world-europe-49221066
 
-[11] BBC — Man loses hand in clashes at banned France rave, juin 2021 — https://feeds.bbci.co.uk/news/world-europe-57540121
+[11] BBC - Man loses hand in clashes at banned France rave, juin 2021 - https://feeds.bbci.co.uk/news/world-europe-57540121
 
-[12] Guillaume Kosmicki — *Free parties : une histoire des histoires* (référence bibliographique)
+[12] Guillaume Kosmicki - *Free parties : une histoire des histoires* (référence bibliographique)

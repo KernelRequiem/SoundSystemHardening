@@ -1,4 +1,4 @@
-# Mobilisation — Vue d'ensemble
+# Mobilisation - Vue d'ensemble
 
 **Qui se mobilise, comment, depuis quand, et avec quels outils. L'état du mouvement de résistance des free parties en France.**
 
@@ -87,7 +87,7 @@ Appui extérieur au mouvement. La LDH a pris position contre la PPL 1133, saisi 
   │   Tribune Télérama (Technopol, Tekno Anti Rep, RdR, avocate Rostan)
   ├── Avril 2026 : PPL 1133 adoptée à l'AN (78 contre 67)
   ├── Mai 2026 : RIPOST adopté au Sénat (243 contre 33)
-  │              Violences Elven — saisine Défenseure des droits (LDH)
+  │              Violences Elven - saisine Défenseure des droits (LDH)
   └── Mai-juin 2026 : Manifestives 2026
       30+ villes, séquence sur 4 semaines (30 mai → 13 juin)
       Dijon, Angoulême, Montpellier, Nevers (30 mai)
@@ -207,11 +207,11 @@ La limite de l'argument : la distinction entre techno commerciale (clubs, festiv
 
 ## Liens avec les autres dossiers du repo
 
-* `droits-libertes/arsenal-legislatif.md` — détail PPL 1133 et RIPOST
-* `droits-libertes/recours-juridiques.md` — comment contester légalement
-* `droits-libertes/repression.md` — documentation des violences
-* `droits-libertes/jurisprudence.md` — décisions de justice exploitables
-* `cyber-opsec/` — sécurité opérationnelle pour les collectifs
+* `droits-libertes/arsenal-legislatif.md` - détail PPL 1133 et RIPOST
+* `droits-libertes/recours-juridiques.md` - comment contester légalement
+* `droits-libertes/repression.md` - documentation des violences
+* `droits-libertes/jurisprudence.md` - décisions de justice exploitables
+* `cyber-opsec/` - sécurité opérationnelle pour les collectifs
 
 ---
 

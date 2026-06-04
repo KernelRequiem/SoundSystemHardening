@@ -310,7 +310,7 @@ Tribunal judiciaire de [ville du lieu des faits]
 Lettre recommandée avec accusé de réception
 
 Objet : Plainte pénale pour violences volontaires par personnes dépositaires
-de l'autorité publique — article 222-13 du Code pénal
+de l'autorité publique - article 222-13 du Code pénal
 
 Monsieur / Madame le Procureur de la République,
 
@@ -430,7 +430,7 @@ PIÈCES JOINTES
 [Via le formulaire en ligne ou par courrier postal]
 
 Objet : Signalement pour manquement à la déontologie et usage disproportionné
-de la force — faits du [date] à [lieu]
+de la force - faits du [date] à [lieu]
 
 Madame, Monsieur,
 
@@ -493,7 +493,7 @@ Tribunal judiciaire de [ville]
 
 Lettre recommandée avec accusé de réception
 
-Objet : Demande de restitution du matériel saisi le [date] — Procédure n°
+Objet : Demande de restitution du matériel saisi le [date] - Procédure n°
 [référence si connue]
 
 Monsieur / Madame [le Procureur / le Juge],
@@ -579,7 +579,7 @@ PIÈCES JOINTES
 
 Lettre recommandée avec accusé de réception
 
-Objet : [Requête en exonération / Contestation] — Contravention n° [numéro]
+Objet : [Requête en exonération / Contestation] - Contravention n° [numéro]
 
 LETTRE DE PRÉSENTATION
 

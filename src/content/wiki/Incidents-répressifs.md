@@ -1,7 +1,7 @@
 # Incidents répressifs
 
 > Page rattachée à : [[Histoire-Culture](https://github.com/menardrop-cpu/digital-rights/wiki/Histoire-&-Culture)
-> Statut : actif — mis à jour en continu
+> Statut : actif - mis à jour en continu
 > Dernière mise à jour : mai 2026
 
 Cette page documente les incidents de répression majeurs survenus lors d'interventions des forces de l'ordre sur des événements festifs en France. Chaque fiche est construite selon le même format : faits, bilan documenté, suites judiciaires, sources. Les faits contestés sont signalés comme tels.
@@ -12,18 +12,18 @@ Cette page documente les incidents de répression majeurs survenus lors d'interv
 
 ## Sommaire
 
-1. [Nantes 2019 — Mort de Steve Maïa Caniço](#nantes-2019--mort-de-steve-maïa-caniço)
-2. [Lieuron 2021 — Réveillon du Nouvel An](#lieuron-2021--réveillon-du-nouvel-an)
-3. [Redon 2021 — Main arrachée](#redon-2021--main-arrachée)
-4. [Maine-et-Loire 2024 — Charge sur free party](#maine-et-loire-2024--charge-sur-free-party)
-5. [Carhaix 2025 — Tirs à balles réelles](#carhaix-2025--tirs-à-balles-réelles)
-6. [Arrêtés préfectoraux 2025 — Hérault et Haute-Marne](#arrêtés-préfectoraux-2025--hérault-et-haute-marne)
+1. [Nantes 2019 - Mort de Steve Maïa Caniço](#nantes-2019--mort-de-steve-maïa-caniço)
+2. [Lieuron 2021 - Réveillon du Nouvel An](#lieuron-2021--réveillon-du-nouvel-an)
+3. [Redon 2021 - Main arrachée](#redon-2021--main-arrachée)
+4. [Maine-et-Loire 2024 - Charge sur free party](#maine-et-loire-2024--charge-sur-free-party)
+5. [Carhaix 2025 - Tirs à balles réelles](#carhaix-2025--tirs-à-balles-réelles)
+6. [Arrêtés préfectoraux 2025 - Hérault et Haute-Marne](#arrêtés-préfectoraux-2025--hérault-et-haute-marne)
 7. [Tableau récapitulatif](#tableau-récapitulatif)
 8. [Sources](#sources)
 
 ---
 
-## Nantes 2019 — Mort de Steve Maïa Caniço
+## Nantes 2019 - Mort de Steve Maïa Caniço
 
 ### Faits
 
@@ -48,10 +48,10 @@ Dans la nuit du 21 au 22 juin 2019, lors de la Fête de la Musique, une soirée 
 **Dépaysement de l'enquête :** les deux juges d'instruction nantais demandent leur propre dessaisissement pour des impératifs de "sérénité" et d'"impartialité", l'enquête mettant en cause des policiers avec lesquels ils travaillent régulièrement. L'enquête est dépaysée à Rennes en septembre 2019 [1].
 
 **Mises en examen (juillet 2021) :**
-* Commissaire divisionnaire Grégoire Chassaing — chargé du dispositif policier — mis en examen pour homicide involontaire
-* Ancien directeur de cabinet du préfet — mis en examen
-* Ancien préfet de Loire-Atlantique — mis en examen
-* La maire de Nantes, la ville et la métropole — statut de témoin assisté
+* Commissaire divisionnaire Grégoire Chassaing - chargé du dispositif policier - mis en examen pour homicide involontaire
+* Ancien directeur de cabinet du préfet - mis en examen
+* Ancien préfet de Loire-Atlantique - mis en examen
+* La maire de Nantes, la ville et la métropole - statut de témoin assisté
 
 **Verdict (20 septembre 2024) :** le commissaire Grégoire Chassaing est **relaxé** par le tribunal correctionnel. Les autres mis en examen et les témoins assistés bénéficient d'un non-lieu [1].
 
@@ -59,11 +59,11 @@ Dans la nuit du 21 au 22 juin 2019, lors de la Fête de la Musique, une soirée 
 
 **#JusticePourSteve** devient un hashtag national. Une pétition dénonçant sa mort comme "un emblème troublant d'une gestion de l'ordre public de plus en plus autoritaire et répressive" est signée par des dizaines de milliers de personnes. Le teknival de Redon de juin 2021 lui est rendu en hommage [3].
 
-Le verdict de relaxe de septembre 2024 — cinq ans après les faits, après une enquête qui avait établi la concomitance de la chute avec l'intervention — renforce le sentiment documenté d'impunité institutionnelle dans le mouvement.
+Le verdict de relaxe de septembre 2024 - cinq ans après les faits, après une enquête qui avait établi la concomitance de la chute avec l'intervention - renforce le sentiment documenté d'impunité institutionnelle dans le mouvement.
 
 ---
 
-## Lieuron 2021 — Réveillon du Nouvel An
+## Lieuron 2021 - Réveillon du Nouvel An
 
 ### Faits
 
@@ -81,7 +81,7 @@ Cet incident n'est pas un épisode de violence policière documentée. Son impor
 
 ---
 
-## Redon 2021 — Main arrachée
+## Redon 2021 - Main arrachée
 
 ### Faits
 
@@ -120,17 +120,17 @@ Sur la blessure grave, le parquet indique que la grenade "est arrivée au sol et
 
 ### Suites judiciaires
 
-**11 mars 2022 :** le parquet de Rennes classe les deux plaintes sans suite — la plainte de la victime pour non-assistance à personne en danger et violence volontaire aggravée, ainsi qu'une plainte complémentaire [6].
+**11 mars 2022 :** le parquet de Rennes classe les deux plaintes sans suite - la plainte de la victime pour non-assistance à personne en danger et violence volontaire aggravée, ainsi qu'une plainte complémentaire [6].
 
 L'enquête démontre selon les sources proches du dossier non seulement la disproportion de la force mais les responsabilités de la préfecture et du ministère de l'Intérieur. Ces éléments ne conduisent pas à des poursuites [4].
 
 ### Portée
 
-Redon devient avec Steve Maïa Caniço l'un des deux symboles majeurs de la violence d'État dans les représentations du mouvement. La spécificité de Redon est le chiffre des munitions utilisées — 1 602 grenades CM6 en une nuit sur 1 000 participants — qui constitue un argument factuel difficilement contestable sur la disproportion.
+Redon devient avec Steve Maïa Caniço l'un des deux symboles majeurs de la violence d'État dans les représentations du mouvement. La spécificité de Redon est le chiffre des munitions utilisées - 1 602 grenades CM6 en une nuit sur 1 000 participants - qui constitue un argument factuel difficilement contestable sur la disproportion.
 
 ---
 
-## Maine-et-Loire 2024 — Charge sur free party
+## Maine-et-Loire 2024 - Charge sur free party
 
 ### Faits
 
@@ -149,7 +149,7 @@ Cet incident est moins documenté que Steve et Redon dans les sources publiques 
 
 ---
 
-## Carhaix 2025 — Tirs à balles réelles
+## Carhaix 2025 - Tirs à balles réelles
 
 ### Faits
 
@@ -161,7 +161,7 @@ Le même camion a également ses vitres brisées par des matraques. Victor reço
 
 ### Bilan documenté
 
-* Deux impacts de balles dans la porte avant gauche du camion — documentés par photo fournie à l'AFP
+* Deux impacts de balles dans la porte avant gauche du camion - documentés par photo fournie à l'AFP
 * Aucune blessure par balle selon le parquet de Brest
 * Quatre gendarmes blessés lors des affrontements selon les sources officielles
 * 2 500 participants à l'événement
@@ -182,9 +182,9 @@ Enquête ouverte par le parquet de Brest. Pas de mise en examen à ce stade. Dem
 
 ---
 
-## Arrêtés préfectoraux 2025 — Hérault et Haute-Marne
+## Arrêtés préfectoraux 2025 - Hérault et Haute-Marne
 
-### Hérault — arrêté du 3 janvier 2025
+### Hérault - arrêté du 3 janvier 2025
 
 **Acte :** le préfet de l'Hérault François-Xavier Lauch édicte un arrêté interdisant sur l'ensemble du département et jusqu'au 31 décembre 2025 l'ensemble des rassemblements festifs à caractère musical non déclarés et non autorisés, ainsi que la circulation de tout véhicule transportant du matériel de type sound system destiné à de tels rassemblements.
 
@@ -192,7 +192,7 @@ Enquête ouverte par le parquet de Brest. Pas de mise en examen à ce stade. Dem
 
 **Recours :** deux recours (référé-liberté et référé-suspension) sont examinés le 20 février 2025 par le tribunal administratif de Montpellier. Le juge des référés rejette les deux le 21 février 2025. Les requérants annoncent faire appel devant le Conseil d'État [11].
 
-### Haute-Marne — 2025
+### Haute-Marne - 2025
 
 Arrêté préfectoral d'interdiction annuelle similaire, couvrant l'année entière, sans examen au cas par cas [11].
 
@@ -206,13 +206,13 @@ Ces deux arrêtés constituent une nouvelle catégorie d'instrument répressif :
 
 | Incident | Date | Lieu | Bilan | Suites judiciaires | Statut |
 |---------|------|------|-------|-------------------|--------|
-| Steve Maïa Caniço | 21-22 juin 2019 | Nantes | 1 mort | Commissaire relaxé sept. 2024 | Clôturé — relaxe |
-| Réveillon Lieuron | 31 déc. 2020 | Lieuron (35) | Arrestations, amendes | — | Sans suite judiciaire |
-| Redon | 18-19 juin 2021 | Redon (35) | 1 main arrachée, dizaines de blessés | Classé sans suite mars 2022 | Clôturé — sans suite |
+| Steve Maïa Caniço | 21-22 juin 2019 | Nantes | 1 mort | Commissaire relaxé sept. 2024 | Clôturé - relaxe |
+| Réveillon Lieuron | 31 déc. 2020 | Lieuron (35) | Arrestations, amendes | - | Sans suite judiciaire |
+| Redon | 18-19 juin 2021 | Redon (35) | 1 main arrachée, dizaines de blessés | Classé sans suite mars 2022 | Clôturé - sans suite |
 | Maine-et-Loire | Mai 2024 | Maine-et-Loire | LBD, grenades, LBR | Non documenté | À compléter |
 | Carhaix | 7-8 déc. 2025 | Carhaix (29) | 2 impacts de balle sur camion | Enquête ouverte, juge demandé | En cours |
 | Arrêté Hérault | 3 jan. 2025 | Hérault | Interdiction annuelle | Recours rejetés TA Montpellier | Appel Conseil d'État |
-| Arrêté Haute-Marne | 2025 | Haute-Marne | Interdiction annuelle | — | En cours |
+| Arrêté Haute-Marne | 2025 | Haute-Marne | Interdiction annuelle | - | En cours |
 
 ---
 
@@ -240,24 +240,24 @@ Pour contribuer : ouvrir une PR avec le label `incidents` et citer systématique
 
 ## Sources
 
-[1] Wikipedia FR — Mort de Steve Maia Caniço — https://fr.wikipedia.org/wiki/Mort_de_Steve_Maia_Cani%C3%A7o
+[1] Wikipedia FR - Mort de Steve Maia Caniço - https://fr.wikipedia.org/wiki/Mort_de_Steve_Maia_Cani%C3%A7o
 
-[2] France Bleu — Mort de Steve à Nantes : ce qu'il faut savoir avant le procès — https://www.francebleu.fr/infos/faits-divers-justice/mort-de-steve-a-nantes-ce-qu-il-faut-savoir-avant-le-proces-du-commissaire-poursuivi-pour-homicide-involontaire-4528855
+[2] France Bleu - Mort de Steve à Nantes : ce qu'il faut savoir avant le procès - https://www.francebleu.fr/infos/faits-divers-justice/mort-de-steve-a-nantes-ce-qu-il-faut-savoir-avant-le-proces-du-commissaire-poursuivi-pour-homicide-involontaire-4528855
 
-[3] Techno+ — Chronologie de la résistance festive des free parties — https://technoplus.org/chronologie-de-la-resistance-festive-des-free-parties/
+[3] Techno+ - Chronologie de la résistance festive des free parties - https://technoplus.org/chronologie-de-la-resistance-festive-des-free-parties/
 
-[4] Cheperz — Chronologie des principaux teknivals et free parties en France — https://www.cheperz.org/chronologie-teknivals-free-parties-france.html
+[4] Cheperz - Chronologie des principaux teknivals et free parties en France - https://www.cheperz.org/chronologie-teknivals-free-parties-france.html
 
-[5] France24 — Rave party illégale à Redon : cinq gendarmes blessés, un jeune homme a perdu une main, juin 2021 — https://www.france24.com/fr/france/20210619-rave-party-ill%C3%A9gale-%C3%A0-redon-cinq-gendarmes-bless%C3%A9s-un-jeune-homme-a-perdu-une-main
+[5] France24 - Rave party illégale à Redon : cinq gendarmes blessés, un jeune homme a perdu une main, juin 2021 - https://www.france24.com/fr/france/20210619-rave-party-ill%C3%A9gale-%C3%A0-redon-cinq-gendarmes-bless%C3%A9s-un-jeune-homme-a-perdu-une-main
 
-[6] Konbini — Main arrachée lors d'une free-party à Redon : la plainte classée sans suite, mars 2022 — https://www.konbini.com/popculture/main-arrachee-free-party-redon-plainte-sans-suite/
+[6] Konbini - Main arrachée lors d'une free-party à Redon : la plainte classée sans suite, mars 2022 - https://www.konbini.com/popculture/main-arrachee-free-party-redon-plainte-sans-suite/
 
-[7] Assemblée nationale — Question écrite n°43350, maintien de l'ordre lors du teknival de Redon (Amnesty International cité) — https://www.assemblee-nationale.fr/dyn/15/questions/QANR5L15QE43350.pdf
+[7] Assemblée nationale - Question écrite n°43350, maintien de l'ordre lors du teknival de Redon (Amnesty International cité) - https://www.assemblee-nationale.fr/dyn/15/questions/QANR5L15QE43350.pdf
 
-[8] France 3 Bretagne — Deux impacts de balles sur leur camion : les teufeurs portent plainte pour tentative de meurtre, décembre 2025 — https://france3-regions.franceinfo.fr/bretagne/finistere/deux-impacts-de-balles-sur-leur-camion-les-teufeurs-d-une-rave-party-portent-plainte-contre-des-gendarmes-pour-tentative-de-meurtre-3265913.html
+[8] France 3 Bretagne - Deux impacts de balles sur leur camion : les teufeurs portent plainte pour tentative de meurtre, décembre 2025 - https://france3-regions.franceinfo.fr/bretagne/finistere/deux-impacts-de-balles-sur-leur-camion-les-teufeurs-d-une-rave-party-portent-plainte-contre-des-gendarmes-pour-tentative-de-meurtre-3265913.html
 
-[9] France Bleu Bretagne — Tirs d'un gendarme en marge d'une rave party à Carhaix : le parquet de Brest ouvre une enquête, décembre 2025 — https://www.francebleu.fr/infos/faits-divers-justice/tirs-d-un-gendarme-en-marge-d-un-rave-party-a-carhaix-le-parquet-de-brest-ouvre-une-enquete-8097015
+[9] France Bleu Bretagne - Tirs d'un gendarme en marge d'une rave party à Carhaix : le parquet de Brest ouvre une enquête, décembre 2025 - https://www.francebleu.fr/infos/faits-divers-justice/tirs-d-un-gendarme-en-marge-d-un-rave-party-a-carhaix-le-parquet-de-brest-ouvre-une-enquete-8097015
 
-[10] France Bleu Bretagne — Rave party à Carhaix : leur camion touché par des tirs, deux participants demandent la saisie d'un juge d'instruction, mars 2026 — https://www.francebleu.fr/bretagne/finistere-29/carhaix-plouguer/rave-party-a-carhaix-leur-camion-touche-par-des-tirs-deux-participants-demandent-la-saisie-d-un-juge-d-instruction-6218599
+[10] France Bleu Bretagne - Rave party à Carhaix : leur camion touché par des tirs, deux participants demandent la saisie d'un juge d'instruction, mars 2026 - https://www.francebleu.fr/bretagne/finistere-29/carhaix-plouguer/rave-party-a-carhaix-leur-camion-touche-par-des-tirs-deux-participants-demandent-la-saisie-d-un-juge-d-instruction-6218599
 
-[11] Le Poing — Arrêté anti free-parties Hérault : le tribunal administratif rejette les recours, février 2025 — https://lepoing.net/herault-larrete-prefectoral-anti-free-party-attaque-au-tribunal-administratif/
+[11] Le Poing - Arrêté anti free-parties Hérault : le tribunal administratif rejette les recours, février 2025 - https://lepoing.net/herault-larrete-prefectoral-anti-free-party-attaque-au-tribunal-administratif/

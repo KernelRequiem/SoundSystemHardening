@@ -82,7 +82,7 @@ Après le 17 décembre 2025 :
 
 En décembre 2025, les musiques électroniques entrent au patrimoine culturel immatériel français. En janvier 2026, le préfet de l'Hérault édicte un arrêté interdisant les free parties pour toute l'année 2025 [9]. En mars 2026, la proposition de loi 1133 est déposée pour criminaliser les organisateurs. En mai 2026, RIPOST est voté au Sénat.
 
-La simultanéité de la reconnaissance patrimoniale et de la répression est l'argument le plus puissant disponible en 2026. Il n'est pas rhétorique — il est factuel et documenté.
+La simultanéité de la reconnaissance patrimoniale et de la répression est l'argument le plus puissant disponible en 2026. Il n'est pas rhétorique - il est factuel et documenté.
 
 ---
 
@@ -137,11 +137,11 @@ La patrimonialisation d'une pratique culturelle commence par sa documentation. S
 
 **Ce qui existe déjà :**
 
-* Le livre de Guillaume Kosmicki, musicologue : *Free parties : une histoire des histoires* — référence académique sur l'histoire du mouvement [11]
-* Le documentaire *Laurent Garnier off the record* — archive audiovisuelle sur l'histoire de la tekno française, avec témoignages de figures internationales [5]
-* La pièce documentaire *Tribe* de Pierre Levent (2026) — transposition scénique des témoignages du mouvement [11]
-* Les archives de Techno+ — 30 ans de documentation sanitaire et culturelle
-* Les archives de la chronologie Techno+ — histoire de la résistance festive depuis 1993 [12]
+* Le livre de Guillaume Kosmicki, musicologue : *Free parties : une histoire des histoires* - référence académique sur l'histoire du mouvement [11]
+* Le documentaire *Laurent Garnier off the record* - archive audiovisuelle sur l'histoire de la tekno française, avec témoignages de figures internationales [5]
+* La pièce documentaire *Tribe* de Pierre Levent (2026) - transposition scénique des témoignages du mouvement [11]
+* Les archives de Techno+ - 30 ans de documentation sanitaire et culturelle
+* Les archives de la chronologie Techno+ - histoire de la résistance festive depuis 1993 [12]
 
 **Ce qui manque et que le mouvement doit construire :**
 
@@ -184,7 +184,7 @@ Les industries culturelles et créatives françaises représentent 143 milliards
 
 Les free parties ne sont pas économiquement séparables de la French Touch institutionnelle. Les sound systems forment des DJ. Les teknivals sont des espaces d'apprentissage et de circulation des savoir-faire. Les collectifs de free parties ont alimenté les clubs, les festivals, et l'industrie de la musique électronique. Criminaliser la base, c'est fragiliser le sommet.
 
-Cet argument n'est pas encore documenté de façon rigoureuse — il repose sur des observations qualitatives. Sa formalisation en étude économique serait un apport majeur au dossier.
+Cet argument n'est pas encore documenté de façon rigoureuse - il repose sur des observations qualitatives. Sa formalisation en étude économique serait un apport majeur au dossier.
 
 ---
 
@@ -221,26 +221,26 @@ Cet argument n'est pas encore documenté de façon rigoureuse — il repose sur 
 
 ## Sources
 
-[1] Public Sénat — Projet de loi RIPOST : contenu du texte, mai 2026 — https://www.publicsenat.fr/actualites/parlementaire/projet-de-loi-ripost-contre-les-troubles-a-lordre-public-ce-que-contient-le-texte-du-senat
+[1] Public Sénat - Projet de loi RIPOST : contenu du texte, mai 2026 - https://www.publicsenat.fr/actualites/parlementaire/projet-de-loi-ripost-contre-les-troubles-a-lordre-public-ce-que-contient-le-texte-du-senat
 
-[2] Billboard FR — FIP célèbre les 60 ans de Laurent Garnier avec un mix de 8h, février 2026 — https://fr.billboard.com/?p=6058
+[2] Billboard FR - FIP célèbre les 60 ans de Laurent Garnier avec un mix de 8h, février 2026 - https://fr.billboard.com/?p=6058
 
-[3] Techno+ — Chronologie de la résistance festive des free parties — https://technoplus.org/chronologie-de-la-resistance-festive-des-free-parties/
+[3] Techno+ - Chronologie de la résistance festive des free parties - https://technoplus.org/chronologie-de-la-resistance-festive-des-free-parties/
 
-[4] Paul Musique Officiel — Top 100 des DJ français : les meilleurs producteurs de la French Touch — https://paul-musique.com/top-100-des-dj-francais-les-meilleurs-producteurs-de-la-french-touch/
+[4] Paul Musique Officiel - Top 100 des DJ français : les meilleurs producteurs de la French Touch - https://paul-musique.com/top-100-des-dj-francais-les-meilleurs-producteurs-de-la-french-touch/
 
-[5] RTS — Un film retrace l'histoire de la techno à travers le DJ Laurent Garnier — https://www.rts.ch/info/culture/musiques/11699495-un-film-retrace-lhistoire-de-la-techno-a-travers-le-dj-laurent-garnier.html
+[5] RTS - Un film retrace l'histoire de la techno à travers le DJ Laurent Garnier - https://www.rts.ch/info/culture/musiques/11699495-un-film-retrace-lhistoire-de-la-techno-a-travers-le-dj-laurent-garnier.html
 
-[6] Bpifrance — Plan French Touch : 10 Mds€ déployés depuis 2020, novembre 2025 — https://presse.bpifrance.fr/french-touch-de-bpifrance-bilan-et-horizons-de-developpement-du-plan-french-touch-10-mdseur-deployes-depuis-2020-et-20-mdseur-dici-2030
+[6] Bpifrance - Plan French Touch : 10 Mds€ déployés depuis 2020, novembre 2025 - https://presse.bpifrance.fr/french-touch-de-bpifrance-bilan-et-horizons-de-developpement-du-plan-french-touch-10-mdseur-deployes-depuis-2020-et-20-mdseur-dici-2030
 
-[7] Tsugi — Les musiques électroniques intronisées au patrimoine culturel immatériel français, décembre 2025 — https://www.tsugi.fr/les-musiques-electroniques-intronisees-au-patrimoine-culturel-immateriel-francais/
+[7] Tsugi - Les musiques électroniques intronisées au patrimoine culturel immatériel français, décembre 2025 - https://www.tsugi.fr/les-musiques-electroniques-intronisees-au-patrimoine-culturel-immateriel-francais/
 
-[8] Euronews — La musique électronique inscrite au patrimoine culturel immatériel français, décembre 2025 — https://fr.euronews.com/culture/2025/12/18/la-musique-electronique-inscrite-au-patrimoine-culturel-immateriel-francais
+[8] Euronews - La musique électronique inscrite au patrimoine culturel immatériel français, décembre 2025 - https://fr.euronews.com/culture/2025/12/18/la-musique-electronique-inscrite-au-patrimoine-culturel-immateriel-francais
 
-[9] Tribune administrative de Montpellier — Arrêté Hérault du 3 janvier 2025, maintien de l'interdiction — https://montpellier.tribunal-administratif.fr/decisions-de-justice/dernieres-decisions/le-juge-des-referes-maintient-l-interdiction-des-rave-party-non-declarees-et-non-autorisees-et-l-interdiction-du-transport-de-materiel-de-son-desti
+[9] Tribune administrative de Montpellier - Arrêté Hérault du 3 janvier 2025, maintien de l'interdiction - https://montpellier.tribunal-administratif.fr/decisions-de-justice/dernieres-decisions/le-juge-des-referes-maintient-l-interdiction-des-rave-party-non-declarees-et-non-autorisees-et-l-interdiction-du-transport-de-materiel-de-son-desti
 
-[10] CNews — Macron aimerait inscrire la French Touch à l'Unesco, juin 2025 — https://www.cnews.fr/france/2025-06-21/musique-electro-emmanuel-macron-aimerait-inscrire-la-french-touch-lunesco-1700010
+[10] CNews - Macron aimerait inscrire la French Touch à l'Unesco, juin 2025 - https://www.cnews.fr/france/2025-06-21/musique-electro-emmanuel-macron-aimerait-inscrire-la-french-touch-lunesco-1700010
 
-[11] Politis — Entretien Pierre Levent : "La répression ne va pas éteindre les free parties", avril 2026 — https://www.politis.fr/articles/2026/04/entretien-pierre-levent-la-repression-ne-va-pas-eteindre-les-free-parties/
+[11] Politis - Entretien Pierre Levent : "La répression ne va pas éteindre les free parties", avril 2026 - https://www.politis.fr/articles/2026/04/entretien-pierre-levent-la-repression-ne-va-pas-eteindre-les-free-parties/
 
-[12] Techno+ — Chronologie de la résistance festive des free parties — https://technoplus.org/chronologie-de-la-resistance-festive-des-free-parties/
+[12] Techno+ - Chronologie de la résistance festive des free parties - https://technoplus.org/chronologie-de-la-resistance-festive-des-free-parties/

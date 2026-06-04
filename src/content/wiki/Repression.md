@@ -331,13 +331,13 @@ Si je subis ou documente un usage de la force, les éléments qui caractérisent
 La répression s'est intensifiée de façon documentée :
 
 ```
-2019  Steve Maia Caniço — noyade après intervention (Nantes)
-2021  Redon — main arrachée, 7h de tirs (hommage à Steve)
-2024  Phalsbourg/Moselle — dispositif lourd, blocage d'accès
-2024  (site TEKSUD) — décès d'une participante évitant les gendarmes
-2025  Carhaix (Trans Off) — 200+ gendarmes, encerclement, tirs sur véhicules
-2026  Elven (Morbihan) — nassage, LBD tendus, dizaines de blessés
-2026  Rennes — agression néofasciste + gaz en espace clos (cinéma désaffecté)
+2019  Steve Maia Caniço - noyade après intervention (Nantes)
+2021  Redon - main arrachée, 7h de tirs (hommage à Steve)
+2024  Phalsbourg/Moselle - dispositif lourd, blocage d'accès
+2024  (site TEKSUD) - décès d'une participante évitant les gendarmes
+2025  Carhaix (Trans Off) - 200+ gendarmes, encerclement, tirs sur véhicules
+2026  Elven (Morbihan) - nassage, LBD tendus, dizaines de blessés
+2026  Rennes - agression néofasciste + gaz en espace clos (cinéma désaffecté)
 ```
 
 En parallèle de cette escalade physique, l'escalade législative (PPL 1133, RIPOST) durcit les sanctions. La LDH parle d'une intensification de la répression depuis la mort de Steve Maia Caniço en 2019. Paradoxe : la France a fait inscrire la culture techno française au patrimoine culturel immatériel de l'UNESCO tout en réprimant les fêtes non payantes.

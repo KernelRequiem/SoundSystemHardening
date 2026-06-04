@@ -4,7 +4,7 @@
 > Statut : stable
 > Dernière mise à jour : mai 2026
 
-Cette page détaille le deuxième axe de la stratégie de résistance : construire une légitimité politique par les coalitions, le cadrage culturel et la présence dans l'espace public. L'axe politique ne remplace pas l'axe juridique — il le nourrit en créant un rapport de force qui rend les textes répressifs politiquement coûteux à maintenir.
+Cette page détaille le deuxième axe de la stratégie de résistance : construire une légitimité politique par les coalitions, le cadrage culturel et la présence dans l'espace public. L'axe politique ne remplace pas l'axe juridique - il le nourrit en créant un rapport de force qui rend les textes répressifs politiquement coûteux à maintenir.
 
 ---
 
@@ -41,7 +41,7 @@ Une Manifestive est une manifestation de rue portée par des sound systems : des
 
 ### Historique et montée en puissance
 
-Le format Manifestive a été développé par Tekno Anti Rep comme réponse à la répression. En avril 2025, des Manifestives ont été organisées dans plus de 25 villes françaises [4]. En 2026, le mouvement s'est étendu : **plus de 30 villes** accueillent des cortèges festifs et revendicatifs organisés en quatre vagues — 30 mai, 31 mai, 6 juin et 13 juin 2026 [5].
+Le format Manifestive a été développé par Tekno Anti Rep comme réponse à la répression. En avril 2025, des Manifestives ont été organisées dans plus de 25 villes françaises [4]. En 2026, le mouvement s'est étendu : **plus de 30 villes** accueillent des cortèges festifs et revendicatifs organisés en quatre vagues - 30 mai, 31 mai, 6 juin et 13 juin 2026 [5].
 
 **Vague du 30 mai 2026 (jour de rédaction de cette page) :**
 
@@ -81,7 +81,7 @@ Trois effets simultanés :
 
 ### Les tribunes comme outil de coalition
 
-Une tribune n'est pas un communiqué. Elle ne sert pas à informer les lecteurs de la presse — elle sert à montrer publiquement qui signe. La liste des signataires est le message, pas le texte.
+Une tribune n'est pas un communiqué. Elle ne sert pas à informer les lecteurs de la presse - elle sert à montrer publiquement qui signe. La liste des signataires est le message, pas le texte.
 
 **Tribune du 27 mars 2026 dans Télérama :** trente acteurs de la scène techno dont Laurent Garnier, Barbara Butch et Rebeka Warrior ont signé un texte contre la proposition de loi 1133. La tribune pointait que "depuis plusieurs années, les organisateurs de ces fêtes se sont fédérés, organisés, avec des associations, des bénévoles. Des dispositifs de médiation soutenus par les pouvoirs publics ont même été mis en place" [1]. L'argument : le mouvement est déjà en train de s'institutionnaliser partiellement, la loi détruit ce travail.
 
@@ -98,11 +98,11 @@ Critères de sélection des signataires :
   ✗ Éviter : liste homogène de "teufeurs" (confirme le cadrage adverse)
 
 Médias cibles par ordre de priorité :
-  1. Télérama — lectorat culture, hors milieu techno, fort impact politique
-  2. Mediapart — lectorat militant, fort impact à gauche
-  3. Basta! — lectorat alternatif, fort impact dans les réseaux militants
-  4. France Inter / Franceinfo — audience grand public
-  5. Tsugi / Mixmag — lectorat spécialisé, mais utile pour la documentation
+  1. Télérama - lectorat culture, hors milieu techno, fort impact politique
+  2. Mediapart - lectorat militant, fort impact à gauche
+  3. Basta! - lectorat alternatif, fort impact dans les réseaux militants
+  4. France Inter / Franceinfo - audience grand public
+  5. Tsugi / Mixmag - lectorat spécialisé, mais utile pour la documentation
 ```
 
 ### Entretenir les relations presse
@@ -177,19 +177,19 @@ L'argument UNESCO fonctionne parce qu'il renverse le cadrage. Au lieu de défend
 **La démarche à engager :**
 
 ```
-Étape 1 — Documentation culturelle
+Étape 1 - Documentation culturelle
   → Constituer un dossier sur l'histoire, les collectifs,
     l'influence internationale de la tekno française
   → S'appuyer sur les travaux existants (Guillaume Kosmicki,
     musicologue, auteur de Free parties : une histoire des histoires)
 
-Étape 2 — Construction institutionnelle
+Étape 2 - Construction institutionnelle
   → Approcher le Ministère de la Culture (délégation au patrimoine
     culturel immatériel)
   → Approcher des institutions culturelles (Cité de la Musique,
     Philharmonie de Paris, INA pour les archives)
 
-Étape 3 — Dépôt de candidature
+Étape 3 - Dépôt de candidature
   → Format : même modèle que Rave the Planet en Allemagne
   → Porteur : une structure type Technopol ou une coalition ad hoc
 ```
@@ -209,7 +209,7 @@ La mise en regard de la situation française avec les autres pays européens est
 
 **Formulation de l'argument :**
 
-> En 2024, l'Allemagne inscrit la techno au patrimoine UNESCO. En 2026, la France criminalise les organisateurs à hauteur de deux ans de prison. La différence n'est pas culturelle — elle est politique.
+> En 2024, l'Allemagne inscrit la techno au patrimoine UNESCO. En 2026, la France criminalise les organisateurs à hauteur de deux ans de prison. La différence n'est pas culturelle - elle est politique.
 
 ---
 
@@ -298,26 +298,26 @@ Documenter les échecs est aussi important que documenter les succès.
 
 ## Sources
 
-[1] Franceinfo — Free party : les députés vont-ils siffler la fin de la fête ?, avril 2026 — https://www.franceinfo.fr/culture/musique/free-party-les-deputes-vont-ils-siffler-la-fin-de-la-fete_7926770.html
+[1] Franceinfo - Free party : les députés vont-ils siffler la fin de la fête ?, avril 2026 - https://www.franceinfo.fr/culture/musique/free-party-les-deputes-vont-ils-siffler-la-fin-de-la-fete_7926770.html
 
-[2] Public Sénat — Projet de loi RIPOST : ce que contient le texte, mai 2026 — https://www.publicsenat.fr/actualites/parlementaire/projet-de-loi-ripost-contre-les-troubles-a-lordre-public-ce-que-contient-le-texte-du-senat
+[2] Public Sénat - Projet de loi RIPOST : ce que contient le texte, mai 2026 - https://www.publicsenat.fr/actualites/parlementaire/projet-de-loi-ripost-contre-les-troubles-a-lordre-public-ce-que-contient-le-texte-du-senat
 
-[3] Techno+ — Chronologie de la résistance festive des free parties — https://technoplus.org/chronologie-de-la-resistance-festive-des-free-parties/
+[3] Techno+ - Chronologie de la résistance festive des free parties - https://technoplus.org/chronologie-de-la-resistance-festive-des-free-parties/
 
-[4] InfoLibertaire — Manifestive Tekno Anti Rep 2025 — https://www.infolibertaire.net/manifestive-tekno-anti-rep-2025/
+[4] InfoLibertaire - Manifestive Tekno Anti Rep 2025 - https://www.infolibertaire.net/manifestive-tekno-anti-rep-2025/
 
-[5] Dijon Actualités — Dijon au cœur des Manifestives 2026 : le collectif Tekno Anti Rep appelle à la mobilisation le 30 mai — https://dijon-actualites.fr/2026/05/26/dijon-au-coeur-des-manifestives-2026-le-collectif-tekno-anti-rep-appelle-a-la-mobilisation-le-30-mai/
+[5] Dijon Actualités - Dijon au cœur des Manifestives 2026 : le collectif Tekno Anti Rep appelle à la mobilisation le 30 mai - https://dijon-actualites.fr/2026/05/26/dijon-au-coeur-des-manifestives-2026-le-collectif-tekno-anti-rep-appelle-a-la-mobilisation-le-30-mai/
 
-[6] Dijon Actualités — De la place de la République à la place Wilson, la Manifestive rassemble plusieurs centaines de personnes, 30 mai 2026 — https://dijon-actualites.fr/2026/05/30/de-la-place-de-la-republique-a-la-place-wilson-la-manifestive-rassemble-plusieurs-centaines-de-personnes/
+[6] Dijon Actualités - De la place de la République à la place Wilson, la Manifestive rassemble plusieurs centaines de personnes, 30 mai 2026 - https://dijon-actualites.fr/2026/05/30/de-la-place-de-la-republique-a-la-place-wilson-la-manifestive-rassemble-plusieurs-centaines-de-personnes/
 
-[7] Politis — Entretien Pierre Levent : "La répression ne va pas éteindre les free parties", avril 2026 — https://www.politis.fr/articles/2026/04/entretien-pierre-levent-la-repression-ne-va-pas-eteindre-les-free-parties/
+[7] Politis - Entretien Pierre Levent : "La répression ne va pas éteindre les free parties", avril 2026 - https://www.politis.fr/articles/2026/04/entretien-pierre-levent-la-repression-ne-va-pas-eteindre-les-free-parties/
 
-[8] Radio FG — La techno berlinoise reconnue au patrimoine immatériel de l'UNESCO, mars 2024 — https://www.radiofg.com/la-techno-berlinoise-reconnue-au-patrimoine-immateriel-de-l-unesco
+[8] Radio FG - La techno berlinoise reconnue au patrimoine immatériel de l'UNESCO, mars 2024 - https://www.radiofg.com/la-techno-berlinoise-reconnue-au-patrimoine-immateriel-de-l-unesco
 
-[9] Guettapen — La culture techno de Berlin admise au patrimoine mondial de l'UNESCO, mars 2024 — https://www.guettapen.com/2024/03/15/la-culture-techno-de-berlin-admise-au-patrimoine-mondial-de-lunesco/
+[9] Guettapen - La culture techno de Berlin admise au patrimoine mondial de l'UNESCO, mars 2024 - https://www.guettapen.com/2024/03/15/la-culture-techno-de-berlin-admise-au-patrimoine-mondial-de-lunesco/
 
-[10] Durevie — C'est officiel : la culture techno berlinoise entre au patrimoine immatériel de l'UNESCO — https://www.durevie.paris/article/cest-officiel-la-culture-techno-berlinoise-entre-au-patrimoine-culturel-immateriel-de-lunesco
+[10] Durevie - C'est officiel : la culture techno berlinoise entre au patrimoine immatériel de l'UNESCO - https://www.durevie.paris/article/cest-officiel-la-culture-techno-berlinoise-entre-au-patrimoine-culturel-immateriel-de-lunesco
 
-[11] Radio FG — C'est officiel : la techno de Berlin entre bien à l'UNESCO, octobre 2024 — https://www.radiofg.com/c-est-officiel-la-techno-de-berlin-entre-bien-a-l-unesco
+[11] Radio FG - C'est officiel : la techno de Berlin entre bien à l'UNESCO, octobre 2024 - https://www.radiofg.com/c-est-officiel-la-techno-de-berlin-entre-bien-a-l-unesco
 
-[12] Berlin Techno Narrative — La techno berlinoise à l'UNESCO : processus et enjeux — https://berlintechnonarrative.com/index.php/fr/site-historique-autour-de-la-musique-techno-a-berlin/la-techno-berlinoise-a-lunesco
+[12] Berlin Techno Narrative - La techno berlinoise à l'UNESCO : processus et enjeux - https://berlintechnonarrative.com/index.php/fr/site-historique-autour-de-la-musique-techno-a-berlin/la-techno-berlinoise-a-lunesco
