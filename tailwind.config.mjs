@@ -63,5 +63,6 @@ export default {
       },
     },
   },
+  safelist: ['text-neon-red'],
   plugins: [],
 };
