@@ -5,12 +5,11 @@ import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
   site: 'https://soundsystemhardening.fr',
-  integrations: [tailwind(), mdx()],
+  integrations: [tailwind(), mdx(), sitemap()],
   markdown: {
     shikiConfig: {
       theme: 'github-dark',
       wrap: true,
     },
   },
-  site: 'https://soundsystemhardening.netlify.app',
 });
