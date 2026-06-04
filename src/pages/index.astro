@@ -4,7 +4,103 @@ import Layout from '../layouts/Layout.astro';
 
 <Layout title="Home" description="Wiki collectif : droits, opsec, résistance pour pratiques culturelles alternatives">
 
-  <!-- MANIFESTO - accordéon interactif en haut -->
+  
+
+  <!-- HERO ASCII -->
+  <section class="mb-12 relative">
+    <div class="absolute -inset-4 bg-gradient-to-r from-neon-green/10 via-transparent to-neon-pink/10 blur-3xl pointer-events-none"></div>
+    <div class="relative text-center">
+      <div class="mb-6 overflow-x-auto">
+        <pre class="text-neon-green text-[0.38rem] sm:text-[0.48rem] md:text-[0.6rem] leading-tight font-mono inline-block text-left">███████╗ ██████╗ ██╗   ██╗███╗   ██╗██████╗
+██╔════╝██╔═══██╗██║   ██║████╗  ██║██╔══██╗
+███████╗██║   ██║██║   ██║██╔██╗ ██║██║  ██║
+╚════██║██║   ██║██║   ██║██║╚██╗██║██║  ██║
+███████║╚██████╔╝╚██████╔╝██║ ╚████║██████╔╝
+╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═══╝╚═════╝
+
+███████╗██╗   ██╗███████╗████████╗███████╗███╗   ███╗
+██╔════╝╚██╗ ██╔╝██╔════╝╚══██╔══╝██╔════╝████╗ ████║
+███████╗ ╚████╔╝ ███████╗   ██║   █████╗  ██╔████╔██║
+╚════██║  ╚██╔╝  ╚════██║   ██║   ██╔══╝  ██║╚██╔╝██║
+███████║   ██║   ███████║   ██║   ███████╗██║ ╚═╝ ██║
+╚══════╝   ╚═╝   ╚══════╝   ╚═╝   ╚══════╝╚═╝     ╚═╝
+
+<span class="text-neon-red">██╗  ██╗ █████╗ ██████╗ ██████╗ ███████╗███╗   ██╗██╗███╗   ██╗ ██████╗
+██║  ██║██╔══██╗██╔══██╗██╔══██╗██╔════╝████╗  ██║██║████╗  ██║██╔════╝
+███████║███████║██████╔╝██║  ██║█████╗  ██╔██╗ ██║██║██╔██╗ ██║██║  ███╗
+██╔══██║██╔══██║██╔══██╗██║  ██║██╔══╝  ██║╚██╗██║██║██║╚██╗██║██║   ██║
+██║  ██║██║  ██║██║  ██║██████╔╝███████╗██║ ╚████║██║██║ ╚████║╚██████╔╝
+╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚═════╝ ╚══════╝╚═╝  ╚═══╝╚═╝╚═╝  ╚═══╝ ╚═════╝</span></pre>
+      </div>
+      <div class="text-sm font-mono text-dedsec-muted mb-6">
+        ▸ <span class="text-neon-cyan">INIT.SYSTEM</span> &nbsp;|&nbsp; <span class="text-neon-pink">v1.0.0</span> &nbsp;|&nbsp; <span class="text-neon-green">● ONLINE</span>
+      </div>
+      <p class="text-lg text-dedsec-text leading-relaxed mb-6 max-w-3xl mx-auto">
+        Le <span class="text-neon-green font-bold">cerveau collectif</span> du mouvement free party. Ressources techniques, juridiques et stratégiques pour <span class="text-neon-pink">documenter</span>, <span class="text-neon-cyan">protéger</span> et <span class="text-neon-green">défendre</span> les droits des pratiques culturelles alternatives.
+      </p>
+      <div class="flex flex-wrap gap-3 justify-center">
+        <a href="/wiki/Urgence-immédiate" class="btn-neon no-underline">🚨 URGENCE IMMÉDIATE</a>
+        <a href="/wiki/Strategie-contre-ripost" class="btn-neon no-underline" style="border-color: #ff006e; color: #ff006e;">⚖️ CONTRE RIPOST</a>
+        <a href="/wiki/Sécurite-Numerique" class="btn-neon no-underline" style="border-color: #00d9ff; color: #00d9ff;">🔐 OPSEC</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <section class="mb-12">
+    <div class="grid grid-cols-3 gap-4">
+      <div class="card-neon text-center">
+        <div class="text-3xl font-bold text-neon-green mb-1">55</div>
+        <div class="text-xs text-dedsec-muted uppercase tracking-widest">Pages Wiki</div>
+      </div>
+      <div class="card-neon text-center">
+        <div class="text-3xl font-bold text-neon-pink mb-1">337</div>
+        <div class="text-xs text-dedsec-muted uppercase tracking-widest">Free parties / an</div>
+      </div>
+      <div class="card-neon text-center">
+        <div class="text-3xl font-bold text-neon-cyan mb-1">30+</div>
+        <div class="text-xs text-dedsec-muted uppercase tracking-widest">Ans de mouvement</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- NAVIGATION CARDS -->
+  <section class="mb-12">
+    <h2 class="mb-6">▸ PARCOURS D'UTILISATION</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <a href="/wiki/Urgence-immédiate" class="card-neon no-underline group">
+        <div class="text-2xl mb-2">🚨</div>
+        <h3 class="text-neon-pink mb-2 group-hover:text-neon-green transition-colors">Urgence immédiate</h3>
+        <p class="text-sm text-dedsec-muted">GAV, saisie, contrôle. Procédures à suivre maintenant.</p>
+      </a>
+      <a href="/wiki/Strategie-contre-ripost" class="card-neon no-underline group">
+        <div class="text-2xl mb-2">⚖️</div>
+        <h3 class="text-neon-cyan mb-2 group-hover:text-neon-green transition-colors">Contre RIPOST</h3>
+        <p class="text-sm text-dedsec-muted">Loi mai 2026 : 2 ans prison + 30K€. Comment contester.</p>
+      </a>
+      <a href="/wiki/Sécurite-Numerique" class="card-neon no-underline group">
+        <div class="text-2xl mb-2">🔐</div>
+        <h3 class="text-neon-green mb-2 group-hover:text-neon-cyan transition-colors">Sécurité numérique</h3>
+        <p class="text-sm text-dedsec-muted">Signal, métadonnées, anonymisation. Les 4 règles critiques.</p>
+      </a>
+      <a href="/wiki/Modus-Operandi" class="card-neon no-underline group">
+        <div class="text-2xl mb-2">🎯</div>
+        <h3 class="text-neon-pink mb-2 group-hover:text-neon-green transition-colors">Modus Operandi</h3>
+        <p class="text-sm text-dedsec-muted">Failles légales, zones grises, techniques de contournement.</p>
+      </a>
+      <a href="/wiki/Histoire-&-Culture" class="card-neon no-underline group">
+        <div class="text-2xl mb-2">📜</div>
+        <h3 class="text-neon-cyan mb-2 group-hover:text-neon-green transition-colors">Histoire & Culture</h3>
+        <p class="text-sm text-dedsec-muted">Chronologie 1988-2026, sound systems, patrimoine.</p>
+      </a>
+      <a href="/wiki/Mobilisation" class="card-neon no-underline group">
+        <div class="text-2xl mb-2">📣</div>
+        <h3 class="text-neon-green mb-2 group-hover:text-neon-cyan transition-colors">Mobilisation</h3>
+        <p class="text-sm text-dedsec-muted">Templates de recours, argumentaires, contacts alliés.</p>
+      </a>
+    </div>
+  </section>
+<!-- MANIFESTO - accordéon interactif en haut -->
   <section class="mb-12">
 
     <!-- Titre visuel -->
@@ -121,102 +217,6 @@ import Layout from '../layouts/Layout.astro';
 
     </div>
   </section>
-
-  <!-- HERO ASCII -->
-  <section class="mb-12 relative">
-    <div class="absolute -inset-4 bg-gradient-to-r from-neon-green/10 via-transparent to-neon-pink/10 blur-3xl pointer-events-none"></div>
-    <div class="relative text-center">
-      <div class="mb-6 overflow-x-auto">
-        <pre class="text-neon-green text-[0.38rem] sm:text-[0.48rem] md:text-[0.6rem] leading-tight font-mono inline-block text-left">███████╗ ██████╗ ██╗   ██╗███╗   ██╗██████╗
-██╔════╝██╔═══██╗██║   ██║████╗  ██║██╔══██╗
-███████╗██║   ██║██║   ██║██╔██╗ ██║██║  ██║
-╚════██║██║   ██║██║   ██║██║╚██╗██║██║  ██║
-███████║╚██████╔╝╚██████╔╝██║ ╚████║██████╔╝
-╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═══╝╚═════╝
-
-███████╗██╗   ██╗███████╗████████╗███████╗███╗   ███╗
-██╔════╝╚██╗ ██╔╝██╔════╝╚══██╔══╝██╔════╝████╗ ████║
-███████╗ ╚████╔╝ ███████╗   ██║   █████╗  ██╔████╔██║
-╚════██║  ╚██╔╝  ╚════██║   ██║   ██╔══╝  ██║╚██╔╝██║
-███████║   ██║   ███████║   ██║   ███████╗██║ ╚═╝ ██║
-╚══════╝   ╚═╝   ╚══════╝   ╚═╝   ╚══════╝╚═╝     ╚═╝
-
-<span class="text-neon-purple">██╗  ██╗ █████╗ ██████╗ ██████╗ ███████╗███╗   ██╗██╗███╗   ██╗ ██████╗
-██║  ██║██╔══██╗██╔══██╗██╔══██╗██╔════╝████╗  ██║██║████╗  ██║██╔════╝
-███████║███████║██████╔╝██║  ██║█████╗  ██╔██╗ ██║██║██╔██╗ ██║██║  ███╗
-██╔══██║██╔══██║██╔══██╗██║  ██║██╔══╝  ██║╚██╗██║██║██║╚██╗██║██║   ██║
-██║  ██║██║  ██║██║  ██║██████╔╝███████╗██║ ╚████║██║██║ ╚████║╚██████╔╝
-╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚═════╝ ╚══════╝╚═╝  ╚═══╝╚═╝╚═╝  ╚═══╝ ╚═════╝</span></pre>
-      </div>
-      <div class="text-sm font-mono text-dedsec-muted mb-6">
-        ▸ <span class="text-neon-cyan">INIT.SYSTEM</span> &nbsp;|&nbsp; <span class="text-neon-pink">v1.0.0</span> &nbsp;|&nbsp; <span class="text-neon-green">● ONLINE</span>
-      </div>
-      <p class="text-lg text-dedsec-text leading-relaxed mb-6 max-w-3xl mx-auto">
-        Le <span class="text-neon-green font-bold">cerveau collectif</span> du mouvement free party. Ressources techniques, juridiques et stratégiques pour <span class="text-neon-pink">documenter</span>, <span class="text-neon-cyan">protéger</span> et <span class="text-neon-green">défendre</span> les droits des pratiques culturelles alternatives.
-      </p>
-      <div class="flex flex-wrap gap-3 justify-center">
-        <a href="/wiki/Urgence-immédiate" class="btn-neon no-underline">🚨 URGENCE IMMÉDIATE</a>
-        <a href="/wiki/Strategie-contre-ripost" class="btn-neon no-underline" style="border-color: #ff006e; color: #ff006e;">⚖️ CONTRE RIPOST</a>
-        <a href="/wiki/Sécurite-Numerique" class="btn-neon no-underline" style="border-color: #00d9ff; color: #00d9ff;">🔐 OPSEC</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- STATS -->
-  <section class="mb-12">
-    <div class="grid grid-cols-3 gap-4">
-      <div class="card-neon text-center">
-        <div class="text-3xl font-bold text-neon-green mb-1">55</div>
-        <div class="text-xs text-dedsec-muted uppercase tracking-widest">Pages Wiki</div>
-      </div>
-      <div class="card-neon text-center">
-        <div class="text-3xl font-bold text-neon-pink mb-1">337</div>
-        <div class="text-xs text-dedsec-muted uppercase tracking-widest">Free parties / an</div>
-      </div>
-      <div class="card-neon text-center">
-        <div class="text-3xl font-bold text-neon-cyan mb-1">30+</div>
-        <div class="text-xs text-dedsec-muted uppercase tracking-widest">Ans de mouvement</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- NAVIGATION CARDS -->
-  <section class="mb-12">
-    <h2 class="mb-6">▸ PARCOURS D'UTILISATION</h2>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <a href="/wiki/Urgence-immédiate" class="card-neon no-underline group">
-        <div class="text-2xl mb-2">🚨</div>
-        <h3 class="text-neon-pink mb-2 group-hover:text-neon-green transition-colors">Urgence immédiate</h3>
-        <p class="text-sm text-dedsec-muted">GAV, saisie, contrôle. Procédures à suivre maintenant.</p>
-      </a>
-      <a href="/wiki/Strategie-contre-ripost" class="card-neon no-underline group">
-        <div class="text-2xl mb-2">⚖️</div>
-        <h3 class="text-neon-cyan mb-2 group-hover:text-neon-green transition-colors">Contre RIPOST</h3>
-        <p class="text-sm text-dedsec-muted">Loi mai 2026 : 2 ans prison + 30K€. Comment contester.</p>
-      </a>
-      <a href="/wiki/Sécurite-Numerique" class="card-neon no-underline group">
-        <div class="text-2xl mb-2">🔐</div>
-        <h3 class="text-neon-green mb-2 group-hover:text-neon-cyan transition-colors">Sécurité numérique</h3>
-        <p class="text-sm text-dedsec-muted">Signal, métadonnées, anonymisation. Les 4 règles critiques.</p>
-      </a>
-      <a href="/wiki/Modus-Operandi" class="card-neon no-underline group">
-        <div class="text-2xl mb-2">🎯</div>
-        <h3 class="text-neon-pink mb-2 group-hover:text-neon-green transition-colors">Modus Operandi</h3>
-        <p class="text-sm text-dedsec-muted">Failles légales, zones grises, techniques de contournement.</p>
-      </a>
-      <a href="/wiki/Histoire-&-Culture" class="card-neon no-underline group">
-        <div class="text-2xl mb-2">📜</div>
-        <h3 class="text-neon-cyan mb-2 group-hover:text-neon-green transition-colors">Histoire & Culture</h3>
-        <p class="text-sm text-dedsec-muted">Chronologie 1988-2026, sound systems, patrimoine.</p>
-      </a>
-      <a href="/wiki/Mobilisation" class="card-neon no-underline group">
-        <div class="text-2xl mb-2">📣</div>
-        <h3 class="text-neon-green mb-2 group-hover:text-neon-cyan transition-colors">Mobilisation</h3>
-        <p class="text-sm text-dedsec-muted">Templates de recours, argumentaires, contacts alliés.</p>
-      </a>
-    </div>
-  </section>
-
   <!-- WARNING -->
   <section class="mb-8">
     <div class="warning-box">
