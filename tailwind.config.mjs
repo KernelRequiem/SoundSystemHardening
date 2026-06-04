@@ -20,6 +20,7 @@ export default {
           'orange': '#ff6b00',
           'yellow': '#ffe600',
           'purple': '#b400ff',
+          'red': '#ff2020',
         },
         'free': {
           'rave': '#ff006e',
