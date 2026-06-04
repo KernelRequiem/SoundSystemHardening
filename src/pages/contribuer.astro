@@ -1,0 +1,302 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Contribuer" description="Comment contribuer au wiki SoundSystemHardening — contact, signalement, ajout de contenu">
+
+  <h1 class="mb-2">▸ CONTRIBUER</h1>
+  <p class="text-dedsec-muted text-sm mb-12 font-mono">Ce wiki est un outil collectif. Il vit par ses contributions.</p>
+
+  <!-- PRINCIPES -->
+  <section class="mb-12">
+    <div class="terminal mb-6">
+      <div class="text-neon-green font-bold font-mono text-xs mb-3 uppercase tracking-widest">▸ PRINCIPES DE BASE</div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="border-l-2 border-neon-green pl-4">
+          <div class="text-neon-green font-mono font-bold text-sm mb-1">[01] SOURCER</div>
+          <div class="text-xs text-dedsec-muted">Toute affirmation factuelle doit être sourcée. Pas de rumeurs, pas d'approximations.</div>
+        </div>
+        <div class="border-l-2 border-neon-cyan pl-4">
+          <div class="text-neon-cyan font-mono font-bold text-sm mb-1">[02] ANONYMISER</div>
+          <div class="text-xs text-dedsec-muted">Aucun nom réel, aucune donnée permettant d'identifier des personnes ou des lieux précis.</div>
+        </div>
+        <div class="border-l-2 border-neon-pink pl-4">
+          <div class="text-neon-pink font-mono font-bold text-sm mb-1">[03] VÉRIFIER</div>
+          <div class="text-xs text-dedsec-muted">Les informations juridiques doivent être vérifiées par quelqu'un avec des compétences légales.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMMENT CONTRIBUER -->
+  <section class="mb-12">
+    <h2 class="mb-6">▸ COMMENT CONTRIBUER</h2>
+
+    <div class="space-y-4">
+
+      <!-- GitHub -->
+      <div class="card-neon group">
+        <div class="flex items-start gap-4">
+          <div class="text-2xl shrink-0">🛠️</div>
+          <div class="flex-1">
+            <h3 class="text-neon-green mt-0 mb-2">Via GitHub — méthode principale</h3>
+            <p class="text-sm text-dedsec-muted mb-4">Le wiki est open source. La méthode la plus directe et traçable.</p>
+            <div class="space-y-2 text-sm font-mono">
+              <div class="flex gap-3">
+                <span class="text-neon-green/50 shrink-0">01.</span>
+                <span class="text-dedsec-text">Fork le repo <span class="text-neon-cyan">KernelRequiem/SoundSystemHardening</span></span>
+              </div>
+              <div class="flex gap-3">
+                <span class="text-neon-green/50 shrink-0">02.</span>
+                <span class="text-dedsec-text">Modifie ou crée un fichier <span class="text-neon-cyan">.md</span> dans <span class="text-neon-cyan">src/content/wiki/</span></span>
+              </div>
+              <div class="flex gap-3">
+                <span class="text-neon-green/50 shrink-0">03.</span>
+                <span class="text-dedsec-text">Ouvre une Pull Request avec une description claire</span>
+              </div>
+              <div class="flex gap-3">
+                <span class="text-neon-green/50 shrink-0">04.</span>
+                <span class="text-dedsec-text">Le contenu est relu, vérifié, puis mergé</span>
+              </div>
+            </div>
+            <div class="mt-4">
+              <a
+                href="https://github.com/KernelRequiem/SoundSystemHardening"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="btn-neon no-underline text-xs"
+              >
+                ▸ Ouvrir le repo GitHub
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Signalement d'erreur -->
+      <div class="card-neon group">
+        <div class="flex items-start gap-4">
+          <div class="text-2xl shrink-0">🐛</div>
+          <div class="flex-1">
+            <h3 class="text-neon-cyan mt-0 mb-2">Signaler une erreur ou un lien cassé</h3>
+            <p class="text-sm text-dedsec-muted mb-4">Tu as trouvé une info incorrecte, une page vide, un lien mort ?</p>
+            <div class="space-y-2 text-sm">
+              <div class="flex gap-3">
+                <span class="text-neon-cyan/50 shrink-0">◇</span>
+                <span class="text-dedsec-text">Ouvre une <strong class="text-neon-cyan">Issue GitHub</strong> avec le titre de la page et la description du problème</span>
+              </div>
+              <div class="flex gap-3">
+                <span class="text-neon-cyan/50 shrink-0">◇</span>
+                <span class="text-dedsec-text">Ou envoie un message via le <strong class="text-neon-cyan">canal Signal</strong> dédié (voir ci-dessous)</span>
+              </div>
+            </div>
+            <div class="mt-4">
+              <a
+                href="https://github.com/KernelRequiem/SoundSystemHardening/issues/new"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="btn-neon no-underline text-xs"
+                style="border-color: #00d9ff; color: #00d9ff;"
+              >
+                ▸ Ouvrir une issue
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Témoignage / cas terrain -->
+      <div class="card-neon group">
+        <div class="flex items-start gap-4">
+          <div class="text-2xl shrink-0">📋</div>
+          <div class="flex-1">
+            <h3 class="text-neon-pink mt-0 mb-2">Partager un cas terrain ou un témoignage</h3>
+            <p class="text-sm text-dedsec-muted mb-3">Tu as vécu une saisie, une GAV, une intervention ? Ce retour d'expérience enrichit le wiki.</p>
+            <div class="warning-box mb-4 text-xs">
+              <strong class="text-neon-pink">Sécurité obligatoire :</strong> Anonymise systématiquement — aucun nom, aucun lieu précis, aucune date permettant l'identification. Supprime les métadonnées des fichiers joints.
+            </div>
+            <div class="space-y-2 text-sm">
+              <div class="flex gap-3">
+                <span class="text-neon-pink/50 shrink-0">◇</span>
+                <span class="text-dedsec-text">Décris la situation, le déroulement, ce qui a fonctionné / échoué</span>
+              </div>
+              <div class="flex gap-3">
+                <span class="text-neon-pink/50 shrink-0">◇</span>
+                <span class="text-dedsec-text">Partage via le canal Signal ou par issue GitHub (anonymisée)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Traduction / relecture -->
+      <div class="card-neon group">
+        <div class="flex items-start gap-4">
+          <div class="text-2xl shrink-0">🌍</div>
+          <div class="flex-1">
+            <h3 class="text-neon-green mt-0 mb-2">Relecture juridique ou traduction</h3>
+            <p class="text-sm text-dedsec-muted mb-3">Tu as des compétences en droit, en sécurité informatique, ou tu parles une autre langue ?</p>
+            <div class="space-y-2 text-sm">
+              <div class="flex gap-3">
+                <span class="text-neon-green/50 shrink-0">◇</span>
+                <span class="text-dedsec-text"><strong class="text-neon-green">Juriste / avocat</strong> — relecture des pages Droits & Libertés, RIPOST, recours</span>
+              </div>
+              <div class="flex gap-3">
+                <span class="text-neon-green/50 shrink-0">◇</span>
+                <span class="text-dedsec-text"><strong class="text-neon-green">Profil cyber</strong> — audit des pages OPSEC, corrections techniques</span>
+              </div>
+              <div class="flex gap-3">
+                <span class="text-neon-green/50 shrink-0">◇</span>
+                <span class="text-dedsec-text"><strong class="text-neon-green">Traducteur</strong> — EN, DE, ES, IT pour les collectifs européens</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="mb-12">
+    <h2 class="mb-6">▸ CONTACT</h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+      <div class="card-neon">
+        <div class="flex items-center gap-3 mb-3">
+          <span class="text-xl">🐙</span>
+          <h3 class="text-neon-green mt-0 mb-0">GitHub</h3>
+        </div>
+        <p class="text-xs text-dedsec-muted mb-3">Méthode publique et traçable. Pour tout ce qui peut être dit ouvertement.</p>
+        <div class="space-y-1 text-xs font-mono">
+          <div>
+            <a href="https://github.com/KernelRequiem/SoundSystemHardening/issues" target="_blank" class="text-neon-cyan no-underline hover:underline">
+              ▸ Issues (bugs, suggestions)
+            </a>
+          </div>
+          <div>
+            <a href="https://github.com/KernelRequiem/SoundSystemHardening/discussions" target="_blank" class="text-neon-cyan no-underline hover:underline">
+              ▸ Discussions (questions, débats)
+            </a>
+          </div>
+          <div>
+            <a href="https://github.com/KernelRequiem/SoundSystemHardening/pulls" target="_blank" class="text-neon-cyan no-underline hover:underline">
+              ▸ Pull Requests (contributions)
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-neon border-neon-green/30">
+        <div class="flex items-center gap-3 mb-3">
+          <span class="text-xl">🔒</span>
+          <h3 class="text-neon-green mt-0 mb-0">Canal sécurisé</h3>
+        </div>
+        <p class="text-xs text-dedsec-muted mb-3">Pour les échanges sensibles, témoignages, signalements confidentiels.</p>
+        <div class="space-y-2 text-xs font-mono">
+          <div class="flex items-center gap-2">
+            <span class="text-neon-green">▸</span>
+            <span class="text-dedsec-text">Signal uniquement — pas de Telegram, pas de WhatsApp</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="text-neon-green">▸</span>
+            <span class="text-dedsec-text">Lien de contact disponible sur le repo GitHub</span>
+          </div>
+          <div class="flex items-center gap-2 mt-3">
+            <span class="text-dedsec-muted">◇</span>
+            <span class="text-dedsec-muted text-[10px]">Désactive la localisation avant de contacter</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-neon border-neon-pink/30">
+        <div class="flex items-center gap-3 mb-3">
+          <span class="text-xl">🤝</span>
+          <h3 class="text-neon-pink mt-0 mb-0">Organisations alliées</h3>
+        </div>
+        <p class="text-xs text-dedsec-muted mb-3">Structures avec lesquelles ce wiki est en lien.</p>
+        <div class="space-y-1 text-xs font-mono">
+          <a href="https://technoplus.org" target="_blank" class="flex items-center gap-2 text-dedsec-text hover:text-neon-pink no-underline transition-colors">
+            <span class="text-neon-pink/50">▸</span> Techno+
+          </a>
+          <a href="https://www.ldh-france.org" target="_blank" class="flex items-center gap-2 text-dedsec-text hover:text-neon-pink no-underline transition-colors">
+            <span class="text-neon-pink/50">▸</span> LDH — Ligue des droits de l'Homme
+          </a>
+          <a href="https://mars-infos.org" target="_blank" class="flex items-center gap-2 text-dedsec-text hover:text-neon-pink no-underline transition-colors">
+            <span class="text-neon-pink/50">▸</span> Marseille Infos Autonomes
+          </a>
+          <a href="https://contre-attaque.net" target="_blank" class="flex items-center gap-2 text-dedsec-text hover:text-neon-pink no-underline transition-colors">
+            <span class="text-neon-pink/50">▸</span> Contre Attaque
+          </a>
+        </div>
+      </div>
+
+      <div class="card-neon border-neon-cyan/30">
+        <div class="flex items-center gap-3 mb-3">
+          <span class="text-xl">⚖️</span>
+          <h3 class="text-neon-cyan mt-0 mb-0">Soutien juridique d'urgence</h3>
+        </div>
+        <p class="text-xs text-dedsec-muted mb-3">En situation de crise, pas ici — contacte directement :</p>
+        <div class="space-y-1 text-xs font-mono">
+          <a href="/wiki/Contacts-Allies" class="flex items-center gap-2 text-neon-green hover:text-neon-cyan no-underline transition-colors font-bold">
+            <span>🚨</span> Page Contacts & Alliés →
+          </a>
+          <div class="text-dedsec-muted text-[10px] mt-2">FSJS · Avocats spécialisés · permanences juridiques</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ROADMAP -->
+  <section class="mb-12">
+    <h2 class="mb-6">▸ CE QUI MANQUE — PRIORITÉS</h2>
+    <p class="text-sm text-dedsec-muted mb-4">Pages vides ou inexistantes, classées par urgence :</p>
+
+    <div class="space-y-2">
+      {[
+        { label: 'Contacts & Alliés', desc: 'Numéros d\'avocats, FSJS, LDH, Techno+ — page critique manquante', priority: 'CRITIQUE', color: 'neon-pink' },
+        { label: 'Templates de recours', desc: '6 templates cités partout mais non rédigés (GAV, saisie, AFD, référé...)', priority: 'CRITIQUE', color: 'neon-pink' },
+        { label: 'Veille RIPOST', desc: 'Tableau de bord de la navette parlementaire en cours', priority: 'URGENT', color: 'neon-orange' },
+        { label: 'Après l\'événement', desc: 'Que faire dans les 72h après une intervention ? Processus complet absent', priority: 'URGENT', color: 'neon-orange' },
+        { label: 'Jurisprudence', desc: 'Compiler les décisions de justice exploitables (TA Montpellier, Cass. 2020...)', priority: 'IMPORTANT', color: 'neon-cyan' },
+        { label: 'Guide débutant', desc: 'Comment monter un collectif, acquérir du matériel, premiers réflexes', priority: 'IMPORTANT', color: 'neon-cyan' },
+        { label: 'Carte des ressources régionales', desc: 'Contacts, avocats, assos par région', priority: 'SOUHAITABLE', color: 'neon-green' },
+      ].map(item => (
+        <div class="flex items-start gap-4 bg-dedsec-darker border border-dedsec-border hover:border-dedsec-text/30 rounded px-4 py-3 transition-all">
+          <span class={`font-mono text-[10px] shrink-0 mt-0.5 text-${item.color} border border-${item.color}/30 rounded px-1.5 py-0.5`}>
+            {item.priority}
+          </span>
+          <div class="flex-1 min-w-0">
+            <div class="font-mono text-sm text-dedsec-text font-bold">{item.label}</div>
+            <div class="text-xs text-dedsec-muted mt-0.5">{item.desc}</div>
+          </div>
+          <a
+            href="https://github.com/KernelRequiem/SoundSystemHardening/issues/new"
+            target="_blank"
+            class="text-[10px] font-mono text-dedsec-muted hover:text-neon-green no-underline transition-colors shrink-0"
+          >
+            Je contribue →
+          </a>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- LICENCE -->
+  <section class="mb-8">
+    <div class="terminal text-xs font-mono">
+      <div class="text-neon-green font-bold mb-2">▸ LICENCE</div>
+      <p class="text-dedsec-muted">
+        Ce wiki est publié sous licence <span class="text-neon-cyan">Creative Commons BY-SA 4.0</span>.
+        Tu peux librement copier, modifier et redistribuer le contenu, à condition de citer la source
+        et de publier tes modifications sous la même licence.
+      </p>
+      <p class="text-dedsec-muted mt-2">
+        Pas de tracking. Pas de cookies. Pas de publicité. Hébergé sur Netlify, code sur GitHub.
+      </p>
+    </div>
+  </section>
+
+</Layout>
