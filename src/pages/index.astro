@@ -3,13 +3,130 @@ import Layout from '../layouts/Layout.astro';
 ---
 
 <Layout title="Home" description="Wiki collectif : droits, opsec, résistance pour pratiques culturelles alternatives">
-  <!-- HERO -->
-  <section class="mb-16 relative">
-    <div class="absolute -inset-4 bg-gradient-to-r from-neon-green/10 via-transparent to-neon-pink/10 blur-3xl"></div>
-    
+
+  <!-- MANIFESTO — accordéon interactif en haut -->
+  <section class="mb-12">
+
+    <!-- Titre visuel -->
+    <div class="relative mb-6 select-none">
+      <div class="absolute inset-0 bg-gradient-to-r from-neon-green/20 via-neon-cyan/10 to-neon-pink/20 blur-2xl rounded-xl pointer-events-none"></div>
+      <div class="relative border border-neon-green/40 rounded-xl px-6 py-5 bg-dedsec-darker overflow-hidden">
+        <div class="absolute inset-0 opacity-5" style="background: repeating-linear-gradient(0deg, transparent, transparent 2px, #00ff9f 2px, #00ff9f 3px);"></div>
+        <div class="relative flex items-center gap-4">
+          <div class="shrink-0">
+            <div class="w-12 h-12 rounded border-2 border-neon-green flex items-center justify-center shadow-[0_0_20px_#00ff9f55]">
+              <span class="text-neon-green font-mono font-bold text-xl">M</span>
+            </div>
+          </div>
+          <div>
+            <div class="text-[10px] font-mono text-dedsec-muted uppercase tracking-[0.2em] mb-1">▸ FICHIER_OUVERT : manifesto.txt</div>
+            <h2 class="text-2xl font-display font-bold m-0 leading-tight">
+              <span class="text-neon-green">MANIFESTE</span>
+              <span class="text-dedsec-muted text-lg font-mono font-normal ml-2">// free party</span>
+            </h2>
+            <div class="text-xs text-dedsec-muted mt-1 font-mono">Ce que nous sommes · Ce que nous défendons · Pourquoi nous ne nous arrêterons pas</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Accordéon -->
+    <div class="space-y-2">
+
+      <details class="group" open>
+        <summary class="flex items-center gap-3 px-5 py-4 bg-dedsec-darker border border-neon-green/30 rounded-lg cursor-pointer hover:border-neon-green transition-all list-none">
+          <span class="text-neon-green font-mono text-xs w-8 shrink-0">I.</span>
+          <span class="font-mono font-bold text-sm text-dedsec-text group-hover:text-neon-green transition-colors flex-1">D'où nous venons</span>
+          <span class="text-neon-green/50 font-mono text-xs transition-transform duration-200 group-open:rotate-90 shrink-0">▸</span>
+        </summary>
+        <div class="px-5 py-4 border border-t-0 border-neon-green/20 rounded-b-lg bg-dedsec-black/40 text-sm text-dedsec-muted leading-relaxed space-y-3">
+          <p>La fête libre a une dette envers les <span class="text-neon-cyan">sound systems jamaïcains</span> des années 1950 — musique sortie des clubs fermés pour les rues, les arrière-cours, ceux sans moyens d'entrer. Un acte de résistance intact aujourd'hui.</p>
+          <p>En 1994, le <span class="text-neon-pink">Criminal Justice Act</span> criminalise les rassemblements à "musique répétitive". Spiral Tribe quitte l'Angleterre. <em>La répression n'a pas tué la free party. Elle l'a exportée.</em></p>
+          <p>En 2001, <span class="text-neon-pink">l'amendement Mariani</span> impose la déclaration préalable. La free party entre dans le droit pour mieux être réprimée. Depuis, le mouvement s'est outillé.</p>
+        </div>
+      </details>
+
+      <details class="group">
+        <summary class="flex items-center gap-3 px-5 py-4 bg-dedsec-darker border border-neon-green/30 rounded-lg cursor-pointer hover:border-neon-green transition-all list-none">
+          <span class="text-neon-green font-mono text-xs w-8 shrink-0">II.</span>
+          <span class="font-mono font-bold text-sm text-dedsec-text group-hover:text-neon-green transition-colors flex-1">Ce que nous sommes</span>
+          <span class="text-neon-green/50 font-mono text-xs transition-transform duration-200 group-open:rotate-90 shrink-0">▸</span>
+        </summary>
+        <div class="px-5 py-4 border border-t-0 border-neon-green/20 rounded-b-lg bg-dedsec-black/40 text-sm text-dedsec-muted leading-relaxed space-y-3">
+          <p>Un mouvement de <span class="text-neon-green font-bold">30 ans</span>. Des espaces gratuits, sans sélection à l'entrée. Une organisation sans hiérarchie : des collectifs qui construisent leur son de leurs propres mains.</p>
+          <p>En 2024, la techno française inscrite au <span class="text-neon-cyan">patrimoine UNESCO</span>. L'État qui la récompense d'un côté la réprime de l'autre.</p>
+          <div class="grid grid-cols-2 gap-3 mt-2">
+            <div class="border-l-2 border-neon-green pl-3"><div class="text-neon-green text-xs font-bold mb-1">Bienveillance</div><div class="text-xs">Techno+, Freeform — RdR sans jugement</div></div>
+            <div class="border-l-2 border-neon-cyan pl-3"><div class="text-neon-cyan text-xs font-bold mb-1">Féminisme</div><div class="text-xs">Safer sex, protocoles violences</div></div>
+            <div class="border-l-2 border-neon-pink pl-3"><div class="text-neon-pink text-xs font-bold mb-1">Anti-fascisme</div><div class="text-xs">Culture d'accueil, mobilisation</div></div>
+            <div class="border-l-2 border-neon-green pl-3"><div class="text-neon-green text-xs font-bold mb-1">Solidarité</div><div class="text-xs">FSJS — défense collective des saisies</div></div>
+          </div>
+        </div>
+      </details>
+
+      <details class="group">
+        <summary class="flex items-center gap-3 px-5 py-4 bg-dedsec-darker border border-neon-green/30 rounded-lg cursor-pointer hover:border-neon-green transition-all list-none">
+          <span class="text-neon-green font-mono text-xs w-8 shrink-0">III.</span>
+          <span class="font-mono font-bold text-sm text-dedsec-text group-hover:text-neon-green transition-colors flex-1">Ce que nous défendons</span>
+          <span class="text-neon-green/50 font-mono text-xs transition-transform duration-200 group-open:rotate-90 shrink-0">▸</span>
+        </summary>
+        <div class="px-5 py-4 border border-t-0 border-neon-green/20 rounded-b-lg bg-dedsec-black/40 text-sm text-dedsec-muted leading-relaxed space-y-2">
+          <div class="flex gap-3"><span class="text-neon-green shrink-0">◆</span><span><strong class="text-dedsec-text">La liberté de rassemblement</strong> — Art. 11 CESDH. Ériger une free party en délit est une violation disproportionnée.</span></div>
+          <div class="flex gap-3"><span class="text-neon-green shrink-0">◆</span><span><strong class="text-dedsec-text">La gratuité comme refus du marché</strong> — L'État accepte la techno quand elle rapporte de la TVA. Il la réprime quand elle n'en rapporte pas.</span></div>
+          <div class="flex gap-3"><span class="text-neon-green shrink-0">◆</span><span><strong class="text-dedsec-text">L'autogestion</strong> — Le DIY n'est pas une contrainte économique. C'est une philosophie d'autonomie.</span></div>
+          <div class="flex gap-3"><span class="text-neon-green shrink-0">◆</span><span><strong class="text-dedsec-text">La réduction des risques</strong> — Le soin n'est jamais une infraction.</span></div>
+          <div class="flex gap-3"><span class="text-neon-pink shrink-0">◆</span><span><strong class="text-neon-pink">La mémoire des morts</strong> — Steve Maia Caniço, Redon 2021, 2024. Ces morts sont le produit d'une politique.</span></div>
+        </div>
+      </details>
+
+      <details class="group">
+        <summary class="flex items-center gap-3 px-5 py-4 bg-dedsec-darker border border-neon-pink/30 rounded-lg cursor-pointer hover:border-neon-pink transition-all list-none">
+          <span class="text-neon-pink font-mono text-xs w-8 shrink-0">IV.</span>
+          <span class="font-mono font-bold text-sm text-dedsec-text group-hover:text-neon-pink transition-colors flex-1">Ce que nous refusons</span>
+          <span class="text-neon-pink/50 font-mono text-xs transition-transform duration-200 group-open:rotate-90 shrink-0">▸</span>
+        </summary>
+        <div class="px-5 py-4 border border-t-0 border-neon-pink/20 rounded-b-lg bg-dedsec-black/40 text-sm text-dedsec-muted leading-relaxed space-y-2">
+          <div class="flex gap-3"><span class="text-neon-pink shrink-0">✕</span><span><strong class="text-dedsec-text">La criminalisation de la présence</strong> — Danser n'est pas un crime.</span></div>
+          <div class="flex gap-3"><span class="text-neon-pink shrink-0">✕</span><span><strong class="text-dedsec-text">L'amalgame avec le crime organisé</strong> — Les infractions sont déjà réprimées par le droit commun.</span></div>
+          <div class="flex gap-3"><span class="text-neon-pink shrink-0">✕</span><span><strong class="text-dedsec-text">La répression préventive</strong> — Les arrêtés couvrant des départements entiers sont incompatibles avec l'État de droit.</span></div>
+          <div class="flex gap-3"><span class="text-neon-pink shrink-0">✕</span><span><strong class="text-dedsec-text">L'institutionnalisation forcée</strong> — La techno payante et la free party, c'est le même mouvement.</span></div>
+        </div>
+      </details>
+
+      <details class="group">
+        <summary class="flex items-center gap-3 px-5 py-4 bg-dedsec-darker border border-neon-cyan/30 rounded-lg cursor-pointer hover:border-neon-cyan transition-all list-none">
+          <span class="text-neon-cyan font-mono text-xs w-8 shrink-0">V.</span>
+          <span class="font-mono font-bold text-sm text-dedsec-text group-hover:text-neon-cyan transition-colors flex-1">Ce que nous exigeons</span>
+          <span class="text-neon-cyan/50 font-mono text-xs transition-transform duration-200 group-open:rotate-90 shrink-0">▸</span>
+        </summary>
+        <div class="px-5 py-4 border border-t-0 border-neon-cyan/20 rounded-b-lg bg-dedsec-black/40 text-sm text-dedsec-muted leading-relaxed space-y-2">
+          <div class="flex gap-3"><span class="text-neon-cyan font-mono text-xs shrink-0 mt-0.5">01.</span><span>La <strong class="text-dedsec-text">fin de l'exception répressive</strong> — Arrêt des délits de présence et de complicité par le soin.</span></div>
+          <div class="flex gap-3"><span class="text-neon-cyan font-mono text-xs shrink-0 mt-0.5">02.</span><span><strong class="text-dedsec-text">L'abrogation du régime Mariani</strong> — Il a produit de la clandestinité, pas de la sécurité.</span></div>
+          <div class="flex gap-3"><span class="text-neon-cyan font-mono text-xs shrink-0 mt-0.5">03.</span><span>La <strong class="text-dedsec-text">fin des interdictions préfectorales massives</strong> — Restrictions ciblées, motivées, délimitées.</span></div>
+          <div class="flex gap-3"><span class="text-neon-cyan font-mono text-xs shrink-0 mt-0.5">04.</span><span><strong class="text-dedsec-text">La désescalade</strong> — Médiation, accès aux secours garanti, pas de charges nocturnes.</span></div>
+        </div>
+      </details>
+
+      <details class="group">
+        <summary class="flex items-center gap-3 px-5 py-4 bg-dedsec-darker border border-neon-green/50 rounded-lg cursor-pointer hover:border-neon-green hover:shadow-[0_0_15px_#00ff9f22] transition-all list-none">
+          <span class="text-neon-green font-mono text-xs w-8 shrink-0">VI.</span>
+          <span class="font-mono font-bold text-sm text-neon-green flex-1">Pourquoi nous continuerons</span>
+          <span class="text-neon-green/50 font-mono text-xs transition-transform duration-200 group-open:rotate-90 shrink-0">▸</span>
+        </summary>
+        <div class="px-5 py-4 border border-t-0 border-neon-green/30 rounded-b-lg bg-neon-green/5 text-sm text-dedsec-muted leading-relaxed space-y-3">
+          <p>La free party a survécu au Criminal Justice Act de 1994, à la loi Mariani, aux centaines d'arrêtés préfectoraux et aux saisies de matériel. Elle a survécu parce qu'elle <strong class="text-neon-green">ne dépend de personne</strong> — pas d'un label rachetable, pas d'un festival qui perd son financement.</p>
+          <p class="text-neon-green font-mono text-center pt-2 text-base border-t border-neon-green/20">"Free music for free people"<br/><span class="text-xs text-dedsec-muted">▸ SPIRAL TRIBE</span></p>
+        </div>
+      </details>
+
+    </div>
+  </section>
+
+  <!-- HERO ASCII -->
+  <section class="mb-12 relative">
+    <div class="absolute -inset-4 bg-gradient-to-r from-neon-green/10 via-transparent to-neon-pink/10 blur-3xl pointer-events-none"></div>
     <div class="relative text-center">
-      <!-- ASCII Art Hero -->
-      <div class="mb-8 overflow-x-auto">
+      <div class="mb-6 overflow-x-auto">
         <pre class="text-neon-green text-[0.38rem] sm:text-[0.48rem] md:text-[0.6rem] leading-tight font-mono inline-block text-left">███████╗ ██████╗ ██╗   ██╗███╗   ██╗██████╗
 ██╔════╝██╔═══██╗██║   ██║████╗  ██║██╔══██╗
 ███████╗██║   ██║██║   ██║██╔██╗ ██║██║  ██║
@@ -31,41 +148,32 @@ import Layout from '../layouts/Layout.astro';
 ██║  ██║██║  ██║██║  ██║██████╔╝███████╗██║ ╚████║██║██║ ╚████║╚██████╔╝
 ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚═════╝ ╚══════╝╚═╝  ╚═══╝╚═╝╚═╝  ╚═══╝ ╚═════╝</span></pre>
       </div>
-
       <div class="text-sm font-mono text-dedsec-muted mb-6">
         ▸ <span class="text-neon-cyan">INIT.SYSTEM</span> &nbsp;|&nbsp; <span class="text-neon-pink">v1.0.0</span> &nbsp;|&nbsp; <span class="text-neon-green">● ONLINE</span>
       </div>
-
-      <p class="text-xl text-dedsec-text leading-relaxed mb-6 max-w-3xl mx-auto">
+      <p class="text-lg text-dedsec-text leading-relaxed mb-6 max-w-3xl mx-auto">
         Le <span class="text-neon-green font-bold">cerveau collectif</span> du mouvement free party. Ressources techniques, juridiques et stratégiques pour <span class="text-neon-pink">documenter</span>, <span class="text-neon-cyan">protéger</span> et <span class="text-neon-green">défendre</span> les droits des pratiques culturelles alternatives.
       </p>
-
-      <div class="flex flex-wrap gap-3 mt-8 justify-center">
-        <a href="/wiki/Urgence-immédiate" class="btn-neon no-underline">
-          🚨 URGENCE IMMÉDIATE
-        </a>
-        <a href="/wiki/Strategie-contre-ripost" class="btn-neon no-underline" style="border-color: #ff006e; color: #ff006e;">
-          ⚖️ CONTRE RIPOST
-        </a>
-        <a href="/wiki/Sécurite-Numerique" class="btn-neon no-underline" style="border-color: #00d9ff; color: #00d9ff;">
-          🔐 OPSEC
-        </a>
+      <div class="flex flex-wrap gap-3 justify-center">
+        <a href="/wiki/Urgence-immédiate" class="btn-neon no-underline">🚨 URGENCE IMMÉDIATE</a>
+        <a href="/wiki/Strategie-contre-ripost" class="btn-neon no-underline" style="border-color: #ff006e; color: #ff006e;">⚖️ CONTRE RIPOST</a>
+        <a href="/wiki/Sécurite-Numerique" class="btn-neon no-underline" style="border-color: #00d9ff; color: #00d9ff;">🔐 OPSEC</a>
       </div>
     </div>
   </section>
 
-  <!-- STATS / MANIFEST -->
-  <section class="mb-16">
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12">
-      <div class="card-neon">
-        <div class="text-3xl font-bold text-neon-green mb-1">48</div>
+  <!-- STATS -->
+  <section class="mb-12">
+    <div class="grid grid-cols-3 gap-4">
+      <div class="card-neon text-center">
+        <div class="text-3xl font-bold text-neon-green mb-1">55</div>
         <div class="text-xs text-dedsec-muted uppercase tracking-widest">Pages Wiki</div>
       </div>
-      <div class="card-neon">
+      <div class="card-neon text-center">
         <div class="text-3xl font-bold text-neon-pink mb-1">337</div>
         <div class="text-xs text-dedsec-muted uppercase tracking-widest">Free parties / an</div>
       </div>
-      <div class="card-neon">
+      <div class="card-neon text-center">
         <div class="text-3xl font-bold text-neon-cyan mb-1">30+</div>
         <div class="text-xs text-dedsec-muted uppercase tracking-widest">Ans de mouvement</div>
       </div>
@@ -73,70 +181,39 @@ import Layout from '../layouts/Layout.astro';
   </section>
 
   <!-- NAVIGATION CARDS -->
-  <section class="mb-16">
+  <section class="mb-12">
     <h2 class="mb-6">▸ PARCOURS D'UTILISATION</h2>
-    
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
       <a href="/wiki/Urgence-immédiate" class="card-neon no-underline group">
         <div class="text-2xl mb-2">🚨</div>
         <h3 class="text-neon-pink mb-2 group-hover:text-neon-green transition-colors">Urgence immédiate</h3>
         <p class="text-sm text-dedsec-muted">GAV, saisie, contrôle. Procédures à suivre maintenant.</p>
       </a>
-
       <a href="/wiki/Strategie-contre-ripost" class="card-neon no-underline group">
         <div class="text-2xl mb-2">⚖️</div>
         <h3 class="text-neon-cyan mb-2 group-hover:text-neon-green transition-colors">Contre RIPOST</h3>
         <p class="text-sm text-dedsec-muted">Loi mai 2026 : 2 ans prison + 30K€. Comment contester.</p>
       </a>
-
       <a href="/wiki/Sécurite-Numerique" class="card-neon no-underline group">
         <div class="text-2xl mb-2">🔐</div>
         <h3 class="text-neon-green mb-2 group-hover:text-neon-cyan transition-colors">Sécurité numérique</h3>
         <p class="text-sm text-dedsec-muted">Signal, métadonnées, anonymisation. Les 4 règles critiques.</p>
       </a>
-
       <a href="/wiki/Modus-Operandi" class="card-neon no-underline group">
         <div class="text-2xl mb-2">🎯</div>
         <h3 class="text-neon-pink mb-2 group-hover:text-neon-green transition-colors">Modus Operandi</h3>
         <p class="text-sm text-dedsec-muted">Failles légales, zones grises, techniques de contournement.</p>
       </a>
-
       <a href="/wiki/Histoire-&-Culture" class="card-neon no-underline group">
         <div class="text-2xl mb-2">📜</div>
         <h3 class="text-neon-cyan mb-2 group-hover:text-neon-green transition-colors">Histoire & Culture</h3>
         <p class="text-sm text-dedsec-muted">Chronologie 1988-2026, sound systems, patrimoine.</p>
       </a>
-
       <a href="/wiki/Mobilisation" class="card-neon no-underline group">
         <div class="text-2xl mb-2">📣</div>
         <h3 class="text-neon-green mb-2 group-hover:text-neon-cyan transition-colors">Mobilisation</h3>
         <p class="text-sm text-dedsec-muted">Templates de recours, argumentaires, contacts alliés.</p>
       </a>
-    </div>
-  </section>
-
-  <!-- MANIFESTO -->
-  <section class="mb-16">
-    <div class="terminal">
-      <div class="text-neon-green mb-4 font-bold">▸ MANIFESTO.txt</div>
-      <p class="text-dedsec-text mb-4">
-        Le mouvement de la fête libre est confronté à une <span class="text-neon-pink">asymétrie de moyens sans précédent</span>. Face à une surveillance technologique de masse et un arsenal juridique qui se durcit, <span class="text-neon-green">l'ignorance est notre plus grande faiblesse</span>.
-      </p>
-      
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
-        <div class="border-l-2 border-neon-green pl-4">
-          <div class="text-neon-green font-bold mb-1 text-sm">[01] OUTILLER</div>
-          <div class="text-xs text-dedsec-muted">Méthodes concrètes pour se protéger des saisies, infiltrations et intimidation.</div>
-        </div>
-        <div class="border-l-2 border-neon-cyan pl-4">
-          <div class="text-neon-cyan font-bold mb-1 text-sm">[02] DOCUMENTER</div>
-          <div class="text-xs text-dedsec-muted">Archive factuelle et sourcée des pratiques répressives.</div>
-        </div>
-        <div class="border-l-2 border-neon-pink pl-4">
-          <div class="text-neon-pink font-bold mb-1 text-sm">[03] STRUCTURER</div>
-          <div class="text-xs text-dedsec-muted">Harmoniser les pratiques de résistance entre collectifs.</div>
-        </div>
-      </div>
     </div>
   </section>
 
@@ -147,11 +224,4 @@ import Layout from '../layouts/Layout.astro';
     </div>
   </section>
 
-  <!-- QUOTE -->
-  <section class="text-center py-12">
-    <div class="text-2xl font-display italic text-dedsec-muted">
-      "<span class="text-neon-green">Free music</span> for <span class="text-neon-pink">free people</span>"
-    </div>
-    <div class="text-xs text-dedsec-muted mt-2 font-mono">▸ SPIRAL TRIBE</div>
-  </section>
 </Layout>

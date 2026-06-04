@@ -76,7 +76,6 @@ const navigation = [
     icon: '📣',
     links: [
       { href: '/wiki/Mobilisation', label: 'Vue d\'ensemble', emoji: '◇' },
-      { href: '/wiki/Manifesto', label: 'Manifesto', emoji: '📜' },
       { href: '/wiki/Templates-Recours', label: 'Templates de recours', emoji: '📝' },
       { href: '/wiki/Contacts-Allies', label: 'Contacts et alliés', emoji: '📞' },
       { href: '/wiki/Argumentaires', label: 'Argumentaires', emoji: '💬' },
@@ -146,7 +145,6 @@ const navigation = [
     links: [
       { href: '/wiki/Sécurite-Numerique', label: 'Sécurité numérique', emoji: '🛡️' },
       { href: '/wiki/Sécurité-des-communications', label: 'Communications sécurisées', emoji: '💬' },
-      { href: '/wiki/Repression', label: 'Répression', emoji: '⚠️' },
     ]
   },
 ];
@@ -273,11 +271,13 @@ const navigation = [
 
         <!-- Navigation -->
         <nav class="p-3 pb-20">
-          {navigation.map((section) => (
-            <div class="mb-4">
-              <div class="sidebar-section-title">
-                {section.icon && <span class="mr-1">{section.icon}</span>}
-                {section.section}
+      {navigation.map((section) => (
+            <div class="mb-1">
+              <div class="px-3 pt-4 pb-1">
+                <span class="text-[9px] font-mono font-bold uppercase tracking-[0.15em] text-dedsec-muted/60">
+                  {section.icon && <span class="mr-1">{section.icon}</span>}
+                  {section.section}
+                </span>
               </div>
               {section.links.map((link) => (
                 <a 
