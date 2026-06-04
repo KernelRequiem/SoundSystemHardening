@@ -157,7 +157,16 @@ const navigation = [
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="generator" content={Astro.generator} />
-    <title>{resolvedTitle}</title>
+    <title>{resolvedTitle}</title><script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "SoundSystemHardening",
+      "url": "https://soundsystemhardening.fr",
+      "logo": "https://soundsystemhardening.fr/SoundSystemHardening-logo.png",
+      "description": "Wiki collectif : droits, opsec, résistance pour le mouvement free party"
+    }
+    </script>
 
     <!-- SEO -->
     <meta name="description" content={resolvedDescription} />
