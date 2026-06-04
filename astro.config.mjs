@@ -1,15 +1,5 @@
-import { defineConfig } from 'astro/config';
-import tailwind from '@astrojs/tailwind';
-import mdx from '@astrojs/mdx';
-import sitemap from '@astrojs/sitemap';
-
-export default defineConfig({
-  site: 'https://soundsystemhardening.fr',
-  integrations: [tailwind(), mdx(), sitemap()],
-  markdown: {
-    shikiConfig: {
-      theme: 'github-dark',
-      wrap: true,
-    },
-  },
-});
+cd ~/sound-system-hardening-new
+git apply /path/to/remove-tirets-quadratins.patch
+git add -A && git commit -m "fix: typos"
+git push origin main
+# Attendre ~5 min pour Netlify → soundsystemhardening.fr live ✅
