@@ -7,38 +7,35 @@ import Layout from '../layouts/Layout.astro';
   <section class="mb-16 relative">
     <div class="absolute -inset-4 bg-gradient-to-r from-neon-green/10 via-transparent to-neon-pink/10 blur-3xl"></div>
     
-    <div class="relative">
-      <div class="ascii-box mb-6 text-neon-green opacity-80">
-{`╔══════════════════════════════════════════════════════════════╗
-║                                                              ║
-║   ███████╗ ██████╗ ██╗   ██╗███╗   ██╗██████╗               ║
-║   ██╔════╝██╔═══██╗██║   ██║████╗  ██║██╔══██╗              ║
-║   ███████╗██║   ██║██║   ██║██╔██╗ ██║██║  ██║              ║
-║   ╚════██║██║   ██║██║   ██║██║╚██╗██║██║  ██║              ║
-║   ███████║╚██████╔╝╚██████╔╝██║ ╚████║██████╔╝              ║
-║   ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═══╝╚═════╝               ║
-║                                                              ║
-║   ███████╗██╗   ██╗███████╗████████╗███████╗███╗   ███╗     ║
-║   ██╔════╝╚██╗ ██╔╝██╔════╝╚══██╔══╝██╔════╝████╗ ████║     ║
-║   ███████╗ ╚████╔╝ ███████╗   ██║   █████╗  ██╔████╔██║     ║
-║   ╚════██║  ╚██╔╝  ╚════██║   ██║   ██╔══╝  ██║╚██╔╝██║     ║
-║   ███████║   ██║   ███████║   ██║   ███████╗██║ ╚═╝ ██║     ║
-║   ╚══════╝   ╚═╝   ╚══════╝   ╚═╝   ╚══════╝╚═╝     ╚═╝     ║
-║                                                              ║
-║       H A R D E N I N G   //   R E S I S T A N C E          ║
-║                                                              ║
-╚══════════════════════════════════════════════════════════════╝`}
+    <div class="relative text-center">
+      <!-- Logo centré -->
+      <div class="flex justify-center mb-8">
+        <div class="w-48 h-48 rounded-full border-3 border-neon-green overflow-hidden
+                    shadow-[0_0_30px_#00ff9f88] hover:shadow-[0_0_60px_#00ff9f]
+                    transition-all duration-300 hover:scale-105">
+          <img
+            src="/SoundSystemHardening-logo.png"
+            alt="SoundSystem Hardening"
+            class="w-full h-full object-cover"
+          />
+        </div>
       </div>
 
-      <div class="text-sm font-mono text-dedsec-muted mb-2">
-        ▸ <span class="text-neon-cyan">INIT.SYSTEM</span> &nbsp;|&nbsp; <span class="text-neon-pink">v1.0.0</span> &nbsp;|&nbsp; <span class="text-neon-green">● ONLINE</span>
+      <!-- Titre hero -->
+      <div class="mb-6">
+        <div class="font-display font-bold text-neon-green text-5xl md:text-7xl leading-none tracking-tight glitch-text" data-text="SOUND SYSTEM">
+          SOUND SYSTEM
+        </div>
+        <div class="font-display font-bold text-neon-purple text-5xl md:text-7xl leading-none tracking-tight mt-1">
+          HARDENING
+        </div>
       </div>
 
-      <p class="text-xl text-dedsec-text leading-relaxed mb-6 max-w-3xl">
+      <p class="text-xl text-dedsec-text leading-relaxed mb-6 max-w-3xl mx-auto">
         Le <span class="text-neon-green font-bold">cerveau collectif</span> du mouvement free party. Ressources techniques, juridiques et stratégiques pour <span class="text-neon-pink">documenter</span>, <span class="text-neon-cyan">protéger</span> et <span class="text-neon-green">défendre</span> les droits des pratiques culturelles alternatives.
       </p>
 
-      <div class="flex flex-wrap gap-3 mt-8">
+      <div class="flex flex-wrap gap-3 mt-8 justify-center">
         <a href="/wiki/Urgence-immédiate" class="btn-neon no-underline">
           🚨 URGENCE IMMÉDIATE
         </a>
