@@ -1,0 +1,283 @@
+---
+// src/pages/securite.astro
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+  title="Sécurité & Confidentialité"
+  category="PROJET"
+  description="Ce qui arrive aux informations que vous partagez sur SoundSystemHardening. Garanties, limites, droits RGPD, recommandations opsec."
+>
+
+  <h1>Vos données, notre responsabilité</h1>
+  <p class="text-dedsec-muted text-sm font-mono tracking-widest uppercase mb-10">
+    ▸ Ce que vous partagez · Ce qu'on en fait · Comment vous protéger
+  </p>
+
+  <div class="info-box mb-10">
+    Cette page s'adresse aux visiteurs qui partagent des informations via les formulaires du site :
+    signalement de la carte, contact, report de problème. Si vous naviguez en lecture seule, rien
+    n'est collecté sur vous — consultez <a href="/a-propos">À propos & Transparence</a> pour les détails techniques.
+  </div>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- 1. INVENTAIRE DE CE QUE VOUS POUVEZ PARTAGER  -->
+  <!-- ══════════════════════════════════════════════ -->
+  <h2>Ce que vous pouvez partager, selon le formulaire</h2>
+
+  <p>
+    Trois points de saisie existent sur le site. Voici exactement ce que chacun collecte,
+    où ça va, et combien de temps ça reste.
+  </p>
+
+  <h3>Signalement de la carte de la répression</h3>
+
+  <table>
+    <thead>
+      <tr><th>Champ</th><th>Obligatoire</th><th>Où ça va</th><th>Visible publiquement</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Lieu (ville, département)</td><td>Oui</td><td>Airtable — modérateurs</td><td>Oui, après validation</td></tr>
+      <tr><td>Date</td><td>Oui</td><td>Airtable — modérateurs</td><td>Oui, après validation</td></tr>
+      <tr><td>Type de répression</td><td>Oui</td><td>Airtable — modérateurs</td><td>Oui, après validation</td></tr>
+      <tr><td>Description</td><td>Oui</td><td>Airtable — modérateurs</td><td>Oui, après validation</td></tr>
+      <tr><td>Bilan</td><td>Non</td><td>Airtable — modérateurs</td><td>Oui, après validation</td></tr>
+      <tr><td>Source (URL)</td><td>Non</td><td>Airtable — modérateurs</td><td>Oui, après validation</td></tr>
+      <tr><td>Votre IP</td><td>(automatique)</td><td>Logs Netlify (7 jours max)</td><td>Non</td></tr>
+    </tbody>
+  </table>
+
+  <div class="warning-box mt-4 mb-8">
+    <strong>Ce que vous ne devez pas inclure dans une description de signalement :</strong>
+    aucun nom réel de personne, aucun prénom, aucune adresse personnelle, aucune donnée
+    permettant d'identifier un participant ou un organisateur. Si la description contient
+    des données nominatives, on la supprime avant publication.
+  </div>
+
+  <h3>Formulaire de contact</h3>
+
+  <table>
+    <thead>
+      <tr><th>Champ</th><th>Obligatoire</th><th>Où ça va</th><th>Visible publiquement</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Objet</td><td>Oui</td><td>Dashboard Netlify — modérateurs</td><td>Non</td></tr>
+      <tr><td>Message</td><td>Oui</td><td>Dashboard Netlify — modérateurs</td><td>Non</td></tr>
+      <tr><td>Moyen de réponse</td><td>Non</td><td>Dashboard Netlify — modérateurs</td><td>Non</td></tr>
+      <tr><td>Votre IP</td><td>(automatique)</td><td>Logs Netlify (7 jours max)</td><td>Non</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Signalement de problème sur le wiki</h3>
+
+  <table>
+    <thead>
+      <tr><th>Champ</th><th>Obligatoire</th><th>Où ça go</th><th>Visible publiquement</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Type de problème</td><td>Oui</td><td>Dashboard Netlify — modérateurs</td><td>Non</td></tr>
+      <tr><td>Page concernée</td><td>Non</td><td>Dashboard Netlify — modérateurs</td><td>Non</td></tr>
+      <tr><td>Description</td><td>Oui</td><td>Dashboard Netlify — modérateurs</td><td>Non</td></tr>
+      <tr><td>Votre IP</td><td>(automatique)</td><td>Logs Netlify (7 jours max)</td><td>Non</td></tr>
+    </tbody>
+  </table>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- 2. CE QU'ON EN FAIT                            -->
+  <!-- ══════════════════════════════════════════════ -->
+  <h2>Ce qu'on en fait</h2>
+
+  <ul>
+    <li>
+      <strong>Signalements carte :</strong> on lit, on vérifie la source, on ajoute les coordonnées
+      géographiques, on passe en statut "Valide" si le cas est sourcé. Le signalement original
+      reste dans Airtable, accessible uniquement aux modérateurs.
+    </li>
+    <li>
+      <strong>Messages de contact :</strong> on lit et on répond si vous avez laissé un moyen
+      de contact. Le message reste dans le dashboard Netlify jusqu'à suppression manuelle.
+    </li>
+    <li>
+      <strong>Signalements de problème :</strong> on traite, on corrige le wiki, on supprime
+      la soumission après traitement.
+    </li>
+  </ul>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- 3. CE QU'ON NE FAIT PAS                        -->
+  <!-- ══════════════════════════════════════════════ -->
+  <h2>Ce qu'on ne fait pas — sans exception</h2>
+
+  <ul>
+    <li>On ne transmet aucune donnée à des tiers, des annonceurs ou des partenaires commerciaux</li>
+    <li>On ne répond à aucune réquisition judiciaire ou policière — si une demande arrive,
+        elle sera rendue publique sur ce wiki avant toute réponse</li>
+    <li>On ne recroupe pas les informations reçues pour identifier des personnes</li>
+    <li>On ne vend, ne loue et ne cède aucune donnée</li>
+    <li>On ne publie aucun signalement sans l'avoir anonymisé et vérifié</li>
+    <li>On ne conserve pas les messages de contact au-delà de leur traitement</li>
+  </ul>
+
+  <div class="warning-box mb-8">
+    <strong>Sur les réquisitions judiciaires :</strong> nous ne sommes pas une association
+    déclarée et nous n'avons pas de représentant légal désigné. En pratique, une réquisition
+    adressée à Netlify (hébergeur des formulaires) ou à Airtable (base de données des signalements)
+    est traitée par ces sociétés selon leur propre politique. Netlify est une société américaine
+    soumise au droit américain. Airtable également. Aucune de ces sociétés n'a d'obligation
+    de nous notifier avant de répondre à une demande légale.
+    <br/><br/>
+    <strong>Ce que ça implique concrètement :</strong> si la nature de ce que vous partagez
+    pourrait vous exposer légalement, ne le partagez pas via ces formulaires. Utilisez les
+    recommandations de la section suivante.
+  </div>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- 4. COMMENT VOUS PROTÉGER DAVANTAGE             -->
+  <!-- ══════════════════════════════════════════════ -->
+  <h2>Comment vous protéger davantage</h2>
+
+  <p>
+    Si la situation qui vous amène à utiliser ces formulaires est sensible — témoignage sur
+    une garde à vue, signalement d'une violence policière, contact depuis une zone réprimée —
+    voici les mesures à prendre avant d'envoyer quoi que ce soit.
+  </p>
+
+  <h3>Avant de remplir un formulaire</h3>
+
+  <ul>
+    <li>
+      <strong>Utilisez un VPN ou Tor.</strong> Votre IP est la seule métadonnée automatiquement
+      collectée. Un VPN la masque aux yeux de Netlify et Airtable. Tor la masque complètement.
+      Le navigateur Tor est téléchargeable sur <a href="https://www.torproject.org" target="_blank" rel="noopener">torproject.org</a>.
+    </li>
+    <li>
+      <strong>N'incluez aucune donnée personnelle.</strong> Pas de nom, pas de prénom, pas d'adresse,
+      pas de numéro de téléphone — ni le vôtre, ni celui d'autres personnes.
+    </li>
+    <li>
+      <strong>Soyez factuel, pas émotionnel.</strong> Un signalement factuel sourcé est utile.
+      Un témoignage personnel identifiable est un risque. Décrivez ce qui s'est passé, pas ce
+      que vous avez ressenti.
+    </li>
+    <li>
+      <strong>Ne citez pas de lieux précis.</strong> Ville et département suffisent pour la carte.
+      Une adresse exacte peut permettre d'identifier un site ou des personnes.
+    </li>
+  </ul>
+
+  <h3>Pour les communications sensibles</h3>
+
+  <p>
+    Si vous avez des informations importantes mais trop sensibles pour les formulaires —
+    une vidéo d'une intervention, des preuves d'une saisie abusive, le témoignage d'une
+    personne en GAV — ne les envoyez pas via ce site.
+  </p>
+
+  <ul>
+    <li>
+      <strong>Signal</strong> — messagerie chiffrée de bout en bout.
+      Utilisez les messages éphémères (disparaissent après un délai configurable).
+      Téléchargeable sur <a href="https://signal.org" target="_blank" rel="noopener">signal.org</a>.
+    </li>
+    <li>
+      <strong>Session</strong> — comme Signal mais sans numéro de téléphone requis.
+      Anonymat plus élevé.
+      Téléchargeable sur <a href="https://getsession.org" target="_blank" rel="noopener">getsession.org</a>.
+    </li>
+    <li>
+      <strong>Briar</strong> — messagerie P2P qui fonctionne sans serveur central,
+      même via Bluetooth ou Wi-Fi direct en l'absence d'internet.
+      Téléchargeable sur <a href="https://briarproject.org" target="_blank" rel="noopener">briarproject.org</a>.
+    </li>
+  </ul>
+
+  <p>
+    Pour nous contacter via ces canaux, utilisez le formulaire de contact en indiquant
+    votre identifiant (Session ID, etc.) dans le champ "Moyen de réponse". On prend contact
+    de notre côté.
+  </p>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- 5. L'INTÉGRITÉ DES INFORMATIONS PUBLIÉES       -->
+  <!-- ══════════════════════════════════════════════ -->
+  <h2>L'intégrité des informations publiées</h2>
+
+  <p>
+    Ce que vous lisez sur ce wiki a été modéré avant publication. Mais la modération humaine
+    n'est pas infaillible. Voici comment on garantit l'intégrité du contenu.
+  </p>
+
+  <ul>
+    <li>
+      <strong>Sourçage obligatoire.</strong> Aucun fait juridique, législatif ou incident
+      répressif n'est publié sans source vérifiable — article de presse, décision de justice,
+      rapport d'ONG, texte de loi. Les sources sont citées directement dans les pages.
+    </li>
+    <li>
+      <strong>Versionnement public.</strong> Chaque modification du wiki est enregistrée dans
+      l'historique Git sur GitHub. Vous pouvez voir qui a modifié quoi et quand, et comparer
+      les versions. Aucune modification n'est invisible.
+    </li>
+    <li>
+      <strong>Signalement public.</strong> Si une information vous semble incorrecte, utilisez
+      le formulaire de signalement. On traite et on corrige. Si on refuse une correction,
+      on explique pourquoi.
+    </li>
+    <li>
+      <strong>Pas d'IA pour le contenu éditorial.</strong> Les pages wiki sont rédigées et
+      vérifiées par des humains. Des outils d'aide à la rédaction peuvent être utilisés,
+      mais le contenu publié est validé et assumé par des personnes.
+    </li>
+  </ul>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- 6. VOS DROITS RGPD                             -->
+  <!-- ══════════════════════════════════════════════ -->
+  <h2>Vos droits (RGPD)</h2>
+
+  <p>
+    Le RGPD s'applique aux données collectées par des entités traitant des données de
+    résidents européens. Les formulaires de ce site collectent des données (voir tableaux
+    ci-dessus). Voici vos droits et comment les exercer.
+  </p>
+
+  <ul>
+    <li>
+      <strong>Droit d'accès :</strong> vous pouvez demander ce que nous avons reçu de vous.
+    </li>
+    <li>
+      <strong>Droit de suppression :</strong> vous pouvez demander la suppression de toute
+      soumission vous concernant. On la supprime d'Airtable et/ou du dashboard Netlify dans
+      les 72 heures.
+    </li>
+    <li>
+      <strong>Droit de rectification :</strong> si une information publiée sur la carte
+      est inexacte, signalez-le via le formulaire.
+    </li>
+    <li>
+      <strong>Comment exercer ces droits :</strong> via le
+      <a href="/contact">formulaire de contact</a>, objet "Autre", en précisant votre demande.
+      Pas de preuve d'identité exigée au-delà de pouvoir décrire précisément ce que vous
+      avez soumis.
+    </li>
+  </ul>
+
+  <div class="info-box mt-6 mb-10">
+    <strong>Limites pratiques :</strong> si vous avez soumis un signalement de carte sous
+    Tor sans laisser de moyen de contact, nous n'avons aucun moyen de vous identifier pour
+    supprimer votre soumission spécifique. Dans ce cas, décrivez le contenu de votre
+    soumission dans le formulaire de contact et on supprime manuellement.
+  </div>
+
+  <!-- CTA -->
+  <div class="flex flex-wrap gap-4 mt-4">
+    <a href="/contact" class="btn-neon no-underline after:hidden">
+      ▸ Formulaire de contact
+    </a>
+    <a href="/a-propos" class="btn-neon no-underline after:hidden"
+      style="border-color:#00d9ff;color:#00d9ff">
+      ▸ Architecture technique du site
+    </a>
+  </div>
+
+</Layout>
