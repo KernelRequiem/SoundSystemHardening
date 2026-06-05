@@ -294,7 +294,7 @@
   }
 
   .sidebar-section-title span {
-    @apply text-[10px] font-mono font-bold uppercase tracking-[0.15em] text-dedsec-muted/60 transition-colors duration-200;
+    @apply text-[16px] font-mono font-bold uppercase tracking-[0.15em] text-dedsec-muted/60 transition-colors duration-200;
   }
 
   .sidebar-section-title .chevron {

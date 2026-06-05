@@ -20,7 +20,6 @@ const resolvedDescription = description || defaultDescription;
 const resolvedImage = ogImage || `${siteUrl}/SoundSystemHardening-logo.png`;
 const resolvedTitle = title === 'Home' ? 'SoundSystemHardening' : `${title} | SoundSystemHardening`;
 
-// Structure de navigation complète
 const navigation = [
   {
     section: 'ACCUEIL',
@@ -43,7 +42,7 @@ const navigation = [
   },
   {
     section: 'CONTRE RIPOST',
-    icon: '⚖️',
+    icon: '🛡️',
     links: [
       { href: '/wiki/Strategie-contre-ripost', label: 'Stratégie contre RIPOST', emoji: '🛡️' },
       { href: '/wiki/Contestation', label: 'Contester les amendes', emoji: '📋' },
@@ -88,42 +87,22 @@ const navigation = [
     icon: '🎯',
     links: [
       { href: '/wiki/Modus-Operandi', label: 'Vue d\'ensemble', emoji: '◇' },
-    ]
-  },
-  {
-    section: '› Zones grises',
-    icon: '',
-    links: [
+      { href: '', label: '── Zones grises ──', emoji: '' },
       { href: '/wiki/ZAD-Pourquoi-État-Evite', label: 'ZAD', emoji: '🌳' },
       { href: '/wiki/Propriete-Privee-Fermee', label: 'Propriété privée', emoji: '🔒' },
       { href: '/wiki/Terrains-Abandonnes', label: 'Terrains abandonnés', emoji: '🏚️' },
       { href: '/wiki/Espaces-Semi-Publics', label: 'Espaces semi-publics', emoji: '🏛️' },
       { href: '/wiki/Zones-Limitrophes', label: 'Zones limitrophes', emoji: '↔️' },
-    ]
-  },
-  {
-    section: '› Failles légales',
-    icon: '',
-    links: [
+      { href: '', label: '── Failles légales ──', emoji: '' },
       { href: '/wiki/Definition-Ambigue-Organisateur', label: 'Définition organisateur', emoji: '❓' },
       { href: '/wiki/Seuil-250-500-Personnes', label: 'Seuil 250-500', emoji: '👥' },
-      { href: '/wiki/Rassemblement-vs-Manifestation', label: 'Rassemblement vs Manifestation', emoji: '⚖️' },
+      { href: '/wiki/Rassemblement-vs-Manifestation', label: 'Rassemblement vs Manif', emoji: '⚖️' },
       { href: '/wiki/Declaration-Preuve-Legitimite', label: 'Déclaration légitimité', emoji: '📋' },
       { href: '/wiki/Prescription-et-Delais', label: 'Prescription', emoji: '⏰' },
-    ]
-  },
-  {
-    section: '› Failles opérationnelles',
-    icon: '',
-    links: [
+      { href: '', label: '── Failles opéra. ──', emoji: '' },
       { href: '/wiki/Manque-de-Ressources', label: 'Manque de ressources', emoji: '📉' },
       { href: '/wiki/Coordination-Defaillante', label: 'Coordination défaillante', emoji: '⚙️' },
-    ]
-  },
-  {
-    section: '› Contournement',
-    icon: '',
-    links: [
+      { href: '', label: '── Contournement ──', emoji: '' },
       { href: '/wiki/Camouflage-Evenement', label: 'Camouflage', emoji: '🎭' },
       { href: '/wiki/Fragmentation-Geographique', label: 'Fragmentation', emoji: '🗺️' },
       { href: '/wiki/Coordination-Decentralisee', label: 'Coordination décentralisée', emoji: '🔗' },
@@ -218,14 +197,16 @@ const navigation = [
   </head>
 
   <script>
-    // Enregistrement du Service Worker
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('/sw.js').catch(() => {});
       });
     }
   </script>
-  <body><SpeedInsights />
+
+  <body>
+    <SpeedInsights />
+
     <!-- Progress bar de lecture -->
     <div
       id="progress-bar"
@@ -233,10 +214,10 @@ const navigation = [
       style="width: 0%; background: linear-gradient(90deg, #00ff9f, #00d9ff); box-shadow: 0 0 8px #00ff9f, 0 0 20px #00ff9f55;"
     ></div>
 
-    <!-- Mobile menu button -->
-    <button 
+    <!-- Burger menu button -->
+    <button
       id="menu-toggle"
-      class="fixed top-4 left-4 z-50 lg:flex bg-dedsec-darker border border-neon-green p-2 rounded text-neon-green"
+      class="fixed top-4 left-4 z-50 flex bg-dedsec-darker border border-neon-green p-2 rounded text-neon-green hover:bg-neon-green/10 transition-all"
       aria-label="Toggle menu"
     >
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -247,8 +228,9 @@ const navigation = [
     </button>
 
     <div class="flex min-h-screen">
+
       <!-- Sidebar -->
-      <aside 
+      <aside
         id="sidebar"
         class="fixed top-0 left-0 h-screen w-72 bg-dedsec-darker border-r border-dedsec-border overflow-y-auto transition-transform duration-300 z-40 -translate-x-full"
       >
@@ -265,18 +247,19 @@ const navigation = [
               ▸ Resistance Toolkit
             </div>
           </a>
-          <!-- Barre de recherche rapide -->
-          <a href="/search" class="mt-3 flex items-center gap-3 bg-dedsec-gray border border-neon-green/30 hover:border-neon-green rounded px-4 py-3 text-dedsec-muted hover:text-neon-green transition-all no-underline group shadow-[0_0_0_transparent] hover:shadow-[0_0_12px_#00ff9f22]">
+
+          <!-- Recherche -->
+          <a href="/search" class="mt-3 flex items-center gap-3 bg-dedsec-gray border border-neon-green/30 hover:border-neon-green rounded px-4 py-3 text-dedsec-muted hover:text-neon-green transition-all no-underline group">
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="shrink-0 text-neon-green/60 group-hover:text-neon-green transition-colors">
               <circle cx="11" cy="11" r="8"/>
               <line x1="21" y1="21" x2="16.65" y2="16.65"/>
             </svg>
             <span class="font-mono text-sm flex-1">Rechercher...</span>
-            <kbd class="font-mono text-[10px] text-dedsec-muted/60 group-hover:text-neon-green/60 border border-dedsec-border group-hover:border-neon-green/30 rounded px-1.5 py-0.5 transition-colors">/</kbd>
+            <kbd class="font-mono text-[10px] text-dedsec-muted/60 group-hover:text-neon-green/60 border border-dedsec-border rounded px-1.5 py-0.5">/</kbd>
           </a>
 
-          <!-- Arbre de décision -->
-          <a href="/que-faire" class="mt-2 flex items-center gap-3 bg-neon-pink/10 border border-neon-pink/40 hover:border-neon-pink rounded px-4 py-3 text-neon-pink transition-all no-underline group hover:shadow-[0_0_12px_#ff006e22]">
+          <!-- Urgence -->
+          <a href="/que-faire" class="mt-2 flex items-center gap-3 bg-neon-pink/10 border border-neon-pink/40 hover:border-neon-pink rounded px-4 py-3 text-neon-pink transition-all no-underline group">
             <span class="text-lg shrink-0">🚨</span>
             <span class="font-mono text-sm flex-1 font-bold">Que faire si...</span>
             <span class="font-mono text-[10px] text-neon-pink/50 group-hover:text-neon-pink/80">▸</span>
@@ -290,28 +273,37 @@ const navigation = [
           </a>
         </div>
 
-        <!-- Navigation -->
+        <!-- Navigation accordéon -->
         <nav class="p-3 pb-20">
-      {navigation.map((section) => (
-            <div class="mb-1">
-              <div class="px-3 pt-4 pb-1">
-                <span class="text-[9px] font-mono font-bold uppercase tracking-[0.15em] text-dedsec-muted/60">
+          {navigation.map((section) => (
+            <div class="mb-1 sidebar-accordion">
+              <div class="sidebar-section-title">
+                <span>
                   {section.icon && <span class="mr-1">{section.icon}</span>}
                   {section.section}
                 </span>
+                <span class="chevron">▼</span>
               </div>
-              {section.links.map((link) => (
-                <a 
-                  href={link.href}
-                  class={`sidebar-link ${currentPath === link.href ? 'active' : ''}`}
-                >
-                  <span class="text-neon-cyan/50 mr-2 text-xs">{link.emoji}</span>
-                  {link.label}
-                </a>
-              ))}
+              <div class="sidebar-section-links">
+                {section.links.map((link) => (
+                  link.href === '' ? (
+                    <div class="px-4 py-1 text-[9px] font-mono uppercase tracking-widest text-neon-cyan/40 mt-2">
+                      {link.label}
+                    </div>
+                  ) : (
+                    
+                      href={link.href}
+                      class={`sidebar-link ${currentPath === link.href ? 'active' : ''}`}
+                    >
+                      <span class="text-neon-cyan/50 mr-1 text-xs">{link.emoji}</span>
+                      {link.label}
+                    </a>
+                  )
+                ))}
+              </div>
             </div>
           ))}
-          
+
           <!-- Footer sidebar -->
           <div class="mt-8 pt-4 border-t border-dedsec-border px-3">
             <div class="text-[10px] text-dedsec-muted space-y-1">
@@ -329,55 +321,52 @@ const navigation = [
       </aside>
 
       <!-- Overlay mobile -->
-      <div 
+      <div
         id="overlay"
-        class="fixed inset-0 bg-black/80 z-30 lg:hidden hidden"
+        class="fixed inset-0 bg-black/80 z-30 hidden"
       ></div>
 
       <!-- Main content -->
-      <main class="flex-1 min-w-0 lg:ml-0">
+      <main class="flex-1 min-w-0">
+
         <!-- Top bar -->
         <div class="sticky top-0 z-20 bg-dedsec-black/80 backdrop-blur-md border-b border-dedsec-border">
           <div class="px-6 py-3 flex items-center justify-between">
-            <!-- Breadcrumb gauche -->
-            <div class="flex items-center gap-2 text-xs font-mono text-dedsec-muted ml-12 lg:ml-0">
+
+            <!-- Breadcrumb -->
+            <div class="flex items-center gap-2 text-xs font-mono text-dedsec-muted ml-12">
               <a href="/" class="text-neon-green hover:text-neon-cyan transition-colors no-underline">◆</a>
               <span class="text-dedsec-muted">/</span>
-              {
-                categoryHref
-                  ? <a href={categoryHref} class="hover:text-neon-green transition-colors no-underline">{category || 'WIKI'}</a>
-                  : <span>{category || 'WIKI'}</span>
+              {categoryHref
+                ? <a href={categoryHref} class="hover:text-neon-green transition-colors no-underline">{category || 'WIKI'}</a>
+                : <span>{category || 'WIKI'}</span>
               }
               <span class="text-dedsec-muted">/</span>
               <span class="text-dedsec-text truncate max-w-xs">{title}</span>
             </div>
-            <!-- Logo à droite (fixed) -->
-            <a href="/" class="fixed right-6 top-12 z-50 group cursor-pointer pointer-events-auto no-underline">
+
+            <!-- Logo fixed -->
+            <a href="/" class="fixed right-6 top-12 z-50 no-underline">
               <div class="w-40 h-40 rounded-full border-3 border-neon-green overflow-hidden
                           shadow-[0_0_25px_#00ff9f77] hover:shadow-[0_0_50px_#00ff9f]
                           transition-all duration-300 hover:scale-105">
-                <img
-                  src="/SoundSystemHardening-logo.png"
-                  alt="SoundSystem Hardening"
-                  class="w-full h-full object-cover"
-                />
+                <img src="/SoundSystemHardening-logo.png" alt="SoundSystem Hardening" class="w-full h-full object-cover" />
               </div>
             </a>
-            <!-- Dark/Light mode toggle -->
-            <button
-              id="theme-toggle"
-              class="hidden md:flex items-center gap-2 px-3 py-2 rounded border border-neon-cyan/30 hover:border-neon-cyan text-neon-cyan hover:bg-neon-cyan/10 transition-all"
-              title="Toggle dark/light mode"
-            >
-              <span id="theme-icon">🌙</span>
-              <span class="text-[10px] font-mono">MODE</span>
-            </button>
 
-            <!-- Statut droite -->
+            <!-- Dark/Light toggle + Statut -->
             <div class="flex items-center gap-3 text-[10px] font-mono text-dedsec-muted">
-              <a href="/search" class="hidden md:flex items-center gap-1 text-dedsec-muted hover:text-neon-green transition-colors no-underline" title="Recherche (/)">
+              <button
+                id="theme-toggle"
+                class="hidden md:flex items-center gap-2 px-3 py-2 rounded border border-neon-cyan/30 hover:border-neon-cyan text-neon-cyan hover:bg-neon-cyan/10 transition-all"
+              >
+                <span id="theme-icon">🌙</span>
+                <span class="text-[10px] font-mono">MODE</span>
+              </button>
+              <span class="hidden md:inline text-dedsec-border">|</span>
+              <a href="/search" class="hidden md:flex items-center gap-1 text-dedsec-muted hover:text-neon-green transition-colors no-underline">
                 <span>⌕</span>
-                <span class="text-[10px]">SEARCH</span>
+                <span>SEARCH</span>
               </a>
               <span class="hidden md:inline text-dedsec-border">|</span>
               <span class="hidden md:inline">▸ SECURE.CONNECTION</span>
@@ -389,7 +378,8 @@ const navigation = [
         <!-- Content -->
         <article class="px-6 py-8 lg:px-12 lg:py-12 max-w-4xl mx-auto prose-dedsec animate-fade-in">
           <slot />
-        </article><TableOfContents />
+        </article>
+        <TableOfContents />
 
         <!-- Footer -->
         <footer class="border-t border-dedsec-border mt-16 px-6 lg:px-12 py-8">
@@ -430,50 +420,75 @@ const navigation = [
     </div>
 
     <script>
-      // Progress bar de lecture
+      // Progress bar
       const bar = document.getElementById('progress-bar');
       if (bar) {
         const update = () => {
           const scrollTop = window.scrollY;
           const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-          const pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
-          bar.style.width = pct + '%';
+          bar.style.width = (docHeight > 0 ? (scrollTop / docHeight) * 100 : 0) + '%';
         };
         window.addEventListener('scroll', update, { passive: true });
         update();
       }
 
-      // Menu mobile
+      // Burger menu
       const toggle = document.getElementById('menu-toggle');
       const sidebar = document.getElementById('sidebar');
       const overlay = document.getElementById('overlay');
-
       if (toggle && sidebar && overlay) {
         toggle.addEventListener('click', () => {
           sidebar.classList.toggle('-translate-x-full');
           overlay.classList.toggle('hidden');
         });
-
         overlay.addEventListener('click', () => {
           sidebar.classList.add('-translate-x-full');
           overlay.classList.add('hidden');
         });
       }
     </script>
+
     <script>
-      const toggle = document.getElementById("theme-toggle");
-      const icon = document.getElementById("theme-icon");
+      // Dark/Light mode
+      const themeToggle = document.getElementById('theme-toggle');
+      const themeIcon = document.getElementById('theme-icon');
       const html = document.documentElement;
-      const savedTheme = localStorage.getItem("theme") || "dark";
-      html.setAttribute("data-theme", savedTheme);
-      function updateIcon(theme) { icon.textContent = theme === "dark" ? "🌙" : "☀️"; }
+      const savedTheme = localStorage.getItem('theme') || 'dark';
+      html.setAttribute('data-theme', savedTheme);
+      function updateIcon(theme) {
+        if (themeIcon) themeIcon.textContent = theme === 'dark' ? '🌙' : '☀️';
+      }
       updateIcon(savedTheme);
-      toggle?.addEventListener("click", () => {
-        const current = html.getAttribute("data-theme");
-        const next = current === "dark" ? "light" : "dark";
-        html.setAttribute("data-theme", next);
-        localStorage.setItem("theme", next);
+      themeToggle?.addEventListener('click', () => {
+        const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+        html.setAttribute('data-theme', next);
+        localStorage.setItem('theme', next);
         updateIcon(next);
+      });
+    </script>
+
+    <script>
+      // Sidebar accordéon
+      document.addEventListener('DOMContentLoaded', () => {
+        const accordions = document.querySelectorAll('.sidebar-accordion');
+        accordions.forEach(accordion => {
+          const title = accordion.querySelector('.sidebar-section-title');
+          const links = accordion.querySelector('.sidebar-section-links');
+          const hasActive = accordion.querySelector('.sidebar-link.active');
+          if (hasActive) {
+            links.classList.add('open');
+            title.classList.add('open');
+          }
+          title?.addEventListener('click', () => {
+            const isOpen = links.classList.contains('open');
+            document.querySelectorAll('.sidebar-section-links').forEach(l => l.classList.remove('open'));
+            document.querySelectorAll('.sidebar-section-title').forEach(t => t.classList.remove('open'));
+            if (!isOpen) {
+              links.classList.add('open');
+              title.classList.add('open');
+            }
+          });
+        });
       });
     </script>
 
