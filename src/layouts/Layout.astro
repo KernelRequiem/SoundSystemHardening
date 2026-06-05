@@ -14,130 +14,89 @@ interface Props {
 const { title, description, category, categoryHref, ogImage } = Astro.props;
 const currentPath = Astro.url.pathname;
 
-const siteUrl = 'https://soundsystemhardening.fr';
+const siteUrl = 'https://soundsystemhardening.fr'\;
 const defaultDescription = 'Wiki collectif : droits, opsec et résistance pour le mouvement free party. Loi RIPOST, sécurité numérique, stratégies juridiques.';
 const resolvedDescription = description || defaultDescription;
 const resolvedImage = ogImage || `${siteUrl}/SoundSystemHardening-logo.png`;
 const resolvedTitle = title === 'Home' ? 'SoundSystemHardening' : `${title} | SoundSystemHardening`;
 
 const navigation = [
-  {
-    section: 'ACCUEIL',
-    icon: '🏠',
-    links: [
-      { href: '/', label: 'Home', emoji: '◆' },
-      { href: '/wiki/Urgence-immédiate', label: 'Urgence immédiate', emoji: '🚨' },
-      { href: '/wiki/L\'esprit-des-teufeurs', label: 'L\'esprit des teufeurs', emoji: '✊' },
-    ]
-  },
-  {
-    section: 'DROITS & LIBERTÉS',
-    icon: '⚖️',
-    links: [
-      { href: '/wiki/arsenal-legislatif', label: 'Arsenal législatif', emoji: '📜' },
-      { href: '/wiki/jurisprudence', label: 'Jurisprudence', emoji: '⚖️' },
-      { href: '/wiki/recours-juridiques', label: 'Recours juridiques', emoji: '🛡️' },
-      { href: '/wiki/repression', label: 'Répression', emoji: '⚠️' },
-    ]
-  },
-  {
-    section: 'CONTRE RIPOST',
-    icon: '🛡️',
-    links: [
-      { href: '/wiki/Strategie-contre-ripost', label: 'Stratégie contre RIPOST', emoji: '🛡️' },
-      { href: '/wiki/Contestation', label: 'Contester les amendes', emoji: '📋' },
-    ]
-  },
-  {
-    section: 'STRATÉGIE',
-    icon: '🎯',
-    links: [
-      { href: '/wiki/Stratégie-résistance', label: 'Vue d\'ensemble', emoji: '◇' },
-      { href: '/wiki/Juridique', label: 'Axe juridique', emoji: '⚖️' },
-      { href: '/wiki/Politique', label: 'Axe politique', emoji: '📢' },
-      { href: '/wiki/Sanitaire', label: 'Axe sanitaire', emoji: '🏥' },
-      { href: '/wiki/Organisationnel', label: 'Axe organisationnel', emoji: '🔧' },
-      { href: '/wiki/Culturel', label: 'Axe culturel', emoji: '🎵' },
-      { href: '/wiki/Coalitions', label: 'Coalitions', emoji: '🤝' },
-    ]
-  },
-  {
-    section: 'HISTOIRE & CULTURE',
-    icon: '📜',
-    links: [
-      { href: '/wiki/Histoire-&-Culture', label: 'Vue d\'ensemble', emoji: '◇' },
-      { href: '/wiki/Chronologie', label: 'Chronologie 1988-2026', emoji: '📅' },
-      { href: '/wiki/Sound-System', label: 'Sound Systems', emoji: '🔊' },
-      { href: '/wiki/Incidents-répressifs', label: 'Incidents répressifs', emoji: '⚠️' },
-      { href: '/wiki/Patrimoine-culturel', label: 'Patrimoine culturel', emoji: '🎨' },
-    ]
-  },
-  {
-    section: 'MOBILISATION',
-    icon: '📣',
-    links: [
-      { href: '/wiki/Mobilisation', label: 'Vue d\'ensemble', emoji: '◇' },
-      { href: '/wiki/Templates-Recours', label: 'Templates de recours', emoji: '📝' },
-      { href: '/wiki/Contacts-Allies', label: 'Contacts et alliés', emoji: '📞' },
-      { href: '/wiki/Argumentaires', label: 'Argumentaires', emoji: '💬' },
-    ]
-  },
-  {
-    section: 'MODUS OPERANDI',
-    icon: '🎯',
-    links: [
-      { href: '/wiki/Modus-Operandi', label: 'Vue d\'ensemble', emoji: '◇' },
-      { href: '', label: '── Zones grises ──', emoji: '' },
-      { href: '/wiki/ZAD-Pourquoi-État-Evite', label: 'ZAD', emoji: '🌳' },
-      { href: '/wiki/Propriete-Privee-Fermee', label: 'Propriété privée', emoji: '🔒' },
-      { href: '/wiki/Terrains-Abandonnes', label: 'Terrains abandonnés', emoji: '🏚️' },
-      { href: '/wiki/Espaces-Semi-Publics', label: 'Espaces semi-publics', emoji: '🏛️' },
-      { href: '/wiki/Zones-Limitrophes', label: 'Zones limitrophes', emoji: '↔️' },
-      { href: '', label: '── Failles légales ──', emoji: '' },
-      { href: '/wiki/Definition-Ambigue-Organisateur', label: 'Définition organisateur', emoji: '❓' },
-      { href: '/wiki/Seuil-250-500-Personnes', label: 'Seuil 250-500', emoji: '👥' },
-      { href: '/wiki/Rassemblement-vs-Manifestation', label: 'Rassemblement vs Manif', emoji: '⚖️' },
-      { href: '/wiki/Declaration-Preuve-Legitimite', label: 'Déclaration légitimité', emoji: '📋' },
-      { href: '/wiki/Prescription-et-Delais', label: 'Prescription', emoji: '⏰' },
-      { href: '', label: '── Failles opéra. ──', emoji: '' },
-      { href: '/wiki/Manque-de-Ressources', label: 'Manque de ressources', emoji: '📉' },
-      { href: '/wiki/Coordination-Defaillante', label: 'Coordination défaillante', emoji: '⚙️' },
-      { href: '', label: '── Contournement ──', emoji: '' },
-      { href: '/wiki/Camouflage-Evenement', label: 'Camouflage', emoji: '🎭' },
-      { href: '/wiki/Fragmentation-Geographique', label: 'Fragmentation', emoji: '🗺️' },
-      { href: '/wiki/Coordination-Decentralisee', label: 'Coordination décentralisée', emoji: '🔗' },
-      { href: '/wiki/Documentation-Preemptive', label: 'Documentation préemptive', emoji: '📸' },
-    ]
-  },
-  {
-    section: 'VEILLE',
-    icon: '📡',
-    links: [
-      { href: '/wiki/Vue-d\'ensemble-veille', label: 'Vue d\'ensemble', emoji: '◇' },
-      { href: '/wiki/Lois-En-Cours', label: 'Lois en cours', emoji: '📜' },
-      { href: '/wiki/Actualites-Repressions', label: 'Actualités répression', emoji: '📰' },
-      { href: '/wiki/Sources-Fiables', label: 'Sources fiables', emoji: '📚' },
-      { href: '/wiki/Changelog', label: 'Changelog', emoji: '📝' },
-    ]
-  },
-  {
-    section: 'MÉDIAS & INFOS',
-    icon: '📺',
-    links: [
-      { href: '/wiki/Medias-Propriete', label: 'Médias & Propriété', emoji: '💰' },
-    ]
-  },
-  {
-    section: 'CYBER-OPSEC',
-    icon: '🔐',
-    links: [
-      { href: '/wiki/Sécurite-Numerique', label: 'Sécurité numérique', emoji: '🛡️' },
-      { href: '/wiki/Sécurité-des-communications', label: 'Communications sécurisées', emoji: '💬' },
-    ]
-  },
+  { section: 'ACCUEIL', icon: '🏠', links: [
+    { href: '/', label: 'Home', emoji: '◆' },
+    { href: '/wiki/Urgence-immédiate', label: 'Urgence immédiate', emoji: '🚨' },
+    { href: "/wiki/L'esprit-des-teufeurs", label: "L'esprit des teufeurs", emoji: '✊' },
+  ]},
+  { section: 'DROITS & LIBERTÉS', icon: '⚖️', links: [
+    { href: '/wiki/arsenal-legislatif', label: 'Arsenal législatif', emoji: '📜' },
+    { href: '/wiki/jurisprudence', label: 'Jurisprudence', emoji: '⚖️' },
+    { href: '/wiki/recours-juridiques', label: 'Recours juridiques', emoji: '🛡️' },
+    { href: '/wiki/repression', label: 'Répression', emoji: '⚠️' },
+  ]},
+  { section: 'CONTRE RIPOST', icon: '🛡️', links: [
+    { href: '/wiki/Strategie-contre-ripost', label: 'Stratégie contre RIPOST', emoji: '🛡️' },
+    { href: '/wiki/Contestation', label: 'Contester les amendes', emoji: '📋' },
+  ]},
+  { section: 'STRATÉGIE', icon: '🎯', links: [
+    { href: '/wiki/Stratégie-résistance', label: "Vue d'ensemble", emoji: '◇' },
+    { href: '/wiki/Juridique', label: 'Axe juridique', emoji: '⚖️' },
+    { href: '/wiki/Politique', label: 'Axe politique', emoji: '📢' },
+    { href: '/wiki/Sanitaire', label: 'Axe sanitaire', emoji: '🏥' },
+    { href: '/wiki/Organisationnel', label: 'Axe organisationnel', emoji: '🔧' },
+    { href: '/wiki/Culturel', label: 'Axe culturel', emoji: '🎵' },
+    { href: '/wiki/Coalitions', label: 'Coalitions', emoji: '🤝' },
+  ]},
+  { section: 'HISTOIRE & CULTURE', icon: '📜', links: [
+    { href: '/wiki/Histoire-&-Culture', label: "Vue d'ensemble", emoji: '◇' },
+    { href: '/wiki/Chronologie', label: 'Chronologie 1988-2026', emoji: '📅' },
+    { href: '/wiki/Sound-System', label: 'Sound Systems', emoji: '🔊' },
+    { href: '/wiki/Incidents-répressifs', label: 'Incidents répressifs', emoji: '⚠️' },
+    { href: '/wiki/Patrimoine-culturel', label: 'Patrimoine culturel', emoji: '🎨' },
+  ]},
+  { section: 'MOBILISATION', icon: '📣', links: [
+    { href: '/wiki/Mobilisation', label: "Vue d'ensemble", emoji: '◇' },
+    { href: '/wiki/Templates-Recours', label: 'Templates de recours', emoji: '📝' },
+    { href: '/wiki/Contacts-Allies', label: 'Contacts et alliés', emoji: '📞' },
+    { href: '/wiki/Argumentaires', label: 'Argumentaires', emoji: '💬' },
+  ]},
+  { section: 'MODUS OPERANDI', icon: '🎯', links: [
+    { href: '/wiki/Modus-Operandi', label: "Vue d'ensemble", emoji: '◇' },
+    { href: '', label: '── Zones grises ──', emoji: '' },
+    { href: '/wiki/ZAD-Pourquoi-État-Evite', label: 'ZAD', emoji: '🌳' },
+    { href: '/wiki/Propriete-Privee-Fermee', label: 'Propriété privée', emoji: '🔒' },
+    { href: '/wiki/Terrains-Abandonnes', label: 'Terrains abandonnés', emoji: '🏚️' },
+    { href: '/wiki/Espaces-Semi-Publics', label: 'Espaces semi-publics', emoji: '🏛️' },
+    { href: '/wiki/Zones-Limitrophes', label: 'Zones limitrophes', emoji: '↔️' },
+    { href: '', label: '── Failles légales ──', emoji: '' },
+    { href: '/wiki/Definition-Ambigue-Organisateur', label: 'Définition organisateur', emoji: '❓' },
+    { href: '/wiki/Seuil-250-500-Personnes', label: 'Seuil 250-500', emoji: '👥' },
+    { href: '/wiki/Rassemblement-vs-Manifestation', label: 'Rassemblement vs Manif', emoji: '⚖️' },
+    { href: '/wiki/Declaration-Preuve-Legitimite', label: 'Déclaration légitimité', emoji: '📋' },
+    { href: '/wiki/Prescription-et-Delais', label: 'Prescription', emoji: '⏰' },
+    { href: '', label: '── Failles opéra. ──', emoji: '' },
+    { href: '/wiki/Manque-de-Ressources', label: 'Manque de ressources', emoji: '📉' },
+    { href: '/wiki/Coordination-Defaillante', label: 'Coordination défaillante', emoji: '⚙️' },
+    { href: '', label: '── Contournement ──', emoji: '' },
+    { href: '/wiki/Camouflage-Evenement', label: 'Camouflage', emoji: '🎭' },
+    { href: '/wiki/Fragmentation-Geographique', label: 'Fragmentation', emoji: '🗺️' },
+    { href: '/wiki/Coordination-Decentralisee', label: 'Coordination décentralisée', emoji: '🔗' },
+    { href: '/wiki/Documentation-Preemptive', label: 'Documentation préemptive', emoji: '📸' },
+  ]},
+  { section: 'VEILLE', icon: '📡', links: [
+    { href: "/wiki/Vue-d'ensemble-veille", label: "Vue d'ensemble", emoji: '◇' },
+    { href: '/wiki/Lois-En-Cours', label: 'Lois en cours', emoji: '📜' },
+    { href: '/wiki/Actualites-Repressions', label: 'Actualités répression', emoji: '📰' },
+    { href: '/wiki/Sources-Fiables', label: 'Sources fiables', emoji: '📚' },
+    { href: '/wiki/Changelog', label: 'Changelog', emoji: '📝' },
+  ]},
+  { section: 'MÉDIAS & INFOS', icon: '📺', links: [
+    { href: '/wiki/Medias-Propriete', label: 'Médias & Propriété', emoji: '💰' },
+  ]},
+  { section: 'CYBER-OPSEC', icon: '🔐', links: [
+    { href: '/wiki/Sécurite-Numerique', label: 'Sécurité numérique', emoji: '🛡️' },
+    { href: '/wiki/Sécurité-des-communications', label: 'Communications sécurisées', emoji: '💬' },
+  ]},
 ];
 ---
-
 <!doctype html>
 <html lang="fr">
   <head>
@@ -145,8 +104,6 @@ const navigation = [
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="generator" content={Astro.generator} />
     <title>{resolvedTitle}</title>
-
-    <!-- Schema.org Organization -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -157,12 +114,8 @@ const navigation = [
       "description": "Wiki collectif : droits, opsec, résistance pour le mouvement free party"
     }
     </script>
-
-    <!-- SEO -->
     <meta name="description" content={resolvedDescription} />
     <link rel="canonical" href={`${siteUrl}${currentPath}`} />
-
-    <!-- Open Graph -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content={`${siteUrl}${currentPath}`} />
     <meta property="og:title" content={resolvedTitle} />
@@ -172,22 +125,14 @@ const navigation = [
     <meta property="og:image:height" content="512" />
     <meta property="og:site_name" content="SoundSystemHardening" />
     <meta property="og:locale" content="fr_FR" />
-
-    <!-- Twitter Card -->
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:title" content={resolvedTitle} />
     <meta name="twitter:description" content={resolvedDescription} />
     <meta name="twitter:image" content={resolvedImage} />
-
-    <!-- Favicons -->
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
-    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="/favicon-180.png" />
     <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png" />
-
-    <!-- PWA -->
     <link rel="manifest" href="/manifest.json" />
     <meta name="theme-color" content="#00ff9f" />
     <meta name="mobile-web-app-capable" content="yes" />
@@ -195,85 +140,44 @@ const navigation = [
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="SSHardening" />
   </head>
-
-  <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js').catch(() => {});
-      });
-    }
-  </script>
-
   <body>
     <SpeedInsights />
-
-    <!-- Progress bar de lecture -->
-    <div
-      id="progress-bar"
-      class="fixed top-0 left-0 h-[2px] z-[9999] pointer-events-none"
-      style="width: 0%; background: linear-gradient(90deg, #00ff9f, #00d9ff); box-shadow: 0 0 8px #00ff9f, 0 0 20px #00ff9f55;"
-    ></div>
-
-    <!-- Burger menu button -->
-    <button
-      id="menu-toggle"
-      class="fixed top-4 left-4 z-50 flex bg-dedsec-darker border border-neon-green p-2 rounded text-neon-green hover:bg-neon-green/10 transition-all"
-      aria-label="Toggle menu"
-    >
+    <div id="progress-bar" class="fixed top-0 left-0 h-[2px] z-[9999] pointer-events-none" style="width: 0%; background: linear-gradient(90deg, #00ff9f, #00d9ff); box-shadow: 0 0 8px #00ff9f;"></div>
+    <button id="menu-toggle" class="fixed top-4 left-4 z-50 flex bg-dedsec-darker border border-neon-green p-2 rounded text-neon-green hover:bg-neon-green/10 transition-all" aria-label="Toggle menu">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <line x1="3" y1="12" x2="21" y2="12"/>
         <line x1="3" y1="6" x2="21" y2="6"/>
         <line x1="3" y1="18" x2="21" y2="18"/>
       </svg>
     </button>
-
     <div class="flex min-h-screen">
-
-      <!-- Sidebar -->
-      <aside
-        id="sidebar"
-        class="fixed top-0 left-0 h-screen w-72 bg-dedsec-darker border-r border-dedsec-border overflow-y-auto transition-transform duration-300 z-40 -translate-x-full"
-      >
-        <!-- Header sidebar -->
+      <aside id="sidebar" class="fixed top-0 left-0 h-screen w-72 bg-dedsec-darker border-r border-dedsec-border overflow-y-auto transition-transform duration-300 z-40 -translate-x-full">
         <div class="sticky top-0 bg-dedsec-darker border-b border-dedsec-border p-4 z-10">
           <a href="/" class="block no-underline">
             <div class="font-display font-bold text-neon-green text-lg leading-tight">
               <span class="glitch-text" data-text="SOUNDSYSTEM">SOUNDSYSTEM</span>
             </div>
-            <div class="font-display font-bold text-neon-pink text-lg leading-tight mt-0.5">
-              HARDENING
-            </div>
-            <div class="text-[10px] text-dedsec-muted mt-2 font-mono uppercase tracking-widest">
-              ▸ Resistance Toolkit
-            </div>
+            <div class="font-display font-bold text-neon-pink text-lg leading-tight mt-0.5">HARDENING</div>
+            <div class="text-[10px] text-dedsec-muted mt-2 font-mono uppercase tracking-widest">▸ Resistance Toolkit</div>
           </a>
-
-          <!-- Recherche -->
           <a href="/search" class="mt-3 flex items-center gap-3 bg-dedsec-gray border border-neon-green/30 hover:border-neon-green rounded px-4 py-3 text-dedsec-muted hover:text-neon-green transition-all no-underline group">
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="shrink-0 text-neon-green/60 group-hover:text-neon-green transition-colors">
-              <circle cx="11" cy="11" r="8"/>
-              <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+              <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
             </svg>
             <span class="font-mono text-sm flex-1">Rechercher...</span>
-            <kbd class="font-mono text-[10px] text-dedsec-muted/60 group-hover:text-neon-green/60 border border-dedsec-border rounded px-1.5 py-0.5">/</kbd>
+            <kbd class="font-mono text-[10px] border border-dedsec-border rounded px-1.5 py-0.5">/</kbd>
           </a>
-
-          <!-- Urgence -->
           <a href="/que-faire" class="mt-2 flex items-center gap-3 bg-neon-pink/10 border border-neon-pink/40 hover:border-neon-pink rounded px-4 py-3 text-neon-pink transition-all no-underline group">
             <span class="text-lg shrink-0">🚨</span>
             <span class="font-mono text-sm flex-1 font-bold">Que faire si...</span>
-            <span class="font-mono text-[10px] text-neon-pink/50 group-hover:text-neon-pink/80">▸</span>
+            <span class="font-mono text-[10px] text-neon-pink/50">▸</span>
           </a>
-
-          <!-- Contribuer -->
           <a href="/contribuer" class="mt-2 flex items-center gap-3 bg-neon-cyan/5 border border-neon-cyan/20 hover:border-neon-cyan/60 rounded px-4 py-3 text-dedsec-muted hover:text-neon-cyan transition-all no-underline group">
             <span class="text-lg shrink-0">🛠️</span>
             <span class="font-mono text-sm flex-1">Contribuer</span>
-            <span class="font-mono text-[10px] text-dedsec-muted/40 group-hover:text-neon-cyan/50">▸</span>
+            <span class="font-mono text-[10px] text-dedsec-muted/40">▸</span>
           </a>
         </div>
-
-        <!-- Navigation accordéon -->
         <nav class="p-3 pb-20">
           {navigation.map((section) => (
             <div class="mb-1 sidebar-accordion">
@@ -287,14 +191,9 @@ const navigation = [
               <div class="sidebar-section-links">
                 {section.links.map((link) => (
                   link.href === '' ? (
-                    <div class="px-4 py-1 text-[9px] font-mono uppercase tracking-widest text-neon-cyan/40 mt-2">
-                      {link.label}
-                    </div>
+                    <div class="px-4 py-1 text-[9px] font-mono uppercase tracking-widest text-neon-cyan/40 mt-2">{link.label}</div>
                   ) : (
-                    
-                      href={link.href}
-                      class={['sidebar-link', currentPath === link.href ? 'active' : ''].join(' ')}
-                    >
+                    <a href={link.href} class={link.href === currentPath ? 'sidebar-link active' : 'sidebar-link'}>
                       <span class="text-neon-cyan/50 mr-1 text-xs">{link.emoji}</span>
                       {link.label}
                     </a>
@@ -303,37 +202,22 @@ const navigation = [
               </div>
             </div>
           ))}
-
-          <!-- Footer sidebar -->
           <div class="mt-8 pt-4 border-t border-dedsec-border px-3">
             <div class="text-[10px] text-dedsec-muted space-y-1">
               <div>VERSION ▸ 1.0.0</div>
               <div>STATUT ▸ <span class="text-neon-green">● ACTIF</span></div>
               <div>LICENSE ▸ CC BY-SA 4.0</div>
               <div class="pt-2">
-                <a href="https://github.com/KernelRequiem/SoundSystemHardening" target="_blank" class="text-neon-cyan text-[10px]">
-                  ▸ github.com/KernelRequiem
-                </a>
+                <a href="https://github.com/KernelRequiem/SoundSystemHardening" target="_blank" class="text-neon-cyan text-[10px]">▸ github.com/KernelRequiem</a>
               </div>
             </div>
           </div>
         </nav>
       </aside>
-
-      <!-- Overlay mobile -->
-      <div
-        id="overlay"
-        class="fixed inset-0 bg-black/80 z-30 hidden"
-      ></div>
-
-      <!-- Main content -->
+      <div id="overlay" class="fixed inset-0 bg-black/80 z-30 hidden"></div>
       <main class="flex-1 min-w-0">
-
-        <!-- Top bar -->
         <div class="sticky top-0 z-20 bg-dedsec-black/80 backdrop-blur-md border-b border-dedsec-border">
           <div class="px-6 py-3 flex items-center justify-between">
-
-            <!-- Breadcrumb -->
             <div class="flex items-center gap-2 text-xs font-mono text-dedsec-muted ml-12">
               <a href="/" class="text-neon-green hover:text-neon-cyan transition-colors no-underline">◆</a>
               <span class="text-dedsec-muted">/</span>
@@ -344,29 +228,19 @@ const navigation = [
               <span class="text-dedsec-muted">/</span>
               <span class="text-dedsec-text truncate max-w-xs">{title}</span>
             </div>
-
-            <!-- Logo fixed -->
             <a href="/" class="fixed right-6 top-12 z-50 no-underline">
-              <div class="w-40 h-40 rounded-full border-3 border-neon-green overflow-hidden
-                          shadow-[0_0_25px_#00ff9f77] hover:shadow-[0_0_50px_#00ff9f]
-                          transition-all duration-300 hover:scale-105">
+              <div class="w-40 h-40 rounded-full border-3 border-neon-green overflow-hidden shadow-[0_0_25px_#00ff9f77] hover:shadow-[0_0_50px_#00ff9f] transition-all duration-300 hover:scale-105">
                 <img src="/SoundSystemHardening-logo.png" alt="SoundSystem Hardening" class="w-full h-full object-cover" />
               </div>
             </a>
-
-            <!-- Dark/Light toggle + Statut -->
             <div class="flex items-center gap-3 text-[10px] font-mono text-dedsec-muted">
-              <button
-                id="theme-toggle"
-                class="hidden md:flex items-center gap-2 px-3 py-2 rounded border border-neon-cyan/30 hover:border-neon-cyan text-neon-cyan hover:bg-neon-cyan/10 transition-all"
-              >
+              <button id="theme-toggle" class="hidden md:flex items-center gap-2 px-3 py-2 rounded border border-neon-cyan/30 hover:border-neon-cyan text-neon-cyan hover:bg-neon-cyan/10 transition-all">
                 <span id="theme-icon">🌙</span>
                 <span class="text-[10px] font-mono">MODE</span>
               </button>
               <span class="hidden md:inline text-dedsec-border">|</span>
               <a href="/search" class="hidden md:flex items-center gap-1 text-dedsec-muted hover:text-neon-green transition-colors no-underline">
-                <span>⌕</span>
-                <span>SEARCH</span>
+                <span>⌕</span><span>SEARCH</span>
               </a>
               <span class="hidden md:inline text-dedsec-border">|</span>
               <span class="hidden md:inline">▸ SECURE.CONNECTION</span>
@@ -374,14 +248,10 @@ const navigation = [
             </div>
           </div>
         </div>
-
-        <!-- Content -->
         <article class="px-6 py-8 lg:px-12 lg:py-12 max-w-4xl mx-auto prose-dedsec animate-fade-in">
           <slot />
         </article>
         <TableOfContents />
-
-        <!-- Footer -->
         <footer class="border-t border-dedsec-border mt-16 px-6 lg:px-12 py-8">
           <div class="max-w-4xl mx-auto">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs font-mono">
@@ -418,9 +288,7 @@ const navigation = [
         </footer>
       </main>
     </div>
-
     <script>
-      // Progress bar
       const bar = document.getElementById('progress-bar');
       if (bar) {
         const update = () => {
@@ -431,8 +299,6 @@ const navigation = [
         window.addEventListener('scroll', update, { passive: true });
         update();
       }
-
-      // Burger menu
       const toggle = document.getElementById('menu-toggle');
       const sidebar = document.getElementById('sidebar');
       const overlay = document.getElementById('overlay');
@@ -447,9 +313,7 @@ const navigation = [
         });
       }
     </script>
-
     <script>
-      // Dark/Light mode
       const themeToggle = document.getElementById('theme-toggle');
       const themeIcon = document.getElementById('theme-icon');
       const html = document.documentElement;
@@ -466,9 +330,7 @@ const navigation = [
         updateIcon(next);
       });
     </script>
-
     <script>
-      // Sidebar accordéon
       document.addEventListener('DOMContentLoaded', () => {
         const accordions = document.querySelectorAll('.sidebar-accordion');
         accordions.forEach(accordion => {
@@ -491,6 +353,5 @@ const navigation = [
         });
       });
     </script>
-
   </body>
 </html>
