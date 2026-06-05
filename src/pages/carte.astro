@@ -40,7 +40,7 @@ const TYPES = {
         <div class="block-title">▸ Période</div>
         <select id="yearFilter"><option value="all">Toutes les années</option></select>
 
-        <a class="contrib" href="/contribuer">+ SIGNALER UN CAS</a>
+        <button class="contrib" id="openModal">+ SIGNALER UN CAS</button>
 
         <p class="note">
           Aucune donnée nominative. Chaque cas est sourcé.
@@ -164,7 +164,117 @@ const TYPES = {
     ySel.onchange = () => { yearFilter = ySel.value; render(); };
 
     render();
+
+    // ---- Modal signalement ----
+    const modal       = document.getElementById('reportModal');
+    const modalForm   = document.getElementById('modalForm');
+    const modalSucess = document.getElementById('modalSuccess');
+    const formError   = document.getElementById('formError');
+    const submitBtn   = document.getElementById('submitReport');
+
+    function openModal()  { modal.style.display = 'flex'; modal.setAttribute('aria-hidden','false'); }
+    function closeModal() { modal.style.display = 'none'; modal.setAttribute('aria-hidden','true'); modalForm.style.display='block'; modalSucess.style.display='none'; formError.style.display='none'; submitBtn.disabled=false; submitBtn.textContent='ENVOYER LE SIGNALEMENT'; }
+
+    document.getElementById('openModal').addEventListener('click', openModal);
+    document.getElementById('closeModal').addEventListener('click', closeModal);
+    document.getElementById('closeSuccess').addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+
+    document.getElementById('submitReport').addEventListener('click', async () => {
+      const lieu   = document.getElementById('f-lieu').value.trim();
+      const date   = document.getElementById('f-date').value.trim();
+      const type   = document.getElementById('f-type').value.trim();
+      const desc   = document.getElementById('f-desc').value.trim();
+      const bilan  = document.getElementById('f-bilan').value.trim();
+      const source = document.getElementById('f-source').value.trim();
+
+      if (!lieu || !date || !type || !desc) {
+        formError.textContent = 'Champs requis manquants : Lieu, Date, Type, Description.';
+        formError.style.display = 'block';
+        return;
+      }
+      formError.style.display = 'none';
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'ENVOI EN COURS...';
+
+      try {
+        const res = await fetch('/api/report', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ lieu, date, type, description: desc, bilan, source }),
+        });
+        const data = await res.json();
+        if (res.ok && data.ok) {
+          modalForm.style.display = 'none';
+          document.getElementById('modalSuccess').style.display = 'block';
+        } else {
+          throw new Error(data.error || 'Erreur inconnue');
+        }
+      } catch (err) {
+        formError.textContent = 'Erreur : ' + err.message;
+        formError.style.display = 'block';
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'ENVOYER LE SIGNALEMENT';
+      }
+    });
   </script>
+  <!-- ======= MODAL SIGNALEMENT ======= -->
+  <div id="reportModal" class="modal-overlay" aria-hidden="true">
+    <div class="modal-box" role="dialog" aria-labelledby="modalTitle">
+      <div class="modal-header">
+        <span id="modalTitle">▸ SIGNALER UN CAS</span>
+        <button id="closeModal" class="modal-close" aria-label="Fermer">✕</button>
+      </div>
+
+      <div id="modalForm">
+        <p class="modal-note">Le signalement arrive en statut <b>En attente</b>. Un modérateur vérifie et géolocalise avant publication.</p>
+
+        <div class="field">
+          <label for="f-lieu">Lieu <span class="req">*</span></label>
+          <input id="f-lieu" type="text" placeholder="ex: Redon (35)" required />
+        </div>
+        <div class="field">
+          <label for="f-date">Date <span class="req">*</span></label>
+          <input id="f-date" type="date" required />
+        </div>
+        <div class="field">
+          <label for="f-type">Type de répression <span class="req">*</span></label>
+          <select id="f-type" required>
+            <option value="">-- choisir --</option>
+            <option value="Charge / intervention">Charge / intervention</option>
+            <option value="Blessure / mutilation">Blessure / mutilation</option>
+            <option value="Saisie de materiel">Saisie de matériel</option>
+            <option value="GAV / interpellation">GAV / interpellation</option>
+            <option value="Interdiction prefectorale">Interdiction préfectorale</option>
+            <option value="Autre">Autre</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="f-desc">Description <span class="req">*</span></label>
+          <textarea id="f-desc" rows="3" placeholder="Résumé factuel, sans donnée nominative"></textarea>
+        </div>
+        <div class="field">
+          <label for="f-bilan">Bilan</label>
+          <input id="f-bilan" type="text" placeholder="ex: 2 GAV, matériel saisi" />
+        </div>
+        <div class="field">
+          <label for="f-source">Source (URL)</label>
+          <input id="f-source" type="url" placeholder="https://..." />
+        </div>
+
+        <button id="submitReport" class="submit-btn">ENVOYER LE SIGNALEMENT</button>
+        <p id="formError" class="form-error" style="display:none"></p>
+      </div>
+
+      <div id="modalSuccess" style="display:none" class="modal-success">
+        <div class="success-icon">✔</div>
+        <p>Signalement reçu.</p>
+        <p class="success-sub">Un modérateur valide et géolocalise avant publication.</p>
+        <button id="closeSuccess" class="submit-btn" style="margin-top:16px">FERMER</button>
+      </div>
+    </div>
+  </div>
+
 </Layout>
 
 <style is:global>
@@ -407,4 +517,133 @@ const TYPES = {
     .carte-aside { width: 100%; max-height: 38vh; }
     .toggle-btn { display: none; }
   }
+
+  /* ---- Modal signalement ---- */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.85);
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(3px);
+  }
+
+  .modal-box {
+    background: #0a0d14;
+    border: 1px solid #00ff9f;
+    box-shadow: 0 0 40px rgba(0,255,159,.2);
+    width: 100%;
+    max-width: 480px;
+    max-height: 90vh;
+    overflow-y: auto;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 16px;
+    border-bottom: 1px solid #10151f;
+    font-size: 11px;
+    color: #00ff9f;
+    letter-spacing: 1px;
+  }
+
+  .modal-close {
+    background: transparent;
+    border: none;
+    color: #5a6472;
+    cursor: pointer;
+    font-size: 14px;
+    font-family: 'JetBrains Mono', monospace;
+    padding: 2px 6px;
+    transition: color .15s;
+  }
+  .modal-close:hover { color: #ff2e4d; }
+
+  .modal-note {
+    font-size: 9px;
+    color: #5a6472;
+    line-height: 1.7;
+    padding: 12px 16px;
+    border-bottom: 1px solid #10151f;
+  }
+  .modal-note b { color: #ffd400; }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 10px 16px 0;
+  }
+
+  .field label {
+    font-size: 9px;
+    color: #5a6472;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .req { color: #ff2e4d; }
+
+  .field input,
+  .field select,
+  .field textarea {
+    background: #05060a;
+    border: 1px solid #10151f;
+    color: #00ff9f;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    padding: 8px;
+    outline: none;
+    resize: vertical;
+    transition: border-color .15s;
+  }
+  .field input:focus,
+  .field select:focus,
+  .field textarea:focus { border-color: #00ff9f; }
+  .field input::placeholder,
+  .field textarea::placeholder { color: #2a3040; }
+
+  .submit-btn {
+    display: block;
+    width: calc(100% - 32px);
+    margin: 16px 16px 12px;
+    padding: 11px;
+    background: transparent;
+    border: 1px solid #00ff9f;
+    color: #00ff9f;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all .15s;
+  }
+  .submit-btn:hover:not(:disabled) { background: #00ff9f; color: #05060a; }
+  .submit-btn:disabled { opacity: .4; cursor: not-allowed; }
+
+  .form-error {
+    font-size: 10px;
+    color: #ff2e4d;
+    padding: 0 16px 12px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .modal-success {
+    padding: 32px 16px;
+    text-align: center;
+    font-family: 'JetBrains Mono', monospace;
+    color: #00ff9f;
+    font-size: 12px;
+    line-height: 1.8;
+  }
+  .success-icon {
+    font-size: 32px;
+    color: #00ff9f;
+    text-shadow: 0 0 16px rgba(0,255,159,.6);
+    margin-bottom: 12px;
+  }
+  .success-sub { font-size: 9px; color: #5a6472; margin-top: 4px; }
 </style>

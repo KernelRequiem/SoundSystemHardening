@@ -17,3 +17,8 @@
   from = "/wiki"
   to = "/wiki/index"
   status = 301
+
+[[redirects]]
+  from = "/api/report"
+  to = "/.netlify/functions/report"
+  status = 200
