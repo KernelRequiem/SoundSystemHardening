@@ -1,0 +1,45 @@
+name: Sync Airtable -> incidents.json
+
+on:
+  schedule:
+    - cron: '0 * * * *'   # toutes les heures, a la minute 00
+  workflow_dispatch: {}    # bouton "Run workflow" manuel dans l'onglet Actions
+
+permissions:
+  contents: write          # autorise le commit du JSON mis a jour
+
+concurrency:
+  group: sync-airtable
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Sync depuis Airtable
+        env:
+          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
+          AIRTABLE_BASE_ID: ${{ secrets.AIRTABLE_BASE_ID }}
+          AIRTABLE_TABLE: Incidents
+        run: node scripts/sync-airtable.mjs
+
+      - name: Commit si changement
+        run: |
+          git config user.name "sync-bot"
+          git config user.email "actions@users.noreply.github.com"
+          if git diff --quiet -- src/data/incidents.json; then
+            echo "Aucun changement, rien a commiter."
+          else
+            git add src/data/incidents.json
+            git commit -m "data: maj incidents [skip ci]"
+            git push
+            echo "Commit pousse, Netlify va redeployer."
+          fi

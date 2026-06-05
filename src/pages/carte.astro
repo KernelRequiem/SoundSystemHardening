@@ -1,0 +1,410 @@
+---
+// src/pages/carte.astro
+import Layout from '../layouts/Layout.astro';
+import incidents from '../data/incidents.json';
+
+const TYPES = {
+  charge:       { label: 'Charge / intervention', color: '#ff2e4d' },
+  blessure:     { label: 'Blessure / mutilation',  color: '#ff8a00' },
+  saisie:       { label: 'Saisie de materiel',     color: '#00d9ff' },
+  gav:          { label: 'GAV / interpellation',   color: '#ffd400' },
+  interdiction: { label: 'Interdiction prefect.',  color: '#ff3bd4' },
+  autre:        { label: 'Autre',                  color: '#00ff9f' },
+};
+---
+
+<Layout title="Carte de la repression">
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""
+  />
+
+  <div class="carte-wrap" id="carteWrap">
+    <button id="carteToggle" class="toggle-btn" title="Replier/Deployer">◀</button>
+
+    <aside class="carte-aside" id="carteSidebar">
+      <div class="aside-inner">
+        <h1>CARTE DE LA RÉPRESSION</h1>
+        <div class="h1sub">▸ INDEX TERRITORIAL // 1996–2026</div>
+
+        <div class="stat">
+          <span>INCIDENTS<br/>INDEXÉS</span>
+          <b id="count">00</b>
+        </div>
+
+        <div class="block-title">▸ Type de répression</div>
+        <div class="filters" id="filters"></div>
+
+        <div class="block-title">▸ Période</div>
+        <select id="yearFilter"><option value="all">Toutes les années</option></select>
+
+        <a class="contrib" href="/contribuer">+ SIGNALER UN CAS</a>
+
+        <p class="note">
+          Aucune donnée nominative. Chaque cas est sourcé.
+          Les signalements passent en validation avant publication.
+        </p>
+      </div>
+    </aside>
+
+    <main class="carte-main">
+      <div class="topbar">
+        <span class="live">● SECURE.CONNECTION</span>
+        <span>SRC ▸ incidents.json</span>
+        <span class="topbar-right">CC BY-SA 4.0</span>
+      </div>
+      <div id="map"></div>
+    </main>
+  </div>
+
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""
+    is:inline
+  ></script>
+
+  <script define:vars={{ INCIDENTS: incidents, TYPES }}>
+    // ---- Toggle sidebar ----
+    const carteToggle = document.getElementById('carteToggle');
+    const carteSidebar = document.getElementById('carteSidebar');
+    const carteWrap = document.getElementById('carteWrap');
+    let open = true;
+
+    carteToggle.addEventListener('click', () => {
+      open = !open;
+      carteSidebar.classList.toggle('collapsed', !open);
+      carteWrap.classList.toggle('collapsed', !open);
+      carteToggle.textContent = open ? '◀' : '▶';
+      setTimeout(() => { if (window._map) window._map.invalidateSize(); }, 320);
+    });
+
+    // ---- Carte Leaflet ----
+    const map = L.map('map', { zoomControl: true }).setView([46.6, 2.4], 6);
+    window._map = map;
+
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; OpenStreetMap &copy; CARTO',
+      maxZoom: 19,
+      subdomains: 'abcd',
+    }).addTo(map);
+
+    const active = new Set(Object.keys(TYPES));
+    let yearFilter = 'all';
+    const layer = L.layerGroup().addTo(map);
+
+    document.head.insertAdjacentHTML('beforeend',
+      '<style>@keyframes mpulse{0%{transform:scale(1);opacity:1}50%{transform:scale(1.5);opacity:.5}100%{transform:scale(1);opacity:1}}</style>'
+    );
+
+    function dotIcon(color) {
+      return L.divIcon({
+        className: '',
+        iconSize: [16, 16],
+        iconAnchor: [8, 8],
+        html: `<div style="width:14px;height:14px;border-radius:50%;background:${color};
+          box-shadow:0 0 10px ${color},0 0 4px ${color};
+          border:1px solid #05060a;animation:mpulse 2s infinite"></div>`,
+      });
+    }
+
+    function popupHTML(i) {
+      const t = TYPES[i.type] || TYPES.autre;
+      const d = new Date(i.date).toLocaleDateString('fr-FR');
+      return `
+        <span class="pop-type" style="background:${t.color}">${t.label.toUpperCase()}</span>
+        <div class="pop-title">${i.titre}</div>
+        <div class="pop-date">▸ ${i.lieu} // ${d}</div>
+        <div class="pop-desc">${i.desc || ''}</div>
+        ${i.bilan ? `<div class="pop-bilan">BILAN ▸ ${i.bilan}</div>` : ''}
+        <div class="pop-links">
+          ${i.source ? `<a href="${i.source}" target="_blank" rel="noopener">↗ SOURCE</a>` : ''}
+          ${i.wiki   ? `<a href="${i.wiki}">↗ FICHE WIKI</a>` : ''}
+        </div>`;
+    }
+
+    function render() {
+      layer.clearLayers();
+      let n = 0;
+      INCIDENTS.forEach((i) => {
+        if (!active.has(i.type)) return;
+        if (yearFilter !== 'all' && !String(i.date).startsWith(yearFilter)) return;
+        L.marker([i.lat, i.lng], { icon: dotIcon((TYPES[i.type] || TYPES.autre).color) })
+          .bindPopup(popupHTML(i), { maxWidth: 280 })
+          .addTo(layer);
+        n++;
+      });
+      document.getElementById('count').textContent = String(n).padStart(2, '0');
+    }
+
+    // Filtres par type
+    const fbox = document.getElementById('filters');
+    Object.entries(TYPES).forEach(([key, t]) => {
+      const count = INCIDENTS.filter((i) => i.type === key).length;
+      const b = document.createElement('button');
+      b.className = 'chip on';
+      b.innerHTML = `<span class="dot" style="background:${t.color}"></span>${t.label}<span class="ct">${count}</span>`;
+      b.onclick = () => {
+        active.has(key) ? active.delete(key) : active.add(key);
+        b.classList.toggle('on', active.has(key));
+        render();
+      };
+      fbox.appendChild(b);
+    });
+
+    // Filtre par année
+    const years = [...new Set(INCIDENTS.map((i) => String(i.date).slice(0, 4)))].sort().reverse();
+    const ySel = document.getElementById('yearFilter');
+    years.forEach((y) => {
+      const o = document.createElement('option');
+      o.value = y; o.textContent = y; ySel.appendChild(o);
+    });
+    ySel.onchange = () => { yearFilter = ySel.value; render(); };
+
+    render();
+  </script>
+</Layout>
+
+<style is:global>
+  /* ---- Casser les contraintes du Layout sur cette page ---- */
+  article.prose-dedsec:has(#carteWrap) {
+    padding: 0 !important;
+    max-width: none !important;
+    margin: 0 !important;
+  }
+
+  /* Fallback pour navigateurs sans :has() */
+  .carte-wrap ~ * { display: none; }
+
+  /* ---- Réduire le logo circulaire fixe (160px → 28px) ---- */
+  a.fixed .w-40 {
+    width: 28px !important;
+    height: 28px !important;
+    border-width: 1px !important;
+    box-shadow: none !important;
+  }
+  a.fixed {
+    top: 8px !important;
+    right: 8px !important;
+  }
+
+  /* ---- Carte wrap ---- */
+  .carte-wrap {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    height: calc(100dvh - 52px);
+    position: relative;
+    transition: grid-template-columns 0.3s ease;
+    overflow: hidden;
+  }
+
+  .carte-wrap.collapsed {
+    grid-template-columns: 0px 1fr;
+  }
+
+  /* ---- Toggle btn ---- */
+  .toggle-btn {
+    position: absolute;
+    left: 280px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1000;
+    width: 18px;
+    height: 48px;
+    background: #0a0d14;
+    border: 1px solid #10151f;
+    border-left: none;
+    color: #00ff9f;
+    cursor: pointer;
+    font-size: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: left 0.3s ease, color 0.15s;
+    padding: 0;
+  }
+
+  .toggle-btn:hover { color: #00d9ff; }
+
+  .carte-wrap.collapsed .toggle-btn {
+    left: 0px;
+    border-left: 1px solid #10151f;
+    border-right: none;
+  }
+
+  /* ---- Sidebar ---- */
+  .carte-aside {
+    background: #0a0d14;
+    border-right: 1px solid #10151f;
+    overflow: hidden;
+    transition: opacity 0.25s ease;
+    width: 280px;
+  }
+
+  .carte-aside.collapsed {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .aside-inner {
+    padding: 16px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    height: 100%;
+    overflow-y: auto;
+  }
+
+  .carte-aside h1 {
+    font-size: 13px;
+    color: #00ff9f;
+    letter-spacing: 1px;
+    text-shadow: 0 0 8px rgba(0,255,159,.4);
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .h1sub { font-size: 9px; color: #00d9ff; letter-spacing: 1px; font-family: 'JetBrains Mono', monospace; }
+
+  .block-title {
+    font-size: 9px;
+    color: #5a6472;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-family: 'JetBrains Mono', monospace;
+    margin-top: 4px;
+  }
+
+  .filters { display: flex; flex-direction: column; gap: 5px; }
+
+  .chip {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 6px 8px;
+    cursor: pointer;
+    border: 1px solid #10151f;
+    background: transparent;
+    color: #5a6472;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    text-align: left;
+    transition: all .15s;
+    white-space: nowrap;
+  }
+
+  .chip:hover { border-color: #00ff9f; color: #00ff9f; }
+  .chip.on { border-color: #00ff9f; color: #05060a; background: #00ff9f; }
+  .chip .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .chip .ct { margin-left: auto; opacity: .6; font-size: 9px; }
+
+  #yearFilter {
+    width: 100%;
+    background: #05060a;
+    color: #00ff9f;
+    border: 1px solid #10151f;
+    padding: 7px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+  }
+
+  .stat {
+    border: 1px solid #10151f;
+    padding: 8px 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .stat b { font-size: 20px; color: #00d9ff; text-shadow: 0 0 8px rgba(0,217,255,.4); }
+  .stat span { font-size: 8px; color: #5a6472; letter-spacing: 1px; }
+
+  .contrib {
+    display: block;
+    text-align: center;
+    padding: 8px;
+    border: 1px solid #00d9ff;
+    color: #00d9ff;
+    text-decoration: none;
+    font-size: 10px;
+    letter-spacing: 1px;
+    font-family: 'JetBrains Mono', monospace;
+    transition: all .15s;
+  }
+  .contrib:hover { background: #00d9ff; color: #05060a; }
+
+  .note {
+    font-size: 8px;
+    color: #5a6472;
+    line-height: 1.7;
+    border-top: 1px solid #10151f;
+    padding-top: 10px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* ---- Main / Carte ---- */
+  .carte-main { position: relative; overflow: hidden; }
+
+  #map { position: absolute; inset: 0; background: #05060a; top: 34px; }
+
+  .topbar {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    z-index: 500;
+    height: 34px;
+    background: rgba(5,6,10,.9);
+    border-bottom: 1px solid #10151f;
+    display: flex;
+    align-items: center;
+    padding: 0 14px;
+    gap: 14px;
+    font-size: 10px;
+    letter-spacing: 1px;
+    color: #5a6472;
+    backdrop-filter: blur(4px);
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .topbar .live { color: #00ff9f; animation: tblink 1.4s infinite; }
+  @keyframes tblink { 50% { opacity: .3; } }
+  .topbar-right { margin-left: auto; }
+
+  /* ---- Leaflet overrides ---- */
+  .leaflet-container { background: #05060a; font-family: 'JetBrains Mono', monospace; }
+  .leaflet-popup-content-wrapper {
+    background: #0a0d14;
+    color: #00ff9f;
+    border: 1px solid #00ff9f;
+    border-radius: 0;
+    box-shadow: 0 0 20px rgba(0,255,159,.2);
+  }
+  .leaflet-popup-tip { background: #00ff9f; }
+  .leaflet-control-zoom a {
+    background: #0a0d14 !important;
+    color: #00ff9f !important;
+    border: 1px solid #10151f !important;
+    border-radius: 0 !important;
+  }
+  .leaflet-control-zoom a:hover { background: #00ff9f !important; color: #05060a !important; }
+  .leaflet-control-attribution {
+    background: rgba(5,6,10,.8) !important;
+    color: #5a6472 !important;
+    font-size: 9px !important;
+  }
+
+  /* ---- Popup ---- */
+  .pop-type { font-size: 9px; letter-spacing: 2px; padding: 2px 7px; display: inline-block; color: #05060a; font-weight: 700; }
+  .pop-title { font-size: 13px; color: #00d9ff; margin: 8px 0 2px; font-family: 'JetBrains Mono', monospace; }
+  .pop-date { font-size: 10px; color: #5a6472; letter-spacing: 1px; margin-bottom: 8px; }
+  .pop-desc { font-size: 11px; color: #00ff9f; opacity: .85; margin-bottom: 8px; }
+  .pop-bilan { font-size: 10px; color: #ff8a00; border-left: 2px solid #ff8a00; padding-left: 8px; margin-bottom: 8px; }
+  .pop-links { display: flex; gap: 10px; border-top: 1px solid #10151f; padding-top: 8px; }
+  .pop-links a { color: #00d9ff; text-decoration: none; font-size: 10px; }
+
+  @media (max-width: 760px) {
+    .carte-wrap { grid-template-columns: 1fr; grid-template-rows: auto 1fr; height: 100dvh; }
+    .carte-aside { width: 100%; max-height: 38vh; }
+    .toggle-btn { display: none; }
+  }
+</style>

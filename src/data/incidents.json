@@ -1,0 +1,41 @@
+[
+  {
+    "id": "redon-2021",
+    "lieu": "Redon (35)",
+    "lat": 47.6517,
+    "lng": -2.0856,
+    "date": "2021-06-19",
+    "type": "blessure",
+    "titre": "Rave de la Saint-Jean",
+    "desc": "48h affrontements après intervention.",
+    "bilan": "1 main arrachée, plusieurs blessés graves.",
+    "source": "https://www.amnesty.fr",
+    "wiki": "/wiki/Incidents-répressifs"
+  },
+  {
+    "id": "carhaix-2025",
+    "lieu": "Carhaix (29)",
+    "lat": 48.2767,
+    "lng": -3.5736,
+    "date": "2025-12-06",
+    "type": "charge",
+    "titre": "Encerclement total",
+    "desc": "3000-5000 personnes. Tirs sur véhicules.",
+    "bilan": "Plainte pour tentative de meurtre.",
+    "source": "https://www.lemonde.fr",
+    "wiki": "/wiki/Incidents-répressifs"
+  },
+  {
+    "id": "phalsbourg-2024",
+    "lieu": "Phalsbourg (57)",
+    "lat": 48.7686,
+    "lng": 7.2603,
+    "date": "2024-10-12",
+    "type": "interdiction",
+    "titre": "Aérodrome abandonné",
+    "desc": "2000 personnes, 48h. Arrêté préfectoral.",
+    "bilan": "Zéro intervention.",
+    "source": "https://www.republicain-lorrain.fr",
+    "wiki": "/wiki/Modus-Operandi"
+  }
+]
