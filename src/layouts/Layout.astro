@@ -356,6 +356,16 @@ const navigation = [
                 />
               </div>
             </a>
+            <!-- Dark/Light mode toggle -->
+            <button
+              id="theme-toggle"
+              class="hidden md:flex items-center gap-2 px-3 py-2 rounded border border-neon-cyan/30 hover:border-neon-cyan text-neon-cyan hover:bg-neon-cyan/10 transition-all"
+              title="Toggle dark/light mode"
+            >
+              <span id="theme-icon">🌙</span>
+              <span class="text-[10px] font-mono">MODE</span>
+            </button>
+
             <!-- Statut droite -->
             <div class="flex items-center gap-3 text-[10px] font-mono text-dedsec-muted">
               <a href="/search" class="hidden md:flex items-center gap-1 text-dedsec-muted hover:text-neon-green transition-colors no-underline" title="Recherche (/)">
@@ -443,5 +453,22 @@ const navigation = [
         });
       }
     </script>
+    <script>
+      const toggle = document.getElementById("theme-toggle");
+      const icon = document.getElementById("theme-icon");
+      const html = document.documentElement;
+      const savedTheme = localStorage.getItem("theme") || "dark";
+      html.setAttribute("data-theme", savedTheme);
+      function updateIcon(theme) { icon.textContent = theme === "dark" ? "🌙" : "☀️"; }
+      updateIcon(savedTheme);
+      toggle?.addEventListener("click", () => {
+        const current = html.getAttribute("data-theme");
+        const next = current === "dark" ? "light" : "dark";
+        html.setAttribute("data-theme", next);
+        localStorage.setItem("theme", next);
+        updateIcon(next);
+      });
+    </script>
+
   </body>
 </html>
