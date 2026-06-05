@@ -1,0 +1,407 @@
+---
+// src/pages/contact.astro
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+  title="Contact & Signalement"
+  category="PROJET"
+  description="Nous contacter ou signaler un problème sur le wiki SoundSystemHardening, sans passer par GitHub."
+>
+
+  <h1>Contact & Signalement</h1>
+  <p class="text-dedsec-muted text-sm font-mono tracking-widest uppercase mb-10">
+    ▸ Aucun compte requis · Aucune donnée conservée côté site
+  </p>
+
+  <!-- TABS -->
+  <div class="tabs-bar">
+    <button class="tab-btn active" data-tab="contact">✉ NOUS CONTACTER</button>
+    <button class="tab-btn" data-tab="signaler">⚠ SIGNALER UN PROBLÈME</button>
+  </div>
+
+  <!-- ═══════════════════════════════════ -->
+  <!-- FORM 1 : CONTACT                   -->
+  <!-- ═══════════════════════════════════ -->
+  <div id="tab-contact" class="tab-panel active">
+    <p class="tab-desc">
+      Une question, une suggestion, une idée de collaboration. On lit tout.
+      Laissez un moyen de réponse si vous attendez un retour — ce n'est pas obligatoire.
+    </p>
+
+    <div id="contact-form-wrap">
+      <!-- Formulaire détecté par Netlify au build via data-netlify="true" -->
+      <form
+        name="contact"
+        method="POST"
+        data-netlify="true"
+        netlify-honeypot="bot-field"
+        id="contactForm"
+        class="form-block"
+      >
+        <input type="hidden" name="form-name" value="contact" />
+        <p class="hidden"><label>Ne pas remplir : <input name="bot-field" /></label></p>
+
+        <div class="field">
+          <label for="c-objet">Objet <span class="req">*</span></label>
+          <select id="c-objet" name="objet" required>
+            <option value="">-- choisir --</option>
+            <option value="Question juridique">Question juridique</option>
+            <option value="Question technique / opsec">Question technique / opsec</option>
+            <option value="Suggestion de contenu">Suggestion de contenu</option>
+            <option value="Partenariat / collaboration">Partenariat / collaboration</option>
+            <option value="Presse / média">Presse / média</option>
+            <option value="Autre">Autre</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="c-message">Message <span class="req">*</span></label>
+          <textarea id="c-message" name="message" rows="5" placeholder="Votre message..." required></textarea>
+        </div>
+
+        <div class="field">
+          <label for="c-reponse">Moyen de réponse <span class="opt">(optionnel)</span></label>
+          <input
+            id="c-reponse"
+            name="reponse"
+            type="text"
+            placeholder="Email, Session ID, Briar, ou rien si vous ne voulez pas de retour"
+          />
+          <span class="field-hint">On ne stocke pas ce que vous écrivez ici côté site.</span>
+        </div>
+
+        <button type="submit" class="submit-btn" id="contactSubmit">ENVOYER</button>
+        <p id="contactError" class="form-error" style="display:none"></p>
+      </form>
+    </div>
+
+    <div id="contact-success" class="form-success" style="display:none">
+      <div class="success-icon">✔</div>
+      <p>Message envoyé.</p>
+      <p class="success-sub">Si vous avez laissé un moyen de réponse, on vous répond dès que possible.</p>
+      <button id="contactReset" class="reset-btn">ENVOYER UN AUTRE MESSAGE</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════ -->
+  <!-- FORM 2 : SIGNALER UN PROBLÈME      -->
+  <!-- ═══════════════════════════════════ -->
+  <div id="tab-signaler" class="tab-panel">
+    <p class="tab-desc">
+      Information incorrecte, lien cassé, contenu manquant, bug d'affichage.
+      On corrige dès que possible.
+    </p>
+
+    <div id="signaler-form-wrap">
+      <form
+        name="signalement"
+        method="POST"
+        data-netlify="true"
+        netlify-honeypot="bot-field"
+        id="signalerForm"
+        class="form-block"
+      >
+        <input type="hidden" name="form-name" value="signalement" />
+        <p class="hidden"><label>Ne pas remplir : <input name="bot-field" /></label></p>
+
+        <div class="field">
+          <label for="s-type">Type de problème <span class="req">*</span></label>
+          <select id="s-type" name="type" required>
+            <option value="">-- choisir --</option>
+            <option value="Information incorrecte">Information incorrecte ou obsolète</option>
+            <option value="Lien cassé">Lien cassé</option>
+            <option value="Contenu manquant">Contenu manquant ou incomplet</option>
+            <option value="Bug technique">Bug technique / affichage</option>
+            <option value="Problème de sécurité">Problème de sécurité</option>
+            <option value="Autre">Autre</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="s-page">Page concernée <span class="opt">(optionnel)</span></label>
+          <input
+            id="s-page"
+            name="page"
+            type="text"
+            placeholder="ex: /wiki/arsenal-legislatif ou URL complète"
+          />
+        </div>
+
+        <div class="field">
+          <label for="s-desc">Description <span class="req">*</span></label>
+          <textarea
+            id="s-desc"
+            name="description"
+            rows="5"
+            placeholder="Décrivez le problème. Pour une info incorrecte, indiquez la correction et la source si possible."
+            required
+          ></textarea>
+        </div>
+
+        <button type="submit" class="submit-btn" id="signalerSubmit">ENVOYER LE SIGNALEMENT</button>
+        <p id="signalerError" class="form-error" style="display:none"></p>
+      </form>
+    </div>
+
+    <div id="signaler-success" class="form-success" style="display:none">
+      <div class="success-icon">✔</div>
+      <p>Signalement reçu.</p>
+      <p class="success-sub">On traite les problèmes signalés par ordre de priorité.</p>
+      <button id="signalerReset" class="reset-btn">SIGNALER AUTRE CHOSE</button>
+    </div>
+  </div>
+
+  <script>
+    // ---- Tabs ----
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+      });
+    });
+
+    // ---- Utilitaire encode Netlify Forms ----
+    function encode(data) {
+      return Object.keys(data)
+        .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(data[k] || ''))
+        .join('&');
+    }
+
+    // ---- Soumission AJAX générique ----
+    async function submitForm(formEl, submitBtn, errorEl, wrapEl, successEl) {
+      const data = {};
+      new FormData(formEl).forEach((v, k) => { data[k] = v; });
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'ENVOI EN COURS...';
+      errorEl.style.display = 'none';
+
+      try {
+        const res = await fetch('/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: encode(data),
+        });
+
+        if (res.ok) {
+          wrapEl.style.display = 'none';
+          successEl.style.display = 'block';
+        } else {
+          throw new Error('Erreur réseau (' + res.status + ')');
+        }
+      } catch (err) {
+        errorEl.textContent = 'Erreur : ' + err.message + '. Réessayez ou ouvrez une issue GitHub.';
+        errorEl.style.display = 'block';
+        submitBtn.disabled = false;
+        submitBtn.textContent = submitBtn.dataset.label;
+      }
+    }
+
+    // ---- Form contact ----
+    const cForm   = document.getElementById('contactForm');
+    const cSubmit = document.getElementById('contactSubmit');
+    const cError  = document.getElementById('contactError');
+    cSubmit.dataset.label = 'ENVOYER';
+
+    cForm.addEventListener('submit', e => {
+      e.preventDefault();
+      submitForm(cForm, cSubmit, cError,
+        document.getElementById('contact-form-wrap'),
+        document.getElementById('contact-success'));
+    });
+
+    document.getElementById('contactReset').addEventListener('click', () => {
+      cForm.reset();
+      cSubmit.disabled = false;
+      cSubmit.textContent = 'ENVOYER';
+      document.getElementById('contact-form-wrap').style.display = 'block';
+      document.getElementById('contact-success').style.display = 'none';
+    });
+
+    // ---- Form signalement ----
+    const sForm   = document.getElementById('signalerForm');
+    const sSubmit = document.getElementById('signalerSubmit');
+    const sError  = document.getElementById('signalerError');
+    sSubmit.dataset.label = 'ENVOYER LE SIGNALEMENT';
+
+    sForm.addEventListener('submit', e => {
+      e.preventDefault();
+      submitForm(sForm, sSubmit, sError,
+        document.getElementById('signaler-form-wrap'),
+        document.getElementById('signaler-success'));
+    });
+
+    document.getElementById('signalerReset').addEventListener('click', () => {
+      sForm.reset();
+      sSubmit.disabled = false;
+      sSubmit.textContent = 'ENVOYER LE SIGNALEMENT';
+      document.getElementById('signaler-form-wrap').style.display = 'block';
+      document.getElementById('signaler-success').style.display = 'none';
+    });
+  </script>
+
+</Layout>
+
+<style is:global>
+  .hidden { display: none; }
+
+  /* ---- Tabs ---- */
+  .tabs-bar {
+    display: flex;
+    gap: 0;
+    border-bottom: 1px solid #10151f;
+    margin-bottom: 28px;
+  }
+
+  .tab-btn {
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    color: #5a6472;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1px;
+    padding: 10px 20px;
+    cursor: pointer;
+    margin-bottom: -1px;
+    transition: all .15s;
+  }
+
+  .tab-btn:hover { color: #00ff9f; }
+
+  .tab-btn.active {
+    color: #00ff9f;
+    border-bottom-color: #00ff9f;
+  }
+
+  /* ---- Panels ---- */
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  .tab-desc {
+    font-size: 13px;
+    color: #5a6472;
+    line-height: 1.7;
+    margin-bottom: 24px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* ---- Form ---- */
+  .form-block {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    max-width: 600px;
+  }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-bottom: 16px;
+  }
+
+  .field label {
+    font-size: 10px;
+    color: #5a6472;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .req { color: #ff2e4d; }
+  .opt { color: #2a3040; font-size: 9px; }
+
+  .field input,
+  .field select,
+  .field textarea {
+    background: #05060a;
+    border: 1px solid #10151f;
+    color: #00ff9f;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    padding: 10px;
+    outline: none;
+    resize: vertical;
+    transition: border-color .15s;
+    max-width: 100%;
+  }
+
+  .field input:focus,
+  .field select:focus,
+  .field textarea:focus { border-color: #00ff9f; }
+
+  .field input::placeholder,
+  .field textarea::placeholder { color: #1e2530; }
+
+  .field-hint {
+    font-size: 9px;
+    color: #2a3040;
+    font-family: 'JetBrains Mono', monospace;
+    margin-top: 2px;
+  }
+
+  .submit-btn {
+    align-self: flex-start;
+    margin-top: 8px;
+    padding: 11px 24px;
+    background: transparent;
+    border: 1px solid #00ff9f;
+    color: #00ff9f;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all .15s;
+  }
+
+  .submit-btn:hover:not(:disabled) { background: #00ff9f; color: #05060a; }
+  .submit-btn:disabled { opacity: .35; cursor: not-allowed; }
+
+  .form-error {
+    font-size: 10px;
+    color: #ff2e4d;
+    font-family: 'JetBrains Mono', monospace;
+    margin-top: 10px;
+    max-width: 500px;
+  }
+
+  /* ---- Success ---- */
+  .form-success {
+    padding: 32px 0;
+    font-family: 'JetBrains Mono', monospace;
+    color: #00ff9f;
+    font-size: 14px;
+    line-height: 1.8;
+  }
+
+  .success-icon {
+    font-size: 28px;
+    text-shadow: 0 0 12px rgba(0,255,159,.5);
+    margin-bottom: 10px;
+  }
+
+  .success-sub {
+    font-size: 10px;
+    color: #5a6472;
+    margin-top: 4px;
+  }
+
+  .reset-btn {
+    margin-top: 16px;
+    padding: 8px 18px;
+    background: transparent;
+    border: 1px solid #5a6472;
+    color: #5a6472;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all .15s;
+  }
+
+  .reset-btn:hover { border-color: #00ff9f; color: #00ff9f; }
+</style>
