@@ -1,0 +1,28 @@
+@keyframes silhouette-float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-15px); }
+  100% { transform: translateY(0px); }
+}
+
+@keyframes background-rotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes glow-pulse {
+  0% { box-shadow: 0 0 15px #00ff9f; }
+  50% { box-shadow: 0 0 30px #00ff9f; }
+  100% { box-shadow: 0 0 15px #00ff9f; }
+}
+
+.logo-container {
+  animation: glow-pulse 2s ease-in-out infinite;
+}
+
+.logo-bg {
+  animation: background-rotate 8s linear infinite;
+}
+
+.logo-img {
+  animation: silhouette-float 3s ease-in-out infinite;
+}
