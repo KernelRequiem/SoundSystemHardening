@@ -59,6 +59,59 @@ const TYPES = {
     </main>
   </div>
 
+  <!-- ======= MODAL SIGNALEMENT ======= -->
+  <div id="reportModal" class="modal-overlay" aria-hidden="true">
+    <div class="modal-box" role="dialog" aria-labelledby="modalTitle">
+      <div class="modal-header">
+        <span id="modalTitle">▸ SIGNALER UN CAS</span>
+        <button id="closeModal" class="modal-close" aria-label="Fermer">✕</button>
+      </div>
+      <div id="modalForm">
+        <p class="modal-note">Le signalement arrive en statut <b>En attente</b>. Un modérateur vérifie et géolocalise avant publication.</p>
+        <div class="field">
+          <label for="f-lieu">Lieu <span class="req">*</span></label>
+          <input id="f-lieu" type="text" placeholder="ex: Redon (35)" />
+        </div>
+        <div class="field">
+          <label for="f-date">Date <span class="req">*</span></label>
+          <input id="f-date" type="date" />
+        </div>
+        <div class="field">
+          <label for="f-type">Type de répression <span class="req">*</span></label>
+          <select id="f-type">
+            <option value="">-- choisir --</option>
+            <option value="Charge / intervention">Charge / intervention</option>
+            <option value="Blessure / mutilation">Blessure / mutilation</option>
+            <option value="Saisie de materiel">Saisie de matériel</option>
+            <option value="GAV / interpellation">GAV / interpellation</option>
+            <option value="Interdiction prefectorale">Interdiction préfectorale</option>
+            <option value="Autre">Autre</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="f-desc">Description <span class="req">*</span></label>
+          <textarea id="f-desc" rows="3" placeholder="Résumé factuel, sans donnée nominative"></textarea>
+        </div>
+        <div class="field">
+          <label for="f-bilan">Bilan</label>
+          <input id="f-bilan" type="text" placeholder="ex: 2 GAV, matériel saisi" />
+        </div>
+        <div class="field">
+          <label for="f-source">Source (URL)</label>
+          <input id="f-source" type="url" placeholder="https://..." />
+        </div>
+        <button id="submitReport" class="submit-btn">ENVOYER LE SIGNALEMENT</button>
+        <p id="formError" class="form-error" style="display:none"></p>
+      </div>
+      <div id="modalSuccess" style="display:none" class="modal-success">
+        <div class="success-icon">✔</div>
+        <p>Signalement reçu.</p>
+        <p class="success-sub">Un modérateur valide et géolocalise avant publication.</p>
+        <button id="closeSuccess" class="submit-btn" style="margin-top:16px">FERMER</button>
+      </div>
+    </div>
+  </div>
+
   <script
     src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
@@ -218,62 +271,6 @@ const TYPES = {
       }
     });
   </script>
-  <!-- ======= MODAL SIGNALEMENT ======= -->
-  <div id="reportModal" class="modal-overlay" aria-hidden="true">
-    <div class="modal-box" role="dialog" aria-labelledby="modalTitle">
-      <div class="modal-header">
-        <span id="modalTitle">▸ SIGNALER UN CAS</span>
-        <button id="closeModal" class="modal-close" aria-label="Fermer">✕</button>
-      </div>
-
-      <div id="modalForm">
-        <p class="modal-note">Le signalement arrive en statut <b>En attente</b>. Un modérateur vérifie et géolocalise avant publication.</p>
-
-        <div class="field">
-          <label for="f-lieu">Lieu <span class="req">*</span></label>
-          <input id="f-lieu" type="text" placeholder="ex: Redon (35)" required />
-        </div>
-        <div class="field">
-          <label for="f-date">Date <span class="req">*</span></label>
-          <input id="f-date" type="date" required />
-        </div>
-        <div class="field">
-          <label for="f-type">Type de répression <span class="req">*</span></label>
-          <select id="f-type" required>
-            <option value="">-- choisir --</option>
-            <option value="Charge / intervention">Charge / intervention</option>
-            <option value="Blessure / mutilation">Blessure / mutilation</option>
-            <option value="Saisie de materiel">Saisie de matériel</option>
-            <option value="GAV / interpellation">GAV / interpellation</option>
-            <option value="Interdiction prefectorale">Interdiction préfectorale</option>
-            <option value="Autre">Autre</option>
-          </select>
-        </div>
-        <div class="field">
-          <label for="f-desc">Description <span class="req">*</span></label>
-          <textarea id="f-desc" rows="3" placeholder="Résumé factuel, sans donnée nominative"></textarea>
-        </div>
-        <div class="field">
-          <label for="f-bilan">Bilan</label>
-          <input id="f-bilan" type="text" placeholder="ex: 2 GAV, matériel saisi" />
-        </div>
-        <div class="field">
-          <label for="f-source">Source (URL)</label>
-          <input id="f-source" type="url" placeholder="https://..." />
-        </div>
-
-        <button id="submitReport" class="submit-btn">ENVOYER LE SIGNALEMENT</button>
-        <p id="formError" class="form-error" style="display:none"></p>
-      </div>
-
-      <div id="modalSuccess" style="display:none" class="modal-success">
-        <div class="success-icon">✔</div>
-        <p>Signalement reçu.</p>
-        <p class="success-sub">Un modérateur valide et géolocalise avant publication.</p>
-        <button id="closeSuccess" class="submit-btn" style="margin-top:16px">FERMER</button>
-      </div>
-    </div>
-  </div>
 
 </Layout>
 
