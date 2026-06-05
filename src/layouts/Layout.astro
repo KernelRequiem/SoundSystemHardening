@@ -14,7 +14,7 @@ interface Props {
 const { title, description, category, categoryHref, ogImage } = Astro.props;
 const currentPath = Astro.url.pathname;
 
-const siteUrl = 'https://soundsystemhardening.fr'\;
+const siteUrl = 'https://soundsystemhardening.fr';
 const defaultDescription = 'Wiki collectif : droits, opsec et résistance pour le mouvement free party. Loi RIPOST, sécurité numérique, stratégies juridiques.';
 const resolvedDescription = description || defaultDescription;
 const resolvedImage = ogImage || `${siteUrl}/SoundSystemHardening-logo.png`;
