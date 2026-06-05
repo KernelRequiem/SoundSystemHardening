@@ -1,0 +1,59 @@
+---
+interface Props {
+  headings?: Array<{ depth: number; slug: string; text: string }>;
+}
+
+const { headings = [] } = Astro.props;
+
+// Filter only h2 and h3
+const filteredHeadings = headings.filter(h => h.depth === 2 || h.depth === 3);
+---
+
+<nav id="toc" class="hidden lg:block fixed right-6 top-24 w-64 max-h-[calc(100vh-100px)] overflow-y-auto">
+  <div class="text-[10px] font-mono font-bold uppercase tracking-[0.15em] text-neon-green mb-3 border-b border-neon-green/30 pb-2">
+    ▸ Sur cette page
+  </div>
+  
+  <ul class="space-y-1 text-[13px] font-mono">
+    {filteredHeadings.map((heading) => (
+      <li style={{ paddingLeft: `${(heading.depth - 2) * 12}px` }}>
+        <a 
+          href={`#${heading.slug}`}
+          class="text-dedsec-muted hover:text-neon-cyan transition-colors block py-1 border-l-2 border-transparent hover:border-neon-cyan pl-2"
+        >
+          {heading.text}
+        </a>
+      </li>
+    ))}
+  </ul>
+  
+  {filteredHeadings.length === 0 && (
+    <div class="text-[10px] text-dedsec-muted/50">Aucun titre</div>
+  )}
+</nav>
+
+<style>
+  #toc a.active {
+    @apply text-neon-cyan border-neon-cyan;
+  }
+</style>
+
+<script>
+  // Auto-highlight current heading on scroll
+  document.addEventListener('DOMContentLoaded', () => {
+    const headings = document.querySelectorAll('h2, h3');
+    const tocLinks = document.querySelectorAll('#toc a');
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          tocLinks.forEach(link => link.classList.remove('active'));
+          const activeLink = document.querySelector(`#toc a[href="#${entry.target.id}"]`);
+          if (activeLink) activeLink.classList.add('active');
+        }
+      });
+    }, { rootMargin: '0px 0px -80% 0px' });
+
+    headings.forEach(h => observer.observe(h));
+  });
+</script>

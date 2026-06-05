@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import SpeedInsights from "@vercel/speed-insights/astro"
+import TableOfContents from '../components/TableOfContents.astro';
 
 interface Props {
   title: string;
@@ -371,7 +372,7 @@ const navigation = [
         <!-- Content -->
         <article class="px-6 py-8 lg:px-12 lg:py-12 max-w-4xl mx-auto prose-dedsec animate-fade-in">
           <slot />
-        </article>
+        </article><TableOfContents />
 
         <!-- Footer -->
         <footer class="border-t border-dedsec-border mt-16 px-6 lg:px-12 py-8">
