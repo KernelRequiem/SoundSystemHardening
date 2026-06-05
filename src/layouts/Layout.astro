@@ -139,6 +139,27 @@ const navigation = [
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="SSHardening" />
+    <style>
+      /* Animation pin carte dans la topbar */
+      .carte-pin-idle {
+        display: inline-flex;
+        animation: pin-pulse 2.5s ease-in-out infinite;
+        transform-origin: center bottom;
+      }
+      @keyframes pin-pulse {
+        0%, 100% { transform: translateY(0) scale(1); opacity: 1; }
+        50%       { transform: translateY(-2px) scale(1.15); opacity: .7; }
+      }
+      .carte-pin-active {
+        display: inline-flex;
+        filter: drop-shadow(0 0 4px #00ff9f);
+        animation: pin-glow 1.2s ease-in-out infinite alternate;
+      }
+      @keyframes pin-glow {
+        from { filter: drop-shadow(0 0 2px #00ff9f); }
+        to   { filter: drop-shadow(0 0 8px #00ff9f) drop-shadow(0 0 14px #00ff9f66); }
+      }
+    </style>
   </head>
   <body>
     <SpeedInsights />
@@ -217,7 +238,7 @@ const navigation = [
       <div id="overlay" class="fixed inset-0 bg-black/80 z-30 hidden"></div>
       <main class="flex-1 min-w-0">
         <div class="sticky top-0 z-20 bg-dedsec-black/80 backdrop-blur-md border-b border-dedsec-border">
-          <div class="px-6 py-3 flex items-center justify-between">
+          <div class="px-6 py-3 flex items-center justify-between relative">
             <div class="flex items-center gap-2 text-xs font-mono text-dedsec-muted ml-12">
               <a href="/" class="text-neon-green hover:text-neon-cyan transition-colors no-underline">◆</a>
               <span class="text-dedsec-muted">/</span>
@@ -228,6 +249,25 @@ const navigation = [
               <span class="text-dedsec-muted">/</span>
               <span class="text-dedsec-text truncate max-w-xs">{title}</span>
             </div>
+
+            <!-- Bouton CARTE centré -->
+            <a
+              href="/carte"
+              class={`carte-nav-btn absolute left-1/2 -translate-x-1/2 flex items-center gap-2 px-3 py-1.5 font-mono text-[10px] tracking-widest border transition-all no-underline ${
+                currentPath === '/carte'
+                  ? 'border-neon-green text-neon-green bg-neon-green/10 shadow-[0_0_12px_rgba(0,255,159,.3)]'
+                  : 'border-dedsec-border text-dedsec-muted hover:border-neon-green hover:text-neon-green hover:shadow-[0_0_10px_rgba(0,255,159,.2)]'
+              }`}
+              title="Carte de la répression"
+            >
+              <span class={currentPath === '/carte' ? 'carte-pin-active' : 'carte-pin-idle'}>
+                <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor" aria-hidden="true">
+                  <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                </svg>
+              </span>
+              CARTE
+            </a>
+
             <a href="/" class="fixed right-6 top-12 z-50 no-underline">
               <div class="w-40 h-40 rounded-full border-3 border-neon-green overflow-hidden shadow-[0_0_25px_#00ff9f77] hover:shadow-[0_0_50px_#00ff9f] transition-all duration-300 hover:scale-105">
                 <img src="/SoundSystemHardening-logo.png" alt="SoundSystem Hardening" class="w-full h-full object-cover" />
