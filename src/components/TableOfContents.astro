@@ -9,32 +9,25 @@ const { headings = [] } = Astro.props;
 const filteredHeadings = headings.filter(h => h.depth === 2 || h.depth === 3);
 ---
 
-<nav id="toc" class="hidden lg:block fixed right-6 top-96 w-64 max-h-[calc(100vh-100px)] overflow-y-auto">
-  <div class="text-[10px] font-mono font-bold uppercase tracking-[0.15em] text-neon-green mb-3 border-b border-neon-green/30 pb-2">
-    ▸ Sur cette page
+<nav id="toc" class="hidden lg:flex fixed right-12 top-1/2 -translate-y-1/2 z-40 flex-col items-center gap-4">
+  <div class="text-[9px] font-mono font-bold uppercase tracking-[0.15em] text-neon-green whitespace-nowrap">
+    ▸ SCROLL
   </div>
   
-  <ul class="space-y-1 text-[13px] font-mono">
+  <div class="flex flex-col gap-3">
     {filteredHeadings.map((heading) => (
-      <li style={{ paddingLeft: `${(heading.depth - 2) * 12}px` }}>
-        <a 
-          href={`#${heading.slug}`}
-          class="text-dedsec-muted hover:text-neon-cyan transition-colors block py-1 border-l-2 border-transparent hover:border-neon-cyan pl-2"
-        >
-          {heading.text}
-        </a>
-      </li>
+      <a 
+        href={`#${heading.slug}`}
+        class="w-3 h-3 rounded-full border-2 border-dedsec-muted hover:border-neon-cyan hover:bg-neon-cyan/20 transition-all"
+        title={heading.text}
+      />
     ))}
-  </ul>
-  
-  {filteredHeadings.length === 0 && (
-    <div class="text-[10px] text-dedsec-muted/50">Aucun titre</div>
-  )}
+  </div>
 </nav>
 
 <style>
   #toc a.active {
-    @apply text-neon-cyan border-neon-cyan;
+    @apply border-neon-cyan bg-neon-cyan/30;
   }
 </style>
 
