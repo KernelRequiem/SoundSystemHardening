@@ -293,7 +293,7 @@ const navigation = [
                   ) : (
                     
                       href={link.href}
-                      class={`sidebar-link ${currentPath === link.href ? 'active' : ''}`}
+                      class={`sidebar-link ${currentPath === link.hrclass={['sidebar-link', currentPath === link.href ? 'active' : ''].join(' ')}ef ? 'active' : ''}`}
                     >
                       <span class="text-neon-cyan/50 mr-1 text-xs">{link.emoji}</span>
                       {link.label}
