@@ -4,6 +4,20 @@
 @tailwind components;
 @tailwind utilities;
 
+/*
+  PALETTE ACTIVE (règle stricte) :
+  ─────────────────────────────────
+  #00ff9f  neon-green  → accent principal : h1, code, bullets, strong, états actifs
+  #00d9ff  neon-cyan   → liens uniquement + info-box
+  #e8e8f0  dedsec-text → corps du texte, h2, h3
+  #7a7a8a  dedsec-muted → h4, labels, metadata
+  #ff4444              → avertissements seulement (jamais dans la typo courante)
+  ─────────────────────────────────
+  Tout le reste (neon-pink, neon-orange, neon-yellow, neon-purple)
+  est réservé aux composants spécifiques (carte, badges).
+  Il ne doit jamais apparaître dans les titres ou le corps de texte.
+*/
+
 @layer base {
   :root {
     --color-bg: #0a0a0f;
@@ -26,15 +40,15 @@
 
   body {
     @apply bg-dedsec-black text-dedsec-text font-mono;
-    background-image: 
-      radial-gradient(circle at 20% 30%, rgba(0, 255, 159, 0.03) 0%, transparent 50%),
-      radial-gradient(circle at 80% 70%, rgba(255, 0, 110, 0.03) 0%, transparent 50%),
+    /* Un seul gradient subtil — le rose retiré */
+    background-image:
+      radial-gradient(circle at 20% 30%, rgba(0, 255, 159, 0.025) 0%, transparent 50%),
       linear-gradient(180deg, #0a0a0f 0%, #08080c 100%);
     background-attachment: fixed;
     min-height: 100vh;
   }
 
-  /* Scan line effect */
+  /* Scan line — conservé, c'est l'identité du site */
   body::before {
     content: '';
     position: fixed;
@@ -49,18 +63,25 @@
     z-index: 100;
   }
 
-  /* Grid background subtle */
+  /* Grille de fond — conservée */
   body::after {
     content: '';
     position: fixed;
     inset: 0;
-    background-image: 
+    background-image:
       linear-gradient(rgba(0, 255, 159, 0.02) 1px, transparent 1px),
       linear-gradient(90deg, rgba(0, 255, 159, 0.02) 1px, transparent 1px);
     background-size: 50px 50px;
     pointer-events: none;
     z-index: -1;
   }
+
+  /* ─── TITRES ───────────────────────────────────────────
+     h1 seul est coloré (neon-green) — c'est le signal visuel principal
+     h2 → texte blanc, séparé par un filet vert très discret
+     h3 → texte blanc, aucun ornement
+     h4 → gris, compact, rôle de label
+  ───────────────────────────────────────────────────── */
 
   h1 {
     @apply font-display text-4xl font-bold text-neon-green mb-6 mt-4;
@@ -69,8 +90,8 @@
   }
 
   h2 {
-    @apply font-display text-2xl font-bold text-neon-cyan mb-4 mt-8;
-    border-bottom: 1px solid rgba(0, 217, 255, 0.2);
+    @apply font-display text-2xl font-bold text-dedsec-text mb-4 mt-8;
+    border-bottom: 1px solid rgba(0, 255, 159, 0.15);
     padding-bottom: 0.5rem;
     letter-spacing: -0.01em;
   }
@@ -80,13 +101,18 @@
   }
 
   h4 {
-    @apply font-display text-lg font-semibold text-neon-pink mb-2 mt-4;
+    @apply font-display text-base font-semibold text-dedsec-muted mb-2 mt-4 uppercase tracking-widest;
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
   }
+
+  /* ─── TYPOGRAPHIE COURANTE ───────────────────────── */
 
   p {
     @apply text-dedsec-text leading-relaxed mb-4;
   }
 
+  /* Liens : cyan → vert au hover — seul endroit où cyan est utilisé */
   a {
     @apply text-neon-cyan transition-colors duration-200;
     text-decoration: none;
@@ -112,20 +138,35 @@
     width: 100%;
   }
 
+  /* strong → vert (met en valeur sans ajouter une couleur supplémentaire) */
+  strong {
+    @apply text-neon-green font-bold;
+  }
+
+  /* em → blanc italique uniquement, pas de couleur */
+  em {
+    @apply text-dedsec-text not-italic;
+    font-style: italic;
+  }
+
+  /* ─── CODE ───────────────────────────────────────── */
+
   code {
-    @apply font-mono text-sm text-neon-green bg-dedsec-gray px-1.5 py-0.5 rounded;
+    @apply font-mono text-sm text-neon-green bg-dedsec-gray px-1.5 py-0.5;
     border: 1px solid rgba(0, 255, 159, 0.2);
   }
 
   pre {
-    @apply bg-dedsec-darker p-4 rounded-lg overflow-x-auto my-4;
-    border: 1px solid rgba(0, 255, 159, 0.2);
-    box-shadow: 0 0 20px rgba(0, 255, 159, 0.05);
+    @apply bg-dedsec-darker p-4 overflow-x-auto my-4;
+    border: 1px solid rgba(0, 255, 159, 0.15);
+    box-shadow: 0 0 20px rgba(0, 255, 159, 0.04);
   }
 
   pre code {
     @apply bg-transparent border-0 p-0;
   }
+
+  /* ─── LISTES ─────────────────────────────────────── */
 
   ul, ol {
     @apply ml-6 mb-4 space-y-2;
@@ -152,14 +193,24 @@
     counter-increment: item;
   }
 
+  /* compteurs ol → vert (était rose) */
   ol li::before {
     content: counter(item, decimal-leading-zero);
-    @apply absolute left-0 text-neon-pink font-bold text-sm;
+    @apply absolute left-0 font-bold text-sm;
+    color: rgba(0, 255, 159, 0.6);
   }
 
+  /* ─── BLOCKQUOTE ─────────────────────────────────── */
+
+  /* filet vert discret au lieu du rose */
   blockquote {
-    @apply border-l-2 border-neon-pink pl-4 py-2 my-4 bg-dedsec-gray/30 italic;
+    @apply border-l-2 pl-4 py-2 my-4 italic;
+    border-color: rgba(0, 255, 159, 0.3);
+    background: rgba(0, 255, 159, 0.03);
+    color: #b0b0c0;
   }
+
+  /* ─── TABLES ─────────────────────────────────────── */
 
   table {
     @apply w-full border-collapse my-6 font-mono text-sm;
@@ -177,58 +228,43 @@
     @apply bg-dedsec-gray/20;
   }
 
+  /* ─── DIVERS ─────────────────────────────────────── */
+
   hr {
     @apply border-0 my-8;
     height: 1px;
-    background: linear-gradient(90deg, transparent, #00ff9f, transparent);
+    background: linear-gradient(90deg, transparent, rgba(0, 255, 159, 0.3), transparent);
   }
 
   ::selection {
     @apply bg-neon-green text-dedsec-black;
   }
 
-  ::-webkit-scrollbar {
-    width: 10px;
-    height: 10px;
-  }
-
-  ::-webkit-scrollbar-track {
-    @apply bg-dedsec-darker;
-  }
-
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { @apply bg-dedsec-darker; }
   ::-webkit-scrollbar-thumb {
-    @apply bg-dedsec-border rounded-full;
+    @apply bg-dedsec-border;
+    border-radius: 9999px;
     border: 2px solid #08080c;
   }
-
-  ::-webkit-scrollbar-thumb:hover {
-    @apply bg-neon-green;
-  }
-
-  strong {
-    @apply text-neon-green font-bold;
-  }
-
-  em {
-    @apply text-neon-pink not-italic;
-  }
+  ::-webkit-scrollbar-thumb:hover { @apply bg-neon-green; }
 }
 
 @layer components {
 
   /* Card neon */
   .card-neon {
-    @apply bg-dedsec-gray/50 border border-dedsec-border rounded-lg p-6 transition-all duration-300;
+    @apply bg-dedsec-gray/50 border border-dedsec-border p-6 transition-all duration-300;
     backdrop-filter: blur(10px);
   }
 
   .card-neon:hover {
-    @apply border-neon-green/50;
-    box-shadow: 0 0 30px rgba(0, 255, 159, 0.15);
+    border-color: rgba(0, 255, 159, 0.4);
+    box-shadow: 0 0 24px rgba(0, 255, 159, 0.1);
     transform: translateY(-2px);
   }
 
-  /* Button */
+  /* Bouton principal */
   .btn-neon {
     @apply inline-flex items-center px-6 py-3 bg-transparent border border-neon-green text-neon-green font-mono font-bold uppercase tracking-wider transition-all duration-300;
     clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
@@ -236,13 +272,14 @@
 
   .btn-neon:hover {
     @apply bg-neon-green text-dedsec-black;
-    box-shadow: 0 0 20px rgba(0, 255, 159, 0.5);
+    box-shadow: 0 0 20px rgba(0, 255, 159, 0.4);
   }
 
   /* Terminal */
   .terminal {
-    @apply bg-dedsec-darker border border-neon-green/30 rounded-lg p-4 font-mono;
-    box-shadow: inset 0 0 30px rgba(0, 255, 159, 0.05);
+    @apply bg-dedsec-darker border p-4 font-mono;
+    border-color: rgba(0, 255, 159, 0.25);
+    box-shadow: inset 0 0 30px rgba(0, 255, 159, 0.04);
   }
 
   .terminal::before {
@@ -255,7 +292,7 @@
     @apply font-mono text-xs leading-tight whitespace-pre text-neon-green;
   }
 
-  /* Glitch text */
+  /* Glitch (conservé pour les éléments décoratifs, pas pour le contenu) */
   .glitch-text {
     position: relative;
     @apply text-neon-green font-bold;
@@ -266,10 +303,8 @@
   .glitch-text::after {
     content: attr(data-text);
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
   }
 
   .glitch-text::before {
@@ -284,7 +319,8 @@
     z-index: -2;
   }
 
-  /* Sidebar section title */
+  /* ─── SIDEBAR ─────────────────────────────────────── */
+
   .sidebar-section-title {
     @apply px-3 pt-4 pb-1 flex items-center justify-between cursor-pointer select-none;
   }
@@ -309,7 +345,6 @@
     @apply text-neon-green;
   }
 
-  /* Sidebar section links (accordéon) */
   .sidebar-section-links {
     @apply overflow-hidden transition-all duration-300;
     max-height: 0;
@@ -319,50 +354,59 @@
     max-height: 500px;
   }
 
-  /* Sidebar link */
   .sidebar-link {
     @apply flex items-center gap-2 px-4 py-2.5 text-sm font-mono text-dedsec-muted
-           rounded-md mx-2 mb-0.5
-           border border-transparent
+           mx-2 mb-0.5 border border-transparent
            transition-all duration-200 cursor-pointer no-underline;
   }
 
   .sidebar-link:hover {
     @apply text-neon-green bg-neon-green/10 border-neon-green/30;
-    box-shadow: 0 0 12px rgba(0, 255, 159, 0.13);
+    box-shadow: 0 0 12px rgba(0, 255, 159, 0.1);
     transform: translateX(4px);
   }
 
   .sidebar-link.active {
     @apply text-neon-green bg-neon-green/15 border-neon-green/50;
-    box-shadow: 0 0 15px rgba(0, 255, 159, 0.2);
+    box-shadow: 0 0 15px rgba(0, 255, 159, 0.15);
   }
 
-  /* Prose dedsec */
+  /* ─── PROSE ──────────────────────────────────────── */
+
   .prose-dedsec {
     @apply max-w-none;
   }
 
   .prose-dedsec img {
-    @apply rounded-lg border border-dedsec-border my-4;
+    @apply border border-dedsec-border my-4;
   }
 
-  /* Warning box */
+  /* Avertissement — rouge atténué, jamais rose vif */
   .warning-box {
-    @apply bg-neon-pink/10 border border-neon-pink/50 rounded-lg p-4 my-4;
+    @apply p-4 my-4;
+    background: rgba(255, 68, 68, 0.06);
+    border-left: 3px solid rgba(255, 68, 68, 0.5);
+    color: #c8c8d8;
   }
 
   .warning-box::before {
-    content: '⚠️ ';
+    content: '⚠ ';
+    color: rgba(255, 68, 68, 0.8);
+    font-weight: bold;
   }
 
-  /* Info box */
+  /* Information — cyan, distinct du rouge d'avertissement */
   .info-box {
-    @apply bg-neon-cyan/10 border border-neon-cyan/50 rounded-lg p-4 my-4;
+    @apply p-4 my-4;
+    background: rgba(0, 217, 255, 0.05);
+    border-left: 3px solid rgba(0, 217, 255, 0.35);
+    color: #c8c8d8;
   }
 
   .info-box::before {
-    content: 'ℹ️ ';
+    content: '▸ ';
+    color: rgba(0, 217, 255, 0.7);
+    font-weight: bold;
   }
 }
 
