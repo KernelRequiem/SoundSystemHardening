@@ -22,3 +22,8 @@
   from = "/api/report"
   to = "/.netlify/functions/report"
   status = 200
+
+[[redirects]]
+  from = "/api/terrain"
+  to = "/.netlify/functions/terrain"
+  status = 200
