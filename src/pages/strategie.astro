@@ -1,0 +1,233 @@
+---
+// src/pages/strategie.astro
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+  title="Stratégie & Feuille de route"
+  category="PROJET"
+  description="Objectifs à 12 mois pour SoundSystemHardening : couverture du wiki, recrutement de contributeurs, outils terrain. Transparence totale sur l'état actuel et ce qu'il manque."
+>
+
+  <h1>Stratégie — 12 mois</h1>
+  <p class="text-dedsec-muted text-sm font-mono tracking-widest uppercase mb-2">
+    ▸ Juin 2026 → Juin 2027
+  </p>
+  <p class="text-dedsec-muted text-sm font-mono mb-10">
+    Ce document est public. On ne cache pas où on en est ni ce qu'il manque.
+  </p>
+
+  <!-- CONTEXTE -->
+  <div class="warning-box mb-10">
+    <strong>Contexte d'urgence :</strong> la loi RIPOST a été adoptée par le Sénat le 26 mai 2026
+    (243 voix contre 33). Elle retourne à l'Assemblée nationale pour une deuxième lecture.
+    Organisation d'une free party = jusqu'à 2 ans de prison + 30 000 € d'amende. Participation =
+    6 mois de prison. Ce wiki est une réponse directe à cette criminalisation. Le temps compte.
+  </div>
+
+  <!-- ÉTAT ACTUEL -->
+  <h2>État actuel — juin 2026</h2>
+
+  <table>
+    <thead>
+      <tr><th>Indicateur</th><th>Valeur actuelle</th><th>Objectif 12 mois</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Pages wiki publiées</td>
+        <td><strong class="text-neon-cyan">48</strong></td>
+        <td>100+</td>
+      </tr>
+      <tr>
+        <td>Contributeurs actifs</td>
+        <td><strong class="text-neon-cyan">1</strong></td>
+        <td>15+</td>
+      </tr>
+      <tr>
+        <td>Incidents indexés sur la carte</td>
+        <td><strong class="text-neon-cyan">10</strong></td>
+        <td>80+</td>
+      </tr>
+      <tr>
+        <td>Langues disponibles</td>
+        <td><strong class="text-neon-cyan">1 (FR)</strong></td>
+        <td>2 (FR + EN)</td>
+      </tr>
+      <tr>
+        <td>Outils interactifs</td>
+        <td><strong class="text-neon-cyan">1 (carte)</strong></td>
+        <td>4 (carte, checklist, calculateur, PWA offline)</td>
+      </tr>
+      <tr>
+        <td>Pages critiques manquantes</td>
+        <td><strong class="text-neon-pink">7 identifiées</strong></td>
+        <td>0</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- PHASES -->
+  <h2>Les trois phases</h2>
+
+  <!-- PHASE 1 -->
+  <div class="card-neon mb-4 border-neon-pink/40">
+    <div class="flex items-center gap-3 mb-4">
+      <span class="text-neon-pink font-mono font-bold text-xs border border-neon-pink/40 px-2 py-1">PHASE 1</span>
+      <span class="text-neon-pink font-bold">Urgence — Combler les gaps critiques</span>
+      <span class="text-dedsec-muted font-mono text-xs ml-auto">Juin → Sept 2026</span>
+    </div>
+    <p class="text-sm text-dedsec-muted mb-4">
+      Avant que RIPOST ne soit définitivement adopté et appliqué, les pages les plus critiques
+      pour quelqu'un en situation d'urgence (GAV, saisie, interpellation) doivent exister.
+    </p>
+    <ul>
+      <li><strong>Templates de recours</strong> — 6 modèles prêts à utiliser (GAV, saisie abusive, AFD contestable, référé liberté, plainte violence, recours préfectoral)</li>
+      <li><strong>Autogestion légale</strong> — comment prouver l'absence d'organisateur, jurisprudence applicable</li>
+      <li><strong>Chaîne de preuves documentaire</strong> — comment documenter une violence policière pour qu'elle soit recevable en justice</li>
+      <li><strong>Checklist "Avant de partir"</strong> — outil interactif, utilisable offline</li>
+      <li><strong>Carte : 30+ incidents 2026</strong> — alimentée par les signalements communautaires</li>
+    </ul>
+  </div>
+
+  <!-- PHASE 2 -->
+  <div class="card-neon mb-4 border-neon-cyan/40">
+    <div class="flex items-center gap-3 mb-4">
+      <span class="text-neon-cyan font-mono font-bold text-xs border border-neon-cyan/40 px-2 py-1">PHASE 2</span>
+      <span class="text-neon-cyan font-bold">Croissance — Recruter et structurer</span>
+      <span class="text-dedsec-muted font-mono text-xs ml-auto">Sept → Déc 2026</span>
+    </div>
+    <p class="text-sm text-dedsec-muted mb-4">
+      Un wiki tenu par une seule personne est fragile. La priorité de cette phase :
+      recruter au moins 10 contributeurs réguliers et établir un processus de modération
+      qui fonctionne sans dépendre d'une seule personne.
+    </p>
+    <ul>
+      <li><strong>10+ contributeurs actifs</strong> — issus du droit, de la cybersécurité, du terrain militant</li>
+      <li><strong>Calculateur d'exposition RIPOST</strong> — outil interactif : profil × lieu × taille → risque légal + contre-mesures</li>
+      <li><strong>PWA offline</strong> — les pages critiques fonctionnent sans connexion lors d'un événement</li>
+      <li><strong>Premiers contenus EN</strong> — traduction des pages urgence + RIPOST pour les collectifs européens</li>
+      <li><strong>Flux RSS actif</strong> — abonnement aux mises à jour sans revenir sur le site</li>
+    </ul>
+  </div>
+
+  <!-- PHASE 3 -->
+  <div class="card-neon mb-8 border-neon-green/40">
+    <div class="flex items-center gap-3 mb-4">
+      <span class="text-neon-green font-mono font-bold text-xs border border-neon-green/40 px-2 py-1">PHASE 3</span>
+      <span class="text-neon-green font-bold">Durabilité — Indépendance et portée</span>
+      <span class="text-dedsec-muted font-mono text-xs ml-auto">Jan → Juin 2027</span>
+    </div>
+    <p class="text-sm text-dedsec-muted mb-4">
+      Le wiki ne doit pas dépendre d'un hébergeur unique ni d'un cercle de 3 personnes.
+      Cette phase ancre la résilience à long terme.
+    </p>
+    <ul>
+      <li><strong>100+ pages</strong> — couverture complète des 9 sections de navigation</li>
+      <li><strong>15+ contributeurs dans 3+ pays</strong> — réseau EU (FR, BE, DE, NL, UK)</li>
+      <li><strong>Mirror .onion actif</strong> — copie Tor du wiki, inaccessible au blocage DNS</li>
+      <li><strong>Procédure de succession</strong> — le wiki peut continuer sans aucun membre actuel</li>
+      <li><strong>80+ incidents carte</strong> — base documentaire de référence pour avocats et journalistes</li>
+    </ul>
+  </div>
+
+  <!-- CE QU'ON CHERCHE -->
+  <h2>Les profils qu'on cherche</h2>
+
+  <p>
+    On n'a pas besoin de monde pour tout faire en même temps. On a besoin des bonnes
+    compétences sur les bons sujets. Voici précisément ce qui nous manque.
+  </p>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-6">
+
+    <div class="card-neon border-neon-pink/40">
+      <div class="text-neon-pink font-mono font-bold text-sm mb-2">⚖️ JURISTE / ÉTUDIANT DROIT</div>
+      <p class="text-xs text-dedsec-muted mb-3">Besoin immédiat. Priorité absolue.</p>
+      <ul class="text-xs space-y-1">
+        <li>Vérifier et corriger les pages Droits & Libertés</li>
+        <li>Rédiger les 6 templates de recours</li>
+        <li>Compiler les jurisprudences exploitables</li>
+        <li>Analyser le texte final de RIPOST article par article</li>
+      </ul>
+    </div>
+
+    <div class="card-neon border-neon-cyan/40">
+      <div class="text-neon-cyan font-mono font-bold text-sm mb-2">💻 DÉVELOPPEUR FRONT / FULL</div>
+      <p class="text-xs text-dedsec-muted mb-3">Stack : Astro 4 + Tailwind. Accessible sans expérience Astro.</p>
+      <ul class="text-xs space-y-1">
+        <li>Implémenter le service worker (PWA offline)</li>
+        <li>Construire le calculateur d'exposition RIPOST</li>
+        <li>Générer le flux RSS depuis les pages Astro</li>
+        <li>Améliorer les performances mobile</li>
+      </ul>
+    </div>
+
+    <div class="card-neon border-neon-green/40">
+      <div class="text-neon-green font-mono font-bold text-sm mb-2">🔐 EXPERT OPSEC / CYBER</div>
+      <p class="text-xs text-dedsec-muted mb-3">Pour auditer et enrichir les pages techniques.</p>
+      <ul class="text-xs space-y-1">
+        <li>Audit des pages CYBER-OPSEC existantes</li>
+        <li>Corriger les imprécisions techniques</li>
+        <li>Rédiger les pages manquantes (threat model, mobile...)</li>
+        <li>Configurer le mirror .onion</li>
+      </ul>
+    </div>
+
+    <div class="card-neon border-neon-green/20">
+      <div class="text-neon-green font-mono font-bold text-sm mb-2">✊ ACTIVISTE TERRAIN</div>
+      <p class="text-xs text-dedsec-muted mb-3">Expérience vécue, anonymisée.</p>
+      <ul class="text-xs space-y-1">
+        <li>Documenter des cas de répression pour la carte</li>
+        <li>Valider les guides pratiques par l'expérience</li>
+        <li>Identifier les angles morts du wiki</li>
+        <li>Diffuser le wiki dans les réseaux free party</li>
+      </ul>
+    </div>
+
+    <div class="card-neon border-neon-cyan/20">
+      <div class="text-neon-cyan font-mono font-bold text-sm mb-2">🌍 TRADUCTEUR EN / DE / NL</div>
+      <p class="text-xs text-dedsec-muted mb-3">Pour les collectifs européens touchés par des lois similaires.</p>
+      <ul class="text-xs space-y-1">
+        <li>Traduire les pages Urgence immédiate + RIPOST en anglais</li>
+        <li>Adapter le contenu opsec pour d'autres juridictions</li>
+        <li>Connecter avec les wikis équivalents en Europe</li>
+      </ul>
+    </div>
+
+    <div class="card-neon border-neon-pink/20">
+      <div class="text-neon-pink font-mono font-bold text-sm mb-2">📝 RÉDACTEUR / DOCUMENTARISTE</div>
+      <p class="text-xs text-dedsec-muted mb-3">Pour enrichir le contenu éditorial.</p>
+      <ul class="text-xs space-y-1">
+        <li>Pages de veille législative (suivi navette parlementaire)</li>
+        <li>Chronologie détaillée des événements répressifs</li>
+        <li>Pages histoire & culture manquantes</li>
+        <li>Interviews / témoignages anonymisés</li>
+      </ul>
+    </div>
+
+  </div>
+
+  <!-- CTA -->
+  <div class="info-box mb-8">
+    <strong>Pas besoin d'être expert.</strong> La première contribution peut être aussi simple que
+    corriger une phrase incorrecte, signaler un lien mort, ou ajouter une source manquante.
+    Le processus est documenté sur la page <a href="/contribuer">Contribuer</a>.
+    Anonymat respecté. Zéro compte requis pour une issue GitHub.
+  </div>
+
+  <div class="flex flex-wrap gap-4">
+    <a href="/contribuer" class="btn-neon no-underline after:hidden">
+      ▸ Rejoindre le projet
+    </a>
+    <a
+      href="https://github.com/KernelRequiem/SoundSystemHardening/issues"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="btn-neon no-underline after:hidden"
+      style="border-color:#00d9ff;color:#00d9ff"
+    >
+      ▸ Voir les tâches ouvertes
+    </a>
+  </div>
+
+</Layout>
