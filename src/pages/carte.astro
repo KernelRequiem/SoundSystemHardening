@@ -166,15 +166,23 @@ const TYPES = {
     function popupHTML(i) {
       const t = TYPES[i.type] || TYPES.autre;
       const d = new Date(i.date).toLocaleDateString('fr-FR');
+      const cout = i.cout_eur
+        ? '~' + (i.cout_eur / 1000000).toFixed(2).replace('.', ',') + ' M€'
+        : i.effectifs ? '? (' + i.effectifs + ' agents déployés)' : null;
       return `
         <span class="pop-type" style="background:${t.color}">${t.label.toUpperCase()}</span>
         <div class="pop-title">${i.titre}</div>
         <div class="pop-date">▸ ${i.lieu} // ${d}</div>
         <div class="pop-desc">${i.desc || ''}</div>
         ${i.bilan ? `<div class="pop-bilan">BILAN ▸ ${i.bilan}</div>` : ''}
-        <div class="pop-links">
-          ${i.source ? `<a href="${i.source}" target="_blank" rel="noopener">↗ SOURCE</a>` : ''}
-          ${i.wiki   ? `<a href="${i.wiki}">↗ FICHE WIKI</a>` : ''}
+        ${cout ? `<div class="pop-cout">COÛT EST. ▸ ${cout}</div>` : ''}
+        ${i.statut_juridique ? `<div class="pop-statut">${i.statut_juridique.toUpperCase()}</div>` : ''}
+        <div class="pop-actions">
+          <div class="pop-links">
+            ${i.source ? `<a href="${i.source}" target="_blank" rel="noopener">↗ SOURCE</a>` : ''}
+            ${i.wiki   ? `<a href="${i.wiki}">↗ WIKI</a>` : ''}
+          </div>
+          <button class="pop-briefing" onclick="openBriefing('${i.id}')">&#8853; BRIEFING</button>
         </div>`;
     }
 
@@ -217,6 +225,147 @@ const TYPES = {
     ySel.onchange = () => { yearFilter = ySel.value; render(); };
 
     render();
+
+    // ──────────────────────────────────────────────────────────────────
+    // REGISTRE + GÉNÉRATEUR DE BRIEFING
+    // ──────────────────────────────────────────────────────────────────
+    const _registry = {};
+    INCIDENTS.forEach(i => { _registry[i.id] = i; });
+
+    window.openBriefing = function(id) {
+      const i = _registry[id];
+      if (!i) return;
+      const win = window.open('', '_blank');
+      if (!win) { alert('Autorisez les popups pour générer le briefing.'); return; }
+      win.document.write(buildBriefingHTML(i));
+      win.document.close();
+    };
+
+    function esc(s) {
+      return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+    function nl2br(s) { return esc(s).replace(/\n/g,'<br>'); }
+    function row(label, val) {
+      if (!val) return '';
+      return `<div class="dr"><span class="dl">${label}</span><span class="dv">${esc(val)}</span></div>`;
+    }
+    function section(title, body) {
+      if (!body || !body.trim()) return '';
+      return `<section><h2>${title}</h2>${body}</section>`;
+    }
+
+    function buildBriefingHTML(i) {
+      const TLABELS = { charge:'Charge / intervention', blessure:'Blessure / mutilation',
+        saisie:'Saisie de matériel', gav:'GAV / interpellation',
+        interdiction:'Interdiction préfectorale', autre:'Autre' };
+      const dateEv  = i.date ? new Date(i.date).toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'}) : '';
+      const dateGen = new Date().toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric',hour:'2-digit',minute:'2-digit'});
+
+      // Section identification
+      const s1 = row('Lieu',i.lieu) + row('Date',dateEv) + row('Département',i.departement)
+        + row('Préfecture',i.prefecture) + row('Type de répression', TLABELS[i.type]||i.type)
+        + row('Type d\'opération',i.type_operation) + row('Réf. arrêté',i.ref_arrete)
+        + (i.url_arrete ? `<div class="dr"><span class="dl">Arrêté (lien)</span><span class="dv"><a href="${esc(i.url_arrete)}" target="_blank">${esc(i.url_arrete)}</a></span></div>` : '');
+
+      // Section description & bilan
+      const s2 = (i.desc ? `<p>${nl2br(i.desc)}</p>` : '')
+        + (i.bilan ? `<div class="hl-box">▸ Bilan documenté : <strong>${esc(i.bilan)}</strong></div>` : '')
+        + (i.source ? `<p class="meta">Source : <a href="${esc(i.source)}" target="_blank">${esc(i.source)}</a></p>` : '');
+
+      // Section moyens déployés
+      const moyensBody = row('Effectifs déployés', i.effectifs ? i.effectifs + ' agents' : null)
+        + row('Unités',i.unites)
+        + row('Durée intervention',i.duree_h ? i.duree_h + ' heures' : null)
+        + row('Hélicoptères',i.helicopteres ? i.helicopteres + ' appareil(s)' : null)
+        + row('Drones',i.drones ? i.drones + ' drone(s)' : null);
+      const s3 = moyensBody || '';
+
+      // Section coût estimé
+      let s4 = '';
+      if (i.cout_eur) {
+        const fmt = i.cout_eur.toLocaleString('fr-FR') + ' €';
+        s4 = `<div class="cout-box">
+          <div class="cout-total">${fmt}</div>
+          <div class="cout-label">Estimation conservatrice — deniers publics mobilisés</div>
+        </div>`;
+        if (i.cout_methodo) s4 += `<div class="legal-block"><p class="meta-title">▸ Méthodologie</p><p class="pre">${nl2br(i.cout_methodo)}</p></div>`;
+        if (i.source_cout) s4 += `<p class="meta">Source des données : ${esc(i.source_cout)}</p>`;
+        s4 += `<p class="meta avert">⚠️ Estimation basée sur des données budgétaires publiques. Non contractuelle. Vérifier avec les rapports officiels cités.</p>`;
+      }
+
+      // Section cadre juridique
+      const juri = row('Statut juridique',i.statut_juridique) + row('Recours engagés',i.recours)
+        + (i.jurisprudence ? `<div class="legal-block"><p class="meta-title">▸ Jurisprudence applicable</p><p class="pre">${nl2br(i.jurisprudence)}</p></div>` : '');
+      const s5 = juri || '';
+
+      // Sections failles / contre-mesures / arguments
+      const s6 = i.failles ? `<p class="pre">${nl2br(i.failles)}</p>` : '';
+      const s7 = i.contre_mesures ? `<p class="pre">${nl2br(i.contre_mesures)}</p>` : '';
+      const s8 = i.arguments ? `<p class="pre">${nl2br(i.arguments)}</p>` : '';
+
+      const css = `
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:Georgia,'Times New Roman',serif;color:#111;max-width:740px;margin:0 auto;padding:40px;line-height:1.6;font-size:13px}
+        .print-btn{margin-bottom:24px;padding:9px 20px;background:#111;color:#fff;border:none;cursor:pointer;font-family:monospace;font-size:11px;letter-spacing:1px}
+        .print-btn:hover{background:#333}
+        .brand{font-family:monospace;font-size:9px;color:#999;letter-spacing:1px;margin-bottom:6px}
+        .doc-title{font-size:22px;font-weight:bold;border-bottom:2px solid #111;padding-bottom:10px;margin-bottom:6px}
+        .doc-sub{font-family:monospace;font-size:9px;color:#999;margin-bottom:28px}
+        h2{font-family:monospace;font-size:9px;letter-spacing:2px;color:#666;text-transform:uppercase;border-bottom:1px solid #ddd;padding-bottom:3px;margin:28px 0 12px}
+        section{margin-bottom:4px}
+        p{margin-bottom:8px;font-size:13px}
+        .pre{white-space:pre-wrap;font-size:12px;line-height:1.7}
+        .dr{display:flex;gap:12px;margin-bottom:6px;font-size:12px}
+        .dl{font-family:monospace;color:#888;width:170px;flex-shrink:0;font-size:11px;padding-top:1px}
+        .dv{color:#111}
+        .hl-box{background:#f5f5f5;border-left:3px solid #111;padding:10px 14px;margin:12px 0;font-size:12px}
+        .cout-box{background:#fffbeb;border-left:4px solid #d97706;padding:12px 16px;margin:12px 0}
+        .cout-total{font-size:22px;font-weight:bold;font-family:monospace;color:#111}
+        .cout-label{font-size:11px;color:#888;margin-top:2px}
+        .legal-block{margin:12px 0}
+        .meta{font-size:11px;color:#888;margin-bottom:6px}
+        .meta-title{font-family:monospace;font-size:10px;color:#555;font-weight:bold;margin-bottom:4px}
+        .avert{color:#b45309}
+        a{color:#1a56db}
+        .footer{margin-top:40px;padding-top:16px;border-top:1px solid #ddd;font-size:10px;color:#aaa;line-height:1.7}
+        @media print{
+          .print-btn{display:none}
+          body{padding:0;max-width:100%}
+          @page{margin:2cm;size:A4}
+          h2{break-after:avoid}
+        }
+      `;
+
+      return `<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <title>Briefing — ${esc(i.titre)} — ${dateEv}</title>
+  <style>${css}</style>
+</head>
+<body>
+  <button class="print-btn" onclick="window.print()">&#8595; IMPRIMER / EXPORTER PDF &nbsp; (Ctrl+P)</button>
+  <div class="brand">SOUNDSYSTEMHARDENING.FR &nbsp;// BRIEFING OPÉRATIONNEL</div>
+  <div class="doc-title">${esc(i.titre)}</div>
+  <div class="doc-sub">Généré le ${dateGen} — Document factuel et sourcé — CC BY-SA 4.0</div>
+  ${section('01 &mdash; Identification',s1)}
+  ${section('02 &mdash; Description et bilan',s2)}
+  ${section('03 &mdash; Moyens déployés par l\'État',s3)}
+  ${section('04 &mdash; Coût estimé pour l\'État',s4)}
+  ${section('05 &mdash; Cadre juridique et statut',s5)}
+  ${section('06 &mdash; Failles identifiées',s6)}
+  ${section('07 &mdash; Contre-mesures documentées',s7)}
+  ${section('08 &mdash; Arguments de défense',s8)}
+  <div class="footer">
+    Document généré par SoundSystemHardening.fr —
+    <a href="https://soundsystemhardening.fr/securite">soundsystemhardening.fr/securite</a><br>
+    Licence CC BY-SA 4.0 — Contenu vérifiable et sourcé.<br>
+    Ce document est à usage informatif. Il ne constitue pas un avis juridique.
+    Consultez un avocat spécialisé pour tout recours.
+  </div>
+</body>
+</html>`;
+    }
 
     // ---- Modal signalement ----
     const modal       = document.getElementById('reportModal');
@@ -506,8 +655,24 @@ const TYPES = {
   .pop-date { font-size: 10px; color: #5a6472; letter-spacing: 1px; margin-bottom: 8px; }
   .pop-desc { font-size: 11px; color: #00ff9f; opacity: .85; margin-bottom: 8px; }
   .pop-bilan { font-size: 10px; color: #ff8a00; border-left: 2px solid #ff8a00; padding-left: 8px; margin-bottom: 8px; }
-  .pop-links { display: flex; gap: 10px; border-top: 1px solid #10151f; padding-top: 8px; }
+  .pop-links { display: flex; gap: 10px; }
   .pop-links a { color: #00d9ff; text-decoration: none; font-size: 10px; }
+  .pop-cout { font-size: 10px; color: #ffd400; font-family: 'JetBrains Mono', monospace; margin-bottom: 4px; letter-spacing: .5px; }
+  .pop-statut { font-size: 8px; color: #5a6472; letter-spacing: 1.5px; font-family: 'JetBrains Mono', monospace; margin-bottom: 8px; }
+  .pop-actions { display: flex; align-items: center; justify-content: space-between; border-top: 1px solid #10151f; padding-top: 8px; gap: 8px; }
+  .pop-briefing {
+    background: transparent;
+    border: 1px solid #00ff9f;
+    color: #00ff9f;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 1px;
+    padding: 4px 8px;
+    cursor: pointer;
+    transition: all .15s;
+    white-space: nowrap;
+  }
+  .pop-briefing:hover { background: #00ff9f; color: #05060a; }
 
   @media (max-width: 760px) {
     .carte-wrap { grid-template-columns: 1fr; grid-template-rows: auto 1fr; height: 100dvh; }
