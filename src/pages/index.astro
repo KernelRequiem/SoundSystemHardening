@@ -23,7 +23,7 @@ import Layout from '../layouts/Layout.astro';
 ███████║   ██║   ███████║   ██║   ███████╗██║ ╚═╝ ██║
 ╚══════╝   ╚═╝   ╚══════╝   ╚═╝   ╚══════╝╚═╝     ╚═╝
 
-<span style="color: #ff2020;">██╗  ██╗ █████╗ ██████╗ ██████╗ ███████╗███╗   ██╗██╗███╗   ██╗ ██████╗
+<span style="color:#ff2020">██╗  ██╗ █████╗ ██████╗ ██████╗ ███████╗███╗   ██╗██╗███╗   ██╗ ██████╗
 ██║  ██║██╔══██╗██╔══██╗██╔══██╗██╔════╝████╗  ██║██║████╗  ██║██╔════╝
 ███████║███████║██████╔╝██║  ██║█████╗  ██╔██╗ ██║██║██╔██╗ ██║██║  ███╗
 ██╔══██║██╔══██║██╔══██╗██║  ██║██╔══╝  ██║╚██╗██║██║██║╚██╗██║██║   ██║
@@ -42,7 +42,6 @@ import Layout from '../layouts/Layout.astro';
         <p class="font-mono font-bold text-xl text-neon-green text-center mb-8 leading-snug" style="text-shadow: 0 0 24px rgba(0,255,159,0.25)">
           Vous produisez maintenant des données exploitables.
         </p>
-
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-y-2 gap-x-10 mb-7 mx-auto max-w-2xl text-left">
           <div class="font-mono text-sm text-dedsec-muted"><span class="text-neon-green mr-2">▸</span>Infrastructure hardened d'autodéfense</div>
           <div class="font-mono text-sm text-dedsec-muted"><span class="text-neon-green mr-2">▸</span>Cartographie temps réel de la répression</div>
@@ -51,19 +50,17 @@ import Layout from '../layouts/Layout.astro';
           <div class="font-mono text-sm text-dedsec-muted"><span class="text-neon-green mr-2">▸</span>Documentation GAV et templates de recours</div>
           <div class="font-mono text-sm text-dedsec-muted"><span class="text-neon-green mr-2">▸</span>Évaluateur de terrain sécurisé</div>
         </div>
-
         <p class="font-mono text-xs text-dedsec-muted/50 text-center tracking-wider mb-7 border-y border-neon-green/10 py-3">
           Zéro base de données publique &nbsp;·&nbsp; Zéro tracking client
         </p>
-
         <p class="font-mono text-sm text-dedsec-muted/70 text-center italic">
           Conçu pour les collectifs qui transforment l'information en avantage tactique.
         </p>
       </div>
 
       <div class="flex flex-wrap gap-3 justify-center">
-        <a href="/wiki/Urgence-immédiate" class="btn-neon no-underline">🚨 URGENCE IMMED</a>
-        <a href="/wiki/Strategie-contre-ripost" class="btn-neon no-underline" style="border-color: #00d9ff; color: #00d9ff;">⚖️ CONTRE RIPOST</a>
+        <a href="/wiki/Urgence-immédiate" class="btn-neon no-underline">🚨 URGENCE</a>
+        <a href="/wiki/Strategie-contre-ripost" class="btn-neon no-underline" style="border-color:#00d9ff;color:#00d9ff">⚖️ CONTRE RIPOST</a>
         <a href="/terrain" class="btn-neon no-underline">🛰️ TERRAIN</a>
       </div>
     </div>
@@ -74,173 +71,230 @@ import Layout from '../layouts/Layout.astro';
     <div class="grid grid-cols-3 gap-4">
       <div class="card-neon text-center">
         <div class="text-3xl font-bold text-neon-green mb-1">55+</div>
-        <div class="text-xs text-dedsec-muted uppercase tracking-widest">Pages Wiki</div>
+        <div class="text-xs text-dedsec-muted uppercase tracking-widest">Pages wiki</div>
       </div>
       <div class="card-neon text-center">
-        <div class="text-3xl font-bold text-dedsec-text mb-1">10</div>
-        <div class="text-xs text-dedsec-muted uppercase tracking-widest">Incidents cartographiés</div>
+        <div class="text-3xl font-bold text-neon-green mb-1">10</div>
+        <div class="text-xs text-dedsec-muted uppercase tracking-widest">Incidents indexés</div>
       </div>
       <div class="card-neon text-center">
-        <div class="text-3xl font-bold text-neon-green mb-1">30+</div>
-        <div class="text-xs text-dedsec-muted uppercase tracking-widest">Ans de mouvement</div>
+        <div class="text-3xl font-bold text-neon-green mb-1">2026</div>
+        <div class="text-xs text-dedsec-muted uppercase tracking-widest">Loi RIPOST — résistance</div>
       </div>
     </div>
   </section>
 
-  <!-- NAVIGATION CARDS -->
+  <!-- MODULES ACTIFS -->
   <section class="mb-12">
-    <h2 class="mb-6">▸ PARCOURS D'UTILISATION</h2>
+    <h2 class="mb-6">▸ MODULES ACTIFS</h2>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <a href="/wiki/Urgence-immédiate" class="card-neon no-underline group">
-        <div class="text-2xl mb-2">🚨</div>
+
+      <a href="/wiki/Urgence-immédiate" class="card-neon no-underline group relative">
+        <span class="absolute top-3 right-3 font-mono text-[9px] tracking-widest" style="color:rgba(255,68,68,0.7)">CRITIQUE</span>
+        <div class="text-xl mb-2">🚨</div>
         <h3 class="text-dedsec-text mb-2 group-hover:text-neon-green transition-colors">Urgence immédiate</h3>
-        <p class="text-sm text-dedsec-muted">GAV, saisie, contrôle. Procédures à suivre maintenant.</p>
+        <p class="text-sm text-dedsec-muted">GAV, saisie, contrôle. Ce que vous faites dans les prochaines 10 minutes.</p>
       </a>
-      <a href="/wiki/Strategie-contre-ripost" class="card-neon no-underline group">
-        <div class="text-2xl mb-2">⚖️</div>
+
+      <a href="/wiki/Strategie-contre-ripost" class="card-neon no-underline group relative">
+        <span class="absolute top-3 right-3 font-mono text-[9px] tracking-widest text-neon-cyan/60">2026</span>
+        <div class="text-xl mb-2">⚖️</div>
         <h3 class="text-dedsec-text mb-2 group-hover:text-neon-green transition-colors">Contre RIPOST</h3>
-        <p class="text-sm text-dedsec-muted">Loi mai 2026 : 2 ans prison + 30K€. Comment contester.</p>
+        <p class="text-sm text-dedsec-muted">2 ans ferme pour les organisateurs. Décryptage article par article et contre-mesures.</p>
       </a>
-      <a href="/wiki/Sécurite-Numerique" class="card-neon no-underline group">
-        <div class="text-2xl mb-2">🔐</div>
-        <h3 class="text-dedsec-text mb-2 group-hover:text-neon-green transition-colors">Sécurité numérique</h3>
-        <p class="text-sm text-dedsec-muted">Signal, métadonnées, anonymisation. Les 4 règles critiques.</p>
-      </a>
-      <a href="/wiki/Modus-Operandi" class="card-neon no-underline group">
-        <div class="text-2xl mb-2">🎯</div>
-        <h3 class="text-dedsec-text mb-2 group-hover:text-neon-green transition-colors">Modus Operandi</h3>
-        <p class="text-sm text-dedsec-muted">Failles légales, zones grises, techniques de contournement.</p>
-      </a>
-      <a href="/terrain" class="card-neon no-underline group">
-        <div class="text-2xl mb-2">🛰️</div>
+
+      <a href="/terrain" class="card-neon no-underline group relative">
+        <span class="absolute top-3 right-3 font-mono text-[9px] tracking-widest text-neon-green/60">OUTIL</span>
+        <div class="text-xl mb-2">🛰️</div>
         <h3 class="text-dedsec-text mb-2 group-hover:text-neon-green transition-colors">Évaluateur de terrain</h3>
-        <p class="text-sm text-dedsec-muted">Score de risque en temps réel. Proxy sécurisé, coordonnées dégradées.</p>
+        <p class="text-sm text-dedsec-muted">Score de risque en temps réel. Proxy sécurisé, coordonnées dégradées à ~1 km.</p>
       </a>
-      <a href="/carte" class="card-neon no-underline group">
-        <div class="text-2xl mb-2">🗺️</div>
+
+      <a href="/wiki/Sécurite-Numerique" class="card-neon no-underline group relative">
+        <span class="absolute top-3 right-3 font-mono text-[9px] tracking-widest text-dedsec-muted/60">OPSEC</span>
+        <div class="text-xl mb-2">🔐</div>
+        <h3 class="text-dedsec-text mb-2 group-hover:text-neon-green transition-colors">Sécurité numérique</h3>
+        <p class="text-sm text-dedsec-muted">Signal, Tor, chiffrement. Les règles non-négociables avant un événement.</p>
+      </a>
+
+      <a href="/wiki/Modus-Operandi" class="card-neon no-underline group relative">
+        <span class="absolute top-3 right-3 font-mono text-[9px] tracking-widest text-dedsec-muted/60">TACTIQUE</span>
+        <div class="text-xl mb-2">🎯</div>
+        <h3 class="text-dedsec-text mb-2 group-hover:text-neon-green transition-colors">Modus Operandi</h3>
+        <p class="text-sm text-dedsec-muted">Failles légales et opérationnelles. Là où l'État ne peut structurellement pas intervenir.</p>
+      </a>
+
+      <a href="/carte" class="card-neon no-underline group relative">
+        <span class="absolute top-3 right-3 font-mono text-[9px] tracking-widest text-dedsec-muted/60">DONNÉES</span>
+        <div class="text-xl mb-2">🗺️</div>
         <h3 class="text-dedsec-text mb-2 group-hover:text-neon-green transition-colors">Carte de la répression</h3>
-        <p class="text-sm text-dedsec-muted">Index territorial des incidents — 1996 à aujourd'hui.</p>
+        <p class="text-sm text-dedsec-muted">Index territorial des incidents documentés — 1996 à aujourd'hui.</p>
       </a>
+
     </div>
   </section>
 
-  <!-- MANIFESTO -->
+  <!-- MANIFESTE -->
   <section class="mb-12">
-    <div class="relative mb-6 select-none">
-      <div class="absolute inset-0 bg-gradient-to-r from-neon-green/20 via-transparent to-neon-green/10 blur-2xl rounded-xl pointer-events-none"></div>
-      <div class="relative border border-neon-green/40 rounded-xl px-6 py-5 bg-dedsec-darker overflow-hidden">
-        <div class="absolute inset-0 opacity-5" style="background: repeating-linear-gradient(0deg, transparent, transparent 2px, #00ff9f 2px, #00ff9f 3px);"></div>
-        <div class="relative flex items-center gap-4">
-          <div class="shrink-0">
-            <div class="w-12 h-12 rounded border-2 border-neon-green flex items-center justify-center shadow-[0_0_20px_#00ff9f48]">
-              <span class="text-neon-green font-mono font-bold text-xl">M</span>
-            </div>
-          </div>
-          <div>
-            <div class="text-[10px] font-mono text-dedsec-muted uppercase tracking-[0.2em] mb-1">▸ FICHIER_OUVERT : manifesto.txt</div>
-            <h2 class="text-2xl font-display font-bold m-0 leading-tight">
-              <span class="text-neon-green">MANIFESTE</span>
-              <span class="text-dedsec-muted text-lg font-mono font-normal ml-2">// free party</span>
-            </h2>
-            <div class="text-xs text-dedsec-muted mt-1 font-mono">Ce que nous sommes · Ce que nous défendons · Pourquoi nous ne nous arrêterons pas</div>
-          </div>
-        </div>
+
+    <div class="mb-8">
+      <div class="font-mono text-[10px] text-dedsec-muted/50 tracking-[0.15em] mb-4">
+        ── FICHIER_OUVERT ──────────────────────────────── manifesto.txt ──
       </div>
+      <h2 class="text-neon-green text-2xl font-bold tracking-tight mb-2 mt-0 border-none pb-0">MANIFESTE</h2>
+      <p class="font-mono text-xs text-dedsec-muted tracking-widest">
+        Ce que nous sommes · Ce que nous défendons · Pourquoi nous ne nous arrêterons pas
+      </p>
     </div>
 
     <div class="space-y-2">
+
+      <!-- I. D'où nous venons -->
       <details class="group" open>
-        <summary class="flex items-center gap-3 px-5 py-4 bg-dedsec-darker border border-neon-green/30 rounded-lg cursor-pointer hover:border-neon-green transition-all list-none">
-          <span class="text-neon-green font-mono text-xs w-8 shrink-0">I.</span>
+        <summary class="flex items-center gap-3 px-5 py-4 bg-dedsec-darker border border-neon-green/25 cursor-pointer hover:border-neon-green/60 transition-all list-none">
+          <span class="text-neon-green font-mono text-xs w-6 shrink-0">I.</span>
           <span class="font-mono font-bold text-sm text-dedsec-text group-hover:text-neon-green transition-colors flex-1">D'où nous venons</span>
-          <span class="text-neon-green/50 font-mono text-xs transition-transform duration-200 group-open:rotate-90 shrink-0">▸</span>
+          <span class="text-neon-green/40 font-mono text-xs transition-transform duration-200 group-open:rotate-90 shrink-0">▸</span>
         </summary>
-        <div class="px-5 py-4 border border-t-0 border-neon-green/20 rounded-b-lg bg-dedsec-black/40 text-sm text-dedsec-muted leading-relaxed space-y-3">
-          <p>La fête libre a une dette envers les <span class="text-neon-cyan">sound systems jamaïcains</span> des années 1950 — musique sortie des clubs fermés pour les rues, les arrière-cours, ceux sans moyens d'entrer. Un acte de résistance intact aujourd'hui.</p>
-          <p>En 1994, le <strong class="text-dedsec-text">Criminal Justice Act</strong> criminalise les rassemblements à "musique répétitive". Spiral Tribe quitte l'Angleterre. <em>La répression n'a pas tué la free party. Elle l'a exportée.</em></p>
-          <p>En 2001, l'<strong class="text-dedsec-text">amendement Mariani</strong> impose la déclaration préalable. La free party entre dans le droit pour mieux être réprimée. Depuis, le mouvement s'est outillé.</p>
+        <div class="px-5 py-5 border border-t-0 border-neon-green/15 bg-dedsec-black/40 text-sm text-dedsec-muted leading-relaxed space-y-3">
+          <p>Jamaïque, années 1950. Les sound systems sortent la musique des clubs fermés et la portent dans les rues, les cours, les terrains vagues. Quand on n'a pas les moyens d'entrer, on construit sa propre scène.</p>
+          <p>Angleterre, 1994. Le <strong class="text-dedsec-text">Criminal Justice Act</strong> criminalise les rassemblements à musique répétitive. Spiral Tribe quitte le pays. <em>La répression n'a pas tué la free party — elle l'a exportée sur le continent.</em></p>
+          <p>France, 2001. L'<strong class="text-dedsec-text">amendement Mariani</strong> impose la déclaration préalable. La free party entre dans le droit pour mieux être réprimée. France, 2026 : la loi RIPOST ajoute 2 ans de prison. À chaque vague répressive, le mouvement s'est outillé. <strong class="text-neon-green">Ce wiki aussi.</strong></p>
         </div>
       </details>
 
+      <!-- II. Ce que nous sommes -->
       <details class="group">
-        <summary class="flex items-center gap-3 px-5 py-4 bg-dedsec-darker border border-neon-green/30 rounded-lg cursor-pointer hover:border-neon-green transition-all list-none">
-          <span class="text-neon-green font-mono text-xs w-8 shrink-0">II.</span>
+        <summary class="flex items-center gap-3 px-5 py-4 bg-dedsec-darker border border-neon-green/25 cursor-pointer hover:border-neon-green/60 transition-all list-none">
+          <span class="text-neon-green font-mono text-xs w-6 shrink-0">II.</span>
           <span class="font-mono font-bold text-sm text-dedsec-text group-hover:text-neon-green transition-colors flex-1">Ce que nous sommes</span>
-          <span class="text-neon-green/50 font-mono text-xs transition-transform duration-200 group-open:rotate-90 shrink-0">▸</span>
+          <span class="text-neon-green/40 font-mono text-xs transition-transform duration-200 group-open:rotate-90 shrink-0">▸</span>
         </summary>
-        <div class="px-5 py-4 border border-t-0 border-neon-green/20 rounded-b-lg bg-dedsec-black/40 text-sm text-dedsec-muted leading-relaxed space-y-3">
-          <p>Un mouvement de <strong class="text-neon-green">30 ans</strong>. Des espaces gratuits, sans sélection à l'entrée. Une organisation sans hiérarchie : des collectifs qui construisent leur son de leurs propres mains.</p>
-          <p>En 2024, la techno française inscrite au <span class="text-neon-cyan">patrimoine UNESCO</span>. L'État qui la récompense d'un côté la réprime de l'autre.</p>
-          <div class="grid grid-cols-2 gap-3 mt-2">
-            <div class="border-l-2 border-neon-green pl-3"><div class="text-neon-green text-xs font-bold mb-1">Bienveillance</div><div class="text-xs">Techno+, Freeform — RdR sans jugement</div></div>
-            <div class="border-l-2 border-neon-cyan pl-3"><div class="text-neon-cyan text-xs font-bold mb-1">Féminisme</div><div class="text-xs">Safer sex, protocoles violences</div></div>
-            <div class="border-l-2 border-dedsec-muted pl-3"><div class="text-dedsec-text text-xs font-bold mb-1">Anti-fascisme</div><div class="text-xs">Culture d'accueil, mobilisation</div></div>
-            <div class="border-l-2 border-neon-green pl-3"><div class="text-neon-green text-xs font-bold mb-1">Solidarité</div><div class="text-xs">FSJS — défense collective des saisies</div></div>
+        <div class="px-5 py-5 border border-t-0 border-neon-green/15 bg-dedsec-black/40 text-sm text-dedsec-muted leading-relaxed space-y-4">
+          <p>Un mouvement de <strong class="text-neon-green">30 ans</strong>. Des espaces gratuits, sans sélection à l'entrée, sans hiérarchie. Des collectifs qui construisent leur son de leurs propres mains, sur des terrains que personne d'autre ne revendique.</p>
+          <p>En 2024, la techno française est inscrite au <span class="text-neon-cyan">patrimoine culturel immatériel de l'UNESCO</span>. L'État qui la récompense d'un côté la criminalise de l'autre. Le paradoxe est la politique.</p>
+          <div class="grid grid-cols-2 gap-3 mt-2 pt-2 border-t border-neon-green/10">
+            <div class="border-l-2 border-neon-green/50 pl-3">
+              <div class="text-neon-green text-xs font-bold font-mono mb-1 tracking-wider">BIENVEILLANCE</div>
+              <div class="text-xs">Techno+, Freeform — réduction des risques sans jugement</div>
+            </div>
+            <div class="border-l-2 border-neon-cyan/50 pl-3">
+              <div class="text-neon-cyan text-xs font-bold font-mono mb-1 tracking-wider">FÉMINISME</div>
+              <div class="text-xs">Safer sex, protocoles contre les violences</div>
+            </div>
+            <div class="border-l-2 border-dedsec-muted/50 pl-3">
+              <div class="text-dedsec-text text-xs font-bold font-mono mb-1 tracking-wider">ANTI-FASCISME</div>
+              <div class="text-xs">Culture d'accueil inconditionnelle</div>
+            </div>
+            <div class="border-l-2 border-neon-green/50 pl-3">
+              <div class="text-neon-green text-xs font-bold font-mono mb-1 tracking-wider">SOLIDARITÉ</div>
+              <div class="text-xs">FSJS — défense collective face aux saisies</div>
+            </div>
           </div>
         </div>
       </details>
 
+      <!-- III. Ce que nous défendons -->
       <details class="group">
-        <summary class="flex items-center gap-3 px-5 py-4 bg-dedsec-darker border border-neon-green/30 rounded-lg cursor-pointer hover:border-neon-green transition-all list-none">
-          <span class="text-neon-green font-mono text-xs w-8 shrink-0">III.</span>
+        <summary class="flex items-center gap-3 px-5 py-4 bg-dedsec-darker border border-neon-green/25 cursor-pointer hover:border-neon-green/60 transition-all list-none">
+          <span class="text-neon-green font-mono text-xs w-6 shrink-0">III.</span>
           <span class="font-mono font-bold text-sm text-dedsec-text group-hover:text-neon-green transition-colors flex-1">Ce que nous défendons</span>
-          <span class="text-neon-green/50 font-mono text-xs transition-transform duration-200 group-open:rotate-90 shrink-0">▸</span>
+          <span class="text-neon-green/40 font-mono text-xs transition-transform duration-200 group-open:rotate-90 shrink-0">▸</span>
         </summary>
-        <div class="px-5 py-4 border border-t-0 border-neon-green/20 rounded-b-lg bg-dedsec-black/40 text-sm text-dedsec-muted leading-relaxed space-y-2">
-          <div class="flex gap-3"><span class="text-neon-green shrink-0">◆</span><span><strong class="text-dedsec-text">La liberté de rassemblement</strong> — Art. 11 CESDH. Ériger une free party en délit est une violation disproportionnée.</span></div>
-          <div class="flex gap-3"><span class="text-neon-green shrink-0">◆</span><span><strong class="text-dedsec-text">La gratuité comme refus du marché</strong> — L'État accepte la techno quand elle rapporte de la TVA. Il la réprime quand elle n'en rapporte pas.</span></div>
-          <div class="flex gap-3"><span class="text-neon-green shrink-0">◆</span><span><strong class="text-dedsec-text">L'autogestion</strong> — Le DIY n'est pas une contrainte économique. C'est une philosophie d'autonomie.</span></div>
-          <div class="flex gap-3"><span class="text-neon-green shrink-0">◆</span><span><strong class="text-dedsec-text">La réduction des risques</strong> — Le soin n'est jamais une infraction.</span></div>
-          <div class="flex gap-3"><span class="text-dedsec-muted shrink-0">◆</span><span><strong class="text-dedsec-text">La mémoire des morts</strong> — Steve Maia Caniço, Redon 2021, 2024. Ces morts sont le produit d'une politique.</span></div>
+        <div class="px-5 py-5 border border-t-0 border-neon-green/15 bg-dedsec-black/40 text-sm text-dedsec-muted leading-relaxed space-y-3">
+          <div class="flex gap-3">
+            <span class="text-neon-green shrink-0 mt-0.5">◆</span>
+            <span><strong class="text-dedsec-text">La liberté de rassemblement</strong> — Art. 11 CESDH. Ériger une free party en délit est une violation disproportionnée et documentable.</span>
+          </div>
+          <div class="flex gap-3">
+            <span class="text-neon-green shrink-0 mt-0.5">◆</span>
+            <span><strong class="text-dedsec-text">La gratuité comme refus du marché</strong> — L'État accepte la techno quand elle rapporte de la TVA. Il la réprime quand elle n'en rapporte pas. Ce n'est pas un hasard.</span>
+          </div>
+          <div class="flex gap-3">
+            <span class="text-neon-green shrink-0 mt-0.5">◆</span>
+            <span><strong class="text-dedsec-text">L'autogestion</strong> — Le DIY n'est pas une contrainte économique. C'est une philosophie d'autonomie qui ne demande pas de permission.</span>
+          </div>
+          <div class="flex gap-3">
+            <span class="text-neon-green shrink-0 mt-0.5">◆</span>
+            <span><strong class="text-dedsec-text">La réduction des risques</strong> — Le soin n'est jamais une infraction. Techno+ opère là où l'État ne va pas.</span>
+          </div>
+          <div class="flex gap-3 pl-3 border-l-2 mt-2 pt-1" style="border-color:rgba(255,68,68,0.35)">
+            <span><strong class="text-dedsec-text">La mémoire des morts</strong> — Steve Maia Caniço. Redon 2021. Carhaix 2025. Ces morts ne sont pas des accidents — ils sont le produit d'une politique de force maximale contre des rassemblements non-armés.</span>
+          </div>
         </div>
       </details>
 
+      <!-- IV. Ce que nous refusons -->
       <details class="group">
-        <summary class="flex items-center gap-3 px-5 py-4 bg-dedsec-darker border border-dedsec-border rounded-lg cursor-pointer hover:border-dedsec-text transition-all list-none">
-          <span class="text-dedsec-muted font-mono text-xs w-8 shrink-0">IV.</span>
-          <span class="font-mono font-bold text-sm text-dedsec-text group-hover:text-dedsec-text transition-colors flex-1">Ce que nous refusons</span>
-          <span class="text-dedsec-muted/50 font-mono text-xs transition-transform duration-200 group-open:rotate-90 shrink-0">▸</span>
+        <summary class="flex items-center gap-3 px-5 py-4 bg-dedsec-darker border cursor-pointer transition-all list-none" style="border-color:rgba(255,68,68,0.2)" onmouseover="this.style.borderColor='rgba(255,68,68,0.5)'" onmouseout="this.style.borderColor='rgba(255,68,68,0.2)'">
+          <span class="font-mono text-xs w-6 shrink-0" style="color:rgba(255,68,68,0.7)">IV.</span>
+          <span class="font-mono font-bold text-sm text-dedsec-text flex-1">Ce que nous refusons</span>
+          <span class="font-mono text-xs transition-transform duration-200 group-open:rotate-90 shrink-0" style="color:rgba(255,68,68,0.4)">▸</span>
         </summary>
-        <div class="px-5 py-4 border border-t-0 border-dedsec-border rounded-b-lg bg-dedsec-black/40 text-sm text-dedsec-muted leading-relaxed space-y-2">
-          <div class="flex gap-3"><span class="text-dedsec-muted shrink-0">✕</span><span><strong class="text-dedsec-text">La criminalisation de la présence</strong> — Danser n'est pas un crime.</span></div>
-          <div class="flex gap-3"><span class="text-dedsec-muted shrink-0">✕</span><span><strong class="text-dedsec-text">L'amalgame avec le crime organisé</strong> — Les infractions sont déjà réprimées par le droit commun.</span></div>
-          <div class="flex gap-3"><span class="text-dedsec-muted shrink-0">✕</span><span><strong class="text-dedsec-text">La répression préventive</strong> — Les arrêtés couvrant des départements entiers sont incompatibles avec l'État de droit.</span></div>
-          <div class="flex gap-3"><span class="text-dedsec-muted shrink-0">✕</span><span><strong class="text-dedsec-text">L'institutionnalisation forcée</strong> — La techno payante et la free party, c'est le même mouvement.</span></div>
+        <div class="px-5 py-5 border border-t-0 bg-dedsec-black/40 text-sm text-dedsec-muted leading-relaxed space-y-3" style="border-color:rgba(255,68,68,0.12);background:rgba(255,68,68,0.03)">
+          <div class="flex gap-3">
+            <span class="shrink-0 mt-0.5 font-bold" style="color:rgba(255,68,68,0.6)">✕</span>
+            <span><strong class="text-dedsec-text">La criminalisation de la présence</strong> — Danser n'est pas un crime. La loi RIPOST en fait un délit passible de 6 mois de prison. C'est disproportionné et contestable.</span>
+          </div>
+          <div class="flex gap-3">
+            <span class="shrink-0 mt-0.5 font-bold" style="color:rgba(255,68,68,0.6)">✕</span>
+            <span><strong class="text-dedsec-text">L'amalgame avec le crime organisé</strong> — Les infractions réelles (stupéfiants, violence) sont déjà réprimées par le droit commun. La répression des free parties en tant que telles est idéologique, pas sécuritaire.</span>
+          </div>
+          <div class="flex gap-3">
+            <span class="shrink-0 mt-0.5 font-bold" style="color:rgba(255,68,68,0.6)">✕</span>
+            <span><strong class="text-dedsec-text">La répression préventive</strong> — Les arrêtés préfectoraux couvrant des départements entiers avant tout incident sont incompatibles avec l'État de droit et attaquables devant le tribunal administratif.</span>
+          </div>
+          <div class="flex gap-3">
+            <span class="shrink-0 mt-0.5 font-bold" style="color:rgba(255,68,68,0.6)">✕</span>
+            <span><strong class="text-dedsec-text">L'institutionnalisation forcée</strong> — On ne régle pas une free party en la déclarant. On ne protège pas la culture en la marchandisant. La forme gratuite et autogérée n'est pas une anomalie à corriger.</span>
+          </div>
         </div>
       </details>
 
+      <!-- V. Ce que nous exigeons -->
       <details class="group">
-        <summary class="flex items-center gap-3 px-5 py-4 bg-dedsec-darker border border-neon-cyan/30 rounded-lg cursor-pointer hover:border-neon-cyan transition-all list-none">
-          <span class="text-neon-cyan font-mono text-xs w-8 shrink-0">V.</span>
+        <summary class="flex items-center gap-3 px-5 py-4 bg-dedsec-darker border border-neon-cyan/25 cursor-pointer hover:border-neon-cyan/60 transition-all list-none">
+          <span class="text-neon-cyan font-mono text-xs w-6 shrink-0">V.</span>
           <span class="font-mono font-bold text-sm text-dedsec-text group-hover:text-neon-cyan transition-colors flex-1">Ce que nous exigeons</span>
-          <span class="text-neon-cyan/50 font-mono text-xs transition-transform duration-200 group-open:rotate-90 shrink-0">▸</span>
+          <span class="text-neon-cyan/40 font-mono text-xs transition-transform duration-200 group-open:rotate-90 shrink-0">▸</span>
         </summary>
-        <div class="px-5 py-4 border border-t-0 border-neon-cyan/20 rounded-b-lg bg-dedsec-black/40 text-sm text-dedsec-muted leading-relaxed space-y-2">
-          <div class="flex gap-3"><span class="text-neon-cyan font-mono text-xs shrink-0 mt-0.5">01.</span><span>La <strong class="text-dedsec-text">fin de l'exception répressive</strong> — Arrêt des délits de présence et de complicité par le soin.</span></div>
-          <div class="flex gap-3"><span class="text-neon-cyan font-mono text-xs shrink-0 mt-0.5">02.</span><span><strong class="text-dedsec-text">L'abrogation du régime Mariani</strong> — Il a produit de la clandestinité, pas de la sécurité.</span></div>
-          <div class="flex gap-3"><span class="text-neon-cyan font-mono text-xs shrink-0 mt-0.5">03.</span><span>La <strong class="text-dedsec-text">fin des interdictions préfectorales massives</strong> — Restrictions ciblées, motivées, délimitées.</span></div>
-          <div class="flex gap-3"><span class="text-neon-cyan font-mono text-xs shrink-0 mt-0.5">04.</span><span><strong class="text-dedsec-text">La désescalade</strong> — Médiation, accès aux secours garanti, pas de charges nocturnes.</span></div>
+        <div class="px-5 py-5 border border-t-0 border-neon-cyan/15 bg-dedsec-black/40 text-sm text-dedsec-muted leading-relaxed space-y-3">
+          <div class="flex gap-4">
+            <span class="text-neon-cyan font-mono text-xs shrink-0 mt-0.5 w-6">01.</span>
+            <span>La <strong class="text-dedsec-text">fin de l'exception répressive</strong> — Arrêt des délits de présence et de complicité par le soin. Le personnel de réduction des risques ne peut pas être poursuivi pour exercer sa mission.</span>
+          </div>
+          <div class="flex gap-4">
+            <span class="text-neon-cyan font-mono text-xs shrink-0 mt-0.5 w-6">02.</span>
+            <span><strong class="text-dedsec-text">L'abrogation du régime Mariani</strong> — 25 ans d'existence, 0 preuve d'efficacité sur la sécurité. Il a produit de la clandestinité, pas de la protection.</span>
+          </div>
+          <div class="flex gap-4">
+            <span class="text-neon-cyan font-mono text-xs shrink-0 mt-0.5 w-6">03.</span>
+            <span>La <strong class="text-dedsec-text">fin des interdictions préfectorales massives</strong> — Restrictions ciblées, motivées juridiquement, délimitées géographiquement. Pas des arrêtés blancs couvrant un département entier.</span>
+          </div>
+          <div class="flex gap-4">
+            <span class="text-neon-cyan font-mono text-xs shrink-0 mt-0.5 w-6">04.</span>
+            <span><strong class="text-dedsec-text">La désescalade systématique</strong> — Médiation, accès aux secours garanti sans interpellation des soignants, interdiction des charges nocturnes sur des rassemblements non-violents.</span>
+          </div>
         </div>
       </details>
 
+      <!-- VI. Pourquoi nous continuerons -->
       <details class="group">
-        <summary class="flex items-center gap-3 px-5 py-4 bg-dedsec-darker border border-neon-green/50 rounded-lg cursor-pointer hover:border-neon-green hover:shadow-[0_0_15px_#00ff9f22] transition-all list-none">
-          <span class="text-neon-green font-mono text-xs w-8 shrink-0">VI.</span>
+        <summary class="flex items-center gap-3 px-5 py-4 bg-neon-green/5 border border-neon-green/40 cursor-pointer hover:border-neon-green hover:shadow-[0_0_20px_rgba(0,255,159,0.08)] transition-all list-none">
+          <span class="text-neon-green font-mono text-xs w-6 shrink-0">VI.</span>
           <span class="font-mono font-bold text-sm text-neon-green flex-1">Pourquoi nous continuerons</span>
           <span class="text-neon-green/50 font-mono text-xs transition-transform duration-200 group-open:rotate-90 shrink-0">▸</span>
         </summary>
-        <div class="px-5 py-4 border border-t-0 border-neon-green/30 rounded-b-lg bg-neon-green/5 text-sm text-dedsec-muted leading-relaxed space-y-3">
-          <p>La free party a survécu au Criminal Justice Act de 1994, à la loi Mariani, aux centaines d'arrêtés préfectoraux et aux saisies de matériel. Elle a survécu parce qu'elle <strong class="text-neon-green">ne dépend de personne</strong> — pas d'un label rachetable, pas d'un festival qui perd son financement.</p>
-          <p class="text-neon-green font-mono text-center pt-2 text-base border-t border-neon-green/20">"Free music for free people"<br/><span class="text-xs text-dedsec-muted">▸ SPIRAL TRIBE</span></p>
+        <div class="px-5 py-5 border border-t-0 border-neon-green/25 bg-neon-green/5 text-sm text-dedsec-muted leading-relaxed space-y-4">
+          <p>La free party a survécu au Criminal Justice Act (1994), à la loi Mariani (2001), à des centaines d'arrêtés préfectoraux et à des dizaines de saisies de matériel. Elle a survécu parce qu'elle <strong class="text-neon-green">ne dépend de personne</strong> — pas d'un label rachetable, pas d'un festival sans financement, pas d'un serveur qui peut être mis sous scellés.</p>
+          <p>La loi RIPOST ajoute un chapitre au même livre. Ce wiki est notre réponse. <strong class="text-neon-green">Rendre l'information aussi difficile à saisir que la musique.</strong></p>
+          <div class="border-t border-neon-green/20 pt-4 text-center">
+            <p class="text-neon-green font-mono text-base">"Free music for free people"</p>
+            <p class="text-xs text-dedsec-muted mt-1 tracking-widest">▸ SPIRAL TRIBE · 1994</p>
+          </div>
         </div>
       </details>
-    </div>
-  </section>
 
-  <!-- WARNING -->
-  <section class="mb-8">
-    <div class="warning-box">
-      Ce wiki contient des informations sensibles. Ne publie jamais de données nominatives. Anonymise systématiquement les témoignages. Privilégie les faits sourcés.
     </div>
   </section>
 
