@@ -158,7 +158,7 @@ import Layout from '../layouts/Layout.astro';
       errEl.style.display = 'none';
 
       try {
-        const res = await fetch('/api/terrain', {
+        const res = await fetch('/.netlify/functions/terrain', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
