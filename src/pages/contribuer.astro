@@ -117,7 +117,11 @@ import Layout from '../layouts/Layout.astro';
       <div class="border border-dedsec-border bg-dedsec-darker px-5 py-4">
         <div class="font-mono text-xs text-neon-green font-bold tracking-widest mb-3">◆ PGP</div>
         <p class="font-mono text-sm text-dedsec-muted mb-2">Chiffrement des emails sensibles.</p>
-        <p class="text-[10px] text-dedsec-muted/50 font-mono">Clé publique disponible sur le repo GitHub · <span class="text-neon-green/60">keys.openpgp.org</span></p>
+        <div class="flex flex-wrap gap-2 mt-2">
+          <a href="/pgp-public-key.asc" download class="btn-neon no-underline text-xs">▸ Télécharger la clé</a>
+          <a href="https://keys.openpgp.org/search?q=crxzydiam0nd%40protonmail.com" target="_blank" rel="noopener noreferrer" class="font-mono text-[10px] text-neon-green/50 hover:text-neon-green transition-colors no-underline self-center">keys.openpgp.org →</a>
+        </div>
+        <p class="text-[10px] text-dedsec-muted/40 font-mono mt-2">Fingerprint : 1399 F26F 66A3 D65C FC76 B496 BF9D E339 889F D4FD</p>
       </div>
 
       <!-- Formulaire -->
