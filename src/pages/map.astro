@@ -80,12 +80,28 @@ const totalIncidents = incidents.length;
         <div class="aside-inner">
           <div>
             <h1 class="map-h1">ÉVALUATEUR DE TERRAIN</h1>
-            <div class="map-sub">▸ PRÉSÉLECTION DE ZONE · OSM/OVERPASS</div>
+            <div class="map-sub">▸ ANALYSE OSM · ATOUTS & RISQUES</div>
           </div>
+
           <div class="ter-warn">
-            <strong>⚠ AVANT D'UTILISER</strong>
-            <p>La coordonnée (arrondie ~1 km) est envoyée à <b>OpenStreetMap</b> depuis ton navigateur. Utilise <b>Tor</b> si la zone est sensible. Validation finale en reconnaissance physique, hors réseau.</p>
+            <strong>⚠ OPSEC</strong>
+            <p>Coordonnée arrondie ~1 km envoyée à <b>OpenStreetMap</b>. Utilise <b>Tor</b> si zone sensible. Validation finale = reconnaissance physique hors réseau.</p>
           </div>
+
+          <!-- Saisie coordonnées -->
+          <div>
+            <div class="block-title">▸ Saisir coordonnées GPS</div>
+            <div class="coord-row">
+              <input id="terLat" type="text" class="coord-input" placeholder="Lat · ex: 48.856" />
+              <input id="terLng" type="text" class="coord-input" placeholder="Lng · ex: 2.352" />
+            </div>
+            <button id="terGo" class="go-btn">⊕ POSITIONNER</button>
+            <p id="terCoordError" class="ter-err" style="display:none;margin-top:4px"></p>
+          </div>
+
+          <div class="coord-or">── ou clic direct sur la carte ──</div>
+
+          <!-- Rayon -->
           <div>
             <div class="block-title">▸ Rayon d'analyse</div>
             <select id="terRayon">
@@ -93,25 +109,57 @@ const totalIncidents = incidents.length;
               <option value="1000" selected>1 km</option>
               <option value="1500">1,5 km</option>
               <option value="2000">2 km</option>
+              <option value="3000">3 km</option>
             </select>
           </div>
+
+          <!-- Zone active -->
           <div>
-            <div class="block-title">▸ Zone sélectionnée</div>
-            <div id="terCoord" class="ter-coord">Cliquez sur la carte pour poser un point</div>
+            <div class="block-title">▸ Point sélectionné</div>
+            <div id="terCoord" class="ter-coord">Cliquez sur la carte ou saisissez des coordonnées</div>
           </div>
+
           <button id="terAnalyze" class="analyze-btn" disabled>ANALYSER CETTE ZONE</button>
+
           <div id="terStatus" class="ter-status" style="display:none">
             <div class="ter-spinner"></div>
             <span id="terStatusMsg">Interrogation Overpass...</span>
           </div>
           <p id="terError" class="ter-err" style="display:none"></p>
+
+          <!-- Rapport -->
           <div id="terReport" class="ter-report" style="display:none">
+
             <div class="score-wrap">
-              <span class="score-label">RISQUE</span>
-              <span id="terScore" class="score-val">-</span>
+              <div>
+                <div class="score-label">RISQUE GLOBAL</div>
+                <span id="terScore" class="score-val">-</span>
+              </div>
+              <div id="terScoreBar" class="score-bar-wrap">
+                <div id="terScoreFill" class="score-bar-fill"></div>
+              </div>
             </div>
-            <ul id="terFacteurs" class="facteurs"></ul>
-            <div id="terMeta" class="ter-meta"></div>
+
+            <!-- Atouts -->
+            <div class="ter-section">
+              <div class="ter-sec-title ter-sec-ok">▸ ATOUTS</div>
+              <ul id="terAvantages" class="facteurs facteurs-ok"></ul>
+              <div id="terNoAtout" class="ter-empty" style="display:none">Aucun atout identifié</div>
+            </div>
+
+            <!-- Risques -->
+            <div class="ter-section">
+              <div class="ter-sec-title ter-sec-risk">▸ RISQUES</div>
+              <ul id="terInconvenients" class="facteurs facteurs-risk"></ul>
+              <div id="terNoRisque" class="ter-empty" style="display:none">Aucun risque identifié</div>
+            </div>
+
+            <!-- Données brutes -->
+            <div class="ter-section">
+              <div class="ter-sec-title">▸ DONNÉES BRUTES</div>
+              <div id="terMeta" class="ter-meta"></div>
+            </div>
+
             <p id="terPrecision" class="ter-note"></p>
           </div>
         </div>
@@ -416,6 +464,27 @@ const totalIncidents = incidents.length;
     map.on('click', function (e) { if (mode === 'terrain') placePin(e.latlng.lat, e.latlng.lng); });
     document.getElementById('terRayon').addEventListener('change', function () { if (rLat !== null) placePin(rLat, rLng); });
 
+    // ── Saisie coordonnées GPS ──────────────────────────────────
+    document.getElementById('terGo').addEventListener('click', function () {
+      var rawLat = document.getElementById('terLat').value.replace(',', '.').trim();
+      var rawLng = document.getElementById('terLng').value.replace(',', '.').trim();
+      var lat = parseFloat(rawLat), lng = parseFloat(rawLng);
+      var errEl = document.getElementById('terCoordError');
+      if (isNaN(lat)||isNaN(lng)||lat<-90||lat>90||lng<-180||lng>180) {
+        errEl.textContent = 'Coordonnées invalides. Format: 48.856 / 2.352';
+        errEl.style.display = 'block'; return;
+      }
+      errEl.style.display = 'none';
+      map.setView([lat, lng], 13);
+      placePin(lat, lng);
+    });
+    // Positionner avec Entrée
+    ['terLat','terLng'].forEach(function(id) {
+      document.getElementById(id).addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') document.getElementById('terGo').click();
+      });
+    });
+
     function haversine(lat1, lng1, lat2, lng2) {
       var R=6371000, r=function(d){return d*Math.PI/180;};
       var a=Math.sin(r(lat2-lat1)/2)**2+Math.cos(r(lat1))*Math.cos(r(lat2))*Math.sin(r(lng2-lng1)/2)**2;
@@ -436,20 +505,97 @@ const totalIncidents = incidents.length;
       return null;
     }
 
-    function scoreTerrain(nearestHab, habCount, zones, militaire, protegee) {
-      var facteurs=[], niveau=0;
-      if (nearestHab===null) { facteurs.push('Aucune habitation dans le rayon - favorable'); }
-      else if (nearestHab<300)  { niveau=Math.max(niveau,3); facteurs.push('Habitation à ~'+nearestHab+' m - risque très élevé'); }
-      else if (nearestHab<600)  { niveau=Math.max(niveau,2); facteurs.push('Habitation à ~'+nearestHab+' m - risque élevé'); }
-      else if (nearestHab<1000) { niveau=Math.max(niveau,1); facteurs.push('Habitation à ~'+nearestHab+' m - risque modéré'); }
-      else { facteurs.push('Habitation à plus de 1 km - risque faible'); }
-      if (habCount>10) { niveau=Math.max(niveau,2); facteurs.push(habCount+' bâtiments - secteur habité'); }
-      else if (habCount>0) { facteurs.push(habCount+' bâtiment(s) dans le rayon'); }
-      if (zones.indexOf('résidentielle')!==-1) { niveau=Math.max(niveau,3); facteurs.push('Zone résidentielle - risque maximal'); }
-      if (protegee) { niveau=Math.max(niveau,2); facteurs.push('Zone naturelle protégée - risque juridique'); }
-      if (militaire) { niveau=Math.max(niveau,1); facteurs.push('Zone militaire - cadre légal spécifique'); }
-      if (zones.length>0) facteurs.push('Zones détectées : '+zones.join(', '));
-      return { score:['faible','modéré','élevé','critique'][niveau], facteurs:facteurs };
+    function scoreTerrain(d) {
+      var avantages=[], inconvenients=[], niveau=0;
+
+      // ── Habitation ─────────────────────────────────────────────
+      if (d.nearestHab===null) {
+        avantages.push('Aucune habitation détectée dans le rayon');
+      } else if (d.nearestHab<300) {
+        niveau=Math.max(niveau,3);
+        inconvenients.push('Habitation à ~'+d.nearestHab+' m - intervention quasi certaine');
+      } else if (d.nearestHab<600) {
+        niveau=Math.max(niveau,2);
+        inconvenients.push('Habitation à ~'+d.nearestHab+' m - risque élevé de plainte');
+      } else if (d.nearestHab<1000) {
+        niveau=Math.max(niveau,1);
+        inconvenients.push('Habitation à ~'+d.nearestHab+' m - risque modéré');
+      } else {
+        avantages.push('Habitation à plus de 1 km - zone tampon suffisante');
+      }
+
+      // ── Densité bâti ───────────────────────────────────────────
+      if (d.habCount>20) {
+        niveau=Math.max(niveau,3);
+        inconvenients.push(d.habCount+' bâtiments - secteur très urbanisé');
+      } else if (d.habCount>5) {
+        niveau=Math.max(niveau,1);
+        inconvenients.push(d.habCount+' bâtiments dans le rayon - semi-urbanisé');
+      } else if (d.habCount===0) {
+        avantages.push('Aucun bâtiment recensé dans le rayon');
+      }
+
+      // ── Zones d'usage ──────────────────────────────────────────
+      if (d.zones.indexOf('résidentielle')!==-1) { niveau=Math.max(niveau,3); inconvenients.push('Zone résidentielle classifiée - intervention garantie'); }
+      if (d.zones.indexOf('militaire')!==-1)     { niveau=Math.max(niveau,1); inconvenients.push('Emprise militaire à proximité - cadre légal restrictif'); }
+      if (d.zones.indexOf('industrielle')!==-1||d.zones.indexOf('commerciale')!==-1) {
+        avantages.push('Zone industrielle/commerciale - tolérance sonore nocturne plus élevée');
+      }
+      if (d.zones.indexOf('agricole')!==-1) {
+        avantages.push('Terrain agricole - zone typiquement isolée et peu surveillée');
+      }
+      if (d.zones.indexOf('forêt')!==-1||d.hasForest) {
+        avantages.push('Couverture forestière - isolation acoustique naturelle');
+      }
+      if (d.protegee) { niveau=Math.max(niveau,2); inconvenients.push('Zone naturelle protégée - risque juridique environnemental'); }
+
+      // ── Accès routier ──────────────────────────────────────────
+      if (d.nearestRoad!==null) {
+        if (d.nearestRoad<200) {
+          avantages.push('Accès routier à ~'+d.nearestRoad+' m - logistique convois facilitée');
+        } else if (d.nearestRoad>800) {
+          avantages.push('Éloigné des routes (~'+d.nearestRoad+' m) - discrétion accrue, piste ou chemin nécessaire');
+        }
+        if (d.roadTypes.indexOf('primary')!==-1||d.roadTypes.indexOf('trunk')!==-1||d.roadTypes.indexOf('motorway')!==-1) {
+          avantages.push('Route principale à portée - accès poids lourds possible');
+        }
+      } else {
+        avantages.push('Aucune route détectée dans le rayon - zone très isolée');
+      }
+
+      // ── Eau ────────────────────────────────────────────────────
+      if (d.hasWater) {
+        avantages.push('Cours d\'eau ou plan d\'eau à proximité - ressource disponible');
+      }
+
+      // ── Services répressifs ────────────────────────────────────
+      if (d.nearestPolice!==null) {
+        var pkm=Math.round(d.nearestPolice/100)/10;
+        if (d.nearestPolice<3000) {
+          niveau=Math.max(niveau,2);
+          inconvenients.push('Brigade/commissariat à ~'+pkm+' km - délai d\'intervention < 10 min');
+        } else if (d.nearestPolice<8000) {
+          niveau=Math.max(niveau,1);
+          inconvenients.push('Forces de l\'ordre à ~'+pkm+' km - délai d\'intervention estimé 15-20 min');
+        } else {
+          avantages.push('Aucune brigade détectée dans un rayon de 8 km');
+        }
+      } else {
+        avantages.push('Aucune brigade/commissariat détecté - réponse opérationnelle plus lente');
+      }
+
+      // ── Établissements sensibles ───────────────────────────────
+      if (d.nearestSensible!==null&&d.nearestSensible<500) {
+        niveau=Math.max(niveau,2);
+        inconvenients.push('Établissement sensible (école/hôpital) à ~'+d.nearestSensible+' m');
+      }
+
+      // ── Lignes haute tension ───────────────────────────────────
+      if (d.powerlines) {
+        avantages.push('Infrastructure électrique (ligne HT) détectée dans la zone');
+      }
+
+      return { score:['faible','modéré','élevé','critique'][niveau], avantages:avantages, inconvenients:inconvenients };
     }
 
     async function queryOverpass(endpoint, query) {
@@ -468,13 +614,19 @@ const totalIncidents = incidents.length;
       document.getElementById('terError').style.display='none';
       document.getElementById('terReport').style.display='none';
       var statusEl=document.getElementById('terStatus'), msgEl=document.getElementById('terStatusMsg');
-
       var rayon=parseInt(document.getElementById('terRayon').value,10);
-      var query='[out:json][timeout:20];\n(\n'+
+
+      // Requête Overpass étendue : bâti + zones + routes + services + eau + HT
+      var query='[out:json][timeout:25];\n(\n'+
         '  way["building"](around:'+rayon+','+rLat+','+rLng+');\n'+
         '  way["landuse"~"residential|military|industrial|farmland|farmyard|forest|commercial|retail"](around:'+rayon+','+rLat+','+rLng+');\n'+
-        '  way["natural"~"water|wood"](around:'+rayon+','+rLat+','+rLng+');\n'+
+        '  way["natural"~"water|wood|scrub|heath|grassland"](around:'+rayon+','+rLat+','+rLng+');\n'+
         '  way["leisure"="nature_reserve"](around:'+rayon+','+rLat+','+rLng+');\n'+
+        '  way["highway"~"motorway|trunk|primary|secondary|tertiary|residential|unclassified|track"](around:'+rayon+','+rLat+','+rLng+');\n'+
+        '  node["amenity"~"police|gendarmerie"](around:8000,'+rLat+','+rLng+');\n'+
+        '  node["amenity"~"hospital|school|kindergarten|college"](around:'+rayon+','+rLat+','+rLng+');\n'+
+        '  way["power"="line"](around:'+rayon+','+rLat+','+rLng+');\n'+
+        '  way["waterway"~"river|stream|canal"](around:'+rayon+','+rLat+','+rLng+');\n'+
         ');\nout center tags;';
 
       var data=null;
@@ -496,36 +648,113 @@ const totalIncidents = incidents.length;
       }
       statusEl.style.display='none';
 
-      var elements=data.elements||[], nearestHabRaw=null, habCount=0, zonesSet={}, militaire=false, protegee=false;
+      // ── Extraction des données ──────────────────────────────────
+      var elements=data.elements||[];
+      var nearestHabRaw=null, habCount=0, zonesSet={};
+      var militaire=false, protegee=false;
+      var nearestRoadRaw=null, roadTypes=[], hasWater=false, hasForest=false;
+      var nearestPoliceRaw=null, nearestSensibleRaw=null;
+      var powerlines=false;
+
       for (var j=0;j<elements.length;j++) {
-        var el=elements[j], tags=el.tags||{}, c=el.center||{};
-        if (tags.building&&c.lat!=null) { habCount++; var d2=haversine(rLat,rLng,c.lat,c.lon); if (nearestHabRaw===null||d2<nearestHabRaw) nearestHabRaw=d2; }
-        var z=classifyZone(tags); if (z&&!zonesSet[z]) zonesSet[z]=true;
+        var el=elements[j], tags=el.tags||{}, c=el.center||el;
+        var dist=c.lat!=null ? haversine(rLat,rLng,c.lat,c.lon) : null;
+
+        // Bâtiments
+        if (tags.building&&dist!=null) {
+          habCount++;
+          if (nearestHabRaw===null||dist<nearestHabRaw) nearestHabRaw=dist;
+        }
+
+        // Zones d'usage
+        var z=classifyZone(tags);
+        if (z&&!zonesSet[z]) zonesSet[z]=true;
         if (tags.landuse==='military') militaire=true;
         if (tags.leisure==='nature_reserve'||tags.boundary==='protected_area') protegee=true;
-      }
-      var nearestHab=nearestHabRaw===null?null:roundDist(nearestHabRaw);
-      var zones=Object.keys(zonesSet);
-      var result=scoreTerrain(nearestHab,habCount,zones,militaire,protegee);
-      var color=SCORE_COLORS[result.score]||'#00ff9f';
 
+        // Forêt / végétation
+        if (tags.natural==='wood'||tags.landuse==='forest'||tags.natural==='scrub') hasForest=true;
+
+        // Eau
+        if (tags.natural==='water'||tags.waterway) hasWater=true;
+
+        // Routes
+        if (tags.highway&&dist!=null) {
+          if (nearestRoadRaw===null||dist<nearestRoadRaw) nearestRoadRaw=dist;
+          if (roadTypes.indexOf(tags.highway)===-1) roadTypes.push(tags.highway);
+        }
+
+        // Services répressifs
+        if ((tags.amenity==='police'||tags.amenity==='gendarmerie')&&dist!=null) {
+          if (nearestPoliceRaw===null||dist<nearestPoliceRaw) nearestPoliceRaw=dist;
+        }
+
+        // Établissements sensibles
+        if ((tags.amenity==='hospital'||tags.amenity==='school'||tags.amenity==='kindergarten'||tags.amenity==='college')&&dist!=null) {
+          if (nearestSensibleRaw===null||dist<nearestSensibleRaw) nearestSensibleRaw=dist;
+        }
+
+        // Lignes HT
+        if (tags.power==='line') powerlines=true;
+      }
+
+      var nearestHab=nearestHabRaw===null?null:roundDist(nearestHabRaw);
+      var nearestRoad=nearestRoadRaw===null?null:roundDist(nearestRoadRaw);
+      var nearestPolice=nearestPoliceRaw===null?null:Math.round(nearestPoliceRaw);
+      var nearestSensible=nearestSensibleRaw===null?null:roundDist(nearestSensibleRaw);
+      var zones=Object.keys(zonesSet);
+
+      var result=scoreTerrain({
+        nearestHab:nearestHab, habCount:habCount, zones:zones,
+        militaire:militaire, protegee:protegee,
+        nearestRoad:nearestRoad, roadTypes:roadTypes,
+        hasWater:hasWater, hasForest:hasForest,
+        nearestPolice:nearestPolice, nearestSensible:nearestSensible,
+        powerlines:powerlines
+      });
+
+      var color=SCORE_COLORS[result.score]||'#00ff9f';
+      var scoreIdx=['faible','modéré','élevé','critique'].indexOf(result.score);
+
+      // Score + barre
       document.getElementById('terScore').textContent=result.score.toUpperCase();
       document.getElementById('terScore').style.color=color;
       document.getElementById('terScore').style.textShadow='0 0 10px '+color+'66';
+      var fill=document.getElementById('terScoreFill');
+      if (fill) { fill.style.width=((scoreIdx+1)*25)+'%'; fill.style.background=color; }
+
+      // Cercle + marqueur
       if (terCircle) terCircle.setStyle({color:color,fillColor:color});
       if (terMarker) terMarker.setStyle({color:color,fillColor:color});
 
-      var ul=document.getElementById('terFacteurs'); ul.innerHTML='';
-      result.facteurs.forEach(function(f){var li=document.createElement('li');li.textContent=f;ul.appendChild(li);});
+      // Atouts
+      var ulOk=document.getElementById('terAvantages'); ulOk.innerHTML='';
+      result.avantages.forEach(function(f){var li=document.createElement('li');li.textContent=f;ulOk.appendChild(li);});
+      document.getElementById('terNoAtout').style.display=result.avantages.length===0?'block':'none';
 
+      // Risques
+      var ulRisk=document.getElementById('terInconvenients'); ulRisk.innerHTML='';
+      result.inconvenients.forEach(function(f){var li=document.createElement('li');li.textContent=f;ulRisk.appendChild(li);});
+      document.getElementById('terNoRisque').style.display=result.inconvenients.length===0?'block':'none';
+
+      // Données brutes
       var hab=nearestHab===null?'aucune':'~'+nearestHab+' m';
+      var road=nearestRoad===null?'aucune':'~'+nearestRoad+' m';
+      var police=nearestPolice===null?'> 8 km':'~'+Math.round(nearestPolice/100)/10+' km';
       document.getElementById('terMeta').innerHTML=
-        '<div><span>Habitation proche</span><b>'+hab+'</b></div>'+
-        '<div><span>Bâtiments</span><b>'+habCount+'</b></div>'+
-        (militaire?'<div><span>Militaire</span><b style="color:#ff8a00">oui</b></div>':'')+
-        (protegee?'<div><span>Zone protégée</span><b style="color:#ff8a00">oui</b></div>':'');
+        '<div><span>Habitation la + proche</span><b>'+hab+'</b></div>'+
+        '<div><span>Bâtiments détectés</span><b>'+habCount+'</b></div>'+
+        '<div><span>Route la + proche</span><b>'+road+'</b></div>'+
+        '<div><span>Forces de l\'ordre</span><b '+(nearestPolice!==null&&nearestPolice<3000?'style="color:#ff8a00"':'')+'>'+police+'</b></div>'+
+        (hasForest?'<div><span>Couvert forestier</span><b style="color:#00ff9f">oui</b></div>':'')+
+        (hasWater?'<div><span>Eau à proximité</span><b style="color:#00ff9f">oui</b></div>':'')+
+        (powerlines?'<div><span>Ligne haute tension</span><b style="color:#ffd400">détectée</b></div>':'')+
+        (militaire?'<div><span>Zone militaire</span><b style="color:#ff8a00">oui</b></div>':'')+
+        (protegee?'<div><span>Zone protégée</span><b style="color:#ff8a00">oui</b></div>':'')+
+        (zones.length?'<div><span>Zones OSM</span><b>'+zones.join(', ')+'</b></div>':'');
 
-      document.getElementById('terPrecision').textContent="Analyse ~1 km. Validation finale en reconnaissance physique.";
+      var rayonLabel=rayon>=1000?(rayon/1000)+' km':rayon+' m';
+      document.getElementById('terPrecision').textContent='Rayon '+rayonLabel+' · '+elements.length+' éléments OSM · Validation obligatoire en reconnaissance physique hors réseau.';
       document.getElementById('terReport').style.display='block';
       document.getElementById('terAnalyze').disabled=false;
     });
@@ -635,8 +864,19 @@ const totalIncidents = incidents.length;
   .ter-warn strong { color: #ff4444; font-size: 9px; letter-spacing: 1px; display: block; margin-bottom: 4px; }
   .ter-warn p { margin: 0; }
   .ter-warn b { color: #ffd400; }
+
+  /* Saisie GPS */
+  .coord-row { display: flex; gap: 6px; margin-bottom: 6px; }
+  .coord-input { flex: 1; background: #05060a; border: 1px solid #1a1f2e; color: #00ff9f; font-family: 'JetBrains Mono', monospace; font-size: 10px; padding: 7px 8px; outline: none; min-width: 0; transition: border-color .15s; }
+  .coord-input:focus { border-color: rgba(0,255,159,0.4); }
+  .coord-input::placeholder { color: #2a3040; }
+  .go-btn { width: 100%; padding: 8px; background: rgba(0,255,159,0.06); border: 1px solid rgba(0,255,159,0.3); color: #00ff9f; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 1px; cursor: pointer; transition: all .15s; }
+  .go-btn:hover { background: rgba(0,255,159,0.12); border-color: rgba(0,255,159,0.6); }
+  .coord-or { font-size: 8px; color: #2a3040; text-align: center; letter-spacing: 1px; font-family: 'JetBrains Mono', monospace; }
+
   .ter-coord { font-size: 11px; color: #c8c8d8; border: 1px solid #1a1f2e; padding: 8px; line-height: 1.6; }
   .ter-coord b { color: #00ff9f; font-size: 13px; }
+
   .analyze-btn { padding: 11px; background: transparent; border: 1px solid rgba(0,255,159,0.5); color: #00ff9f; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 1px; cursor: pointer; transition: all .15s; }
   .analyze-btn:hover:not(:disabled) { background: #00ff9f; color: #05060a; }
   .analyze-btn:disabled { opacity: .3; cursor: not-allowed; }
@@ -644,14 +884,31 @@ const totalIncidents = incidents.length;
   .ter-spinner { width: 10px; height: 10px; border: 1px solid rgba(0,255,159,0.2); border-top-color: #00ff9f; border-radius: 50%; animation: spin .8s linear infinite; flex-shrink: 0; }
   @keyframes spin { to { transform: rotate(360deg); } }
   .ter-err { font-size: 10px; color: #ff4444; line-height: 1.6; }
-  .ter-report { border-top: 1px solid #1a1f2e; padding-top: 12px; display: flex; flex-direction: column; gap: 10px; }
-  .score-wrap { display: flex; align-items: baseline; justify-content: space-between; border: 1px solid #1a1f2e; padding: 10px; }
-  .score-label { font-size: 9px; color: #5a6472; letter-spacing: 2px; font-family: 'JetBrains Mono', monospace; }
-  .score-val { font-size: 22px; font-weight: 700; font-family: 'JetBrains Mono', monospace; }
-  .facteurs { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 6px; }
-  .facteurs li { font-size: 10px; color: #c8c8d8; line-height: 1.5; padding-left: 12px; position: relative; font-family: 'JetBrains Mono', monospace; }
-  .facteurs li::before { content: '▸'; position: absolute; left: 0; color: #00ff9f; }
-  .ter-meta { display: flex; flex-direction: column; gap: 5px; border-top: 1px solid #1a1f2e; padding-top: 8px; }
+
+  /* Rapport */
+  .ter-report { border-top: 1px solid #1a1f2e; padding-top: 12px; display: flex; flex-direction: column; gap: 12px; }
+
+  .score-wrap { display: flex; align-items: center; justify-content: space-between; gap: 12px; border: 1px solid #1a1f2e; padding: 10px 12px; }
+  .score-label { font-size: 8px; color: #5a6472; letter-spacing: 2px; font-family: 'JetBrains Mono', monospace; margin-bottom: 3px; }
+  .score-val { font-size: 20px; font-weight: 700; font-family: 'JetBrains Mono', monospace; }
+  .score-bar-wrap { flex: 1; height: 4px; background: #1a1f2e; }
+  .score-bar-fill { height: 100%; width: 0; transition: width .4s ease, background .4s ease; }
+
+  /* Sections Atouts / Risques */
+  .ter-section { display: flex; flex-direction: column; gap: 6px; }
+  .ter-sec-title { font-size: 8px; letter-spacing: 2px; text-transform: uppercase; font-family: 'JetBrains Mono', monospace; padding-bottom: 5px; border-bottom: 1px solid #1a1f2e; }
+  .ter-sec-ok   { color: rgba(0,255,159,0.6); }
+  .ter-sec-risk { color: rgba(255,68,68,0.6); }
+
+  .facteurs { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 5px; }
+  .facteurs li { font-size: 10px; line-height: 1.5; padding-left: 13px; position: relative; font-family: 'JetBrains Mono', monospace; }
+  .facteurs-ok   li { color: rgba(0,255,159,0.85); }
+  .facteurs-ok   li::before { content: '✓'; position: absolute; left: 0; color: #00ff9f; font-size: 9px; top: 1px; }
+  .facteurs-risk li { color: rgba(255,100,100,0.85); }
+  .facteurs-risk li::before { content: '✕'; position: absolute; left: 0; color: #ff4444; font-size: 9px; top: 1px; }
+  .ter-empty { font-size: 9px; color: #2a3040; font-family: 'JetBrains Mono', monospace; font-style: italic; }
+
+  .ter-meta { display: flex; flex-direction: column; gap: 5px; }
   .ter-meta div { display: flex; justify-content: space-between; font-size: 10px; font-family: 'JetBrains Mono', monospace; }
   .ter-meta span { color: #5a6472; }
   .ter-meta b { color: #e8e8f0; }
