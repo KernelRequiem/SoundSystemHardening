@@ -21,6 +21,16 @@
   status = 301
 
 [[redirects]]
+  from = "/carte"
+  to = "/map"
+  status = 301
+
+[[redirects]]
+  from = "/terrain"
+  to = "/map"
+  status = 301
+
+[[redirects]]
   from = "/api/report"
   to = "/.netlify/functions/report"
   status = 200
