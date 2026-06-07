@@ -1,29 +1,23 @@
 ---
-// src/pages/terrain.astro
-// Évaluateur de terrain. Appel direct Overpass depuis le navigateur.
-// La coordonnée est arrondie à 2 décimales (~1 km) avant envoi.
 import Layout from '../layouts/Layout.astro';
 ---
 
 <Layout title="Évaluateur de terrain">
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
-    crossorigin=""
-  />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
 
   <div class="ter-wrap" id="terWrap">
-    <button id="terToggle" class="ter-toggle" title="Replier/Déployer">◀</button>
+    <button id="terToggle" class="ter-toggle">◀</button>
 
     <aside class="ter-aside" id="terSidebar">
       <div class="ter-inner">
-        <h1 class="ter-h1">ÉVALUATEUR DE TERRAIN</h1>
-        <div class="ter-sub">▸ PRÉSÉLECTION DE ZONE  -  PAS DE VALIDATION GPS</div>
+        <div>
+          <h1 class="ter-h1">ÉVALUATEUR DE TERRAIN</h1>
+          <div class="ter-sub">▸ PRÉSÉLECTION DE ZONE · OSM/OVERPASS</div>
+        </div>
 
         <div class="ter-warn">
-          <strong>⚠ LIRE AVANT D'UTILISER</strong>
-          <p>La coordonnée arrondie (~1 km) est envoyée directement à <b>OpenStreetMap/Overpass</b> depuis ton navigateur. Utilisez cet outil <b>via Tor</b> si la zone est sensible. Sert à présélectionner un secteur, pas à valider un point précis. Validation finale en reconnaissance physique, hors réseau.</p>
+          <strong>⚠ AVANT D'UTILISER</strong>
+          <p>La coordonnée (arrondie à ~1 km) est envoyée à <b>OpenStreetMap/Overpass</b> depuis ton navigateur. Utilise <b>Tor</b> si la zone est sensible. Cet outil présélectionne un secteur, la validation finale se fait en reconnaissance physique, hors réseau.</p>
         </div>
 
         <div class="ter-block">
@@ -42,13 +36,18 @@ import Layout from '../layouts/Layout.astro';
         </div>
 
         <button id="terAnalyze" class="ter-btn" disabled>ANALYSER CETTE ZONE</button>
+
+        <div id="terStatus" class="ter-status" style="display:none">
+          <div class="ter-spinner"></div>
+          <span id="terStatusMsg">Interrogation Overpass...</span>
+        </div>
+
         <p id="terError" class="ter-err" style="display:none"></p>
 
-        <!-- Rapport -->
         <div id="terReport" class="ter-report" style="display:none">
           <div class="ter-score-wrap">
             <span class="ter-score-label">RISQUE</span>
-            <span id="terScore" class="ter-score"> - </span>
+            <span id="terScore" class="ter-score">-</span>
           </div>
           <ul id="terFacteurs" class="ter-facteurs"></ul>
           <div id="terMeta" class="ter-meta"></div>
@@ -59,121 +58,102 @@ import Layout from '../layouts/Layout.astro';
 
     <main class="ter-main">
       <div class="ter-topbar">
-        <span class="ter-live">● DIRECT.OVERPASS</span>
-        <span>arrondi ~1 km · données OSM</span>
-        <span class="ter-topright">données : OpenStreetMap</span>
+        <span class="ter-live">● DIRECT.OSM</span>
+        <span>coordonnée arrondie ~1 km · aucun serveur intermédiaire</span>
+        <span class="ter-topright">CC BY-SA · OpenStreetMap</span>
       </div>
       <div id="terMap"></div>
     </main>
   </div>
 
-  <script
-    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-    crossorigin=""
-    is:inline
-  ></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin="" is:inline></script>
 
   <script is:inline>
-    // Toggle sidebar
-    const tToggle = document.getElementById('terToggle');
-    const tSidebar = document.getElementById('terSidebar');
-    const tWrap = document.getElementById('terWrap');
-    let tOpen = true;
-    tToggle.addEventListener('click', () => {
-      tOpen = !tOpen;
-      tSidebar.classList.toggle('collapsed', !tOpen);
-      tWrap.classList.toggle('collapsed', !tOpen);
-      tToggle.textContent = tOpen ? '◀' : '▶';
-      setTimeout(() => { if (window._terMap) window._terMap.invalidateSize(); }, 320);
+  (function () {
+
+    // ── Sidebar toggle ──────────────────────────────────────────────────────
+    let sidebarOpen = true;
+    document.getElementById('terToggle').addEventListener('click', function () {
+      sidebarOpen = !sidebarOpen;
+      document.getElementById('terSidebar').classList.toggle('collapsed', !sidebarOpen);
+      document.getElementById('terWrap').classList.toggle('collapsed', !sidebarOpen);
+      this.textContent = sidebarOpen ? '◀' : '▶';
+      setTimeout(function () { if (window._terMap) window._terMap.invalidateSize(); }, 320);
     });
 
-    // Carte
-    const map = L.map('terMap', { zoomControl: true }).setView([46.6, 2.4], 6);
+    // ── Carte Leaflet ───────────────────────────────────────────────────────
+    var map = L.map('terMap', { zoomControl: true }).setView([46.6, 2.4], 6);
     window._terMap = map;
     L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
       attribution: '&copy; OpenStreetMap &copy; CARTO',
-      maxZoom: 18, subdomains: 'abcd',
+      maxZoom: 18,
+      subdomains: 'abcd',
     }).addTo(map);
 
-    const SCORE_COLORS = {
-      'faible':   '#00ff9f',
-      'modéré':   '#60a5fa',
-      'élevé':    '#ff8a00',
-      'critique': '#ff4444',
-    };
+    var SCORE_COLORS = { faible: '#00ff9f', modéré: '#60a5fa', élevé: '#ff8a00', critique: '#ff4444' };
+    var marker = null, circle = null;
+    var rLat = null, rLng = null;
 
-    let marker = null;
-    let circle = null;
-    let roundedLat = null, roundedLng = null;
+    var coordEl   = document.getElementById('terCoord');
+    var analyzeBtn = document.getElementById('terAnalyze');
+    var rayonEl   = document.getElementById('terRayon');
+    var errEl     = document.getElementById('terError');
+    var reportEl  = document.getElementById('terReport');
+    var statusEl  = document.getElementById('terStatus');
+    var statusMsg = document.getElementById('terStatusMsg');
 
-    const coordEl   = document.getElementById('terCoord');
-    const analyzeBtn= document.getElementById('terAnalyze');
-    const rayonEl   = document.getElementById('terRayon');
-    const errEl     = document.getElementById('terError');
-    const reportEl  = document.getElementById('terReport');
-
-    const round2 = (n) => Math.round(n * 100) / 100;
+    function round2(n) { return Math.round(n * 100) / 100; }
+    function roundDist(m) { return Math.round(m / 50) * 50; }
 
     function placePin(lat, lng) {
-      // ARRONDI CLIENT à 2 décimales (~1 km) AVANT toute manipulation
-      roundedLat = round2(lat);
-      roundedLng = round2(lng);
-
+      rLat = round2(lat);
+      rLng = round2(lng);
       if (marker) map.removeLayer(marker);
       if (circle) map.removeLayer(circle);
-
-      // Marqueur posé sur la position ARRONDIE (montre la dégradation)
-      marker = L.circleMarker([roundedLat, roundedLng], {
+      marker = L.circleMarker([rLat, rLng], {
         radius: 6, color: '#00ff9f', fillColor: '#00ff9f', fillOpacity: 1, weight: 1,
       }).addTo(map);
-
-      // Cercle de la zone réellement analysée
-      const rayon = parseInt(rayonEl.value, 10);
-      circle = L.circle([roundedLat, roundedLng], {
-        radius: rayon, color: '#00ff9f', fillColor: '#00ff9f',
-        fillOpacity: 0.06, weight: 1, dashArray: '4 4',
+      circle = L.circle([rLat, rLng], {
+        radius: parseInt(rayonEl.value, 10),
+        color: '#00ff9f', fillColor: '#00ff9f', fillOpacity: 0.06, weight: 1, dashArray: '4 4',
       }).addTo(map);
-
-      coordEl.innerHTML = `Zone analysée (arrondie) :<br><b>${roundedLat.toFixed(2)}, ${roundedLng.toFixed(2)}</b><br><span class="ter-coord-note">Votre clic exact n'est jamais transmis</span>`;
+      coordEl.innerHTML = 'Zone analysée (arrondie) :<br><b>' + rLat.toFixed(2) + ', ' + rLng.toFixed(2) + '</b><br><span class="ter-coord-note">Clic précis non transmis</span>';
       analyzeBtn.disabled = false;
       reportEl.style.display = 'none';
       errEl.style.display = 'none';
     }
 
-    map.on('click', (e) => placePin(e.latlng.lat, e.latlng.lng));
+    map.on('click', function (e) { placePin(e.latlng.lat, e.latlng.lng); });
+    rayonEl.addEventListener('change', function () { if (rLat !== null) placePin(rLat, rLng); });
 
-    // Changer le rayon redessine le cercle
-    rayonEl.addEventListener('change', () => {
-      if (roundedLat !== null) placePin(roundedLat, roundedLng);
-    });
-
-    // ---- Logique d'analyse (côté client, appel direct Overpass) ----
-
-    const OVERPASS = 'https://overpass-api.de/api/interpreter';
+    // ── Overpass ────────────────────────────────────────────────────────────
+    // Deux endpoints en cascade : si le premier timeout/échoue, on tente le second
+    var ENDPOINTS = [
+      'https://overpass-api.de/api/interpreter',
+      'https://overpass.kumi.systems/api/interpreter',
+    ];
 
     function buildQuery(lat, lng, radius) {
-      return `[out:json][timeout:25];
-(
-  way["building"](around:${radius},${lat},${lng});
-  way["landuse"~"residential|military|industrial|farmland|farmyard|forest|commercial|retail"](around:${radius},${lat},${lng});
-  way["natural"~"water|wood"](around:${radius},${lat},${lng});
-  way["leisure"="nature_reserve"](around:${radius},${lat},${lng});
-  way["boundary"="protected_area"](around:${radius},${lat},${lng});
-);
-out center tags;`;
+      return '[out:json][timeout:20];\n(\n' +
+        '  way["building"](around:' + radius + ',' + lat + ',' + lng + ');\n' +
+        '  way["landuse"~"residential|military|industrial|farmland|farmyard|forest|commercial|retail"](around:' + radius + ',' + lat + ',' + lng + ');\n' +
+        '  way["natural"~"water|wood"](around:' + radius + ',' + lat + ',' + lng + ');\n' +
+        '  way["leisure"="nature_reserve"](around:' + radius + ',' + lat + ',' + lng + ');\n' +
+        ');\nout center tags;';
     }
 
     function haversine(lat1, lng1, lat2, lng2) {
-      const R = 6371000, toRad = d => d * Math.PI / 180;
-      const dLat = toRad(lat2 - lat1), dLng = toRad(lng2 - lng1);
-      const a = Math.sin(dLat/2)**2 + Math.cos(toRad(lat1))*Math.cos(toRad(lat2))*Math.sin(dLng/2)**2;
+      var R = 6371000, toRad = function (d) { return d * Math.PI / 180; };
+      var dLat = toRad(lat2 - lat1), dLng = toRad(lng2 - lng1);
+      var a = Math.sin(dLat / 2) * Math.sin(dLat / 2)
+        + Math.cos(toRad(lat1)) * Math.cos(toRad(lat2))
+        * Math.sin(dLng / 2) * Math.sin(dLng / 2);
       return 2 * R * Math.asin(Math.sqrt(a));
     }
 
     function classifyZone(tags) {
       if (!tags) return null;
-      const lu = tags.landuse;
+      var lu = tags.landuse;
       if (lu === 'residential') return 'résidentielle';
       if (lu === 'military')    return 'militaire';
       if (lu === 'industrial')  return 'industrielle';
@@ -185,210 +165,278 @@ out center tags;`;
       return null;
     }
 
-    function scoreTerrain({ nearestHab, habCount, zones, militaire, protegee }) {
-      const facteurs = [];
-      let niveau = 0;
+    function scoreTerrain(nearestHab, habCount, zones, militaire, protegee) {
+      var facteurs = [], niveau = 0;
       if (nearestHab === null) {
-        facteurs.push('Aucune habitation détectée dans le rayon analysé');
+        facteurs.push('Aucune habitation dans le rayon - favorable');
       } else if (nearestHab < 300) {
         niveau = Math.max(niveau, 3);
-        facteurs.push(`Habitation la plus proche à ~${nearestHab} m - risque de plainte très élevé`);
+        facteurs.push('Habitation à ~' + nearestHab + ' m - risque très élevé');
       } else if (nearestHab < 600) {
         niveau = Math.max(niveau, 2);
-        facteurs.push(`Habitation la plus proche à ~${nearestHab} m - risque de plainte élevé`);
+        facteurs.push('Habitation à ~' + nearestHab + ' m - risque élevé');
       } else if (nearestHab < 1000) {
         niveau = Math.max(niveau, 1);
-        facteurs.push(`Habitation la plus proche à ~${nearestHab} m - risque modéré`);
+        facteurs.push('Habitation à ~' + nearestHab + ' m - risque modéré');
       } else {
-        facteurs.push('Habitation la plus proche à plus de 1 km - risque faible');
+        facteurs.push('Habitation à plus de 1 km - risque faible');
       }
-      if (habCount > 10) { niveau = Math.max(niveau, 2); facteurs.push(`${habCount} bâtiments dans le rayon - secteur habité`); }
-      else if (habCount > 0) { facteurs.push(`${habCount} bâtiment(s) dans le rayon`); }
-      if (protegee) { niveau = Math.max(niveau, 2); facteurs.push('Zone naturelle protégée - risque juridique environnemental'); }
-      if (militaire) { niveau = Math.max(niveau, 1); facteurs.push('Zone militaire détectée - cadre légal spécifique'); }
-      if (zones.includes('résidentielle')) { niveau = Math.max(niveau, 3); facteurs.push('Zone résidentielle dans le périmètre - risque maximal'); }
-      return { score: ['faible','modéré','élevé','critique'][niveau], facteurs };
+      if (habCount > 10) { niveau = Math.max(niveau, 2); facteurs.push(habCount + ' bâtiments dans le rayon - secteur habité'); }
+      else if (habCount > 0) { facteurs.push(habCount + ' bâtiment(s) dans le rayon'); }
+      if (zones.indexOf('résidentielle') !== -1) { niveau = Math.max(niveau, 3); facteurs.push('Zone résidentielle détectée - risque maximal'); }
+      if (protegee) { niveau = Math.max(niveau, 2); facteurs.push('Zone naturelle protégée - risque juridique'); }
+      if (militaire) { niveau = Math.max(niveau, 1); facteurs.push('Zone militaire - cadre légal spécifique'); }
+      if (zones.length > 0) { facteurs.push('Zones détectées : ' + zones.join(', ')); }
+      return { score: ['faible', 'modéré', 'élevé', 'critique'][niveau], facteurs: facteurs };
     }
 
-    analyzeBtn.addEventListener('click', async () => {
-      if (roundedLat === null) return;
-      analyzeBtn.disabled = true;
-      analyzeBtn.textContent = 'INTERROGATION OVERPASS...';
-      errEl.style.display = 'none';
+    function processElements(elements) {
+      var nearestHabRaw = null, habCount = 0, zonesArr = [], militaire = false, protegee = false;
+      var seen = {};
+      for (var i = 0; i < elements.length; i++) {
+        var el = elements[i], tags = el.tags || {}, c = el.center || {};
+        if (tags.building && c.lat != null && c.lon != null) {
+          habCount++;
+          var d = haversine(rLat, rLng, c.lat, c.lon);
+          if (nearestHabRaw === null || d < nearestHabRaw) nearestHabRaw = d;
+        }
+        var zone = classifyZone(tags);
+        if (zone && !seen[zone]) { seen[zone] = true; zonesArr.push(zone); }
+        if (tags.landuse === 'military') militaire = true;
+        if (tags.leisure === 'nature_reserve' || tags.boundary === 'protected_area') protegee = true;
+      }
+      var nearestHab = nearestHabRaw === null ? null : roundDist(nearestHabRaw);
+      return scoreTerrain(nearestHab, habCount, zonesArr, militaire, protegee);
+    }
 
+    function setStatus(msg) { statusMsg.textContent = msg; statusEl.style.display = 'flex'; }
+    function hideStatus() { statusEl.style.display = 'none'; }
+
+    async function queryOverpass(endpoint, query) {
+      var controller = new AbortController();
+      var tid = setTimeout(function () { controller.abort(); }, 22000);
       try {
-        const rayon = parseInt(rayonEl.value, 10);
-        const query = buildQuery(roundedLat, roundedLng, rayon);
-        const res = await fetch(OVERPASS, {
+        var res = await fetch(endpoint, {
           method: 'POST',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
           body: 'data=' + encodeURIComponent(query),
+          signal: controller.signal,
         });
-        if (!res.ok) throw new Error(`Overpass indisponible (${res.status})`);
-        const data = await res.json();
-        const elements = data.elements || [];
-
-        let nearestHabRaw = null, habCount = 0;
-        const zonesSet = new Set();
-        let militaire = false, protegee = false;
-
-        for (const el of elements) {
-          const tags = el.tags || {}, c = el.center || {};
-          if (tags.building && c.lat != null && c.lon != null) {
-            habCount++;
-            const d = haversine(roundedLat, roundedLng, c.lat, c.lon);
-            if (nearestHabRaw === null || d < nearestHabRaw) nearestHabRaw = d;
-          }
-          const zone = classifyZone(tags);
-          if (zone) zonesSet.add(zone);
-          if (tags.landuse === 'military') militaire = true;
-          if (tags.leisure === 'nature_reserve' || tags.boundary === 'protected_area') protegee = true;
-        }
-
-        const roundDist = m => Math.round(m / 50) * 50;
-        const nearestHab = nearestHabRaw === null ? null : roundDist(nearestHabRaw);
-        const zones = [...zonesSet];
-        const { score, facteurs } = scoreTerrain({ nearestHab, habCount, zones, militaire, protegee });
-
-        renderReport({
-          score, facteurs,
-          habitation_proche_m:  nearestHab,
-          batiments_dans_rayon: habCount,
-          zones_detectees:      zones,
-          zone_militaire:       militaire,
-          zone_protegee:        protegee,
-          precision_note: "Analyse sur zone ~1 km. Validation finale en reconnaissance physique, hors réseau.",
-        });
-      } catch (err) {
-        errEl.textContent = 'Erreur : ' + err.message;
-        errEl.style.display = 'block';
-      } finally {
-        analyzeBtn.disabled = false;
-        analyzeBtn.textContent = 'ANALYSER CETTE ZONE';
+        clearTimeout(tid);
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        return await res.json();
+      } catch (e) {
+        clearTimeout(tid);
+        throw e;
       }
+    }
+
+    analyzeBtn.addEventListener('click', async function () {
+      if (rLat === null) return;
+      analyzeBtn.disabled = true;
+      errEl.style.display = 'none';
+      reportEl.style.display = 'none';
+
+      var rayon = parseInt(rayonEl.value, 10);
+      var query = buildQuery(rLat, rLng, rayon);
+      var data = null;
+
+      for (var i = 0; i < ENDPOINTS.length; i++) {
+        try {
+          setStatus((i === 0 ? 'Interrogation Overpass' : 'Tentative miroir') + '... (' + (i + 1) + '/' + ENDPOINTS.length + ')');
+          data = await queryOverpass(ENDPOINTS[i], query);
+          break;
+        } catch (e) {
+          if (i === ENDPOINTS.length - 1) {
+            hideStatus();
+            errEl.textContent = 'Service cartographique injoignable. Vérifie ta connexion ou réessaie dans quelques instants.';
+            errEl.style.display = 'block';
+            analyzeBtn.disabled = false;
+            return;
+          }
+        }
+      }
+
+      hideStatus();
+
+      if (!data || !data.elements) {
+        errEl.textContent = 'Réponse Overpass invalide.';
+        errEl.style.display = 'block';
+        analyzeBtn.disabled = false;
+        return;
+      }
+
+      var result = processElements(data.elements);
+      renderReport(result, data.elements);
+      analyzeBtn.disabled = false;
     });
 
-    function renderReport(r) {
-      const color = SCORE_COLORS[r.score] || '#00ff9f';
-      const scoreEl = document.getElementById('terScore');
-      scoreEl.textContent = r.score.toUpperCase();
+    function renderReport(result, elements) {
+      var color = SCORE_COLORS[result.score] || '#00ff9f';
+      var scoreEl = document.getElementById('terScore');
+      scoreEl.textContent = result.score.toUpperCase();
       scoreEl.style.color = color;
-      scoreEl.style.textShadow = `0 0 10px ${color}66`;
+      scoreEl.style.textShadow = '0 0 10px ' + color + '66';
+      if (circle) circle.setStyle({ color: color, fillColor: color });
+      if (marker) marker.setStyle({ color: color, fillColor: color });
 
-      // recolorer le cercle selon le risque
-      if (circle) circle.setStyle({ color, fillColor: color });
-      if (marker) marker.setStyle({ color, fillColor: color });
-
-      const ul = document.getElementById('terFacteurs');
+      var ul = document.getElementById('terFacteurs');
       ul.innerHTML = '';
-      r.facteurs.forEach((f) => {
-        const li = document.createElement('li');
+      result.facteurs.forEach(function (f) {
+        var li = document.createElement('li');
         li.textContent = f;
         ul.appendChild(li);
       });
 
-      const meta = document.getElementById('terMeta');
-      const hab = r.habitation_proche_m === null ? 'aucune dans le rayon' : `~${r.habitation_proche_m} m`;
-      meta.innerHTML = `
-        <div><span>Habitation proche</span><b>${hab}</b></div>
-        <div><span>Bâtiments (rayon)</span><b>${r.batiments_dans_rayon}</b></div>
-        <div><span>Zones</span><b>${r.zones_detectees.length ? r.zones_detectees.join(', ') : 'aucune'}</b></div>
-        ${r.zone_militaire ? '<div><span>Militaire</span><b style="color:#ff8a00">oui</b></div>' : ''}
-        ${r.zone_protegee ? '<div><span>Zone protégée</span><b style="color:#ff8a00">oui</b></div>' : ''}
-      `;
+      // Compter bâtiments et zones depuis les éléments bruts
+      var habCount = 0, militaire = false, protegee = false;
+      var nearestHabRaw = null;
+      var zonesSet = {};
+      for (var i = 0; i < elements.length; i++) {
+        var el = elements[i], tags = el.tags || {}, c = el.center || {};
+        if (tags.building && c.lat != null) { habCount++; var d = haversine(rLat, rLng, c.lat, c.lon); if (nearestHabRaw === null || d < nearestHabRaw) nearestHabRaw = d; }
+        if (tags.landuse === 'military') militaire = true;
+        if (tags.leisure === 'nature_reserve' || tags.boundary === 'protected_area') protegee = true;
+      }
+      var nearestHab = nearestHabRaw === null ? null : roundDist(nearestHabRaw);
+      var hab = nearestHab === null ? 'aucune dans le rayon' : '~' + nearestHab + ' m';
 
-      document.getElementById('terPrecision').textContent = r.precision_note;
+      document.getElementById('terMeta').innerHTML =
+        '<div><span>Habitation proche</span><b>' + hab + '</b></div>' +
+        '<div><span>Bâtiments détectés</span><b>' + habCount + '</b></div>' +
+        (militaire ? '<div><span>Zone militaire</span><b style="color:#ff8a00">oui</b></div>' : '') +
+        (protegee  ? '<div><span>Zone protégée</span><b style="color:#ff8a00">oui</b></div>'  : '');
+
+      document.getElementById('terPrecision').textContent =
+        "Analyse sur zone ~1 km. Les données OSM peuvent être incomplètes selon le secteur. Validation finale en reconnaissance physique, hors réseau.";
+
       reportEl.style.display = 'block';
     }
+
+  })();
   </script>
 </Layout>
 
 <style is:global>
   article.prose-dedsec:has(#terWrap) { padding: 0 !important; max-width: none !important; margin: 0 !important; }
 
-  a.fixed .w-40 { width: 28px !important; height: 28px !important; border-width: 1px !important; box-shadow: none !important; }
-  a.fixed { top: 8px !important; right: 8px !important; }
-
   .ter-wrap {
-    display: grid; grid-template-columns: 320px 1fr;
-    height: calc(100dvh - 88px); position: relative;
-    transition: grid-template-columns .3s ease; overflow: hidden;
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    height: calc(100dvh - 88px);
+    position: relative;
+    transition: grid-template-columns .3s ease;
+    overflow: hidden;
   }
   .ter-wrap.collapsed { grid-template-columns: 0 1fr; }
 
   .ter-toggle {
-    position: absolute; left: 320px; top: 50%; transform: translateY(-50%);
-    z-index: 1000; width: 18px; height: 48px; background: #0a0d14;
-    border: 1px solid #2a2a3a; border-left: none; color: #00ff9f;
-    cursor: pointer; font-size: 10px; display: flex; align-items: center;
-    justify-content: center; transition: left .3s ease; padding: 0;
+    position: absolute; left: 300px; top: 50%; transform: translateY(-50%);
+    z-index: 1000; width: 18px; height: 48px;
+    background: #0a0d14; border: 1px solid #2a2a3a; border-left: none;
+    color: #00ff9f; cursor: pointer; font-size: 10px;
+    display: flex; align-items: center; justify-content: center;
+    transition: left .3s ease; padding: 0;
   }
+  .ter-toggle:hover { background: rgba(0,255,159,0.08); }
   .ter-wrap.collapsed .ter-toggle { left: 0; border-left: 1px solid #2a2a3a; border-right: none; }
 
-  .ter-aside { background: #0a0d14; border-right: 1px solid #2a2a3a; overflow: hidden; transition: opacity .25s ease; }
+  .ter-aside {
+    background: #08080c; border-right: 1px solid #1a1f2e;
+    overflow: hidden; transition: opacity .25s ease; width: 300px;
+  }
   .ter-aside.collapsed { opacity: 0; pointer-events: none; }
-  .ter-inner { padding: 16px 14px; display: flex; flex-direction: column; gap: 12px; height: 100%; overflow-y: auto; font-family: 'JetBrains Mono', monospace; }
 
-  .ter-h1 { font-size: 13px; color: #00ff9f; letter-spacing: 1px; text-shadow: 0 0 8px rgba(0,255,159,.4); margin: 0; }
-  .ter-sub { font-size: 9px; color: rgba(0,255,159,0.45); letter-spacing: 1px; }
+  .ter-inner {
+    padding: 16px 14px; display: flex; flex-direction: column;
+    gap: 14px; height: 100%; overflow-y: auto;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .ter-h1 { font-size: 12px !important; color: #00ff9f !important; letter-spacing: 1.5px; text-shadow: 0 0 8px rgba(0,255,159,.4); margin: 0 !important; padding: 0 !important; border: none !important; }
+  .ter-sub { font-size: 9px; color: rgba(0,255,159,0.4); letter-spacing: 1px; margin-top: 3px; }
 
   .ter-warn {
-    background: rgba(255,68,68,.06); border-left: 3px solid rgba(255,68,68,.5);
-    padding: 10px; font-size: 9px; line-height: 1.6; color: #c8c8d8;
+    background: rgba(255,68,68,.05); border-left: 3px solid rgba(255,68,68,.4);
+    padding: 10px; font-size: 9px; line-height: 1.7; color: #7a7a8a;
   }
   .ter-warn strong { color: #ff4444; font-size: 9px; letter-spacing: 1px; display: block; margin-bottom: 4px; }
   .ter-warn p { margin: 0; }
   .ter-warn b { color: #ffd400; }
 
   .ter-block { display: flex; flex-direction: column; gap: 5px; }
-  .ter-label { font-size: 9px; color: #7a7a8a; letter-spacing: 2px; text-transform: uppercase; }
-  #terRayon { width: 100%; background: #05060a; color: #00ff9f; border: 1px solid #2a2a3a; padding: 7px; font-family: 'JetBrains Mono', monospace; font-size: 11px; }
+  .ter-label { font-size: 9px; color: #5a6472; letter-spacing: 2px; text-transform: uppercase; }
 
-  .ter-coord { font-size: 11px; color: #c8c8d8; border: 1px solid #2a2a3a; padding: 8px; line-height: 1.5; }
+  #terRayon {
+    width: 100%; background: #05060a; color: #00ff9f;
+    border: 1px solid #1a1f2e; padding: 7px;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; outline: none;
+  }
+  #terRayon:focus { border-color: rgba(0,255,159,0.4); }
+
+  .ter-coord {
+    font-size: 11px; color: #c8c8d8; border: 1px solid #1a1f2e;
+    padding: 8px; line-height: 1.6;
+  }
   .ter-coord b { color: #00ff9f; font-size: 13px; }
-  .ter-coord-note { font-size: 8px; color: #7a7a8a; }
+  .ter-coord-note { font-size: 8px; color: #5a6472; }
 
   .ter-btn {
-    padding: 11px; background: transparent; border: 1px solid #00ff9f; color: #00ff9f;
-    font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 1px; cursor: pointer; transition: all .15s;
+    padding: 11px; background: transparent; border: 1px solid rgba(0,255,159,0.5);
+    color: #00ff9f; font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 1px; cursor: pointer; transition: all .15s;
   }
   .ter-btn:hover:not(:disabled) { background: #00ff9f; color: #05060a; }
   .ter-btn:disabled { opacity: .3; cursor: not-allowed; }
 
-  .ter-err { font-size: 10px; color: #ff4444; }
+  .ter-status {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 10px; color: rgba(0,255,159,0.6);
+  }
+  .ter-spinner {
+    width: 10px; height: 10px; border: 1px solid rgba(0,255,159,0.2);
+    border-top-color: #00ff9f; border-radius: 50%;
+    animation: spin .8s linear infinite; flex-shrink: 0;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
 
-  .ter-report { border-top: 1px solid #2a2a3a; padding-top: 12px; display: flex; flex-direction: column; gap: 10px; }
-  .ter-score-wrap { display: flex; align-items: baseline; justify-content: space-between; border: 1px solid #2a2a3a; padding: 10px; }
-  .ter-score-label { font-size: 9px; color: #7a7a8a; letter-spacing: 2px; }
-  .ter-score { font-size: 20px; font-weight: 700; color: #00ff9f; }
+  .ter-err { font-size: 10px; color: #ff4444; line-height: 1.6; }
+
+  .ter-report { border-top: 1px solid #1a1f2e; padding-top: 12px; display: flex; flex-direction: column; gap: 10px; }
+  .ter-score-wrap { display: flex; align-items: baseline; justify-content: space-between; border: 1px solid #1a1f2e; padding: 10px; }
+  .ter-score-label { font-size: 9px; color: #5a6472; letter-spacing: 2px; }
+  .ter-score { font-size: 22px; font-weight: 700; }
 
   .ter-facteurs { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 6px; }
   .ter-facteurs li { font-size: 10px; color: #c8c8d8; line-height: 1.5; padding-left: 12px; position: relative; }
   .ter-facteurs li::before { content: '▸'; position: absolute; left: 0; color: #00ff9f; }
 
-  .ter-meta { display: flex; flex-direction: column; gap: 4px; border-top: 1px solid #2a2a3a; padding-top: 8px; }
+  .ter-meta { display: flex; flex-direction: column; gap: 5px; border-top: 1px solid #1a1f2e; padding-top: 8px; }
   .ter-meta div { display: flex; justify-content: space-between; font-size: 10px; }
-  .ter-meta span { color: #7a7a8a; }
+  .ter-meta span { color: #5a6472; }
   .ter-meta b { color: #e8e8f0; }
 
-  .ter-note { font-size: 8px; color: #7a7a8a; line-height: 1.6; border-top: 1px solid #2a2a3a; padding-top: 8px; }
+  .ter-note { font-size: 8px; color: #3a3a4a; line-height: 1.7; border-top: 1px solid #1a1f2e; padding-top: 8px; }
 
   .ter-main { position: relative; overflow: hidden; }
   #terMap { position: absolute; inset: 0; top: 34px; background: #05060a; }
 
   .ter-topbar {
     position: absolute; top: 0; left: 0; right: 0; z-index: 500; height: 34px;
-    background: rgba(5,6,10,.9); border-bottom: 1px solid #2a2a3a; display: flex;
-    align-items: center; padding: 0 14px; gap: 14px; font-size: 10px;
-    letter-spacing: 1px; color: #7a7a8a; backdrop-filter: blur(4px); font-family: 'JetBrains Mono', monospace;
+    background: rgba(8,8,12,.92); border-bottom: 1px solid #1a1f2e;
+    display: flex; align-items: center; padding: 0 14px; gap: 14px;
+    font-size: 10px; letter-spacing: 1px; color: #5a6472;
+    backdrop-filter: blur(4px); font-family: 'JetBrains Mono', monospace;
   }
-  .ter-live { color: #00ff9f; }
+  .ter-live { color: #00ff9f; animation: tblink 1.4s infinite; }
+  @keyframes tblink { 50% { opacity: .3; } }
   .ter-topright { margin-left: auto; }
 
   .leaflet-container { background: #05060a; font-family: 'JetBrains Mono', monospace; }
-  .leaflet-control-zoom a { background: #0a0d14 !important; color: #00ff9f !important; border: 1px solid #2a2a3a !important; border-radius: 0 !important; }
-  .leaflet-control-zoom a:hover { background: #00ff9f !important; color: #05060a !important; }
-  .leaflet-control-attribution { background: rgba(5,6,10,.8) !important; color: #7a7a8a !important; font-size: 9px !important; }
+  .leaflet-popup-content-wrapper { background: #0a0d14; color: #e8e8f0; border: 1px solid rgba(0,255,159,0.3); border-radius: 0; }
+  .leaflet-control-zoom a { background: #0a0d14 !important; color: #00ff9f !important; border: 1px solid #1a1f2e !important; border-radius: 0 !important; }
+  .leaflet-control-zoom a:hover { background: rgba(0,255,159,0.1) !important; }
+  .leaflet-control-attribution { background: rgba(5,6,10,.8) !important; color: #3a3a4a !important; font-size: 9px !important; }
 
   @media (max-width: 760px) {
     .ter-wrap { grid-template-columns: 1fr; grid-template-rows: auto 1fr; height: 100dvh; }
