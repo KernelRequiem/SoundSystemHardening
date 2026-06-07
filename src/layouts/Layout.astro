@@ -295,16 +295,16 @@ const navigation = [
           <!-- Ligne 2 : nav outils en tabs -->
           <div class="flex items-end overflow-x-auto scrollbar-none -mb-px" style="padding-left:52px; border-top:1px solid rgba(42,42,58,0.5);">
             {[
-              { href: '/wiki/Urgence-immédiate',       label: 'URGENCE',  critical: true  },
-              { href: '/wiki/Strategie-contre-ripost', label: 'RIPOST',   critical: false },
-              { href: '/terrain',                      label: 'TERRAIN',  critical: false },
-              { href: '/carte',                        label: 'CARTE',    critical: false },
-              { href: '/wiki/Sécurite-Numerique',      label: 'OPSEC',    critical: false },
-              { href: '/wiki/Modus-Operandi',          label: 'TACTIQUE', critical: false },
+              { href: '/wiki/Urgence-immédiate',       label: 'URGENCE',  icon: '▲', critical: true  },
+              { href: '/wiki/Strategie-contre-ripost', label: 'RIPOST',   icon: '↺', critical: false },
+              { href: '/terrain',                      label: 'TERRAIN',  icon: '◎', critical: false },
+              { href: '/carte',                        label: 'CARTE',    icon: '⊞', critical: false },
+              { href: '/wiki/Sécurite-Numerique',      label: 'OPSEC',    icon: '⊗', critical: false },
+              { href: '/wiki/Modus-Operandi',          label: 'TACTIQUE', icon: '◈', critical: false },
             ].map(tool => (
               <a
                 href={tool.href}
-                class={`shrink-0 flex items-center gap-1.5 px-4 py-2 font-mono text-[10px] tracking-widest transition-all no-underline border-b-2 ${
+                class={`shrink-0 flex items-center gap-2 px-4 py-2 font-mono text-[10px] tracking-widest transition-all no-underline border-b-2 ${
                   currentPath === tool.href
                     ? tool.critical
                       ? 'text-red-400 border-red-400 bg-red-500/5'
@@ -314,9 +314,7 @@ const navigation = [
                       : 'text-dedsec-muted/35 border-transparent hover:text-dedsec-muted hover:border-dedsec-border'
                 }`}
               >
-                {tool.critical && (
-                  <span style={`width:5px; height:5px; border-radius:50%; flex-shrink:0; display:inline-block; ${currentPath === tool.href ? 'background:#f87171; box-shadow:0 0 5px #ef4444;' : 'background:rgba(239,68,68,0.35);'}`}></span>
-                )}
+                <span class="text-[12px] leading-none" aria-hidden="true">{tool.icon}</span>
                 {tool.label}
               </a>
             ))}
