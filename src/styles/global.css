@@ -396,53 +396,59 @@
   /* ─── SIDEBAR ─────────────────────────────────────── */
 
   .sidebar-section-title {
-    @apply px-3 pt-4 pb-1 flex items-center justify-between cursor-pointer select-none;
+    @apply px-4 pt-3 pb-1 flex items-center justify-between cursor-pointer select-none;
   }
 
-  .sidebar-section-title:hover span {
-    @apply text-neon-green;
+  .sidebar-section-title span:first-child {
+    @apply text-[10px] font-mono font-bold uppercase tracking-[0.18em] text-dedsec-muted/50 transition-colors duration-200;
   }
 
-  .sidebar-section-title span {
-    @apply text-[16px] font-mono font-bold uppercase tracking-[0.15em] text-dedsec-muted/60 transition-colors duration-200;
+  .sidebar-section-title:hover span:first-child {
+    @apply text-dedsec-muted;
+  }
+
+  .sidebar-section-title.open span:first-child {
+    @apply text-neon-green/70;
   }
 
   .sidebar-section-title .chevron {
-    @apply text-[10px] text-dedsec-muted/40 transition-transform duration-300;
+    @apply text-[10px] text-dedsec-muted/30 transition-transform duration-200;
   }
 
   .sidebar-section-title.open .chevron {
-    @apply rotate-180 text-neon-green;
-  }
-
-  .sidebar-section-title.open span {
-    @apply text-neon-green;
+    @apply rotate-180 text-neon-green/50;
   }
 
   .sidebar-section-links {
-    @apply overflow-hidden transition-all duration-300;
+    @apply overflow-hidden;
     max-height: 0;
+    transition: max-height 0.25s ease;
   }
 
   .sidebar-section-links.open {
-    max-height: 500px;
+    max-height: 600px;
+  }
+
+  .sidebar-sublabel {
+    @apply px-4 pt-3 pb-0.5 text-[9px] font-mono uppercase tracking-[0.18em];
+    color: rgba(0, 255, 159, 0.25);
   }
 
   .sidebar-link {
-    @apply flex items-center gap-2 px-4 py-2.5 text-sm font-mono text-dedsec-muted
-           mx-2 mb-0.5 border border-transparent
-           transition-all duration-200 cursor-pointer no-underline;
+    @apply flex items-center py-2 pl-4 pr-3 text-xs font-mono text-dedsec-muted/70
+           border-l-2 border-transparent
+           transition-all duration-150 no-underline;
   }
 
   .sidebar-link:hover {
-    @apply text-neon-green bg-neon-green/10 border-neon-green/30;
-    box-shadow: 0 0 12px rgba(0, 255, 159, 0.1);
-    transform: translateX(4px);
+    @apply text-dedsec-text border-l-neon-green/40 bg-neon-green/5;
+    border-left-color: rgba(0, 255, 159, 0.3);
   }
 
   .sidebar-link.active {
-    @apply text-neon-green bg-neon-green/15 border-neon-green/50;
-    box-shadow: 0 0 15px rgba(0, 255, 159, 0.15);
+    @apply text-neon-green font-medium;
+    background: rgba(0, 255, 159, 0.08);
+    border-left-color: #00ff9f;
   }
 
   /* ─── H3 dans les cards : reset des marges globales ── */
