@@ -216,12 +216,12 @@ const navigation = [
 
           <!-- Actions rapides -->
           <div class="px-3 pb-4 grid grid-cols-2 gap-2">
-            <a href="/wiki/Urgence-immédiate" class="flex items-center justify-center gap-1.5 py-2 border font-mono text-[10px] tracking-widest uppercase transition-all no-underline"
-               style={`border-color: ${currentPath === '/wiki/Urgence-immédiate' ? 'rgba(255,68,68,0.7)' : 'rgba(255,68,68,0.3)'}; color: rgba(255,68,68,${currentPath === '/wiki/Urgence-immédiate' ? '1' : '0.7'}); background: rgba(255,68,68,0.05);`}>
-              URGENCE
+            <a href="/wiki/Urgence-immédiate" class="sidebar-quick-crit no-underline"
+               style={currentPath === '/wiki/Urgence-immédiate' ? 'border-color:rgba(255,68,68,0.7);color:rgba(255,68,68,1);background:rgba(255,68,68,0.08);' : ''}>
+              <span>▲</span> URGENCE
             </a>
-            <a href="/contribuer" class="flex items-center justify-center gap-1.5 py-2 border border-dedsec-border hover:border-neon-green/40 font-mono text-[10px] tracking-widest uppercase text-dedsec-muted hover:text-neon-green transition-all no-underline">
-              CONTRIB.
+            <a href="/contribuer" class="sidebar-quick no-underline">
+              <span>✎</span> CONTRIB.
             </a>
           </div>
         </div>
@@ -231,7 +231,10 @@ const navigation = [
           {navigation.map((section) => (
             <div class="sidebar-accordion">
               <div class="sidebar-section-title">
-                <span>{section.section}</span>
+                <span class="sidebar-sec-inner">
+                  <span class="sidebar-sec-icon">{section.icon}</span>
+                  <span class="sidebar-sec-text">{section.section}</span>
+                </span>
                 <span class="chevron">▾</span>
               </div>
               <div class="sidebar-section-links">
@@ -240,7 +243,8 @@ const navigation = [
                     <div class="sidebar-sublabel">{link.label.replace(/──\s*/g, '').replace(/\s*──/g, '')}</div>
                   ) : (
                     <a href={link.href} class={link.href === currentPath ? 'sidebar-link active' : 'sidebar-link'}>
-                      {link.label}
+                      {link.emoji && <span class="sidebar-link-icon">{link.emoji}</span>}
+                      <span>{link.label}</span>
                     </a>
                   )
                 ))}
