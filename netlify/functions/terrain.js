@@ -1,11 +1,10 @@
 // netlify/functions/terrain.js
-// CommonJS — compatible bundler Netlify par défaut (zip-it-and-ship-it)
-//
-// Proxy évaluation terrain. Le client envoie une coordonnée arrondie (~1 km).
-// Le serveur re-arrondit (défense en profondeur), interroge Overpass, agrège.
-// Réponse = agrégats seulement. Aucune coordonnée précise n'est loggée.
+// CommonJS — zero dependency — fonctionne Node 14/16/18/20
+// Utilise https natif Node au lieu de fetch() pour éviter les problèmes de runtime.
 
 'use strict';
+
+const https = require('https');
 
 const CORS = {
   'Access-Control-Allow-Origin': '*',
@@ -13,8 +12,9 @@ const CORS = {
   'Content-Type': 'application/json',
 };
 
-const OVERPASS = 'https://overpass-api.de/api/interpreter';
-const BOUNDS   = { latMin: 41.0, latMax: 51.6, lngMin: -5.6, lngMax: 9.9 };
+const OVERPASS_HOST = 'overpass-api.de';
+const OVERPASS_PATH = '/api/interpreter';
+const BOUNDS = { latMin: 41.0, latMax: 51.6, lngMin: -5.6, lngMax: 9.9 };
 
 const round2    = (n) => Math.round(n * 100) / 100;
 const roundDist = (m) => Math.round(m / 50) * 50;
@@ -47,8 +47,8 @@ function classifyZone(tags) {
   if (lu === 'residential') return 'résidentielle';
   if (lu === 'military')    return 'militaire';
   if (lu === 'industrial')  return 'industrielle';
-  if (lu === 'commercial' || lu === 'retail') return 'commerciale';
-  if (lu === 'farmland'   || lu === 'farmyard') return 'agricole';
+  if (lu === 'commercial' || lu === 'retail')     return 'commerciale';
+  if (lu === 'farmland'   || lu === 'farmyard')   return 'agricole';
   if (lu === 'forest'     || tags.natural === 'wood') return 'forêt';
   if (tags.natural === 'water') return "plan d'eau";
   if (tags.leisure === 'nature_reserve' || tags.boundary === 'protected_area') return 'zone protégée';
@@ -100,7 +100,48 @@ function scoreTerrain({ nearestHab, habCount, zones, militaire, protegee }) {
   return { score: labels[niveau], facteurs };
 }
 
-exports.handler = async function handler(event) {
+// Wrapper https.request → Promise avec timeout 18s
+function postOverpass(query) {
+  return new Promise((resolve, reject) => {
+    const postData = 'data=' + encodeURIComponent(query);
+
+    const req = https.request({
+      hostname: OVERPASS_HOST,
+      path: OVERPASS_PATH,
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Content-Length': Buffer.byteLength(postData),
+        'User-Agent': 'terrain-eval/1.0 (soundsystemhardening.fr)',
+      },
+    }, (res) => {
+      let raw = '';
+      res.on('data', (chunk) => { raw += chunk; });
+      res.on('end', () => {
+        if (res.statusCode !== 200) {
+          return reject(Object.assign(new Error(`Overpass status ${res.statusCode}`), { httpStatus: res.statusCode }));
+        }
+        try {
+          resolve(JSON.parse(raw));
+        } catch {
+          reject(new Error('Réponse Overpass non-JSON'));
+        }
+      });
+    });
+
+    const timer = setTimeout(() => {
+      req.destroy(Object.assign(new Error('timeout'), { name: 'AbortError' }));
+    }, 18000);
+
+    req.on('error', (err) => { clearTimeout(timer); reject(err); });
+    req.on('close', () => clearTimeout(timer));
+
+    req.write(postData);
+    req.end();
+  });
+}
+
+exports.handler = async function (event) {
   if (event.httpMethod === 'OPTIONS') {
     return { statusCode: 204, headers: CORS, body: '' };
   }
@@ -131,37 +172,17 @@ exports.handler = async function handler(event) {
   const latR = round2(lat);
   const lngR = round2(lng);
 
-  // Interrogation Overpass avec AbortController (timeout 18s < limite Netlify 26s)
-  let elements;
+  let data;
   try {
-    const controller = new AbortController();
-    const tid = setTimeout(() => controller.abort(), 18000);
-    let overpassRes;
-    try {
-      overpassRes = await fetch(OVERPASS, {
-        method: 'POST',
-        signal: controller.signal,
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'User-Agent': 'terrain-eval/1.0 (soundsystemhardening.fr)',
-        },
-        body: 'data=' + encodeURIComponent(buildQuery(latR, lngR, rayon)),
-      });
-    } finally {
-      clearTimeout(tid);
-    }
-    if (!overpassRes.ok) {
-      return { statusCode: 502, headers: CORS, body: JSON.stringify({ error: `Service cartographique indisponible (${overpassRes.status})` }) };
-    }
-    const data = await overpassRes.json();
-    elements = data.elements || [];
+    data = await postOverpass(buildQuery(latR, lngR, rayon));
   } catch (err) {
-    const msg = err.name === 'AbortError'
+    const msg = (err.name === 'AbortError' || err.message === 'timeout')
       ? 'Service cartographique trop lent - réessayez dans quelques instants'
       : 'Service cartographique injoignable';
     return { statusCode: 502, headers: CORS, body: JSON.stringify({ error: msg }) };
   }
 
+  const elements = data.elements || [];
   let nearestHabRaw = null;
   let habCount      = 0;
   const zonesSet    = new Set();
