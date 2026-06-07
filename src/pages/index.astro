@@ -17,37 +17,46 @@ import Layout from '../layouts/Layout.astro';
         />
       </div>
 
-      <div class="text-xs font-mono text-dedsec-muted mb-8 tracking-widest">
-        ▸ INIT.SYSTEM &nbsp;|&nbsp; v1.0.0 &nbsp;|&nbsp; <span class="text-neon-green">● ONLINE</span>
-      </div>
+      <!-- ACCROCHE -->
+      <div class="max-w-2xl mx-auto mt-2 mb-10">
 
-      <div class="max-w-3xl mx-auto mb-8">
-        <p class="font-mono text-dedsec-muted/60 text-sm mb-1 text-center">
-          Ils produisent des arrêtés, des saisies et des données.
+        <!-- Ligne adversaire -->
+        <p class="font-mono text-sm text-dedsec-muted/50 text-center tracking-wide mb-4">
+          Ils produisent des arrêtés, des contrôles et des saisies.
         </p>
-        <p class="font-mono font-bold text-xl text-neon-green text-center mb-8 leading-snug" style="text-shadow: 0 0 24px rgba(0,255,159,0.25)">
-          Vous produisez maintenant des données exploitables.
-        </p>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-y-2 gap-x-10 mb-7 mx-auto max-w-2xl text-left">
-          <div class="font-mono text-sm text-dedsec-muted"><span class="text-neon-green mr-2">▸</span>Infrastructure hardened d'autodéfense</div>
-          <div class="font-mono text-sm text-dedsec-muted"><span class="text-neon-green mr-2">▸</span>Cartographie temps réel de la répression</div>
-          <div class="font-mono text-sm text-dedsec-muted"><span class="text-neon-green mr-2">▸</span>Outils logistiques et acoustiques</div>
-          <div class="font-mono text-sm text-dedsec-muted"><span class="text-neon-green mr-2">▸</span>Générateurs de manifestes horodatés</div>
-          <div class="font-mono text-sm text-dedsec-muted"><span class="text-neon-green mr-2">▸</span>Documentation GAV et templates de recours</div>
-          <div class="font-mono text-sm text-dedsec-muted"><span class="text-neon-green mr-2">▸</span>Évaluateur de terrain sécurisé</div>
+
+        <!-- Séparateur terminal -->
+        <div class="flex items-center gap-3 mb-4">
+          <div class="flex-1 h-px" style="background: linear-gradient(90deg, transparent, rgba(0,255,159,0.2))"></div>
+          <span class="font-mono text-[10px] text-neon-green/40 tracking-widest">▸</span>
+          <div class="flex-1 h-px" style="background: linear-gradient(90deg, rgba(0,255,159,0.2), transparent)"></div>
         </div>
-        <p class="font-mono text-xs text-dedsec-muted/50 text-center tracking-wider mb-7 border-y border-neon-green/10 py-3">
-          Zéro base de données publique &nbsp;·&nbsp; Zéro tracking client
+
+        <!-- Ligne réponse — impact maximal -->
+        <p
+          class="font-display font-bold text-2xl sm:text-3xl text-neon-green text-center leading-snug"
+          style="text-shadow: 0 0 40px rgba(0,255,159,0.3), 0 0 80px rgba(0,255,159,0.1); letter-spacing: -0.01em;"
+        >
+          Nous avons maintenant les outils<br class="hidden sm:block" /> pour déjouer et documenter.
         </p>
-        <p class="font-mono text-sm text-dedsec-muted/70 text-center italic">
-          Conçu pour les collectifs qui transforment l'information en avantage tactique.
-        </p>
+
+        <!-- Status bar -->
+        <div class="mt-6 flex items-center justify-center gap-4 text-[10px] font-mono text-dedsec-muted/40 tracking-widest">
+          <span>INIT.SYSTEM</span>
+          <span class="text-dedsec-border">·</span>
+          <span>v1.0.0</span>
+          <span class="text-dedsec-border">·</span>
+          <span class="text-neon-green">● ONLINE</span>
+          <span class="text-dedsec-border">·</span>
+          <span>ZÉRO TRACKING</span>
+        </div>
       </div>
 
+      <!-- CTA -->
       <div class="flex flex-wrap gap-3 justify-center">
-        <a href="/wiki/Urgence-immédiate" class="btn-neon no-underline">🚨 URGENCE</a>
-        <a href="/wiki/Strategie-contre-ripost" class="btn-neon no-underline" style="border-color:#00d9ff;color:#00d9ff">⚖️ CONTRE RIPOST</a>
-        <a href="/terrain" class="btn-neon no-underline">🛰️ TERRAIN</a>
+        <a href="/wiki/Urgence-immédiate" class="btn-neon no-underline">URGENCE</a>
+        <a href="/wiki/Strategie-contre-ripost" class="btn-neon no-underline">CONTRE RIPOST</a>
+        <a href="/terrain" class="btn-neon no-underline">TERRAIN</a>
       </div>
     </div>
   </section>
