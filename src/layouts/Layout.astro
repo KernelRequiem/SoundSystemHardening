@@ -304,17 +304,17 @@ const navigation = [
             ].map(tool => (
               <a
                 href={tool.href}
-                class={`shrink-0 flex items-center gap-2 px-4 py-2 font-mono text-[10px] tracking-widest transition-all no-underline border-b-2 ${
+                class={`shrink-0 flex items-center gap-2 px-4 py-2 font-mono text-[11px] tracking-widest transition-all no-underline border-b-2 ${
                   currentPath === tool.href
                     ? tool.critical
-                      ? 'text-red-400 border-red-400 bg-red-500/5'
-                      : 'text-neon-green border-neon-green bg-neon-green/5'
+                      ? 'text-red-400 border-red-400 bg-red-500/10'
+                      : 'text-neon-green border-neon-green bg-neon-green/10'
                     : tool.critical
-                      ? 'text-red-500/45 border-transparent hover:text-red-400/80 hover:border-red-500/40 hover:bg-red-500/5'
-                      : 'text-dedsec-muted/35 border-transparent hover:text-dedsec-muted hover:border-dedsec-border'
+                      ? 'text-red-400/70 border-transparent hover:text-red-400 hover:border-red-400/60 hover:bg-red-500/5'
+                      : 'text-dedsec-muted hover:text-neon-green hover:border-neon-green/50 hover:bg-neon-green/5 border-transparent'
                 }`}
               >
-                <span class="text-[12px] leading-none" aria-hidden="true">{tool.icon}</span>
+                <span class="text-[13px] leading-none" aria-hidden="true">{tool.icon}</span>
                 {tool.label}
               </a>
             ))}
