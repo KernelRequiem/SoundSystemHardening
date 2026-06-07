@@ -100,7 +100,7 @@ import Layout from '../layouts/Layout.astro';
 
     const SCORE_COLORS = {
       'faible':   '#00ff9f',
-      'modéré':   '#00d9ff',
+      'modéré':   '#60a5fa',
       'élevé':    '#ff8a00',
       'critique': '#ff4444',
     };
@@ -222,7 +222,7 @@ import Layout from '../layouts/Layout.astro';
 
   .ter-wrap {
     display: grid; grid-template-columns: 320px 1fr;
-    height: calc(100dvh - 52px); position: relative;
+    height: calc(100dvh - 88px); position: relative;
     transition: grid-template-columns .3s ease; overflow: hidden;
   }
   .ter-wrap.collapsed { grid-template-columns: 0 1fr; }
@@ -241,7 +241,7 @@ import Layout from '../layouts/Layout.astro';
   .ter-inner { padding: 16px 14px; display: flex; flex-direction: column; gap: 12px; height: 100%; overflow-y: auto; font-family: 'JetBrains Mono', monospace; }
 
   .ter-h1 { font-size: 13px; color: #00ff9f; letter-spacing: 1px; text-shadow: 0 0 8px rgba(0,255,159,.4); margin: 0; }
-  .ter-sub { font-size: 9px; color: #00d9ff; letter-spacing: 1px; }
+  .ter-sub { font-size: 9px; color: rgba(0,255,159,0.45); letter-spacing: 1px; }
 
   .ter-warn {
     background: rgba(255,68,68,.06); border-left: 3px solid rgba(255,68,68,.5);

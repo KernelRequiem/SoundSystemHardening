@@ -5,6 +5,15 @@
 [build.environment]
   NODE_VERSION = "18"
 
+[functions]
+  node_bundler = "esbuild"
+
+[functions.terrain]
+  timeout = 26
+
+[functions.report]
+  timeout = 10
+
 [[headers]]
   for = "/*"
   [headers.values]

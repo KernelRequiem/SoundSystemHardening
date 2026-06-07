@@ -1,11 +1,11 @@
-// api/terrain.js — Vercel Serverless Function
+// api/terrain.js  - Vercel Serverless Function
 //
 // Proxy d'évaluation de terrain. Vercel mappe automatiquement ce fichier
 // sur l'endpoint /api/terrain (pas de redirect à configurer).
 //
 // Le client envoie une coordonnée DÉJÀ arrondie (~1 km). Le serveur la
 // re-arrondit (défense en profondeur), interroge Overpass, agrège, et ne
-// renvoie QUE des agrégats — jamais les coordonnées des bâtiments.
+// renvoie QUE des agrégats  - jamais les coordonnées des bâtiments.
 //
 // Aucune variable d'environnement requise (Overpass est public).
 
@@ -62,37 +62,37 @@ function scoreTerrain({ nearestHab, habCount, zones, militaire, protegee }) {
     facteurs.push('Aucune habitation détectée dans le rayon analysé');
   } else if (nearestHab < 300) {
     niveau = Math.max(niveau, 3);
-    facteurs.push(`Habitation la plus proche à ~${nearestHab} m — risque de plainte très élevé`);
+    facteurs.push(`Habitation la plus proche à ~${nearestHab} m  - risque de plainte très élevé`);
   } else if (nearestHab < 600) {
     niveau = Math.max(niveau, 2);
-    facteurs.push(`Habitation la plus proche à ~${nearestHab} m — risque de plainte élevé`);
+    facteurs.push(`Habitation la plus proche à ~${nearestHab} m  - risque de plainte élevé`);
   } else if (nearestHab < 1000) {
     niveau = Math.max(niveau, 1);
-    facteurs.push(`Habitation la plus proche à ~${nearestHab} m — risque modéré`);
+    facteurs.push(`Habitation la plus proche à ~${nearestHab} m  - risque modéré`);
   } else {
-    facteurs.push('Habitation la plus proche à plus de 1 km — risque faible côté nuisance');
+    facteurs.push('Habitation la plus proche à plus de 1 km  - risque faible côté nuisance');
   }
 
   if (habCount > 10) {
     niveau = Math.max(niveau, 2);
-    facteurs.push(`${habCount} bâtiments dans le rayon — secteur habité`);
+    facteurs.push(`${habCount} bâtiments dans le rayon  - secteur habité`);
   } else if (habCount > 0) {
     facteurs.push(`${habCount} bâtiment(s) dans le rayon`);
   }
 
   if (protegee) {
     niveau = Math.max(niveau, 2);
-    facteurs.push('Zone naturelle protégée détectée — risque juridique environnemental');
+    facteurs.push('Zone naturelle protégée détectée  - risque juridique environnemental');
   }
 
   if (militaire) {
     niveau = Math.max(niveau, 1);
-    facteurs.push('Zone militaire détectée — terrain isolé mais cadre légal spécifique (cf. Teknival Cornusse 2026)');
+    facteurs.push('Zone militaire détectée  - terrain isolé mais cadre légal spécifique (cf. Teknival Cornusse 2026)');
   }
 
   if (zones.includes('résidentielle')) {
     niveau = Math.max(niveau, 3);
-    facteurs.push('Zone résidentielle dans le périmètre — risque maximal');
+    facteurs.push('Zone résidentielle dans le périmètre  - risque maximal');
   }
 
   const labels = ['faible', 'modéré', 'élevé', 'critique'];
@@ -133,21 +133,30 @@ export default async function handler(req, res) {
 
   let elements;
   try {
-    const r = await fetch(OVERPASS, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'User-Agent': 'terrain-eval/1.0 (generic)',
-      },
-      body: 'data=' + encodeURIComponent(buildQuery(latR, lngR, rayon)),
-    });
-    if (!r.ok) {
-      return res.status(502).json({ error: `Service cartographique indisponible (${r.status})` });
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 18000);
+    let overpassRes;
+    try {
+      overpassRes = await fetch(OVERPASS, {
+        method: 'POST',
+        signal: controller.signal,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'User-Agent': 'terrain-eval/1.0 (generic)',
+        },
+        body: 'data=' + encodeURIComponent(buildQuery(latR, lngR, rayon)),
+      });
+    } finally {
+      clearTimeout(timeoutId);
     }
-    const data = await r.json();
+    if (!overpassRes.ok) {
+      return res.status(502).json({ error: `Service cartographique indisponible (${overpassRes.status})` });
+    }
+    const data = await overpassRes.json();
     elements = data.elements || [];
-  } catch {
-    return res.status(502).json({ error: 'Service cartographique injoignable' });
+  } catch (err) {
+    const msg = err.name === 'AbortError' ? 'Service cartographique trop lent (timeout 18s)' : 'Service cartographique injoignable';
+    return res.status(502).json({ error: msg });
   }
 
   let nearestHabRaw = null;
