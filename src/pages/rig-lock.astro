@@ -15,6 +15,52 @@ import Layout from '../layouts/Layout.astro';
       <span class="notice-icon">⚿</span>
       <span>Tout est généré <strong>localement dans votre navigateur</strong>. Aucune donnée n'est envoyée à un serveur.</span>
     </div>
+
+    <!-- Bouton guide -->
+    <button id="guideToggle" class="rl-guide-btn" aria-expanded="false" aria-controls="guidePanel">
+      <span id="guideArrow">▸</span> GUIDE D'UTILISATION
+    </button>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       DROPDOWN GUIDE
+  ═══════════════════════════════════════════════════════ -->
+  <div id="guidePanel" class="rl-guide-panel" aria-hidden="true">
+    <div class="rl-guide-inner">
+
+      <div class="rl-guide-col">
+        <div class="rl-guide-section-title">⊡ CE QUE C'EST</div>
+        <p class="rl-guide-text">RIG-LOCK génère un <strong>manifeste de saisie horodaté</strong> au format PDF, utilisable comme pièce dans un recours juridique. Il documente chaque bien confisqué avec ses caractéristiques, l'identité des agents et les circonstances de la saisie.</p>
+
+        <div class="rl-guide-section-title" style="margin-top:18px">◎ UTILITÉ</div>
+        <ul class="rl-guide-list">
+          <li><span class="rl-guide-bullet">▸</span>Constituer une <strong>preuve opposable</strong> en cas de litige sur la restitution</li>
+          <li><span class="rl-guide-bullet">▸</span>Alimenter un <strong>dépôt de plainte</strong> ou un recours devant le tribunal administratif</li>
+          <li><span class="rl-guide-bullet">▸</span>Archiver les <strong>numéros de série</strong> pour prouver la propriété</li>
+          <li><span class="rl-guide-bullet">▸</span>Calculer automatiquement une <strong>estimation de valeur</strong> pour le préjudice</li>
+        </ul>
+      </div>
+
+      <div class="rl-guide-col">
+        <div class="rl-guide-section-title">▸ COMMENT L'UTILISER</div>
+        <ol class="rl-guide-steps">
+          <li><span class="rl-guide-num">01</span><span>Renseigne la <strong>date, heure et lieu</strong> de la saisie immédiatement après les faits</span></li>
+          <li><span class="rl-guide-num">02</span><span>Coche les <strong>types de biens</strong> saisis et décris chaque élément avec marque/modèle/série</span></li>
+          <li><span class="rl-guide-num">03</span><span>Note les <strong>agents intervenants</strong> (matricule, grade) si tu as pu les relever</span></li>
+          <li><span class="rl-guide-num">04</span><span>Ajoute <strong>témoins et photos</strong> si disponibles</span></li>
+          <li><span class="rl-guide-num">05</span><span>Clique <strong>GÉNÉRER LE MANIFESTE PDF</strong> — le fichier reste sur ta machine</span></li>
+        </ol>
+
+        <div class="rl-guide-opsec">
+          <span class="rl-guide-opsec-icon">⚿</span>
+          <div>
+            <div class="rl-guide-opsec-title">OPSEC</div>
+            <p>Zéro donnée transmise. Génération 100% côté client via <strong>jsPDF</strong>. Le PDF n'est jamais uploadé. Stocke-le chiffré ou hors ligne.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
   </div>
 
   <!-- ═══════════════════════════════════════════════════════
@@ -522,6 +568,50 @@ import Layout from '../layouts/Layout.astro';
   })();
   </script>
 
+  <script is:inline>
+  (function() {
+    var btn   = document.getElementById('guideToggle');
+    var panel = document.getElementById('guidePanel');
+    var arrow = document.getElementById('guideArrow');
+    if (!btn || !panel) return;
+
+    btn.addEventListener('click', function() {
+      var isOpen = panel.classList.contains('open');
+      if (isOpen) {
+        panel.classList.remove('open');
+        btn.classList.remove('open');
+        btn.setAttribute('aria-expanded', 'false');
+        panel.setAttribute('aria-hidden', 'true');
+      } else {
+        panel.classList.add('open');
+        btn.classList.add('open');
+        btn.setAttribute('aria-expanded', 'true');
+        panel.setAttribute('aria-hidden', 'false');
+      }
+    });
+
+    // Ferme si clic en dehors
+    document.addEventListener('click', function(e) {
+      if (!btn.contains(e.target) && !panel.contains(e.target)) {
+        panel.classList.remove('open');
+        btn.classList.remove('open');
+        btn.setAttribute('aria-expanded', 'false');
+        panel.setAttribute('aria-hidden', 'true');
+      }
+    });
+
+    // Ferme avec Echap
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        panel.classList.remove('open');
+        btn.classList.remove('open');
+        btn.setAttribute('aria-expanded', 'false');
+        btn.focus();
+      }
+    });
+  })();
+  </script>
+
 </Layout>
 
 <style is:global>
@@ -602,5 +692,105 @@ import Layout from '../layouts/Layout.astro';
     .rl-grid-2 { grid-template-columns: 1fr; }
     .rl-actions { flex-direction: column; align-items: stretch; }
     .rl-btn-primary, .rl-btn-secondary { text-align: center; }
+  }
+
+  /* ── Guide dropdown ──────────────────────────────────────── */
+  .rl-guide-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    margin-top: 16px;
+    background: none; border: 1px solid rgba(0,255,159,0.2);
+    color: rgba(0,255,159,0.7); font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+    padding: 8px 16px; cursor: pointer; transition: all .15s;
+  }
+  .rl-guide-btn:hover { border-color: rgba(0,255,159,0.5); color: #00ff9f; }
+  .rl-guide-btn.open { border-color: rgba(0,255,159,0.5); color: #00ff9f; }
+  #guideArrow { display: inline-block; transition: transform .2s; }
+  .rl-guide-btn.open #guideArrow { transform: rotate(90deg); }
+
+  .rl-guide-panel {
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height .35s ease, opacity .25s ease;
+    opacity: 0;
+    border-left: 1px solid rgba(0,255,159,0.15);
+    margin: 0 0 28px 0;
+  }
+  .rl-guide-panel.open {
+    max-height: 600px;
+    opacity: 1;
+  }
+  .rl-guide-inner {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+    border: 1px solid rgba(0,255,159,0.12);
+    border-top: none;
+    background: rgba(0,255,159,0.015);
+  }
+  .rl-guide-col {
+    padding: 20px 22px;
+  }
+  .rl-guide-col:first-child {
+    border-right: 1px solid rgba(0,255,159,0.08);
+  }
+  .rl-guide-section-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px; letter-spacing: 2px; color: #00ff9f;
+    text-transform: uppercase; margin-bottom: 10px;
+    padding-bottom: 4px; border-bottom: 1px solid rgba(0,255,159,0.1);
+  }
+  .rl-guide-text {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; color: #8892a4; line-height: 1.7; margin: 0;
+  }
+  .rl-guide-text strong { color: #c0c8d8; }
+  .rl-guide-list {
+    list-style: none; margin: 0; padding: 0;
+  }
+  .rl-guide-list li {
+    display: flex; gap: 6px; align-items: flex-start;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; color: #8892a4; line-height: 1.6; padding: 3px 0;
+  }
+  .rl-guide-list strong { color: #c0c8d8; }
+  .rl-guide-bullet { color: #00ff9f; flex-shrink: 0; }
+  .rl-guide-steps {
+    list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px;
+  }
+  .rl-guide-steps li {
+    display: flex; gap: 12px; align-items: flex-start;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; color: #8892a4; line-height: 1.6;
+  }
+  .rl-guide-steps strong { color: #c0c8d8; }
+  .rl-guide-num {
+    flex-shrink: 0; width: 22px; height: 22px; display: flex;
+    align-items: center; justify-content: center;
+    border: 1px solid rgba(0,255,159,0.25); color: #00ff9f;
+    font-size: 9px; font-weight: 700;
+  }
+  .rl-guide-opsec {
+    display: flex; gap: 10px; align-items: flex-start;
+    margin-top: 18px;
+    background: rgba(0,255,159,0.04); border: 1px solid rgba(0,255,159,0.1);
+    padding: 12px 14px;
+  }
+  .rl-guide-opsec-icon {
+    color: #00ff9f; font-size: 14px; flex-shrink: 0; margin-top: 2px;
+  }
+  .rl-guide-opsec-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px; letter-spacing: 2px; color: #00ff9f;
+    text-transform: uppercase; margin-bottom: 4px;
+  }
+  .rl-guide-opsec p {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px; color: #5a6472; line-height: 1.6; margin: 0;
+  }
+  .rl-guide-opsec strong { color: #8892a4; }
+
+  @media (max-width: 600px) {
+    .rl-guide-inner { grid-template-columns: 1fr; }
+    .rl-guide-col:first-child { border-right: none; border-bottom: 1px solid rgba(0,255,159,0.08); }
+    .rl-guide-panel.open { max-height: 1000px; }
   }
 </style>
