@@ -335,18 +335,12 @@ const totalIncidents = incidents.length;
     margin-bottom: 12px;
     display: flex;
     justify-content: center;
-    /* Crée un stacking context isolé avec le fond de page :
-       le mix-blend-mode de l'img blende contre #0a0a0f
-       au lieu du contexte opaque de l'article (.animate-fade-in) */
-    background: #0a0a0f;
-    isolation: isolate;
   }
   .hero-logo {
     width: clamp(280px, 40vw, 400px);
     height: auto;
     object-fit: contain;
     display: block;
-    mix-blend-mode: screen;
   }
 
   .hero-tagline {
