@@ -502,6 +502,13 @@ declare module 'astro:content' {
   collection: "wiki";
   data: any
 } & { render(): Render[".md"] };
+"darknet-pgp-anonymat.md": {
+	id: "darknet-pgp-anonymat.md";
+  slug: "darknet-pgp-anonymat";
+  body: string;
+  collection: "wiki";
+  data: any
+} & { render(): Render[".md"] };
 "jurisprudence.md": {
 	id: "jurisprudence.md";
   slug: "jurisprudence";
@@ -526,6 +533,13 @@ declare module 'astro:content' {
 "reseau-anonymisation.md": {
 	id: "reseau-anonymisation.md";
   slug: "reseau-anonymisation";
+  body: string;
+  collection: "wiki";
+  data: any
+} & { render(): Render[".md"] };
+"strategie-wiki.md": {
+	id: "strategie-wiki.md";
+  slug: "strategie-wiki";
   body: string;
   collection: "wiki";
   data: any

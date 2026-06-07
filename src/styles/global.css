@@ -112,9 +112,10 @@
     @apply text-dedsec-text leading-relaxed mb-4;
   }
 
-  /* Liens : cyan → vert au hover — seul endroit où cyan est utilisé */
+  /* Liens : vert atténué → vert vif au hover */
   a {
-    @apply text-neon-cyan transition-colors duration-200;
+    @apply transition-colors duration-200;
+    color: rgba(0, 255, 159, 0.65);
     text-decoration: none;
     position: relative;
   }
@@ -252,7 +253,9 @@
 
 @layer components {
 
-  /* Card neon */
+  /* ─── CARDS ─────────────────────────────────────── */
+
+  /* Base card */
   .card-neon {
     @apply bg-dedsec-gray/50 border border-dedsec-border p-6 transition-all duration-300;
     backdrop-filter: blur(10px);
@@ -264,15 +267,86 @@
     transform: translateY(-2px);
   }
 
+  /* Card critique — urgence, danger */
+  .card-neon-critical {
+    @apply bg-dedsec-gray/50 border p-6 transition-all duration-300;
+    border-color: rgba(255, 68, 68, 0.35);
+    backdrop-filter: blur(10px);
+  }
+
+  .card-neon-critical:hover {
+    border-color: rgba(255, 68, 68, 0.7);
+    box-shadow: 0 0 24px rgba(255, 68, 68, 0.12);
+    transform: translateY(-2px);
+  }
+
+  /* Card outil — terrain, carte, outils interactifs */
+  .card-neon-tool {
+    @apply bg-dedsec-gray/50 border p-6 transition-all duration-300;
+    border-color: rgba(0, 255, 159, 0.2);
+    backdrop-filter: blur(10px);
+  }
+
+  .card-neon-tool:hover {
+    border-color: rgba(0, 255, 159, 0.45);
+    box-shadow: 0 0 24px rgba(0, 255, 159, 0.08);
+    transform: translateY(-2px);
+  }
+
+  /* ─── BADGES ─────────────────────────────────────── */
+
+  .badge {
+    @apply inline-block font-mono text-[9px] uppercase tracking-widest px-1.5 py-0.5 border;
+  }
+
+  .badge-critical {
+    @apply badge;
+    color: rgba(255, 68, 68, 0.85);
+    border-color: rgba(255, 68, 68, 0.3);
+    background: rgba(255, 68, 68, 0.06);
+  }
+
+  .badge-tool {
+    @apply badge;
+    color: rgba(0, 255, 159, 0.65);
+    border-color: rgba(0, 255, 159, 0.2);
+    background: rgba(0, 255, 159, 0.03);
+  }
+
+  .badge-opsec {
+    @apply badge;
+    color: rgba(0, 255, 159, 0.7);
+    border-color: rgba(0, 255, 159, 0.2);
+    background: rgba(0, 255, 159, 0.04);
+  }
+
+  .badge-data {
+    @apply badge;
+    color: rgba(122, 122, 138, 0.8);
+    border-color: rgba(42, 42, 58, 0.8);
+    background: transparent;
+  }
+
+  /* ─── BOUTONS ─────────────────────────────────────── */
+
   /* Bouton principal */
   .btn-neon {
-    @apply inline-flex items-center px-6 py-3 bg-transparent border border-neon-green text-neon-green font-mono font-bold uppercase tracking-wider transition-all duration-300;
-    clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
+    @apply inline-flex items-center gap-2 px-5 py-2.5 bg-transparent border border-neon-green text-neon-green font-mono text-sm font-bold uppercase tracking-wider transition-all duration-200;
+    clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
   }
 
   .btn-neon:hover {
     @apply bg-neon-green text-dedsec-black;
-    box-shadow: 0 0 20px rgba(0, 255, 159, 0.4);
+    box-shadow: 0 0 20px rgba(0, 255, 159, 0.35);
+  }
+
+  /* Bouton secondaire */
+  .btn-secondary {
+    @apply inline-flex items-center gap-2 px-5 py-2.5 bg-transparent border border-dedsec-border text-dedsec-muted font-mono text-sm uppercase tracking-wider transition-all duration-200;
+  }
+
+  .btn-secondary:hover {
+    @apply border-neon-green/50 text-neon-green;
   }
 
   /* Terminal */
@@ -371,13 +445,20 @@
     box-shadow: 0 0 15px rgba(0, 255, 159, 0.15);
   }
 
+  /* ─── H3 dans les cards : reset des marges globales ── */
+  .card-neon h3,
+  .card-neon-critical h3,
+  .card-neon-tool h3 {
+    @apply mt-0;
+  }
+
   /* ─── PROSE ──────────────────────────────────────── */
 
   .prose-dedsec {
     @apply max-w-none;
   }
 
-  .prose-dedsec img {
+  .prose-dedsec img:not(.no-border) {
     @apply border border-dedsec-border my-4;
   }
 
@@ -395,17 +476,17 @@
     font-weight: bold;
   }
 
-  /* Information — cyan, distinct du rouge d'avertissement */
+  /* Information — vert atténué */
   .info-box {
     @apply p-4 my-4;
-    background: rgba(0, 217, 255, 0.05);
-    border-left: 3px solid rgba(0, 217, 255, 0.35);
+    background: rgba(0, 255, 159, 0.04);
+    border-left: 3px solid rgba(0, 255, 159, 0.25);
     color: #c8c8d8;
   }
 
   .info-box::before {
     content: '▸ ';
-    color: rgba(0, 217, 255, 0.7);
+    color: rgba(0, 255, 159, 0.6);
     font-weight: bold;
   }
 }
