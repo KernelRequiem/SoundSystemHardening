@@ -40,7 +40,7 @@
 
   body {
     @apply bg-dedsec-black text-dedsec-text font-mono;
-    /* Un seul gradient subtil — le rose retiré */
+    /* Un seul gradient subtil  -  le rose retiré */
     background-image:
       radial-gradient(circle at 20% 30%, rgba(0, 255, 159, 0.025) 0%, transparent 50%),
       linear-gradient(180deg, #0a0a0f 0%, #08080c 100%);
@@ -48,7 +48,7 @@
     min-height: 100vh;
   }
 
-  /* Scan line — conservé, c'est l'identité du site */
+  /* Scan line  -  conservé, c'est l'identité du site */
   body::before {
     content: '';
     position: fixed;
@@ -63,7 +63,7 @@
     z-index: 100;
   }
 
-  /* Grille de fond — conservée */
+  /* Grille de fond  -  conservée */
   body::after {
     content: '';
     position: fixed;
@@ -77,7 +77,7 @@
   }
 
   /* ─── TITRES ───────────────────────────────────────────
-     h1 seul est coloré (neon-green) — c'est le signal visuel principal
+     h1 seul est coloré (neon-green)  -  c'est le signal visuel principal
      h2 → texte blanc, séparé par un filet vert très discret
      h3 → texte blanc, aucun ornement
      h4 → gris, compact, rôle de label
@@ -267,7 +267,7 @@
     transform: translateY(-2px);
   }
 
-  /* Card critique — urgence, danger */
+  /* Card critique  -  urgence, danger */
   .card-neon-critical {
     @apply bg-dedsec-gray/50 border p-6 transition-all duration-300;
     border-color: rgba(255, 68, 68, 0.35);
@@ -280,7 +280,7 @@
     transform: translateY(-2px);
   }
 
-  /* Card outil — terrain, carte, outils interactifs */
+  /* Card outil  -  terrain, carte, outils interactifs */
   .card-neon-tool {
     @apply bg-dedsec-gray/50 border p-6 transition-all duration-300;
     border-color: rgba(0, 255, 159, 0.2);
@@ -468,7 +468,7 @@
     @apply border border-dedsec-border my-4;
   }
 
-  /* Avertissement — rouge atténué, jamais rose vif */
+  /* Avertissement  -  rouge atténué, jamais rose vif */
   .warning-box {
     @apply p-4 my-4;
     background: rgba(255, 68, 68, 0.06);
@@ -482,7 +482,7 @@
     font-weight: bold;
   }
 
-  /* Information — vert atténué */
+  /* Information  -  vert atténué */
   .info-box {
     @apply p-4 my-4;
     background: rgba(0, 255, 159, 0.04);

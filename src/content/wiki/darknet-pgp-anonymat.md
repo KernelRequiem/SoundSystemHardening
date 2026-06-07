@@ -1,26 +1,26 @@
-# Darknet, Tor, VPN et PGP — Guide pratique
+# Darknet, Tor, VPN et PGP  -  Guide pratique
 
 > Statut : stable
 > Dernière mise à jour : juin 2026
 > Dossier : `cyber-opsec/`
 > Complémentaire de : [`reseau-anonymisation.md`](reseau-anonymisation.md) (VPN et Tor en détail)
 
-Ce guide couvre quatre outils complémentaires : ce que le darknet est réellement, comment l'utiliser via Tor, comment un VPN s'intègre dans l'ensemble, et surtout comment PGP/GPG fonctionne — le seul outil de chiffrement absent des autres pages de ce wiki. PGP est la pièce manquante pour chiffrer des communications qui ne passent pas par Signal.
+Ce guide couvre quatre outils complémentaires : ce que le darknet est réellement, comment l'utiliser via Tor, comment un VPN s'intègre dans l'ensemble, et surtout comment PGP/GPG fonctionne  -  le seul outil de chiffrement absent des autres pages de ce wiki. PGP est la pièce manquante pour chiffrer des communications qui ne passent pas par Signal.
 
 ---
 
 ## Sommaire
 
-1. [Le darknet — ce que c'est vraiment](#1-le-darknet--ce-que-cest-vraiment)
-2. [Les services .onion — accès et usages légitimes](#2-les-services-onion--accès-et-usages-légitimes)
-3. [VPN — synthèse et positionnement](#3-vpn--synthèse-et-positionnement)
-4. [PGP/GPG — chiffrement asymétrique de zéro](#4-pgpgpg--chiffrement-asymétrique-de-zéro)
-5. [Combiner les outils — quelle architecture pour quoi](#5-combiner-les-outils--quelle-architecture-pour-quoi)
+1. [Le darknet  -  ce que c'est vraiment](#1-le-darknet--ce-que-cest-vraiment)
+2. [Les services .onion  -  accès et usages légitimes](#2-les-services-onion--accès-et-usages-légitimes)
+3. [VPN  -  synthèse et positionnement](#3-vpn--synthèse-et-positionnement)
+4. [PGP/GPG  -  chiffrement asymétrique de zéro](#4-pgpgpg--chiffrement-asymétrique-de-zéro)
+5. [Combiner les outils  -  quelle architecture pour quoi](#5-combiner-les-outils--quelle-architecture-pour-quoi)
 6. [Ressources et téléchargements](#6-ressources-et-téléchargements)
 
 ---
 
-## 1. Le darknet — ce que c'est vraiment
+## 1. Le darknet  -  ce que c'est vraiment
 
 ### Trois couches d'internet
 
@@ -32,7 +32,7 @@ Le terme "darknet" est systématiquement mal utilisé. Avant d'aller plus loin :
 | **Deep web** | Pages non-indexées mais accessibles avec URL directe | Webmails, espaces privés, intranets |
 | **Darknet** | Réseau superposé nécessitant un logiciel spécifique | Sites .onion (via Tor), réseaux I2P |
 
-Le darknet n'est pas un endroit noir et criminel — c'est une infrastructure réseau. Les outils qui le composent (Tor, I2P) ont été créés pour la vie privée et la résistance à la censure, pas pour le crime organisé.
+Le darknet n'est pas un endroit noir et criminel  -  c'est une infrastructure réseau. Les outils qui le composent (Tor, I2P) ont été créés pour la vie privée et la résistance à la censure, pas pour le crime organisé.
 
 ### Ce que le darknet fait techniquement
 
@@ -102,7 +102,7 @@ Outils en .onion :
 
 ---
 
-## 2. Les services .onion — accès et usages légitimes
+## 2. Les services .onion  -  accès et usages légitimes
 
 ### Accéder aux .onion
 
@@ -115,9 +115,9 @@ La seule façon d'accéder à un service .onion est via **Tor Browser** ou un sy
 4. Copier-coller l'adresse .onion directement dans la barre d'adresse
 ```
 
-Les adresses .onion v3 font 56 caractères alphanumériques + `.onion`. Elles ne sont pas mémorisables — conservez-les dans un gestionnaire de mots de passe chiffré (KeePassXC).
+Les adresses .onion v3 font 56 caractères alphanumériques + `.onion`. Elles ne sont pas mémorisables  -  conservez-les dans un gestionnaire de mots de passe chiffré (KeePassXC).
 
-### SecureDrop — signaler à un journaliste de façon anonyme
+### SecureDrop  -  signaler à un journaliste de façon anonyme
 
 SecureDrop est le système standard utilisé par les rédactions pour recevoir des documents sensibles de lanceurs d'alerte. Chaque journal a sa propre adresse .onion.
 
@@ -143,11 +143,11 @@ Ce qui n'est pas anonyme si vous ne faites pas attention :
 
 ### Héberger un service .onion
 
-Il est possible d'héberger un service web accessible uniquement via Tor — utile pour une plateforme de coordination qui ne doit pas avoir d'IP publique. La configuration passe par Tor et un serveur web local. Hors du périmètre de ce guide — voir la documentation officielle du Tor Project.
+Il est possible d'héberger un service web accessible uniquement via Tor  -  utile pour une plateforme de coordination qui ne doit pas avoir d'IP publique. La configuration passe par Tor et un serveur web local. Hors du périmètre de ce guide  -  voir la documentation officielle du Tor Project.
 
 ---
 
-## 3. VPN — synthèse et positionnement
+## 3. VPN  -  synthèse et positionnement
 
 La page [`reseau-anonymisation.md`](reseau-anonymisation.md) couvre le VPN en détail. Synthèse pour comprendre comment il s'articule avec Tor et PGP :
 
@@ -178,7 +178,7 @@ PGP (indépendant du réseau) :
 
 ---
 
-## 4. PGP/GPG — chiffrement asymétrique de zéro
+## 4. PGP/GPG  -  chiffrement asymétrique de zéro
 
 ### Concept fondamental : cryptographie asymétrique
 
@@ -288,10 +288,10 @@ Le programme pose plusieurs questions. Recommandations :
 ```
 Type de clé :
   → Choisir (1) RSA and RSA
-  → Ou (9) ECC (sign and encrypt) + Curve 25519 — plus moderne et plus rapide
+  → Ou (9) ECC (sign and encrypt) + Curve 25519  -  plus moderne et plus rapide
 
 Taille de clé (si RSA) :
-  → 4096 bits — ne jamais choisir moins de 3072
+  → 4096 bits  -  ne jamais choisir moins de 3072
 
 Durée de validité :
   → 2 ans recommandé (forcer le renouvellement périodique)
@@ -358,7 +358,7 @@ gpg --list-keys
 
 **Vérifier l'empreinte en dehors du canal numérique :**
 
-L'import d'une clé publique ne garantit pas que c'est bien la clé de la personne voulue — quelqu'un pourrait avoir uploadé une fausse clé en votre nom. La vérification se fait en comparant l'empreinte (fingerprint) en personne, par téléphone, ou via un canal différent de celui qu'on veut sécuriser.
+L'import d'une clé publique ne garantit pas que c'est bien la clé de la personne voulue  -  quelqu'un pourrait avoir uploadé une fausse clé en votre nom. La vérification se fait en comparant l'empreinte (fingerprint) en personne, par téléphone, ou via un canal différent de celui qu'on veut sécuriser.
 
 ```bash
 # Afficher l'empreinte d'une clé importée
@@ -391,7 +391,7 @@ hQEMA2xQKmdm9B0RAQf9GupT8...
 -----END PGP MESSAGE-----
 ```
 
-Ce texte peut être envoyé par email, posté dans un forum, ou copié dans n'importe quel canal — il est illisible sans la clé privée du destinataire.
+Ce texte peut être envoyé par email, posté dans un forum, ou copié dans n'importe quel canal  -  il est illisible sans la clé privée du destinataire.
 
 ### Déchiffrer un message reçu
 
@@ -406,7 +406,7 @@ gpg --decrypt message.txt.asc
 
 ### Signer un document (sans chiffrer)
 
-Utile pour signer des communiqués, des prises de position publiques — prouve qu'ils viennent bien de vous sans les chiffrer.
+Utile pour signer des communiqués, des prises de position publiques  -  prouve qu'ils viennent bien de vous sans les chiffrer.
 
 ```bash
 # Signer avec une signature lisible intégrée au texte
@@ -438,7 +438,7 @@ Si la signature est invalide ou si le document a été modifié :
 gpg: BAD signature from "..."
 ```
 
-### Gestion des clés — bonnes pratiques
+### Gestion des clés  -  bonnes pratiques
 
 **Certificat de révocation :**
 Générer immédiatement après création de la paire de clés. Permet d'invalider la clé si la clé privée est compromise ou perdue.
@@ -483,45 +483,45 @@ Utilisation :
 ```
 
 **Autres clients :**
-- **GPG Suite** (macOS) — intégration native avec Mail.app
-- **Kleopatra** (Windows/Linux) — interface graphique pour GPG, gestion des clés
-- **OpenKeychain** (Android) — gestion des clés GPG sur mobile
+- **GPG Suite** (macOS)  -  intégration native avec Mail.app
+- **Kleopatra** (Windows/Linux)  -  interface graphique pour GPG, gestion des clés
+- **OpenKeychain** (Android)  -  gestion des clés GPG sur mobile
 
 ---
 
-## 5. Combiner les outils — quelle architecture pour quoi
+## 5. Combiner les outils  -  quelle architecture pour quoi
 
 ### Matrice de choix
 
 | Situation | VPN | Tor | PGP | Tails |
 |-----------|-----|-----|-----|-------|
-| Navigation quotidienne avec IP masquée | ✓ | — | — | — |
-| Envoyer un email sensible via canal non-chiffré | — | — | ✓ | — |
-| Publier un document anonymement | — | ✓ | — | — |
-| Publier un document signé (authenticité prouvable) | — | — | ✓ | — |
-| Contacter un journaliste (SecureDrop) | — | ✓ | ✓ | ✓ |
-| Coordination d'un événement (canal chiffré) | — | — | — | Signal |
-| Communication ultra-sensible sans trace locale | — | ✓ | ✓ | ✓ |
-| Accéder au wiki depuis un lieu inconnu | ✓ | — | — | — |
+| Navigation quotidienne avec IP masquée | ✓ |  -  |  -  |  -  |
+| Envoyer un email sensible via canal non-chiffré |  -  |  -  | ✓ |  -  |
+| Publier un document anonymement |  -  | ✓ |  -  |  -  |
+| Publier un document signé (authenticité prouvable) |  -  |  -  | ✓ |  -  |
+| Contacter un journaliste (SecureDrop) |  -  | ✓ | ✓ | ✓ |
+| Coordination d'un événement (canal chiffré) |  -  |  -  |  -  | Signal |
+| Communication ultra-sensible sans trace locale |  -  | ✓ | ✓ | ✓ |
+| Accéder au wiki depuis un lieu inconnu | ✓ |  -  |  -  |  -  |
 
 ### Architecture recommandée pour les communications les plus sensibles
 
 Situation : vous devez envoyer un document compromettant à un journaliste ou à une organisation de défense des droits, sans être identifiable.
 
 ```
-Étape 1 — Préparer l'environnement
+Étape 1  -  Préparer l'environnement
   → Démarrer Tails depuis une clé USB (zéro trace sur l'ordinateur)
 
-Étape 2 — Nettoyer les métadonnées du document
+Étape 2  -  Nettoyer les métadonnées du document
   → Utiliser MAT2 (inclus dans Tails)
   → Vérifier qu'aucun nom, IP, username n'est encodé dans les métadonnées
 
-Étape 3 — Chiffrer le document avec PGP
+Étape 3  -  Chiffrer le document avec PGP
   → Importer la clé publique du destinataire (journaliste, organisation)
   → Chiffrer avec sa clé publique
   → Signer avec votre clé (optionnel si vous voulez rester totalement anonyme)
 
-Étape 4 — Transmettre via Tor
+Étape 4  -  Transmettre via Tor
   → Utiliser SecureDrop (adresse .onion du journal)
   → Ou envoyer via ProtonMail accessible en .onion
 
@@ -589,9 +589,9 @@ OpenKeychain (GPG sur Android) :
 
 ### Documentation complémentaire dans ce wiki
 
-- [`reseau-anonymisation.md`](reseau-anonymisation.md) — VPN et Tor en détail, configuration pas à pas
-- [`messagerie-chiffree.md`](messagerie-chiffree.md) — Signal, Briar, ProtonMail
-- [`surveillance-mobile.md`](surveillance-mobile.md) — opsec sur téléphone
+- [`reseau-anonymisation.md`](reseau-anonymisation.md)  -  VPN et Tor en détail, configuration pas à pas
+- [`messagerie-chiffree.md`](messagerie-chiffree.md)  -  Signal, Briar, ProtonMail
+- [`surveillance-mobile.md`](surveillance-mobile.md)  -  opsec sur téléphone
 
 ### Documentation externe de référence
 
@@ -604,14 +604,14 @@ Security in a Box :
   → https://securityinabox.org/fr/
   → Guides par outil, traduits en français
 
-Tor Project — Documentation :
+Tor Project  -  Documentation :
   → https://tb-manual.torproject.org/fr/
 
-Riseup — Guides de sécurité numérique :
+Riseup  -  Guides de sécurité numérique :
   → https://riseup.net/fr/security
   → Orienté militants et organisations politiques
 ```
 
 ---
 
-*Dernière vérification technique : juin 2026. PGP/GPG est un standard stable depuis 1991 — les commandes et concepts documentés ici sont pérennes.*
+*Dernière vérification technique : juin 2026. PGP/GPG est un standard stable depuis 1991  -  les commandes et concepts documentés ici sont pérennes.*

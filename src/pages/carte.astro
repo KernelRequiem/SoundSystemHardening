@@ -286,7 +286,7 @@ const TYPES = {
         const fmt = i.cout_eur.toLocaleString('fr-FR') + ' €';
         s4 = `<div class="cout-box">
           <div class="cout-total">${fmt}</div>
-          <div class="cout-label">Estimation conservatrice — deniers publics mobilisés</div>
+          <div class="cout-label">Estimation conservatrice  -  deniers publics mobilisés</div>
         </div>`;
         if (i.cout_methodo) s4 += `<div class="legal-block"><p class="meta-title">▸ Méthodologie</p><p class="pre">${nl2br(i.cout_methodo)}</p></div>`;
         if (i.source_cout) s4 += `<p class="meta">Source des données : ${esc(i.source_cout)}</p>`;
@@ -340,14 +340,14 @@ const TYPES = {
 <html lang="fr">
 <head>
   <meta charset="utf-8">
-  <title>Briefing — ${esc(i.titre)} — ${dateEv}</title>
+  <title>Briefing  -  ${esc(i.titre)}  -  ${dateEv}</title>
   <style>${css}</style>
 </head>
 <body>
   <button class="print-btn" onclick="window.print()">&#8595; IMPRIMER / EXPORTER PDF &nbsp; (Ctrl+P)</button>
   <div class="brand">SOUNDSYSTEMHARDENING.FR &nbsp;// BRIEFING OPÉRATIONNEL</div>
   <div class="doc-title">${esc(i.titre)}</div>
-  <div class="doc-sub">Généré le ${dateGen} — Document factuel et sourcé — CC BY-SA 4.0</div>
+  <div class="doc-sub">Généré le ${dateGen}  -  Document factuel et sourcé  -  CC BY-SA 4.0</div>
   ${section('01 &mdash; Identification',s1)}
   ${section('02 &mdash; Description et bilan',s2)}
   ${section('03 &mdash; Moyens déployés par l\'État',s3)}
@@ -357,9 +357,9 @@ const TYPES = {
   ${section('07 &mdash; Contre-mesures documentées',s7)}
   ${section('08 &mdash; Arguments de défense',s8)}
   <div class="footer">
-    Document généré par SoundSystemHardening.fr —
+    Document généré par SoundSystemHardening.fr  - 
     <a href="https://soundsystemhardening.fr/securite">soundsystemhardening.fr/securite</a><br>
-    Licence CC BY-SA 4.0 — Contenu vérifiable et sourcé.<br>
+    Licence CC BY-SA 4.0  -  Contenu vérifiable et sourcé.<br>
     Ce document est à usage informatif. Il ne constitue pas un avis juridique.
     Consultez un avocat spécialisé pour tout recours.
   </div>
