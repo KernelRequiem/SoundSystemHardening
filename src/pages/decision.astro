@@ -1,0 +1,579 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+  title="Décision"
+  description="Arbre de décision interactif : droits et procédures face aux forces de l'ordre — Avant, Pendant, Après."
+  category="OUTILS"
+>
+  <h1 class="mb-2">◩ DÉCISION</h1>
+  <p class="text-dedsec-muted text-sm mb-2 font-mono leading-relaxed">
+    Arbre de décision interactif · Contrôle d'identité · Fouille · Interpellation · Garde à vue
+  </p>
+  <p class="text-dedsec-muted/50 text-xs mb-10 font-mono">
+    Réponds aux questions pour obtenir des conseils adaptés à ta situation, avant, pendant et après.
+  </p>
+
+  <!-- Indicateur de phase -->
+  <div id="phase-bar" class="hidden mb-10">
+    <div class="font-mono text-[9px] uppercase tracking-[0.2em] text-dedsec-muted/35 mb-2">Phase active</div>
+    <div class="flex items-stretch gap-0 border border-dedsec-border overflow-hidden">
+      <button id="pb-avant"   data-phase="avant"   class="phase-bar-btn">◷ Avant</button>
+      <div class="w-px bg-dedsec-border shrink-0"></div>
+      <button id="pb-pendant" data-phase="pendant" class="phase-bar-btn">◈ Pendant</button>
+      <div class="w-px bg-dedsec-border shrink-0"></div>
+      <button id="pb-apres"   data-phase="apres"   class="phase-bar-btn">↩ Après</button>
+    </div>
+  </div>
+
+  <!-- Moteur de rendu -->
+  <div id="decision-root" class="max-w-2xl"></div>
+</Layout>
+
+<style>
+  /* ── Phase bar ── */
+  .phase-bar-btn {
+    flex: 1;
+    padding: 10px 16px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    text-align: center;
+    color: rgba(122, 122, 138, 0.4);
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .phase-bar-btn:hover {
+    color: rgba(232, 232, 240, 0.65);
+    background: rgba(0, 255, 159, 0.04);
+  }
+  .phase-bar-btn.active {
+    color: #00ff9f;
+    background: rgba(0, 255, 159, 0.07);
+  }
+
+  /* ── Phase selector cards ── */
+  .phase-card {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 22px 28px;
+    background: rgba(10, 10, 15, 0.5);
+    border: 1px solid rgba(42, 42, 58, 0.9);
+    font-family: 'JetBrains Mono', monospace;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: left;
+    width: 100%;
+  }
+  .phase-card:hover {
+    border-color: rgba(0, 255, 159, 0.45);
+    background: rgba(0, 255, 159, 0.04);
+    transform: translateX(3px);
+    box-shadow: -3px 0 0 rgba(0, 255, 159, 0.4), 0 0 24px rgba(0, 255, 159, 0.06);
+  }
+  .phase-card-icon {
+    font-size: 26px;
+    width: 44px;
+    text-align: center;
+    flex-shrink: 0;
+    opacity: 0.85;
+  }
+  .phase-card-label {
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #e8e8f0;
+    margin-bottom: 5px;
+  }
+  .phase-card-sub {
+    font-size: 11px;
+    letter-spacing: 0.03em;
+    color: rgba(122, 122, 138, 0.55);
+    line-height: 1.5;
+  }
+  .phase-card-tag {
+    margin-left: auto;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(0, 255, 159, 0.4);
+    border: 1px solid rgba(0, 255, 159, 0.13);
+    padding: 4px 10px;
+    flex-shrink: 0;
+  }
+
+  /* ── Situation selector cards ── */
+  .situation-card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 22px 20px;
+    background: rgba(10, 10, 15, 0.5);
+    border: 1px solid rgba(42, 42, 58, 0.9);
+    font-family: 'JetBrains Mono', monospace;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: left;
+    width: 100%;
+    min-height: 100px;
+  }
+  .situation-card:hover {
+    border-color: rgba(0, 255, 159, 0.4);
+    background: rgba(0, 255, 159, 0.04);
+    box-shadow: 0 0 20px rgba(0, 255, 159, 0.06);
+  }
+  .situation-card-icon {
+    font-size: 24px;
+    line-height: 1;
+  }
+  .situation-card-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(232, 232, 240, 0.85);
+    line-height: 1.45;
+  }
+
+  /* ── Resource badges ── */
+  .resource-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 7px 14px;
+    text-decoration: none;
+    transition: all 0.15s;
+  }
+  .resource-badge::after { display: none; }
+  .resource-badge-wiki {
+    color: rgba(0, 255, 159, 0.7);
+    border: 1px solid rgba(0, 255, 159, 0.18);
+    background: rgba(0, 255, 159, 0.03);
+  }
+  .resource-badge-wiki:hover {
+    color: #00ff9f;
+    border-color: rgba(0, 255, 159, 0.45);
+    background: rgba(0, 255, 159, 0.07);
+  }
+  .resource-badge-template {
+    color: rgba(232, 232, 240, 0.6);
+    border: 1px solid rgba(42, 42, 58, 0.9);
+  }
+  .resource-badge-template:hover {
+    color: #e8e8f0;
+    border-color: rgba(232, 232, 240, 0.25);
+  }
+  .resource-badge-contact {
+    color: rgba(0, 217, 255, 0.65);
+    border: 1px solid rgba(0, 217, 255, 0.16);
+    background: rgba(0, 217, 255, 0.03);
+  }
+  .resource-badge-contact:hover {
+    color: rgba(0, 217, 255, 0.95);
+    border-color: rgba(0, 217, 255, 0.35);
+  }
+</style>
+
+<script>
+import {
+  tree,
+  PHASE_LABELS,
+  PHASE_ICONS,
+  PHASE_SUBTITLES,
+  SITUATION_ICONS,
+  type Phase,
+  type DecisionNode,
+} from '../data/decision';
+
+// ─── ÉTAT ─────────────────────────────────────────────────────────────────────
+
+let history: string[] = ['root'];
+
+function currentNode(): DecisionNode {
+  return tree[history[history.length - 1]];
+}
+
+function currentPhase(): Phase | null {
+  for (let i = history.length - 1; i >= 0; i--) {
+    const n = tree[history[i]];
+    if (n?.phase) return n.phase;
+  }
+  return null;
+}
+
+// ─── HELPERS ──────────────────────────────────────────────────────────────────
+
+type SeverityTokens = { border: string; text: string; bg: string; accent: string };
+
+function severityTokens(severity?: string): SeverityTokens {
+  if (severity === 'green')  return { border: 'border-neon-green/40',  text: 'text-neon-green',  bg: 'bg-neon-green/5',   accent: '#00ff9f' };
+  if (severity === 'orange') return { border: 'border-yellow-400/40', text: 'text-yellow-400', bg: 'bg-yellow-400/5', accent: '#facc15' };
+  if (severity === 'red')    return { border: 'border-red-400/40',    text: 'text-red-400',    bg: 'bg-red-400/5',    accent: '#f87171' };
+  return { border: 'border-dedsec-border', text: 'text-dedsec-text', bg: 'bg-dedsec-gray/20', accent: '#2a2a3a' };
+}
+
+function resourceTypePrefix(type: string): string {
+  if (type === 'wiki')     return '◇';
+  if (type === 'template') return '▸';
+  if (type === 'contact')  return '✆';
+  return '→';
+}
+
+function sectionHead(icon: string, label: string, color = 'text-dedsec-muted/50'): string {
+  return `
+    <div class="flex items-center gap-3 mb-4">
+      <span class="font-mono text-[10px] uppercase tracking-[0.18em] ${color}">${icon} ${label}</span>
+      <div class="flex-1 h-px bg-dedsec-border/30"></div>
+    </div>
+  `;
+}
+
+// ─── RENDER : BREADCRUMB ──────────────────────────────────────────────────────
+
+function renderBreadcrumb(): string {
+  if (history.length <= 1) return '';
+  const crumbs = history.map((id, i) => {
+    const node  = tree[id];
+    const raw   = i === 0 ? 'DÉBUT' : node.text;
+    const label = raw.length > 32 ? raw.slice(0, 32) + '…' : raw;
+    const isLast = i === history.length - 1;
+    return `
+      ${i > 0 ? '<span class="text-dedsec-border/50 mx-1">›</span>' : ''}
+      ${isLast
+        ? `<span class="text-neon-green/70">${label}</span>`
+        : `<button class="hover:text-neon-green/80 text-dedsec-muted/40 transition-colors underline underline-offset-2" data-goto="${i}">${label}</button>`
+      }
+    `;
+  }).join('');
+
+  return `
+    <nav class="flex items-center flex-wrap gap-0.5 mb-8 font-mono text-[10px] leading-relaxed">
+      ${crumbs}
+    </nav>
+  `;
+}
+
+// ─── RENDER : SÉLECTEUR DE PHASE ──────────────────────────────────────────────
+
+function renderPhaseSelector(node: DecisionNode): string {
+  const cards = (node.choices ?? []).map(ch => {
+    const phase = ch.next.replace('sit_', '') as Phase;
+    return `
+      <button data-next="${ch.next}" class="phase-card animate-fade-in">
+        <span class="phase-card-icon">${PHASE_ICONS[phase] ?? '◈'}</span>
+        <div class="flex-1 min-w-0">
+          <div class="phase-card-label">${ch.label}</div>
+          <div class="phase-card-sub">${PHASE_SUBTITLES[phase] ?? ''}</div>
+        </div>
+        ${ch.tag ? `<span class="phase-card-tag">${ch.tag}</span>` : ''}
+      </button>
+    `;
+  }).join('');
+
+  return `
+    <div class="mb-8 animate-fade-in">
+      <p class="font-mono text-dedsec-muted/50 text-sm leading-relaxed">${node.subtitle ?? ''}</p>
+    </div>
+    <div class="flex flex-col gap-4">
+      ${cards}
+    </div>
+  `;
+}
+
+// ─── RENDER : SÉLECTEUR DE SITUATION ──────────────────────────────────────────
+
+function renderSituationSelector(node: DecisionNode): string {
+  const phase      = node.phase!;
+  const phaseLabel = PHASE_LABELS[phase];
+
+  const cards = (node.choices ?? []).map(ch => {
+    const sitKey = ch.next.split('_').slice(1).join('_') as keyof typeof SITUATION_ICONS;
+    return `
+      <button data-next="${ch.next}" class="situation-card animate-fade-in">
+        <span class="situation-card-icon">${SITUATION_ICONS[sitKey] ?? '◈'}</span>
+        <span class="situation-card-label">${ch.label}</span>
+      </button>
+    `;
+  }).join('');
+
+  return `
+    <div class="mb-8 animate-fade-in">
+      <div class="font-mono text-[9px] text-neon-green/35 uppercase tracking-[0.22em] mb-2">
+        Phase · ${phaseLabel}
+      </div>
+      <p class="font-mono text-dedsec-muted/55 text-sm leading-relaxed">${node.subtitle ?? ''}</p>
+    </div>
+    <div class="grid grid-cols-2 gap-3">
+      ${cards}
+    </div>
+  `;
+}
+
+// ─── RENDER : NŒUD QUESTION ───────────────────────────────────────────────────
+
+function renderQuestion(node: DecisionNode): string {
+  const choices = (node.choices ?? []).map(ch => `
+    <button
+      data-next="${ch.next}"
+      class="w-full text-left flex items-center gap-4
+             bg-dedsec-darker border border-dedsec-border/70
+             hover:border-neon-green/50 hover:bg-neon-green/3
+             font-mono text-sm px-6 py-5 transition-all duration-200
+             hover:shadow-[0_0_16px_#00ff9f12] hover:translate-x-1 animate-fade-in"
+    >
+      <span class="text-neon-green/30 text-xs shrink-0">▸</span>
+      <span class="flex-1 text-dedsec-text/90 leading-relaxed">${ch.label}</span>
+      ${ch.tag ? `
+        <span class="shrink-0 font-mono text-[9px] uppercase tracking-wider
+                     border border-red-400/35 text-red-400/75 px-2 py-1">${ch.tag}</span>
+      ` : ''}
+    </button>
+  `).join('');
+
+  return `
+    <div class="border border-neon-green/15 bg-neon-green/3 px-6 py-5 mb-8 animate-fade-in">
+      <div class="flex items-start gap-4">
+        <span class="text-neon-green/40 font-mono text-xl mt-0.5 shrink-0 leading-none">?</span>
+        <p class="font-mono text-white/90 text-base font-bold leading-snug m-0">${node.text}</p>
+      </div>
+    </div>
+    <div class="flex flex-col gap-2.5">
+      ${choices}
+    </div>
+  `;
+}
+
+// ─── RENDER : NŒUD RÉSULTAT ───────────────────────────────────────────────────
+
+function renderResult(node: DecisionNode): string {
+  const c = severityTokens(node.severity);
+
+  // ── En-tête ──
+  const header = `
+    <div class="relative border ${c.border} ${c.bg} px-6 py-5 mb-8 animate-fade-in overflow-hidden">
+      <div class="absolute left-0 top-0 bottom-0 w-[3px]" style="background:${c.accent};opacity:0.7;"></div>
+      <div class="flex items-center gap-4">
+        <span class="text-3xl leading-none shrink-0">${node.icon ?? '▸'}</span>
+        <div>
+          <div class="font-mono text-[9px] uppercase tracking-[0.2em] mb-1.5" style="color:${c.accent};opacity:0.6;">
+            ${node.situation ? node.situation.toUpperCase() : ''} · ${node.phase ? node.phase.toUpperCase() : ''}
+          </div>
+          <h2 class="${c.text} font-mono text-lg font-bold m-0 leading-tight">${node.text}</h2>
+        </div>
+      </div>
+    </div>
+  `;
+
+  // ── Contexte juridique ──
+  const contextBlock = node.context && node.context !== 'TODO' ? `
+    <div class="mb-7 animate-fade-in">
+      ${sectionHead('◈', 'Contexte juridique', 'text-dedsec-muted/45')}
+      <p class="text-dedsec-text/75 text-sm leading-[1.85] m-0 pl-1" style="font-family:'Space Grotesk',sans-serif">${node.context}</p>
+    </div>
+  ` : '';
+
+  // ── Actions ──
+  const actionsBlock = node.actions?.length && node.actions[0] !== 'TODO' ? `
+    <div class="card-neon mb-6 animate-fade-in">
+      ${sectionHead('▸', 'Que faire maintenant', 'text-neon-green/70')}
+      <ol class="space-y-3 m-0 p-0 list-none">
+        ${node.actions.map((a, i) => `
+          <li class="flex gap-4 py-1" style="font-family:'Space Grotesk',sans-serif">
+            <span class="text-neon-green/50 font-mono text-[11px] shrink-0 mt-[3px] w-6 leading-none">${String(i + 1).padStart(2, '0')}.</span>
+            <span class="text-dedsec-text/85 text-sm leading-relaxed">${a}</span>
+          </li>
+        `).join('')}
+      </ol>
+    </div>
+  ` : '';
+
+  // ── Droits ──
+  const rightsBlock = node.rights?.length && node.rights[0] !== 'TODO' ? `
+    <div class="card-neon border-neon-green/10 mb-6 animate-fade-in">
+      ${sectionHead('◇', 'Tes droits', 'text-neon-green/50')}
+      <ul class="space-y-3 m-0 p-0 list-none">
+        ${node.rights.map(r => `
+          <li class="flex gap-4 py-0.5" style="font-family:'Space Grotesk',sans-serif">
+            <span class="text-neon-green/25 shrink-0 mt-[3px] leading-none">◇</span>
+            <span class="text-dedsec-muted/80 text-sm leading-relaxed">${r}</span>
+          </li>
+        `).join('')}
+      </ul>
+    </div>
+  ` : '';
+
+  // ── Pièges ──
+  const pitfallsBlock = node.pitfalls?.length && node.pitfalls[0] !== 'TODO' ? `
+    <div class="card-neon border-yellow-400/10 mb-6 animate-fade-in">
+      ${sectionHead('⚠', 'Pièges courants', 'text-yellow-400/60')}
+      <ul class="space-y-3 m-0 p-0 list-none">
+        ${node.pitfalls.map(p => `
+          <li class="flex gap-4 py-0.5" style="font-family:'Space Grotesk',sans-serif">
+            <span class="text-yellow-400/30 shrink-0 mt-[3px] leading-none">⚠</span>
+            <span class="text-dedsec-muted/80 text-sm leading-relaxed">${p}</span>
+          </li>
+        `).join('')}
+      </ul>
+    </div>
+  ` : '';
+
+  // ── Ressources ──
+  const resourcesBlock = node.resources?.length ? `
+    <div class="mb-6 animate-fade-in">
+      ${sectionHead('▸', 'Ressources', 'text-dedsec-muted/35')}
+      <div class="flex flex-wrap gap-2">
+        ${node.resources.map(r => `
+          <a href="${r.href}" class="resource-badge resource-badge-${r.type}">
+            <span class="opacity-60">${resourceTypePrefix(r.type)}</span>
+            <span>${r.label}</span>
+            <span class="opacity-40">→</span>
+          </a>
+        `).join('')}
+      </div>
+    </div>
+  ` : '';
+
+  // ── Phase suivante ──
+  const nextPhaseBlock = node.next_phase ? `
+    <div class="mt-8 pt-6 border-t border-dedsec-border/25 animate-fade-in">
+      <div class="font-mono text-[9px] uppercase tracking-[0.2em] text-dedsec-muted/30 mb-3">
+        Continuer vers la phase suivante
+      </div>
+      <button
+        data-next="${node.next_phase.next}"
+        class="w-full flex items-center justify-between gap-4
+               border border-neon-green/20 hover:border-neon-green/50
+               hover:bg-neon-green/4 px-6 py-4
+               font-mono text-sm text-neon-green/60 hover:text-neon-green/90
+               transition-all duration-200"
+      >
+        <span>${node.next_phase.label}</span>
+        <span class="text-xl opacity-60">→</span>
+      </button>
+    </div>
+  ` : '';
+
+  return header + contextBlock + actionsBlock + rightsBlock + pitfallsBlock + resourcesBlock + nextPhaseBlock;
+}
+
+// ─── RENDER : BOUTONS DE NAVIGATION ───────────────────────────────────────────
+
+function renderNavButtons(node: DecisionNode): string {
+  if (history.length <= 1) return '';
+
+  return `
+    <div class="flex gap-3 mt-10 pt-6 border-t border-dedsec-border/20 animate-fade-in">
+      <button id="btn-back"
+        class="flex items-center gap-2 border border-dedsec-border/60
+               hover:border-dedsec-text/30 text-dedsec-muted/50 hover:text-dedsec-text/70
+               font-mono text-xs px-5 py-2.5 transition-all">
+        ← Retour
+      </button>
+      <button id="btn-restart"
+        class="flex items-center gap-2 border border-dedsec-border/40
+               hover:border-neon-green/30 text-dedsec-muted/30 hover:text-neon-green/60
+               font-mono text-xs px-5 py-2.5 transition-all">
+        ↺ Recommencer
+      </button>
+    </div>
+  `;
+}
+
+// ─── PHASE BAR ────────────────────────────────────────────────────────────────
+
+function updatePhaseBar(): void {
+  const bar = document.getElementById('phase-bar');
+  if (!bar) return;
+
+  const phase = currentPhase();
+  bar.classList.toggle('hidden', !phase);
+  if (!phase) return;
+
+  (['avant', 'pendant', 'apres'] as Phase[]).forEach(p => {
+    document.getElementById(`pb-${p}`)?.classList.toggle('active', p === phase);
+  });
+}
+
+// ─── RENDER PRINCIPAL ─────────────────────────────────────────────────────────
+
+function render(): void {
+  const node      = currentNode();
+  const container = document.getElementById('decision-root');
+  if (!container) return;
+
+  let html = renderBreadcrumb();
+
+  switch (node.type) {
+    case 'phase-select':     html += renderPhaseSelector(node);     break;
+    case 'situation-select': html += renderSituationSelector(node); break;
+    case 'question':         html += renderQuestion(node);          break;
+    case 'result':           html += renderResult(node);            break;
+  }
+
+  html += renderNavButtons(node);
+  container.innerHTML = html;
+
+  updatePhaseBar();
+  bindEvents();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ─── EVENTS ───────────────────────────────────────────────────────────────────
+
+function bindEvents(): void {
+  const container = document.getElementById('decision-root');
+  if (!container) return;
+
+  container.querySelectorAll<HTMLButtonElement>('[data-next]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      history.push(btn.dataset.next!);
+      render();
+    });
+  });
+
+  container.querySelectorAll<HTMLButtonElement>('[data-goto]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      history = history.slice(0, parseInt(btn.dataset.goto!) + 1);
+      render();
+    });
+  });
+
+  document.getElementById('btn-back')?.addEventListener('click', () => {
+    if (history.length > 1) history.pop();
+    render();
+  });
+
+  document.getElementById('btn-restart')?.addEventListener('click', () => {
+    history = ['root'];
+    render();
+  });
+}
+
+// ─── PHASE BAR CLICKS ─────────────────────────────────────────────────────────
+
+document.addEventListener('DOMContentLoaded', () => {
+  const phaseToNode: Record<string, string> = {
+    avant: 'sit_avant', pendant: 'sit_pendant', apres: 'sit_apres',
+  };
+
+  (['avant', 'pendant', 'apres'] as Phase[]).forEach(p => {
+    document.getElementById(`pb-${p}`)?.addEventListener('click', () => {
+      history = ['root', phaseToNode[p]];
+      render();
+    });
+  });
+
+  render();
+});
+</script>
