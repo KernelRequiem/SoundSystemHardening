@@ -54,7 +54,7 @@ import Layout from '../layouts/Layout.astro';
 
       <!-- CTA -->
       <div class="flex flex-wrap gap-3 justify-center">
-        <a href="/wiki/Urgence-immédiate" class="btn-neon no-underline">URGENCE</a>
+        <a href="/wiki/Urgence-immédiate" class="btn-neon-primary no-underline">URGENCE</a>
         <a href="/wiki/Strategie-contre-ripost" class="btn-neon no-underline">CONTRE RIPOST</a>
         <a href="/terrain" class="btn-neon no-underline">TERRAIN</a>
       </div>
@@ -73,14 +73,15 @@ import Layout from '../layouts/Layout.astro';
         <div class="text-[10px] text-dedsec-muted uppercase tracking-widest font-mono">Incidents documentés</div>
       </div>
       <div class="card-neon text-center py-5">
-        <div class="text-2xl font-bold text-neon-green mb-1 font-mono">RIPOST</div>
-        <div class="text-[10px] text-dedsec-muted uppercase tracking-widest font-mono">2026  -  en résistance</div>
+        <div class="text-3xl font-bold text-neon-green mb-1 font-mono">2026</div>
+        <div class="text-[10px] text-dedsec-muted uppercase tracking-widest font-mono">Loi RIPOST active</div>
       </div>
     </div>
   </section>
 
   <!-- MODULES ACTIFS -->
-  <section class="mb-12">
+  <section class="mb-20">
+    <div class="font-mono text-[9px] text-neon-green/40 tracking-[0.2em] mb-1 uppercase">MODULE 01</div>
     <h2 class="mb-6">▸ MODULES ACTIFS</h2>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
@@ -116,19 +117,33 @@ import Layout from '../layouts/Layout.astro';
       </a>
 
       <a href="/terrain" class="card-neon-tool no-underline group relative">
+        <div class="absolute top-3 right-3 flex items-center gap-1.5">
+          <span class="live-dot"></span>
+          <span class="font-mono text-[9px] text-neon-green/60 tracking-widest">LIVE</span>
+        </div>
         <div class="flex items-center gap-2 mb-3">
           <span class="badge-tool">OUTIL INTERACTIF</span>
         </div>
         <h3 class="text-dedsec-text mb-2 group-hover:text-neon-green transition-colors">Évaluateur de terrain</h3>
         <p class="text-sm text-dedsec-muted">Score de risque en temps réel. Proxy sécurisé, coordonnées dégradées à ~1 km.</p>
+        <div class="mt-3 pt-3 border-t border-dedsec-border/50 flex gap-3 font-mono text-[9px] text-dedsec-muted/40 tracking-widest">
+          <span>PROXY SÉCURISÉ</span><span>·</span><span>COORDS ~1KM</span><span>·</span><span>ZÉRO LOG</span>
+        </div>
       </a>
 
       <a href="/carte" class="card-neon-tool no-underline group relative">
+        <div class="absolute top-3 right-3 flex items-center gap-1.5">
+          <span class="live-dot"></span>
+          <span class="font-mono text-[9px] text-neon-green/60 tracking-widest">LIVE</span>
+        </div>
         <div class="flex items-center gap-2 mb-3">
           <span class="badge-tool">DONNÉES</span>
         </div>
         <h3 class="text-dedsec-text mb-2 group-hover:text-neon-green transition-colors">Carte de la répression</h3>
-        <p class="text-sm text-dedsec-muted">23 incidents documentés  -  index territorial 1996 à aujourd'hui.</p>
+        <p class="text-sm text-dedsec-muted">23 incidents documentés. Index territorial 1996 à aujourd'hui.</p>
+        <div class="mt-3 pt-3 border-t border-dedsec-border/50 flex gap-3 font-mono text-[9px] text-dedsec-muted/40 tracking-widest">
+          <span>23 INCIDENTS</span><span>·</span><span>1996-2026</span><span>·</span><span>OPEN DATA</span>
+        </div>
       </a>
 
       <a href="/wiki/Sécurite-Numerique" class="card-neon no-underline group relative md:col-span-2">
@@ -148,12 +163,10 @@ import Layout from '../layouts/Layout.astro';
   </section>
 
   <!-- MANIFESTE -->
-  <section class="mb-12">
+  <section class="mb-20">
 
     <div class="mb-8">
-      <div class="font-mono text-[10px] text-dedsec-muted/50 tracking-[0.15em] mb-4">
-        ── FICHIER_OUVERT ──────────────────────────────── manifesto.txt ──
-      </div>
+      <div class="font-mono text-[9px] text-neon-green/40 tracking-[0.2em] mb-1 uppercase">MODULE 02</div>
       <h2 class="text-neon-green text-2xl font-bold tracking-tight mb-2 mt-0 border-none pb-0">MANIFESTE</h2>
       <p class="font-mono text-xs text-dedsec-muted tracking-widest">
         Ce que nous sommes · Ce que nous défendons · Pourquoi nous ne nous arrêterons pas
@@ -185,14 +198,14 @@ import Layout from '../layouts/Layout.astro';
         </summary>
         <div class="px-5 py-5 border border-t-0 border-neon-green/15 bg-dedsec-black/40 text-sm text-dedsec-muted leading-relaxed space-y-4">
           <p>Un mouvement de <strong class="text-neon-green">30 ans</strong>. Des espaces gratuits, sans sélection à l'entrée, sans hiérarchie. Des collectifs qui construisent leur son de leurs propres mains, sur des terrains que personne d'autre ne revendique.</p>
-          <p>En 2024, la techno française est inscrite au <span class="text-neon-cyan">patrimoine culturel immatériel de l'UNESCO</span>. L'État qui la récompense d'un côté la criminalise de l'autre. Le paradoxe est la politique.</p>
+          <p>En 2024, la techno française est inscrite au <span class="text-dedsec-text font-bold">patrimoine culturel immatériel de l'UNESCO</span>. L'État qui la récompense d'un côté la criminalise de l'autre. Le paradoxe est la politique.</p>
           <div class="grid grid-cols-2 gap-3 mt-2 pt-2 border-t border-neon-green/10">
             <div class="border-l-2 border-neon-green/50 pl-3">
               <div class="text-neon-green text-xs font-bold font-mono mb-1 tracking-wider">BIENVEILLANCE</div>
-              <div class="text-xs">Techno+, Freeform  -  réduction des risques sans jugement</div>
+              <div class="text-xs">Techno+, Freeform - réduction des risques sans jugement</div>
             </div>
-            <div class="border-l-2 border-neon-cyan/50 pl-3">
-              <div class="text-neon-cyan text-xs font-bold font-mono mb-1 tracking-wider">FÉMINISME</div>
+            <div class="border-l-2 border-neon-green/30 pl-3">
+              <div class="text-neon-green/70 text-xs font-bold font-mono mb-1 tracking-wider">FÉMINISME</div>
               <div class="text-xs">Safer sex, protocoles contre les violences</div>
             </div>
             <div class="border-l-2 border-dedsec-muted/50 pl-3">
@@ -266,27 +279,27 @@ import Layout from '../layouts/Layout.astro';
 
       <!-- V. Ce que nous exigeons -->
       <details class="group">
-        <summary class="flex items-center gap-3 px-5 py-4 bg-dedsec-darker border border-neon-cyan/25 cursor-pointer hover:border-neon-cyan/60 transition-all list-none">
-          <span class="text-neon-cyan font-mono text-xs w-6 shrink-0">V.</span>
+        <summary class="flex items-center gap-3 px-5 py-4 bg-dedsec-darker border border-neon-green/25 cursor-pointer hover:border-neon-green/60 transition-all list-none">
+          <span class="text-neon-green font-mono text-xs w-6 shrink-0">V.</span>
           <span class="font-mono font-bold text-sm text-dedsec-text group-hover:text-neon-green transition-colors flex-1">Ce que nous exigeons</span>
-          <span class="text-neon-cyan/40 font-mono text-xs transition-transform duration-200 group-open:rotate-90 shrink-0">▸</span>
+          <span class="text-neon-green/40 font-mono text-xs transition-transform duration-200 group-open:rotate-90 shrink-0">▸</span>
         </summary>
-        <div class="px-5 py-5 border border-t-0 border-neon-cyan/15 bg-dedsec-black/40 text-sm text-dedsec-muted leading-relaxed space-y-3">
+        <div class="px-5 py-5 border border-t-0 border-neon-green/15 bg-dedsec-black/40 text-sm text-dedsec-muted leading-relaxed space-y-3">
           <div class="flex gap-4">
-            <span class="text-neon-cyan font-mono text-xs shrink-0 mt-0.5 w-6">01.</span>
-            <span>La <strong class="text-dedsec-text">fin de l'exception répressive</strong>  -  Arrêt des délits de présence et de complicité par le soin. Le personnel de réduction des risques ne peut pas être poursuivi pour exercer sa mission.</span>
+            <span class="text-neon-green font-mono text-xs shrink-0 mt-0.5 w-6">01.</span>
+            <span>La <strong class="text-dedsec-text">fin de l'exception répressive</strong> - Arrêt des délits de présence et de complicité par le soin. Le personnel de réduction des risques ne peut pas être poursuivi pour exercer sa mission.</span>
           </div>
           <div class="flex gap-4">
-            <span class="text-neon-cyan font-mono text-xs shrink-0 mt-0.5 w-6">02.</span>
-            <span><strong class="text-dedsec-text">L'abrogation du régime Mariani</strong>  -  25 ans d'existence, 0 preuve d'efficacité sur la sécurité. Il a produit de la clandestinité, pas de la protection.</span>
+            <span class="text-neon-green font-mono text-xs shrink-0 mt-0.5 w-6">02.</span>
+            <span><strong class="text-dedsec-text">L'abrogation du régime Mariani</strong> - 25 ans d'existence, 0 preuve d'efficacité sur la sécurité. Il a produit de la clandestinité, pas de la protection.</span>
           </div>
           <div class="flex gap-4">
-            <span class="text-neon-cyan font-mono text-xs shrink-0 mt-0.5 w-6">03.</span>
-            <span>La <strong class="text-dedsec-text">fin des interdictions préfectorales massives</strong>  -  Restrictions ciblées, motivées juridiquement, délimitées géographiquement. Pas des arrêtés blancs couvrant un département entier.</span>
+            <span class="text-neon-green font-mono text-xs shrink-0 mt-0.5 w-6">03.</span>
+            <span>La <strong class="text-dedsec-text">fin des interdictions préfectorales massives</strong> - Restrictions ciblées, motivées juridiquement, délimitées géographiquement. Pas des arrêtés blancs couvrant un département entier.</span>
           </div>
           <div class="flex gap-4">
-            <span class="text-neon-cyan font-mono text-xs shrink-0 mt-0.5 w-6">04.</span>
-            <span><strong class="text-dedsec-text">La désescalade systématique</strong>  -  Médiation, accès aux secours garanti sans interpellation des soignants, interdiction des charges nocturnes sur des rassemblements non-violents.</span>
+            <span class="text-neon-green font-mono text-xs shrink-0 mt-0.5 w-6">04.</span>
+            <span><strong class="text-dedsec-text">La désescalade systématique</strong> - Médiation, accès aux secours garanti sans interpellation des soignants, interdiction des charges nocturnes sur des rassemblements non-violents.</span>
           </div>
         </div>
       </details>

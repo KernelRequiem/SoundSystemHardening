@@ -451,6 +451,38 @@
     border-left-color: #00ff9f;
   }
 
+  /* ─── BOUTON PRIMAIRE (CTA principal rempli) ─────── */
+  .btn-neon-primary {
+    @apply inline-flex items-center px-5 py-2.5 font-mono text-xs tracking-widest font-bold transition-all no-underline;
+    background: #00ff9f;
+    color: #0a0a0f;
+    border: 1px solid #00ff9f;
+  }
+  .btn-neon-primary:hover {
+    background: transparent;
+    color: #00ff9f;
+    box-shadow: 0 0 20px rgba(0,255,159,0.2);
+  }
+
+  /* ─── LISIBILITÉ : paragraphes longs en Space Grotesk ── */
+  details > div p,
+  details > div span:not(.font-mono):not(.text-neon-green):not(.text-dedsec-text) {
+    font-family: 'Space Grotesk', sans-serif;
+    line-height: 1.8;
+  }
+
+  /* ─── INDICATEUR LIVE ────────────────────────────── */
+  @keyframes live-pulse {
+    0%, 100% { opacity: 1; box-shadow: 0 0 6px #00ff9f; }
+    50% { opacity: 0.4; box-shadow: 0 0 2px #00ff9f; }
+  }
+  .live-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: #00ff9f;
+    animation: live-pulse 2s ease-in-out infinite;
+    display: inline-block; flex-shrink: 0;
+  }
+
   /* ─── H3 dans les cards : reset des marges globales ── */
   .card-neon h3,
   .card-neon-critical h3,
