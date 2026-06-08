@@ -26,6 +26,11 @@
   status = 301
 
 [[redirects]]
+  from = "/que-faire"
+  to = "/decision"
+  status = 301
+
+[[redirects]]
   from = "/terrain"
   to = "/map"
   status = 301

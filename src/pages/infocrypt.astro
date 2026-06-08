@@ -1,0 +1,835 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+  title="InfoCrypt"
+  category="CYBER-OPSEC"
+  categoryHref="/wiki/Sécurite-Numerique"
+  description="Chiffrement de fiches sensibles 100% client-side. AES-GCM 256-bit, PBKDF2 250k itérations. Zéro serveur, aucune donnée transmise."
+>
+
+<div class="flex items-start justify-between gap-4 mb-2">
+  <h1 class="mb-0">InfoCrypt</h1>
+  <button onclick="icGuideOpen()" aria-label="Ouvrir le guide"
+    class="shrink-0 flex items-center gap-2 mt-1 px-4 py-2 font-mono text-[11px] tracking-widest uppercase border border-dedsec-border text-dedsec-muted hover:border-neon-green/50 hover:text-neon-green transition-all">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true">
+      <circle cx="12" cy="12" r="10"/><path d="M12 16v-4m0-4h.01" stroke-linecap="round"/>
+    </svg>
+    Guide
+  </button>
+</div>
+<p class="text-dedsec-muted text-sm font-mono tracking-wider mb-8">
+  ▸ Chiffrer une fiche sensible · La transmettre sur n'importe quel canal · Déchiffrer avec le mot de passe
+</p>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     GUIDE MODAL
+═══════════════════════════════════════════════════════════════ -->
+<div id="ic-guide-overlay"
+  class="fixed inset-0 z-50 hidden"
+  style="background:rgba(5,5,10,0.92);backdrop-filter:blur(4px);"
+  onclick="if(event.target===this)icGuideClose()">
+
+  <div class="absolute inset-y-0 right-0 w-full max-w-xl flex flex-col"
+    style="background:#08080c;border-left:1px solid #2a2a3a;overflow-y:auto;">
+
+    <!-- Header -->
+    <div class="flex items-center justify-between px-6 py-4 border-b border-dedsec-border sticky top-0 z-10"
+      style="background:#08080c;">
+      <div>
+        <div class="font-mono text-[10px] text-dedsec-muted tracking-widest uppercase mb-0.5">Documentation</div>
+        <div class="font-bold text-neon-green" style="font-family:'Space Grotesk',sans-serif;font-size:18px;">InfoCrypt — Guide d'utilisation</div>
+      </div>
+      <button onclick="icGuideClose()" aria-label="Fermer"
+        class="text-dedsec-muted hover:text-neon-green transition-colors font-mono text-xl leading-none p-1">
+        ×
+      </button>
+    </div>
+
+    <!-- Contenu -->
+    <div class="px-6 py-6 space-y-8" style="font-family:'Space Grotesk',sans-serif;">
+
+      <!-- C'est quoi -->
+      <section>
+        <div class="ic-guide-section-title">Qu'est-ce que c'est</div>
+        <p class="text-dedsec-text/90 text-sm leading-relaxed mb-3">
+          InfoCrypt chiffre une fiche d'information structurée (téléphone, lieu, rôle, consignes) avec un mot de passe, et produit un bloc de texte illisible que tu peux envoyer sur n'importe quel canal — Signal, Telegram, email, SMS.
+        </p>
+        <p class="text-dedsec-text/90 text-sm leading-relaxed">
+          Ce n'est pas une messagerie chiffrée. C'est une couche de protection supplémentaire sur le contenu, avant qu'il transite par un canal qui n'est pas entièrement sous ton contrôle.
+        </p>
+      </section>
+
+      <!-- Ce que ça fait / pas -->
+      <section>
+        <div class="ic-guide-section-title">Ce que ça fait — et pas</div>
+        <div class="space-y-2">
+          {[
+            { ok: true,  txt: 'Chiffre le contenu : sans le mot de passe, le texte est illisible' },
+            { ok: true,  txt: 'Authentifie les données : toute modification du ciphertext est détectée' },
+            { ok: true,  txt: 'Fonctionne hors ligne et sans compte, 100% dans le navigateur' },
+            { ok: false, txt: 'Ne cache pas le fait qu\'un message chiffré a été envoyé (métadonnées)' },
+            { ok: false, txt: 'Ne protège pas le canal de transmission (utilise Signal pour ça)' },
+            { ok: false, txt: 'Ne transmet pas le mot de passe — tu dois le faire par un autre canal' },
+          ].map(item => (
+            <div class="flex gap-3 text-sm items-start">
+              <span class={item.ok ? 'text-neon-green mt-0.5 shrink-0' : 'text-red-400/70 mt-0.5 shrink-0'}>
+                {item.ok ? '▸' : '✕'}
+              </span>
+              <span class={item.ok ? 'text-dedsec-text/80' : 'text-dedsec-muted'}>{item.txt}</span>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- Workflow recommandé -->
+      <section>
+        <div class="ic-guide-section-title">Workflow recommandé</div>
+        <ol class="space-y-3 list-none p-0 m-0 counter-reset-item">
+          {[
+            { n:'01', titre:'Convenir d\'un mot de passe', detail:'En présentiel ou via Signal (vocal). Jamais écrit dans le même canal que la fiche.' },
+            { n:'02', titre:'Remplir la fiche', detail:'Titre obligatoire. Remplis uniquement les champs nécessaires — moins il y a d\'info, moins il y a de surface d\'attaque.' },
+            { n:'03', titre:'Chiffrer', detail:'Clique Chiffrer. L\'opération est instantanée et locale. Le texte produit est inerte sans le mot de passe.' },
+            { n:'04', titre:'Transmettre le bloc chiffré', detail:'Copie le texte ou télécharge le .json. Envoie-le sur le canal de ton choix — même non chiffré, il est illisible.' },
+            { n:'05', titre:'Déchiffrer à réception', detail:'Le destinataire colle le texte sur cette page, entre le mot de passe, et voit la fiche en clair. Rien n\'est stocké.' },
+          ].map(step => (
+            <li class="flex gap-4 items-start">
+              <span class="font-mono text-xs text-neon-green/50 shrink-0 mt-0.5 w-6">{step.n}</span>
+              <div>
+                <div class="font-semibold text-sm text-dedsec-text mb-0.5">{step.titre}</div>
+                <div class="text-xs text-dedsec-muted leading-relaxed">{step.detail}</div>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      <!-- Choisir un bon mot de passe -->
+      <section>
+        <div class="ic-guide-section-title">Choisir un bon mot de passe</div>
+        <p class="text-dedsec-text/90 text-sm leading-relaxed mb-3">
+          C'est le seul secret. Si le mot de passe est faible, le chiffrement ne sert à rien.
+        </p>
+        <div class="space-y-2">
+          {[
+            'Utilise une phrase de passe longue (4+ mots aléatoires) plutôt qu\'un mot complexe court',
+            'Minimum 14 caractères — PBKDF2 ralentit le brute-force mais ne l\'annule pas',
+            'Varie le mot de passe selon le niveau de sensibilité de la fiche',
+            'Ne réutilise pas un mot de passe déjà utilisé ailleurs',
+            'Ne le note pas dans le même canal que la fiche chiffrée',
+          ].map(tip => (
+            <div class="flex gap-3 text-sm items-start">
+              <span class="text-neon-green/60 mt-0.5 shrink-0 font-mono text-xs">▸</span>
+              <span class="text-dedsec-text/80">{tip}</span>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- Sécurité technique résumée -->
+      <section>
+        <div class="ic-guide-section-title">Ce qui se passe sous le capot</div>
+        <div class="ic-guide-tech-block space-y-3">
+          {[
+            { label:'AES-GCM 256-bit', detail:'Chiffrement authentifié. Fournit à la fois la confidentialité et l\'intégrité — toute modification du ciphertext est détectée.' },
+            { label:'PBKDF2 / SHA-256 / 250 000 iter.', detail:'Dérive une clé de 256 bits à partir du mot de passe. Les 250k itérations rendent chaque tentative de brute-force coûteuse (~0,25s/essai sur CPU standard).' },
+            { label:'Salt aléatoire (16 octets)', detail:'Généré à chaque chiffrement. Empêche les attaques par précalcul (rainbow tables) même si deux fiches partagent le même mot de passe.' },
+            { label:'IV aléatoire (12 octets)', detail:'Garantit que deux chiffrements identiques produisent des ciphertexts différents. Critique pour AES-GCM.' },
+            { label:'Web Crypto API', detail:'API native du navigateur, aucune librairie tiers. Le code ne peut pas être modifié silencieusement par un tiers.' },
+          ].map(item => (
+            <div>
+              <div class="font-mono text-[11px] text-neon-green/80 mb-0.5">{item.label}</div>
+              <div class="text-xs text-dedsec-muted leading-relaxed">{item.detail}</div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- Limites -->
+      <section>
+        <div class="ic-guide-section-title">Limites à connaître</div>
+        <div class="space-y-2">
+          {[
+            'Si ton navigateur est compromis (malware, extension malveillante), InfoCrypt ne peut rien.',
+            'Le mot de passe transmis sur un canal non chiffré annule la protection.',
+            'InfoCrypt ne gère pas plusieurs fiches simultanément en V1.',
+            'Pas d\'auto-destruction — la fiche chiffrée peut être conservée indéfiniment par le destinataire.',
+          ].map(limit => (
+            <div class="flex gap-3 text-sm items-start">
+              <span class="text-yellow-500/70 mt-0.5 shrink-0 font-mono text-xs">!</span>
+              <span class="text-dedsec-muted">{limit}</span>
+            </div>
+          ))}
+        </div>
+      </section>
+
+    </div><!-- /contenu -->
+  </div><!-- /panel -->
+</div><!-- /overlay -->
+
+<!-- Badges -->
+<div class="grid grid-cols-3 gap-3 mb-8">
+  <div class="card-neon text-center py-4">
+    <div class="text-neon-green font-mono font-bold text-xs tracking-widest">AES-GCM 256</div>
+    <div class="text-dedsec-muted/60 text-[10px] font-mono mt-1.5 uppercase tracking-wider">Chiffrement authentifié</div>
+  </div>
+  <div class="card-neon text-center py-4">
+    <div class="text-neon-green font-mono font-bold text-xs tracking-widest">PBKDF2 250k</div>
+    <div class="text-dedsec-muted/60 text-[10px] font-mono mt-1.5 uppercase tracking-wider">Résistant brute-force</div>
+  </div>
+  <div class="card-neon text-center py-4">
+    <div class="text-neon-green font-mono font-bold text-xs tracking-widest">ZÉRO SERVEUR</div>
+    <div class="text-dedsec-muted/60 text-[10px] font-mono mt-1.5 uppercase tracking-wider">100% client-side</div>
+  </div>
+</div>
+
+<div class="info-box mb-8">
+  Tout le chiffrement se fait <strong>dans ton navigateur</strong>. Aucune donnée ne quitte ta machine.
+  Le mot de passe doit être transmis séparément (Signal, en présentiel) — InfoCrypt chiffre l'information, pas le canal.
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     TABS
+══════════════════════════════════════════════════════════════ -->
+<div id="ic-tabs" class="flex gap-0 mb-6 border border-dedsec-border" style="background:#08080c;">
+  <button id="tab-enc" onclick="icTab('enc')"
+    class="ic-tab-btn flex-1 py-3 font-mono text-xs tracking-widest uppercase transition-all">
+    🔒 Chiffrer
+  </button>
+  <button id="tab-dec" onclick="icTab('dec')"
+    class="ic-tab-btn flex-1 py-3 font-mono text-xs tracking-widest uppercase transition-all"
+    style="border-left:1px solid #2a2a3a;">
+    🔓 Déchiffrer
+  </button>
+</div>
+
+<!-- Alert globale -->
+<div id="ic-alert" class="ic-alert hidden mb-4 px-4 py-3 font-mono text-xs tracking-wide"></div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     PANEL CHIFFRER
+══════════════════════════════════════════════════════════════ -->
+<div id="panel-enc" class="ic-panel">
+
+  <div class="card-neon mb-4">
+    <div class="ic-section-title">Contenu de la fiche</div>
+
+    <div class="ic-field">
+      <label class="ic-label">Titre <span class="text-neon-green">*</span></label>
+      <input id="f-title" type="text" class="ic-input" placeholder="ex: Infoline Sono Principal" autocomplete="off">
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="ic-field">
+        <label class="ic-label">Téléphone</label>
+        <input id="f-phone" type="text" class="ic-input" placeholder="+33 6 XX XX XX XX" autocomplete="off">
+      </div>
+      <div class="ic-field">
+        <label class="ic-label">Rôle / Fonction</label>
+        <input id="f-role" type="text" class="ic-input" placeholder="ex: Technicien sono" autocomplete="off">
+      </div>
+    </div>
+    <div class="ic-field">
+      <label class="ic-label">Lieu / Zone</label>
+      <input id="f-location" type="text" class="ic-input" placeholder="ex: Foret de X - 86" autocomplete="off">
+    </div>
+    <div class="ic-field">
+      <label class="ic-label">Instructions / Notes</label>
+      <textarea id="f-instructions" class="ic-input ic-textarea" placeholder="ex: Appeler 30 min avant l'arrivee..."></textarea>
+    </div>
+    <div class="ic-field">
+      <label class="ic-label">Commentaire libre</label>
+      <textarea id="f-comment" class="ic-input ic-textarea" placeholder="Informations supplementaires..."></textarea>
+    </div>
+  </div>
+
+  <div class="card-neon mb-6">
+    <div class="ic-section-title">Mot de passe</div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="ic-field">
+        <label class="ic-label">Mot de passe <span class="text-neon-green">*</span></label>
+        <div class="ic-pw-wrap">
+          <input id="enc-pw1" type="password" class="ic-input" placeholder="Choisir un mot de passe fort" autocomplete="new-password" oninput="icPwStrength(this.value)">
+          <button class="ic-pw-eye" onclick="icTogglePw('enc-pw1')" type="button">👁</button>
+        </div>
+        <div class="ic-pw-bar-track mt-1.5"><div id="ic-pw-bar" class="ic-pw-bar-fill"></div></div>
+        <div id="ic-pw-hint" class="font-mono text-[10px] text-dedsec-muted mt-1">— Entrez un mot de passe</div>
+      </div>
+      <div class="ic-field">
+        <label class="ic-label">Confirmer <span class="text-neon-green">*</span></label>
+        <div class="ic-pw-wrap">
+          <input id="enc-pw2" type="password" class="ic-input" placeholder="Repeter le mot de passe" autocomplete="new-password">
+          <button class="ic-pw-eye" onclick="icTogglePw('enc-pw2')" type="button">👁</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex gap-3 flex-wrap mb-6">
+    <button id="btn-enc" onclick="icEncrypt()" class="btn-neon no-underline after:hidden flex items-center gap-2">
+      <span id="spin-enc" class="ic-spin hidden"></span>
+      <span>Chiffrer</span>
+    </button>
+    <button onclick="icClearEnc()"
+      class="font-mono text-xs tracking-widest uppercase px-5 py-3 border border-red-500/40 text-red-400/70 hover:border-red-500 hover:text-red-400 transition-all">
+      Effacer
+    </button>
+  </div>
+
+  <!-- Résultat -->
+  <div id="enc-result" class="hidden">
+    <div class="card-neon">
+      <div class="ic-section-title">Résultat chiffré</div>
+      <div class="flex justify-between items-center mb-2">
+        <span class="font-mono text-[10px] text-dedsec-muted tracking-widest uppercase">Texte chiffré (base64)</span>
+        <button onclick="icCopy('enc-output', this)" class="ic-copy-btn">Copier</button>
+      </div>
+      <div id="enc-output" class="ic-output-block"></div>
+      <div id="enc-meta" class="font-mono text-[10px] text-dedsec-muted/50 mt-2"></div>
+      <div class="flex gap-3 mt-4 pt-4 border-t border-dedsec-border">
+        <button onclick="icDlJSON()" class="ic-copy-btn">⬇ Télécharger .json</button>
+        <button onclick="icDlTXT()" class="ic-copy-btn">⬇ Télécharger .txt</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     PANEL DÉCHIFFRER
+══════════════════════════════════════════════════════════════ -->
+<div id="panel-dec" class="ic-panel hidden">
+
+  <div class="card-neon mb-4">
+    <div class="ic-section-title">Données chiffrées</div>
+
+    <label id="ic-drop-zone" for="ic-file-import"
+      class="ic-drop-zone flex flex-col items-center justify-center gap-1 cursor-pointer mb-4 py-5 border border-dashed border-dedsec-border hover:border-neon-green/50 transition-colors text-dedsec-muted hover:text-neon-green font-mono text-xs tracking-widest uppercase text-center">
+      <span>📂 Importer un fichier .json ou .txt</span>
+      <span class="text-[10px] text-dedsec-muted/40 normal-case tracking-wide">ou glisser-deposer</span>
+      <input type="file" id="ic-file-import" class="hidden" accept=".json,.txt" onchange="icImportFile(this)">
+    </label>
+
+    <div class="ic-field">
+      <label class="ic-label">Ou coller le texte chiffré</label>
+      <textarea id="dec-input" class="ic-input ic-textarea" style="min-height:110px;font-size:11px;" placeholder="Coller ici le bloc chiffre (base64 ou JSON)..."></textarea>
+    </div>
+  </div>
+
+  <div class="card-neon mb-6">
+    <div class="ic-section-title">Mot de passe</div>
+    <div class="ic-field">
+      <label class="ic-label">Mot de passe <span class="text-neon-green">*</span></label>
+      <div class="ic-pw-wrap">
+        <input id="dec-pw" type="password" class="ic-input" placeholder="Entrer le mot de passe" autocomplete="current-password">
+        <button class="ic-pw-eye" onclick="icTogglePw('dec-pw')" type="button">👁</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex gap-3 flex-wrap mb-6">
+    <button id="btn-dec" onclick="icDecrypt()" class="btn-neon no-underline after:hidden flex items-center gap-2">
+      <span id="spin-dec" class="ic-spin hidden"></span>
+      <span>Déchiffrer</span>
+    </button>
+    <button onclick="icClearDec()"
+      class="font-mono text-xs tracking-widest uppercase px-5 py-3 border border-red-500/40 text-red-400/70 hover:border-red-500 hover:text-red-400 transition-all">
+      Effacer
+    </button>
+  </div>
+
+  <div id="dec-alert-err" class="ic-alert hidden mb-4 px-4 py-3 font-mono text-xs tracking-wide"></div>
+  <div id="dec-alert-ok"  class="ic-alert-ok hidden mb-4 px-4 py-3 font-mono text-xs tracking-wide"></div>
+
+  <!-- Fiche déchiffrée -->
+  <div id="dec-card" class="hidden card-neon" style="border-color:rgba(0,255,159,0.35);">
+    <div id="dec-card-title" class="text-neon-green font-bold text-lg mb-4 pb-3 border-b border-dedsec-border" style="font-family:'Space Grotesk',sans-serif;"></div>
+    <div id="dec-card-fields"></div>
+    <div id="dec-meta" class="font-mono text-[10px] text-dedsec-muted/40 mt-4 pt-3 border-t border-dedsec-border"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     STYLES
+══════════════════════════════════════════════════════════════ -->
+<style is:global>
+  .ic-tab-btn {
+    color: #7a7a8a;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+  }
+  .ic-tab-btn.ic-active {
+    background: rgba(0,255,159,0.1);
+    color: #00ff9f;
+    box-shadow: inset 0 -2px 0 #00ff9f;
+  }
+  .ic-tab-btn:not(.ic-active):hover {
+    color: #e8e8f0;
+    background: rgba(255,255,255,0.03);
+  }
+
+  .ic-section-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: rgba(0,255,159,0.7);
+    margin-bottom: 14px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #2a2a3a;
+  }
+
+  .ic-field { margin-bottom: 14px; }
+
+  .ic-label {
+    display: block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #7a7a8a;
+    margin-bottom: 6px;
+  }
+
+  .ic-input {
+    width: 100%;
+    background: #08080c;
+    border: 1px solid #2a2a3a;
+    color: #e8e8f0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    padding: 10px 12px;
+    outline: none;
+    transition: border-color 0.15s;
+    resize: none;
+  }
+  .ic-input:focus { border-color: rgba(0,255,159,0.5); }
+  .ic-input::placeholder { color: #3a3a4a; }
+
+  .ic-textarea { min-height: 80px; resize: vertical; }
+
+  .ic-pw-wrap { position: relative; }
+  .ic-pw-wrap .ic-input { padding-right: 38px; }
+
+  .ic-pw-eye {
+    position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+    background: none; border: none; cursor: pointer; font-size: 15px; padding: 0;
+    color: #3a3a4a;
+  }
+  .ic-pw-eye:hover { color: #7a7a8a; }
+
+  .ic-pw-bar-track { height: 3px; background: #2a2a3a; overflow: hidden; }
+  .ic-pw-bar-fill  { height: 100%; width: 0%; transition: width 0.2s, background 0.2s; }
+
+  .ic-output-block {
+    background: #05050a;
+    border: 1px solid #2a2a3a;
+    padding: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    word-break: break-all;
+    max-height: 180px;
+    overflow-y: auto;
+    color: #7a7a8a;
+    line-height: 1.6;
+  }
+
+  .ic-copy-btn {
+    background: #08080c;
+    border: 1px solid #2a2a3a;
+    color: #7a7a8a;
+    cursor: pointer;
+    padding: 5px 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.05em;
+    transition: all 0.15s;
+  }
+  .ic-copy-btn:hover  { border-color: rgba(0,255,159,0.5); color: #00ff9f; }
+  .ic-copy-btn.copied { border-color: #00ff9f; color: #00ff9f; }
+
+  .ic-alert {
+    border: 1px solid rgba(255,68,68,0.5);
+    background: rgba(255,68,68,0.06);
+    color: rgba(255,68,68,0.9);
+    border-radius: 0;
+  }
+  .ic-alert-ok {
+    border: 1px solid rgba(0,255,159,0.4);
+    background: rgba(0,255,159,0.06);
+    color: rgba(0,255,159,0.9);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.05em;
+  }
+
+  .ic-drop-zone { background: #05050a; }
+
+  .ic-spin {
+    width: 14px; height: 14px;
+    border: 2px solid rgba(0,0,0,0.5);
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: icspin 0.7s linear infinite;
+    display: inline-block;
+    flex-shrink: 0;
+  }
+  @keyframes icspin { to { transform: rotate(360deg); } }
+
+  .ic-card-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid #2a2a3a;
+  }
+  .ic-card-row:last-child { border-bottom: none; }
+  .ic-card-row-lbl {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #7a7a8a;
+    width: 110px;
+    flex-shrink: 0;
+    padding-top: 2px;
+  }
+  .ic-card-row-val {
+    flex: 1;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 14px;
+    color: #e8e8f0;
+    word-break: break-word;
+    white-space: pre-wrap;
+  }
+
+  /* ── Guide modal ── */
+  .ic-guide-section-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: rgba(0,255,159,0.65);
+    margin-bottom: 12px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid #2a2a3a;
+  }
+
+  .ic-guide-tech-block {
+    background: #05050a;
+    border: 1px solid #2a2a3a;
+    padding: 16px;
+  }
+
+  #ic-guide-overlay {
+    transition: opacity 0.2s;
+  }
+  #ic-guide-overlay.ic-guide-visible {
+    display: block !important;
+  }
+</style>
+
+<!-- ══════════════════════════════════════════════════════════════
+     SCRIPT CRYPTO (client-side uniquement)
+══════════════════════════════════════════════════════════════ -->
+<script is:inline>
+(function () {
+  // ── GUIDE MODAL ───────────────────────────────────────────────
+  window.icGuideOpen = function () {
+    const el = document.getElementById('ic-guide-overlay');
+    el.classList.remove('hidden');
+    // Trap focus / prevent body scroll
+    document.body.style.overflow = 'hidden';
+  };
+  window.icGuideClose = function () {
+    document.getElementById('ic-guide-overlay').classList.add('hidden');
+    document.body.style.overflow = '';
+  };
+  // Fermer avec Echap
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') icGuideClose();
+  });
+
+  // ── TABS ─────────────────────────────────────────────────────
+  window.icTab = function (name) {
+    ['enc','dec'].forEach(n => {
+      document.getElementById('tab-'+n).classList.toggle('ic-active', n===name);
+      document.getElementById('panel-'+n).classList.toggle('hidden', n!==name);
+    });
+  };
+  // Init : tab enc actif
+  document.getElementById('tab-enc').classList.add('ic-active');
+
+  // ── HELPERS ──────────────────────────────────────────────────
+  window.icTogglePw = id => {
+    const el = document.getElementById(id);
+    el.type = el.type === 'password' ? 'text' : 'password';
+  };
+
+  function icShowAlert(id, type, msg) {
+    const el = document.getElementById(id);
+    el.className = (type === 'ok' ? 'ic-alert-ok' : 'ic-alert') + ' mb-4 px-4 py-3 font-mono text-xs tracking-wide';
+    el.textContent = msg;
+  }
+  function icHideAlert(id) {
+    const el = document.getElementById(id);
+    el.className = el.className.replace(/ic-alert\S*/g,'') + ' hidden';
+  }
+
+  window.icCopy = function (srcId, btn) {
+    navigator.clipboard.writeText(document.getElementById(srcId).textContent).then(() => {
+      btn.textContent = '✓ Copie'; btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = 'Copier'; btn.classList.remove('copied'); }, 2000);
+    });
+  };
+
+  function icCopyRaw(text, btn) {
+    navigator.clipboard.writeText(text).then(() => {
+      const orig = btn.textContent; btn.textContent='✓'; btn.classList.add('copied');
+      setTimeout(() => { btn.textContent=orig; btn.classList.remove('copied'); }, 2000);
+    });
+  }
+
+  function esc(s) {
+    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  // ── PASSWORD STRENGTH ─────────────────────────────────────────
+  window.icPwStrength = function (pw) {
+    const bar  = document.getElementById('ic-pw-bar');
+    const hint = document.getElementById('ic-pw-hint');
+    if (!pw) { bar.style.width='0%'; hint.textContent='— Entrez un mot de passe'; hint.style.color=''; return; }
+    let score = 0;
+    if (pw.length >= 8)  score++;
+    if (pw.length >= 14) score++;
+    if (/[A-Z]/.test(pw)) score++;
+    if (/[0-9]/.test(pw)) score++;
+    if (/[^A-Za-z0-9]/.test(pw)) score++;
+    const levels = [
+      { pct:'15%', color:'#ff4444', label:'Tres faible' },
+      { pct:'30%', color:'#ff6b35', label:'Faible'      },
+      { pct:'55%', color:'#ffaa00', label:'Moyen'       },
+      { pct:'80%', color:'#7bed9f', label:'Fort'        },
+      { pct:'100%',color:'#00ff9f', label:'Tres fort'   },
+    ];
+    const l = levels[Math.min(score-1,4)] || levels[0];
+    bar.style.width = l.pct; bar.style.background = l.color;
+    hint.textContent = '— ' + l.label; hint.style.color = l.color;
+  };
+
+  // ── CRYPTO UTILS ──────────────────────────────────────────────
+  const ITER = 250000, SALT_LEN = 16, IV_LEN = 12;
+
+  function b64(buf) { return btoa(String.fromCharCode(...new Uint8Array(buf))); }
+  function unb64(s) { return Uint8Array.from(atob(s), c=>c.charCodeAt(0)).buffer; }
+
+  async function deriveKey(pw, salt) {
+    const km = await crypto.subtle.importKey('raw', new TextEncoder().encode(pw), 'PBKDF2', false, ['deriveKey']);
+    return crypto.subtle.deriveKey(
+      { name:'PBKDF2', salt, iterations:ITER, hash:'SHA-256' },
+      km, { name:'AES-GCM', length:256 }, false, ['encrypt','decrypt']
+    );
+  }
+
+  async function icEncryptPayload(plain, pw) {
+    const salt = crypto.getRandomValues(new Uint8Array(SALT_LEN));
+    const iv   = crypto.getRandomValues(new Uint8Array(IV_LEN));
+    const key  = await deriveKey(pw, salt);
+    const ct   = await crypto.subtle.encrypt({name:'AES-GCM',iv}, key, new TextEncoder().encode(plain));
+    return { v:1, algo:'AES-GCM-256', kdf:'PBKDF2-SHA256', iter:ITER,
+             salt:b64(salt), iv:b64(iv), ct:b64(ct), ts:new Date().toISOString() };
+  }
+
+  async function icDecryptPayload(payload, pw) {
+    const salt = unb64(payload.salt), iv = unb64(payload.iv), ct = unb64(payload.ct);
+    const km = await crypto.subtle.importKey('raw', new TextEncoder().encode(pw), 'PBKDF2', false, ['deriveKey']);
+    const key = await crypto.subtle.deriveKey(
+      { name:'PBKDF2', salt, iterations:payload.iter||ITER, hash:'SHA-256' },
+      km, { name:'AES-GCM', length:256 }, false, ['decrypt']
+    );
+    const pt = await crypto.subtle.decrypt({name:'AES-GCM',iv}, key, ct);
+    return new TextDecoder().decode(pt);
+  }
+
+  // ── CURRENT PAYLOAD ───────────────────────────────────────────
+  let currentPayload = null;
+
+  // ── ENCRYPT FLOW ──────────────────────────────────────────────
+  window.icEncrypt = async function () {
+    const title = document.getElementById('f-title').value.trim();
+    const pw1   = document.getElementById('enc-pw1').value;
+    const pw2   = document.getElementById('enc-pw2').value;
+
+    const alert = document.getElementById('ic-alert');
+    alert.className = 'hidden';
+
+    if (!title) { icShowAlert('ic-alert','err','Le titre est obligatoire.'); return; }
+    if (!pw1)   { icShowAlert('ic-alert','err','Le mot de passe est obligatoire.'); return; }
+    if (pw1 !== pw2) { icShowAlert('ic-alert','err','Les mots de passe ne correspondent pas.'); return; }
+
+    const btn = document.getElementById('btn-enc');
+    const spin = document.getElementById('spin-enc');
+    btn.disabled = true; spin.classList.remove('hidden');
+
+    try {
+      const data = { title };
+      const phone = document.getElementById('f-phone').value.trim();
+      const role  = document.getElementById('f-role').value.trim();
+      const loc   = document.getElementById('f-location').value.trim();
+      const instr = document.getElementById('f-instructions').value.trim();
+      const comm  = document.getElementById('f-comment').value.trim();
+      if (phone) data.phone = phone;
+      if (role)  data.role  = role;
+      if (loc)   data.location = loc;
+      if (instr) data.instructions = instr;
+      if (comm)  data.comment = comm;
+
+      const payload = await icEncryptPayload(JSON.stringify(data), pw1);
+      currentPayload = payload;
+
+      document.getElementById('enc-output').textContent = btoa(JSON.stringify(payload));
+      document.getElementById('enc-meta').textContent =
+        `Chiffre le ${new Date(payload.ts).toLocaleString('fr-FR')} · AES-GCM-256 · PBKDF2 ${payload.iter.toLocaleString()} iter`;
+      document.getElementById('enc-result').classList.remove('hidden');
+      icShowAlert('ic-alert','ok','Fiche chiffree. Copiez le texte ou telechargez le fichier.');
+      document.getElementById('enc-result').scrollIntoView({behavior:'smooth',block:'nearest'});
+    } catch(e) {
+      icShowAlert('ic-alert','err','Erreur de chiffrement : '+e.message);
+    } finally {
+      btn.disabled=false; spin.classList.add('hidden');
+    }
+  };
+
+  window.icDlJSON = function () {
+    if (!currentPayload) return;
+    const blob = new Blob([JSON.stringify(currentPayload,null,2)],{type:'application/json'});
+    icTriggerDl(blob,'infocrypt_'+currentPayload.ts.replace(/[:.TZ]/g,'-')+'.json');
+  };
+  window.icDlTXT = function () {
+    if (!currentPayload) return;
+    const blob = new Blob(['INFOCRYPT V1\n'+'='.repeat(40)+'\n'+btoa(JSON.stringify(currentPayload))+'\n'],{type:'text/plain'});
+    icTriggerDl(blob,'infocrypt_'+currentPayload.ts.replace(/[:.TZ]/g,'-')+'.txt');
+  };
+  function icTriggerDl(blob, name) {
+    const url=URL.createObjectURL(blob), a=document.createElement('a');
+    a.href=url; a.download=name; a.click(); URL.revokeObjectURL(url);
+  }
+
+  window.icClearEnc = function () {
+    ['f-title','f-phone','f-role','f-location','f-instructions','f-comment','enc-pw1','enc-pw2']
+      .forEach(id=>document.getElementById(id).value='');
+    document.getElementById('enc-result').classList.add('hidden');
+    document.getElementById('ic-alert').className='hidden';
+    document.getElementById('ic-pw-bar').style.width='0%';
+    document.getElementById('ic-pw-hint').textContent='— Entrez un mot de passe';
+    currentPayload=null;
+  };
+
+  // ── IMPORT FILE ───────────────────────────────────────────────
+  window.icImportFile = function (input) {
+    const file = input.files[0]; if (!file) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+      let text = e.target.result.trim();
+      if (text.startsWith('INFOCRYPT')) {
+        const lines = text.split('\n');
+        text = lines.find(l => l.length>40 && !/^[=\s]|^INFO/.test(l)) || text;
+      }
+      document.getElementById('dec-input').value = text;
+    };
+    reader.readAsText(file);
+  };
+
+  // Drag-and-drop
+  const dz = document.getElementById('ic-drop-zone');
+  if (dz) {
+    dz.addEventListener('dragover', e=>{ e.preventDefault(); dz.classList.add('border-neon-green/50'); });
+    dz.addEventListener('dragleave', ()=>dz.classList.remove('border-neon-green/50'));
+    dz.addEventListener('drop', e=>{
+      e.preventDefault(); dz.classList.remove('border-neon-green/50');
+      const file=e.dataTransfer.files[0]; if(!file) return;
+      const fi=document.getElementById('ic-file-import'); fi.files=e.dataTransfer.files; icImportFile(fi);
+    });
+  }
+
+  // ── DECRYPT FLOW ──────────────────────────────────────────────
+  window.icDecrypt = async function () {
+    ['dec-alert-err','dec-alert-ok'].forEach(id=>{
+      const el=document.getElementById(id); el.className=(el.className||'')+' hidden';
+    });
+    document.getElementById('dec-card').classList.add('hidden');
+
+    const raw = document.getElementById('dec-input').value.trim();
+    const pw  = document.getElementById('dec-pw').value;
+
+    if (!raw) { icShowAlert('dec-alert-err','err','Collez un texte chiffre ou importez un fichier.'); return; }
+    if (!pw)  { icShowAlert('dec-alert-err','err','Le mot de passe est obligatoire.'); return; }
+
+    const btn=document.getElementById('btn-dec'), spin=document.getElementById('spin-dec');
+    btn.disabled=true; spin.classList.remove('hidden');
+
+    try {
+      let payload;
+      try { payload = JSON.parse(raw); } catch(_) {
+        try { payload = JSON.parse(atob(raw)); } catch(_2) {
+          throw new Error('Format non reconnu (JSON ou base64 InfoCrypt attendu).');
+        }
+      }
+      if (!payload.ct||!payload.salt||!payload.iv) throw new Error('Payload invalide : champs manquants.');
+
+      const plaintext = await icDecryptPayload(payload, pw);
+      const data = JSON.parse(plaintext);
+
+      // Render card
+      document.getElementById('dec-card-title').textContent = data.title || '(Sans titre)';
+      const fields = [
+        {key:'phone',        label:'Telephone'},
+        {key:'role',         label:'Role'},
+        {key:'location',     label:'Lieu / Zone'},
+        {key:'instructions', label:'Instructions'},
+        {key:'comment',      label:'Commentaire'},
+      ];
+      const container = document.getElementById('dec-card-fields');
+      container.innerHTML = '';
+      fields.forEach(f => {
+        if (!data[f.key]) return;
+        const row = document.createElement('div');
+        row.className = 'ic-card-row';
+        row.innerHTML = `
+          <div class="ic-card-row-lbl">${f.label}</div>
+          <div class="ic-card-row-val">${esc(data[f.key])}</div>
+          <button class="ic-copy-btn" style="flex-shrink:0;" onclick="(function(btn){
+            navigator.clipboard.writeText(${JSON.stringify(data[f.key])}).then(()=>{
+              var o=btn.textContent; btn.textContent='✓'; btn.classList.add('copied');
+              setTimeout(()=>{btn.textContent=o;btn.classList.remove('copied')},2000);
+            });
+          })(this)">⧉</button>`;
+        container.appendChild(row);
+      });
+      document.getElementById('dec-meta').textContent =
+        payload.ts ? `Chiffre le ${new Date(payload.ts).toLocaleString('fr-FR')} · ${payload.algo} · PBKDF2 ${(payload.iter||0).toLocaleString()} iter` : '';
+
+      document.getElementById('dec-card').classList.remove('hidden');
+      icShowAlert('dec-alert-ok','ok','Dechiffrement reussi.');
+
+    } catch(e) {
+      const msg = e.name==='OperationError' ? 'Mot de passe incorrect ou donnees corrompues.' : e.message;
+      icShowAlert('dec-alert-err','err','x ' + msg);
+    } finally {
+      btn.disabled=false; spin.classList.add('hidden');
+    }
+  };
+
+  window.icClearDec = function () {
+    document.getElementById('dec-input').value='';
+    document.getElementById('dec-pw').value='';
+    document.getElementById('dec-card').classList.add('hidden');
+    ['dec-alert-err','dec-alert-ok'].forEach(id=>{
+      const el=document.getElementById(id); el.className=(el.className||'')+' hidden';
+    });
+    document.getElementById('ic-file-import').value='';
+  };
+})();
+</script>
+
+</Layout>
