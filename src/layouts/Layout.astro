@@ -220,8 +220,8 @@ const navigation = [
 
           <!-- Actions rapides -->
           <div class="px-3 pb-4 grid grid-cols-2 gap-2">
-            <a href="/wiki/Urgence-immédiate" class="sidebar-quick-crit no-underline"
-               style={currentPath === '/wiki/Urgence-immédiate' ? 'border-color:rgba(255,68,68,0.7);color:rgba(255,68,68,1);background:rgba(255,68,68,0.08);' : ''}>
+            <a href="/urgence" class="sidebar-quick-crit no-underline"
+               style={currentPath === '/urgence' ? 'border-color:rgba(255,68,68,0.7);color:rgba(255,68,68,1);background:rgba(255,68,68,0.08);' : ''}>
               <span>▲</span> URGENCE
             </a>
             <a href="/contribuer" class="sidebar-quick no-underline">
@@ -310,7 +310,7 @@ const navigation = [
             <!-- Zone outils -->
             <div class="flex items-end overflow-x-auto scrollbar-none flex-1 min-w-0" style="padding-left:52px;">
               {[
-                { href: '/wiki/Urgence-immédiate',       label: 'URGENCE',  icon: '▲', critical: true  },
+                { href: '/urgence',                       label: 'URGENCE',  icon: '▲', critical: true  },
                 { href: '/wiki/Strategie-contre-ripost', label: 'RIPOST',   icon: '↺', critical: false },
                 { href: '/decision',                     label: 'DÉCISION', icon: '◩', critical: false },
                 { href: '/map',                          label: 'MAP',      icon: '⊞', critical: false },

@@ -1,0 +1,429 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+  title="URGENCE"
+  description="Protocole d'urgence immédiate : contrôle routier, fouille, saisie matériel, garde à vue. Réflexes terrain free party."
+  category="TERRAIN"
+>
+
+<style>
+  /* ─── Bandeau d'alerte ─── */
+  .alert-banner {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(255, 44, 44, 0.08);
+    border: 1px solid rgba(255, 44, 44, 0.35);
+    border-left: 4px solid #ff2c2c;
+    padding: 14px 20px;
+    margin-bottom: 32px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #ff6b6b;
+  }
+  .alert-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: #ff2c2c;
+    box-shadow: 0 0 8px #ff2c2c;
+    flex-shrink: 0;
+    animation: blink 1s ease-in-out infinite;
+  }
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.2; }
+  }
+
+  /* ─── Grille de scénarios ─── */
+  .scenarios-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+    margin-bottom: 48px;
+  }
+  .scenario-card {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background: rgba(8, 8, 12, 0.9);
+    border: 1px solid rgba(255, 44, 44, 0.2);
+    border-top: 3px solid #ff2c2c;
+    padding: 24px;
+    text-decoration: none;
+    transition: border-color 0.15s, background 0.15s, transform 0.1s;
+    position: relative;
+  }
+  .scenario-card:hover {
+    border-color: rgba(255, 44, 44, 0.6);
+    border-top-color: #ff6b6b;
+    background: rgba(255, 44, 44, 0.05);
+    transform: translateY(-2px);
+  }
+  .scenario-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: rgba(255, 44, 44, 0.5);
+    text-transform: uppercase;
+  }
+  .scenario-icon {
+    font-size: 28px;
+    line-height: 1;
+    margin: 4px 0;
+  }
+  .scenario-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: #e8e8f0;
+    line-height: 1.2;
+    margin: 0;
+  }
+  .scenario-action {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: rgba(232, 232, 240, 0.5);
+    line-height: 1.5;
+    margin: 0;
+  }
+  .scenario-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: auto;
+    padding-top: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #ff6b6b;
+    border-top: 1px solid rgba(255, 44, 44, 0.15);
+  }
+
+  /* ─── Protocole réflexe ─── */
+  .protocol-section {
+    margin-bottom: 48px;
+  }
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .section-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: #ff6b6b;
+    padding: 4px 10px;
+    border: 1px solid rgba(255, 44, 44, 0.3);
+    background: rgba(255, 44, 44, 0.06);
+  }
+  .section-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(255, 44, 44, 0.25), transparent);
+  }
+  .protocol-steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+  }
+  .protocol-step {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 20px;
+    background: rgba(8, 8, 12, 0.9);
+    border: 1px solid rgba(42, 42, 58, 0.8);
+    border-bottom: 3px solid rgba(255, 44, 44, 0.4);
+    position: relative;
+    overflow: hidden;
+  }
+  .step-number {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 36px;
+    font-weight: 700;
+    line-height: 1;
+    color: rgba(255, 44, 44, 0.15);
+    position: absolute;
+    top: 12px;
+    right: 16px;
+  }
+  .step-label {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: #e8e8f0;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .step-detail {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: rgba(232, 232, 240, 0.45);
+    line-height: 1.6;
+  }
+  .step-quote {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: #ff9f9f;
+    background: rgba(255, 44, 44, 0.07);
+    border-left: 2px solid rgba(255, 44, 44, 0.4);
+    padding: 6px 10px;
+    margin-top: 4px;
+    font-style: italic;
+  }
+
+  /* ─── Strip contacts ─── */
+  .contacts-strip {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .contact-block {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 16px 20px;
+    background: rgba(8, 8, 12, 0.9);
+    border: 1px solid rgba(42, 42, 58, 0.8);
+    border-left: 3px solid rgba(0, 255, 159, 0.4);
+  }
+  .contact-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: rgba(0, 255, 159, 0.5);
+  }
+  .contact-value {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    font-weight: 700;
+    color: #e8e8f0;
+    text-decoration: none;
+    transition: color 0.1s;
+  }
+  .contact-value:hover {
+    color: #00ff9f;
+  }
+  .contact-sub {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: rgba(232, 232, 240, 0.35);
+  }
+
+  /* ─── Page title ─── */
+  .page-title-block {
+    margin-bottom: 32px;
+  }
+  .page-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: rgba(255, 44, 44, 0.6);
+    margin-bottom: 8px;
+  }
+  .page-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(28px, 5vw, 42px);
+    font-weight: 700;
+    color: #e8e8f0;
+    line-height: 1.1;
+    margin: 0 0 8px 0;
+  }
+  .page-title span {
+    color: #ff4444;
+  }
+  .page-subtitle {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: rgba(232, 232, 240, 0.4);
+  }
+</style>
+
+<!-- Titre de page -->
+<div class="page-title-block">
+  <p class="page-eyebrow">▲ PROTOCOLE CRITIQUE</p>
+  <h1 class="page-title">URGENCE <span>IMMÉDIATE</span></h1>
+  <p class="page-subtitle">Fiches réflexes terrain · Aucune lecture requise</p>
+</div>
+
+<!-- Bandeau d'alerte -->
+<div class="alert-banner">
+  <span class="alert-dot"></span>
+  <span>Ce document est conçu pour être lu en 10 secondes sous stress. Repère ta situation ci-dessous et clique.</span>
+</div>
+
+<!-- ═══ SCÉNARIOS ═══ -->
+<div class="section-header">
+  <span class="section-tag">01 · Identifie ta situation</span>
+  <div class="section-line"></div>
+</div>
+
+<div class="scenarios-grid">
+
+  <a href="/wiki/Modus-Operandi" class="scenario-card" style="text-decoration:none;">
+    <span class="scenario-num">Situation 01</span>
+    <span class="scenario-icon">🚔</span>
+    <h2 class="scenario-title">Contrôle routier / Barrage</h2>
+    <p class="scenario-action">Tu es arrêté sur la route. Les forces de l'ordre veulent voir les papiers et inspecter le véhicule.</p>
+    <span class="scenario-cta">▶ Réflexes à adopter</span>
+  </a>
+
+  <a href="/wiki/recours-juridiques" class="scenario-card" style="text-decoration:none;">
+    <span class="scenario-num">Situation 02</span>
+    <span class="scenario-icon">🔍</span>
+    <h2 class="scenario-title">Fouille de véhicule</h2>
+    <p class="scenario-action">Les autorités veulent ouvrir le coffre ou inspecter l'intérieur du camion / van.</p>
+    <span class="scenario-cta">▶ Inspection vs Fouille : tes droits</span>
+  </a>
+
+  <a href="/wiki/Templates-Recours" class="scenario-card" style="text-decoration:none;">
+    <span class="scenario-num">Situation 03</span>
+    <span class="scenario-icon">🎛️</span>
+    <h2 class="scenario-title">Saisie de matériel</h2>
+    <p class="scenario-action">Le son, le groupe électrogène ou les camions sont en cours de confiscation.</p>
+    <span class="scenario-cta">▶ Template restitution + FSJS</span>
+  </a>
+
+  <a href="/wiki/Contacts-Allies#en-garde-à-vue--que-faire-dans-les-premières-minutes" class="scenario-card" style="text-decoration:none;">
+    <span class="scenario-num">Situation 04</span>
+    <span class="scenario-icon">🚨</span>
+    <h2 class="scenario-title">Garde à vue</h2>
+    <p class="scenario-action">Un membre du collectif est interpellé et emmené par les forces de l'ordre.</p>
+    <span class="scenario-cta">▶ Protocole GAV complet</span>
+  </a>
+
+  <a href="/wiki/Contacts-Allies#urgence-juridique-immédiate" class="scenario-card" style="text-decoration:none;">
+    <span class="scenario-num">Situation 05</span>
+    <span class="scenario-icon">⚖️</span>
+    <h2 class="scenario-title">Besoin d'un avocat</h2>
+    <p class="scenario-action">Conseil juridique immédiat nécessaire. Barreau, permanence pénale, avocats spécialisés.</p>
+    <span class="scenario-cta">▶ Numéros et contacts actifs</span>
+  </a>
+
+</div>
+
+<!-- ═══ PROTOCOLE 4 ÉTAPES ═══ -->
+<div class="protocol-section">
+  <div class="section-header">
+    <span class="section-tag">02 · Protocole réflexe universel</span>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="protocol-steps">
+
+    <div class="protocol-step">
+      <span class="step-number">1</span>
+      <span class="step-label">Déconnecte</span>
+      <p class="step-detail">Mode avion ou extinction totale. Pas de discussion avec le téléphone allumé.</p>
+      <div class="step-quote">Objectif : empêcher toute extraction de données</div>
+    </div>
+
+    <div class="protocol-step">
+      <span class="step-number">2</span>
+      <span class="step-label">Silence</span>
+      <p class="step-detail">Tu n'es pas obligé de répondre aux questions. L'identité uniquement si demandée.</p>
+      <div class="step-quote">"Je n'ai rien à déclarer pour le moment."</div>
+    </div>
+
+    <div class="protocol-step">
+      <span class="step-number">3</span>
+      <span class="step-label">Documente</span>
+      <p class="step-detail">Si safe, filme discrètement. Note heure, lieu, matricules. Ne filme pas les visages.</p>
+      <div class="step-quote">La preuve se construit maintenant</div>
+    </div>
+
+    <div class="protocol-step">
+      <span class="step-number">4</span>
+      <span class="step-label">Active le réseau</span>
+      <p class="step-detail">Un membre resté libre contacte le FSJS et/ou l'avocat dès la première information.</p>
+      <div class="step-quote">Ne pas attendre pour contacter le FSJS</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══ CONTACTS ═══ -->
+<div class="section-header">
+  <span class="section-tag">03 · Contacts d'urgence</span>
+  <div class="section-line"></div>
+</div>
+
+<div class="contacts-strip">
+
+  <div class="contact-block">
+    <span class="contact-label">FSJS · Saisie matériel</span>
+    <a href="mailto:contact@fsjs.fr" class="contact-value">contact@fsjs.fr</a>
+    <span class="contact-sub">Fonds de Soutien Juridique des Sons · 90% de restitution</span>
+  </div>
+
+  <div class="contact-block">
+    <span class="contact-label">Avocat · Barreau Paris</span>
+    <a href="tel:+33144324800" class="contact-value">01 44 32 48 00</a>
+    <span class="contact-sub">Permanence pénale 24h/24 · GAV uniquement</span>
+  </div>
+
+  <div class="contact-block">
+    <span class="contact-label">Trouver un barreau local</span>
+    <a href="https://www.cnb.avocat.fr/fr/trouver-un-barreau" target="_blank" rel="noopener" class="contact-value">cnb.avocat.fr</a>
+    <span class="contact-sub">Annuaire national des barreaux · permanences pénales</span>
+  </div>
+
+  <div class="contact-block">
+    <span class="contact-label">Violences policières</span>
+    <a href="https://www.flagrant-deni.fr" target="_blank" rel="noopener" class="contact-value">flagrant-deni.fr</a>
+    <span class="contact-sub">Flagrant Déni · conseils et dossiers</span>
+  </div>
+
+  <div class="contact-block">
+    <span class="contact-label">Signalement IGGN</span>
+    <a href="https://www.gendarmerie.interieur.gouv.fr/contact/reclamation-aupres-de-l-inspection-generale-de-la-gendarmerie-nationale-iggn" target="_blank" rel="noopener" class="contact-value">Formulaire IGGN</a>
+    <span class="contact-sub">Incidents impliquant la gendarmerie</span>
+  </div>
+
+  <div class="contact-block">
+    <span class="contact-label">Guide saisie FSJS</span>
+    <a href="https://drive.google.com/file/d/1LQp8x98UdDRAgh6cpCDCNhb2Py1EaKpl/view" target="_blank" rel="noopener" class="contact-value">Guide PDF complet</a>
+    <span class="contact-sub">Procédure de contestation étape par étape</span>
+  </div>
+
+</div>
+
+<!-- ═══ LIENS APPROFONDISSEMENT ═══ -->
+<div class="section-header" style="margin-top:40px;">
+  <span class="section-tag">04 · Approfondir</span>
+  <div class="section-line"></div>
+</div>
+
+<div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:10px;">
+  {[
+    { href: '/wiki/Strategie-contre-ripost', label: 'Stratégie contre RIPOST', icon: '↺' },
+    { href: '/wiki/recours-juridiques',      label: 'Recours juridiques',       icon: '⚖️' },
+    { href: '/wiki/Templates-Recours',       label: 'Templates de recours',     icon: '📋' },
+    { href: '/wiki/Contacts-Allies',         label: 'Contacts et alliés',       icon: '📞' },
+    { href: '/wiki/Sécurite-Numerique',      label: 'Sécurité numérique',       icon: '🔒' },
+    { href: '/decision',                     label: 'Arbre de décision',        icon: '◩' },
+  ].map(link => (
+    <a
+      href={link.href}
+      style="display:flex;align-items:center;gap:10px;padding:12px 16px;background:rgba(8,8,12,0.9);border:1px solid rgba(42,42,58,0.8);text-decoration:none;font-family:'JetBrains Mono',monospace;font-size:11px;color:rgba(232,232,240,0.55);transition:color 0.15s,border-color 0.15s;letter-spacing:0.05em;"
+      onmouseover="this.style.color='#00ff9f';this.style.borderColor='rgba(0,255,159,0.3)'"
+      onmouseout="this.style.color='rgba(232,232,240,0.55)';this.style.borderColor='rgba(42,42,58,0.8)'"
+    >
+      <span style="font-size:14px;flex-shrink:0;">{link.icon}</span>
+      {link.label}
+    </a>
+  ))}
+</div>
+
+</Layout>
