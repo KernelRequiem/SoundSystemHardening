@@ -7,7 +7,7 @@
 //   AIRTABLE_BASE_ID  -> identifiant de la base (commence par "app...")
 //   AIRTABLE_TABLE    -> nom de la table (defaut: "Incidents")
 
-import { writeFile } from 'node:fs/promises';
+import { readFile, writeFile } from 'node:fs/promises';
 
 const TOKEN = process.env.AIRTABLE_TOKEN;
 const BASE  = process.env.AIRTABLE_BASE_ID;
@@ -111,11 +111,35 @@ function mapRecord(r) {
   };
 }
 
-const raw      = await fetchAll();
-const incidents = raw
-  .map(mapRecord)
-  .filter(Boolean)
+// ── Lecture des incidents existants ─────────────────────────────────────────
+// Les incidents dont l'ID ne commence pas par "rec" sont des entrées manuelles
+// (ajoutées directement dans le JSON, pas via Airtable).
+// Le sync ne doit jamais les écraser.
+const AIRTABLE_ID = /^rec[A-Za-z0-9]{14,}$/;
+
+const existingRaw = await readFile(OUT, 'utf8').catch(() => '[]');
+const existing    = JSON.parse(existingRaw);
+const manuals     = existing.filter(i => !AIRTABLE_ID.test(i.id));
+
+// ── Récupération Airtable ────────────────────────────────────────────────────
+const raw            = await fetchAll();
+const fromAirtable   = raw.map(mapRecord).filter(Boolean);
+
+// ── Fusion : Airtable en premier, puis manuels non-dupliqués ─────────────────
+// Un manuel est considéré dupliqué si un enregistrement Airtable a le même
+// couple (lieu normalisé + date). Cela permet d'éviter les doublons si un
+// incident manuel est un jour ajouté dans Airtable.
+const airtableKeys = new Set(
+  fromAirtable.map(i => `${String(i.lieu).toLowerCase().trim()}|${i.date}`)
+);
+const dedupedManuals = manuals.filter(
+  i => !airtableKeys.has(`${String(i.lieu).toLowerCase().trim()}|${i.date}`)
+);
+
+const incidents = [...fromAirtable, ...dedupedManuals]
   .sort((a, b) => String(b.date).localeCompare(String(a.date)));
 
 await writeFile(OUT, JSON.stringify(incidents, null, 2) + '\n', 'utf8');
-console.log(`OK : ${incidents.length} incidents valides ecrits dans ${OUT}`);
+console.log(
+  `OK : ${fromAirtable.length} depuis Airtable + ${dedupedManuals.length} manuels = ${incidents.length} total`
+);

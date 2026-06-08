@@ -35,17 +35,6 @@ const sidebarIcons: Record<string, string> = {
 };
 
 const navigation = [
-  { section: 'ACCUEIL', icon: 'home', links: [
-    { href: '/', label: 'Home', emoji: '◆' },
-    { href: '/wiki/Urgence-immédiate', label: 'Urgence immédiate', emoji: '🚨' },
-    { href: "/wiki/L'esprit-des-teufeurs", label: "L'esprit des teufeurs", emoji: '✊' },
-    { href: '/a-propos', label: 'À propos & Transparence', emoji: '🔍' },
-    { href: '/wiki/strategie-wiki', label: 'Stratégie & Objectifs', emoji: '🎯' },
-    { href: '/securite', label: 'Sécurité & Confidentialité', emoji: '🔒' },
-    { href: '/map', label: 'Carte & Terrain', emoji: '🗺️' },
-    { href: '/rig-lock', label: 'RIG-LOCK - Manifeste saisie', emoji: '⊡' },
-    { href: '/contact', label: 'Contact & Signalement', emoji: '✉️' },
-  ]},
   { section: 'DROITS & LIBERTÉS', icon: 'scale', links: [
     { href: '/wiki/arsenal-legislatif', label: 'Arsenal législatif', emoji: '📜' },
     { href: '/wiki/jurisprudence', label: 'Jurisprudence', emoji: '⚖️' },
@@ -66,6 +55,7 @@ const navigation = [
     { href: '/wiki/Coalitions', label: 'Coalitions', emoji: '🤝' },
   ]},
   { section: 'HISTOIRE & CULTURE', icon: 'clock', links: [
+    { href: "/wiki/L'esprit-des-teufeurs", label: "L'esprit des teufeurs", emoji: '✊' },
     { href: '/wiki/Histoire-&-Culture', label: "Vue d'ensemble", emoji: '◇' },
     { href: '/wiki/Chronologie', label: 'Chronologie 1988-2026', emoji: '📅' },
     { href: '/wiki/Sound-System', label: 'Sound Systems', emoji: '🔊' },
@@ -314,33 +304,61 @@ const navigation = [
             </div>
           </div>
 
-          <!-- Ligne 2 : nav outils en tabs -->
-          <div class="flex items-end overflow-x-auto scrollbar-none -mb-px" style="padding-left:52px; border-top:1px solid rgba(42,42,58,0.5);">
-            {[
-              { href: '/wiki/Urgence-immédiate',       label: 'URGENCE',  icon: '▲', critical: true  },
-              { href: '/wiki/Strategie-contre-ripost', label: 'RIPOST',   icon: '↺', critical: false },
-              { href: '/decision',                     label: 'DÉCISION', icon: '◩', critical: false },
-              { href: '/map',                          label: 'MAP',      icon: '⊞', critical: false },
-              { href: '/rig-lock',                     label: 'RIG-LOCK', icon: '⊡', critical: false },
-              { href: '/wiki/Sécurite-Numerique',      label: 'OPSEC',    icon: '⊗', critical: false },
-              { href: '/wiki/Modus-Operandi',          label: 'TACTIQUE', icon: '◈', critical: false },
-            ].map(tool => (
-              <a
-                href={tool.href}
-                class={`shrink-0 flex items-center gap-2 px-4 py-2 font-mono text-[11px] tracking-widest transition-all no-underline border-b-2 ${
-                  currentPath === tool.href
-                    ? tool.critical
-                      ? 'text-red-400 border-red-400 bg-red-500/10'
-                      : 'text-neon-green border-neon-green bg-neon-green/10'
-                    : tool.critical
-                      ? 'text-red-400/70 border-transparent hover:text-red-400 hover:border-red-400/60 hover:bg-red-500/5'
-                      : 'text-dedsec-muted hover:text-neon-green hover:border-neon-green/50 hover:bg-neon-green/5 border-transparent'
-                }`}
-              >
-                <span class="text-[13px] leading-none" aria-hidden="true">{tool.icon}</span>
-                {tool.label}
-              </a>
-            ))}
+          <!-- Ligne 2 : outils (gauche, scrollable) + confiance (droite, fixe) -->
+          <div class="flex items-end -mb-px" style="border-top:1px solid rgba(42,42,58,0.5);">
+
+            <!-- Zone outils -->
+            <div class="flex items-end overflow-x-auto scrollbar-none flex-1 min-w-0" style="padding-left:52px;">
+              {[
+                { href: '/wiki/Urgence-immédiate',       label: 'URGENCE',  icon: '▲', critical: true  },
+                { href: '/wiki/Strategie-contre-ripost', label: 'RIPOST',   icon: '↺', critical: false },
+                { href: '/decision',                     label: 'DÉCISION', icon: '◩', critical: false },
+                { href: '/map',                          label: 'MAP',      icon: '⊞', critical: false },
+                { href: '/rig-lock',                     label: 'RIG-LOCK', icon: '⊡', critical: false },
+                { href: '/wiki/Sécurite-Numerique',      label: 'OPSEC',    icon: '⊗', critical: false },
+                { href: '/wiki/Modus-Operandi',          label: 'TACTIQUE', icon: '◈', critical: false },
+              ].map(tool => (
+                <a
+                  href={tool.href}
+                  class={`shrink-0 flex items-center gap-2 px-4 py-2 font-mono text-[11px] tracking-widest transition-all no-underline border-b-2 ${
+                    currentPath === tool.href
+                      ? tool.critical
+                        ? 'text-red-400 border-red-400 bg-red-500/10'
+                        : 'text-neon-green border-neon-green bg-neon-green/10'
+                      : tool.critical
+                        ? 'text-red-400/70 border-transparent hover:text-red-400 hover:border-red-400/60 hover:bg-red-500/5'
+                        : 'text-dedsec-muted hover:text-neon-green hover:border-neon-green/50 hover:bg-neon-green/5 border-transparent'
+                  }`}
+                >
+                  <span class="text-[13px] leading-none" aria-hidden="true">{tool.icon}</span>
+                  {tool.label}
+                </a>
+              ))}
+            </div>
+
+            <!-- Séparateur vertical -->
+            <div class="shrink-0 self-stretch w-px mx-1" style="background:linear-gradient(180deg,transparent,rgba(42,42,58,0.9) 30%,rgba(42,42,58,0.9) 70%,transparent);"></div>
+
+            <!-- Zone confiance : accès rapide aux pages clés de sécurité/transparence -->
+            <div class="flex items-end shrink-0">
+              {[
+                { href: '/securite', label: 'SÉCURITÉ', icon: '⊟' },
+                { href: '/a-propos', label: 'INFOS',    icon: '◎' },
+              ].map(trust => (
+                <a
+                  href={trust.href}
+                  class={`shrink-0 flex items-center gap-1.5 px-3 py-2 font-mono text-[11px] tracking-widest transition-all no-underline border-b-2 ${
+                    currentPath === trust.href
+                      ? 'text-white/90 border-white/40 bg-white/5'
+                      : 'text-dedsec-muted/45 border-transparent hover:text-white/70 hover:border-white/25 hover:bg-white/3'
+                  }`}
+                >
+                  <span class="text-[12px] leading-none opacity-70" aria-hidden="true">{trust.icon}</span>
+                  {trust.label}
+                </a>
+              ))}
+            </div>
+
           </div>
         </div>
         <article class="px-6 py-8 lg:px-12 lg:py-12 max-w-4xl mx-auto prose-dedsec animate-fade-in">
@@ -353,13 +371,11 @@ const navigation = [
               <div>
                 <div class="text-neon-green font-bold mb-2">▸ PROJECT</div>
                 <div class="space-y-1 text-dedsec-muted">
-                  <div><a href="https://github.com/KernelRequiem/SoundSystemHardening" class="text-dedsec-text">GitHub Repo</a></div>
-                  <div><a href="https://github.com/KernelRequiem/SoundSystemHardening/wiki" class="text-dedsec-text">Wiki source</a></div>
-                  <div><a href="/wiki/Changelog" class="text-dedsec-text">Changelog</a></div>
-                  <div><a href="/a-propos" class="text-neon-green">À propos & Transparence</a></div>
-                  <div><a href="/securite" class="text-neon-green">Sécurité & Confidentialité</a></div>
-                  <div><a href="/contact" class="text-neon-green">Contact & Signalement</a></div>
-                  <div><a href="/contribuer" class="text-neon-green">Contribuer</a></div>
+                  <div><a href="https://github.com/KernelRequiem/SoundSystemHardening" class="text-dedsec-text hover:text-neon-green transition-colors" target="_blank" rel="noopener">GitHub Repo</a></div>
+                  <div><a href="https://github.com/KernelRequiem/SoundSystemHardening/wiki" class="text-dedsec-text hover:text-neon-green transition-colors" target="_blank" rel="noopener">Wiki source</a></div>
+                  <div><a href="/wiki/Changelog" class="text-dedsec-text hover:text-neon-green transition-colors">Changelog</a></div>
+                  <div><a href="/contact" class="text-dedsec-text hover:text-neon-green transition-colors">Contact & Signalement</a></div>
+                  <div><a href="/contribuer" class="text-dedsec-text hover:text-neon-green transition-colors">Contribuer</a></div>
                 </div>
               </div>
               <div>
