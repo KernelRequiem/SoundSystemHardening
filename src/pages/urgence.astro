@@ -1,5 +1,99 @@
 ---
 import Layout from '../layouts/Layout.astro';
+
+const scenarios = [
+  {
+    id: 'controle',
+    num: '01',
+    icon: '🚔',
+    title: 'Contrôle routier',
+    trigger: 'Tu es arrêté sur la route. Les forces de l\'ordre approchent du véhicule.',
+    steps: [
+      { label: 'Papiers obligatoires', detail: 'Permis de conduire, carte grise, assurance. Tu es légalement obligé de les fournir. Rien d\'autre.', phrase: null },
+      { label: 'Inspection visuelle ≠ Fouille', detail: 'Ils peuvent regarder par les vitres (inspection visuelle). Ouvrir le coffre ou entrer dans le véhicule = fouille : refus possible sans OPJ.', phrase: 'Je ne consens pas à la fouille de mon véhicule.' },
+      { label: 'Ne jamais consentir volontairement', detail: 'Si tu consens volontairement à la fouille, elle devient légale même sans OPJ. Le silence ou le refus explicite te protège.', phrase: null },
+      { label: 'Garde le silence sur la destination', detail: 'Tu n\'es pas obligé de déclarer ta destination, ta mission ou le contenu de ton véhicule. Identité uniquement.', phrase: 'Je préfère ne pas répondre à cette question.' },
+      { label: 'Documente discrètement', detail: 'Note l\'heure, le lieu, le numéro de matricule. Si tu filmes, fais-le sans cacher que tu filmes.', phrase: null },
+    ],
+    contacts: [],
+    wiki: { label: 'Approfondissement : Modus Operandi', href: '/wiki/Modus-Operandi' },
+  },
+  {
+    id: 'fouille',
+    num: '02',
+    icon: '🔍',
+    title: 'Fouille de véhicule',
+    trigger: 'Les autorités veulent ouvrir le coffre ou inspecter l\'intérieur.',
+    steps: [
+      { label: 'Exiger la présence d\'un OPJ', detail: 'Une fouille de véhicule nécessite un Officier de Police Judiciaire. Un simple agent ou militaire ne peut pas l\'ordonner seul.', phrase: 'Je demande la présence d\'un Officier de Police Judiciaire avant toute fouille.' },
+      { label: 'Ne pas ouvrir de toi-même', detail: 'Si tu ouvres toi-même, c\'est une fouille consentie. Attends qu\'ils formalisent la demande. Ne facilite pas la procédure.', phrase: null },
+      { label: 'Exiger un procès-verbal', detail: 'Toute fouille doit faire l\'objet d\'un PV. Demande-le explicitement. Sans PV, la fouille est difficilement contestable.', phrase: 'Je demande un procès-verbal écrit de cette fouille.' },
+      { label: 'Inventaire du matériel', detail: 'Si du matériel est relevé ou photographié, exige un inventaire écrit précis de ce qui a été inspecté.', phrase: null },
+      { label: 'Ne pas s\'opposer physiquement', detail: 'Une fois la procédure légale initiée (OPJ présent), ne t\'oppose pas physiquement. L\'opposition légale se fait par voie écrite après.', phrase: null },
+    ],
+    contacts: [],
+    wiki: { label: 'Recours après fouille', href: '/wiki/recours-juridiques' },
+  },
+  {
+    id: 'saisie',
+    num: '03',
+    icon: '🎛️',
+    title: 'Saisie de matériel',
+    trigger: 'Le son, le groupe électrogène ou les camions sont en cours de confiscation.',
+    steps: [
+      { label: 'Ne pas s\'opposer physiquement', detail: 'L\'opposition physique aggrave la situation pénale. La bataille se gagne au tribunal, pas sur le terrain.', phrase: null },
+      { label: 'Filmer et documenter tout', detail: 'Chaque pièce saisie, chaque véhicule, chaque agent. Ces images servent de base à la contestation et à l\'inventaire contradictoire.', phrase: null },
+      { label: 'Exiger un inventaire écrit précis', detail: 'La saisie doit être listée pièce par pièce. Un inventaire vague ("matériel de sonorisation") complique la restitution. Insiste sur la précision.', phrase: 'Je demande un inventaire précis et exhaustif de chaque pièce saisie.' },
+      { label: 'Contacter le FSJS immédiatement', detail: 'Le Fonds de Soutien Juridique des Sons intervient dès la saisie. 90% de taux de restitution avec accompagnement. Ne pas attendre.', phrase: null },
+      { label: 'Garder tous les documents', detail: 'Récépissé de saisie, PV, inventaire. Tout photographier. Ces pièces sont indispensables pour la procédure de restitution.', phrase: null },
+    ],
+    contacts: [
+      { label: 'FSJS · Email', value: 'contact@fsjs.fr', href: 'mailto:contact@fsjs.fr' },
+      { label: 'Guide PDF restitution', value: 'Télécharger', href: 'https://drive.google.com/file/d/1LQp8x98UdDRAgh6cpCDCNhb2Py1EaKpl/view' },
+    ],
+    wiki: { label: 'Templates de recours', href: '/wiki/Templates-Recours' },
+  },
+  {
+    id: 'gav',
+    num: '04',
+    icon: '🚨',
+    title: 'Garde à vue',
+    trigger: 'Un membre du collectif est interpellé et emmené.',
+    steps: [
+      { label: 'Exercer le droit au silence immédiatement', detail: 'Dès la notification des droits. Le silence ne peut pas être utilisé contre toi. C\'est ton droit le plus puissant.', phrase: 'Je souhaite exercer mon droit au silence. Je ne répondrai à aucune question.' },
+      { label: 'Décliner son identité uniquement', detail: 'Nom, prénom, date et lieu de naissance. Obligatoire. Adresse : possible de refuser selon les cas. Tout le reste : silence.', phrase: null },
+      { label: 'Demander un avocat immédiatement', detail: 'Dès la première heure. Si pas d\'avocat choisi, un commis d\'office est convoqué. Ce droit s\'applique même si tu es présenté comme simple témoin.', phrase: 'Je demande à être assisté d\'un avocat dès maintenant.' },
+      { label: 'Refuser de donner le code PIN', detail: 'En GAV classique, tu peux refuser. Seule une réquisition judiciaire spécifique (en matière de terrorisme ou criminalité organisée) peut l\'exiger. Dans le doute, silence.', phrase: 'Je refuse de communiquer mon code PIN.' },
+      { label: 'Signaler depuis l\'extérieur', detail: 'Un membre libre contacte le FSJS, l\'avocat de la structure, et note l\'heure d\'interpellation. La GAV dure max 24h (prolongeable 24h supplémentaires sur autorisation).', phrase: null },
+    ],
+    contacts: [
+      { label: 'Barreau Paris · Permanence pénale 24h', value: '01 44 32 48 00', href: 'tel:+33144324800' },
+      { label: 'Trouver un barreau local', value: 'cnb.avocat.fr', href: 'https://www.cnb.avocat.fr/fr/trouver-un-barreau' },
+    ],
+    wiki: { label: 'Contacts et alliés complets', href: '/wiki/Contacts-Allies' },
+  },
+  {
+    id: 'avocat',
+    num: '05',
+    icon: '⚖️',
+    title: 'Besoin d\'un avocat',
+    trigger: 'Conseil juridique immédiat nécessaire.',
+    steps: [
+      { label: 'Permanence pénale · 24h/24', detail: 'Chaque barreau a une permanence pénale. À Paris : 01 44 32 48 00. Pour les autres départements : chercher sur cnb.avocat.fr.', phrase: null },
+      { label: 'FSJS · Matériel saisi', detail: 'Le FSJS dispose de références d\'avocats spécialisés sound system. Contacte-les avant de choisir un avocat au hasard. Leur réseau a de l\'expérience sur ces dossiers.', phrase: null },
+      { label: 'LDH · Violences policières', detail: 'La Ligue des Droits de l\'Homme peut orienter et agir collectivement sur les violences lors de rassemblements. Elle ne fournit pas d\'avocat mais peut constituer partie civile.', phrase: null },
+      { label: 'Ne pas parler avant l\'avocat', detail: 'Même si les enquêteurs semblent sympas. Même si tu penses avoir rien à cacher. L\'avocat arrivé, tu parles. Avant, silence.', phrase: 'Je ne ferai aucune déclaration avant d\'avoir consulté un avocat.' },
+      { label: 'Préparer le dossier dès maintenant', detail: 'Dates, heures, lieux, noms des agents si connus, photos, vidéos, témoins. Plus c\'est documenté tôt, plus l\'avocat peut travailler efficacement.', phrase: null },
+    ],
+    contacts: [
+      { label: 'FSJS · Saisie matériel', value: 'contact@fsjs.fr', href: 'mailto:contact@fsjs.fr' },
+      { label: 'Barreau Paris · Permanence', value: '01 44 32 48 00', href: 'tel:+33144324800' },
+      { label: 'Flagrant Déni · Violences', value: 'flagrant-deni.fr', href: 'https://www.flagrant-deni.fr' },
+      { label: 'Signalement IGGN', value: 'Formulaire officiel', href: 'https://www.gendarmerie.interieur.gouv.fr/contact/reclamation-aupres-de-l-inspection-generale-de-la-gendarmerie-nationale-iggn' },
+    ],
+    wiki: { label: 'Tous les contacts et alliés', href: '/wiki/Contacts-Allies' },
+  },
+];
 ---
 
 <Layout
@@ -9,421 +103,448 @@ import Layout from '../layouts/Layout.astro';
 >
 
 <style>
+  /* ─── Reset prose ─── */
+  .urgence-root { all: initial; display: block; font-family: 'JetBrains Mono', monospace; }
+
   /* ─── Bandeau d'alerte ─── */
   .alert-banner {
     display: flex;
     align-items: center;
     gap: 12px;
-    background: rgba(255, 44, 44, 0.08);
-    border: 1px solid rgba(255, 44, 44, 0.35);
+    background: rgba(255, 44, 44, 0.06);
+    border: 1px solid rgba(255, 44, 44, 0.3);
     border-left: 4px solid #ff2c2c;
-    padding: 14px 20px;
-    margin-bottom: 32px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 12px;
-    letter-spacing: 0.12em;
+    padding: 12px 18px;
+    margin-bottom: 28px;
+    font-size: 11px;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: #ff6b6b;
+    color: #ff8080;
   }
   .alert-dot {
-    width: 8px; height: 8px;
+    width: 7px; height: 7px;
     border-radius: 50%;
     background: #ff2c2c;
     box-shadow: 0 0 8px #ff2c2c;
     flex-shrink: 0;
     animation: blink 1s ease-in-out infinite;
   }
-  @keyframes blink {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.2; }
-  }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.15} }
 
-  /* ─── Grille de scénarios ─── */
-  .scenarios-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 16px;
-    margin-bottom: 48px;
-  }
-  .scenario-card {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    background: rgba(8, 8, 12, 0.9);
-    border: 1px solid rgba(255, 44, 44, 0.2);
-    border-top: 3px solid #ff2c2c;
-    padding: 24px;
-    text-decoration: none;
-    transition: border-color 0.15s, background 0.15s, transform 0.1s;
-    position: relative;
-  }
-  .scenario-card:hover {
-    border-color: rgba(255, 44, 44, 0.6);
-    border-top-color: #ff6b6b;
-    background: rgba(255, 44, 44, 0.05);
-    transform: translateY(-2px);
-  }
-  .scenario-num {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 0.2em;
-    color: rgba(255, 44, 44, 0.5);
-    text-transform: uppercase;
-  }
-  .scenario-icon {
-    font-size: 28px;
-    line-height: 1;
-    margin: 4px 0;
-  }
-  .scenario-title {
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 18px;
-    font-weight: 700;
-    color: #e8e8f0;
-    line-height: 1.2;
-    margin: 0;
-  }
-  .scenario-action {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    color: rgba(232, 232, 240, 0.5);
-    line-height: 1.5;
-    margin: 0;
-  }
-  .scenario-cta {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    margin-top: auto;
-    padding-top: 12px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: #ff6b6b;
-    border-top: 1px solid rgba(255, 44, 44, 0.15);
-  }
-
-  /* ─── Protocole réflexe ─── */
-  .protocol-section {
-    margin-bottom: 48px;
-  }
-  .section-header {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 20px;
-  }
-  .section-tag {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 0.25em;
-    text-transform: uppercase;
-    color: #ff6b6b;
-    padding: 4px 10px;
-    border: 1px solid rgba(255, 44, 44, 0.3);
-    background: rgba(255, 44, 44, 0.06);
-  }
-  .section-line {
-    flex: 1;
-    height: 1px;
-    background: linear-gradient(90deg, rgba(255, 44, 44, 0.25), transparent);
-  }
-  .protocol-steps {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 12px;
-  }
-  .protocol-step {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    padding: 20px;
-    background: rgba(8, 8, 12, 0.9);
-    border: 1px solid rgba(42, 42, 58, 0.8);
-    border-bottom: 3px solid rgba(255, 44, 44, 0.4);
-    position: relative;
-    overflow: hidden;
-  }
-  .step-number {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 36px;
-    font-weight: 700;
-    line-height: 1;
-    color: rgba(255, 44, 44, 0.15);
-    position: absolute;
-    top: 12px;
-    right: 16px;
-  }
-  .step-label {
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 15px;
-    font-weight: 700;
-    color: #e8e8f0;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-  .step-detail {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    color: rgba(232, 232, 240, 0.45);
-    line-height: 1.6;
-  }
-  .step-quote {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    color: #ff9f9f;
-    background: rgba(255, 44, 44, 0.07);
-    border-left: 2px solid rgba(255, 44, 44, 0.4);
-    padding: 6px 10px;
-    margin-top: 4px;
-    font-style: italic;
-  }
-
-  /* ─── Strip contacts ─── */
-  .contacts-strip {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 12px;
-    margin-bottom: 24px;
-  }
-  .contact-block {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    padding: 16px 20px;
-    background: rgba(8, 8, 12, 0.9);
-    border: 1px solid rgba(42, 42, 58, 0.8);
-    border-left: 3px solid rgba(0, 255, 159, 0.4);
-  }
-  .contact-label {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 9px;
-    letter-spacing: 0.25em;
-    text-transform: uppercase;
-    color: rgba(0, 255, 159, 0.5);
-  }
-  .contact-value {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 14px;
-    font-weight: 700;
-    color: #e8e8f0;
-    text-decoration: none;
-    transition: color 0.1s;
-  }
-  .contact-value:hover {
-    color: #00ff9f;
-  }
-  .contact-sub {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    color: rgba(232, 232, 240, 0.35);
-  }
-
-  /* ─── Page title ─── */
-  .page-title-block {
-    margin-bottom: 32px;
-  }
+  /* ─── Titre ─── */
   .page-eyebrow {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    color: rgba(255, 44, 44, 0.6);
-    margin-bottom: 8px;
+    font-size: 10px; letter-spacing: 0.3em;
+    text-transform: uppercase; color: rgba(255,44,44,0.55);
+    margin-bottom: 6px; display: block;
   }
   .page-title {
     font-family: 'Space Grotesk', sans-serif;
-    font-size: clamp(28px, 5vw, 42px);
-    font-weight: 700;
-    color: #e8e8f0;
-    line-height: 1.1;
-    margin: 0 0 8px 0;
+    font-size: clamp(26px,5vw,40px);
+    font-weight: 700; color: #e8e8f0;
+    line-height: 1.1; margin: 0 0 6px 0;
   }
-  .page-title span {
+  .page-title span { color: #ff4444; }
+  .page-subtitle {
+    font-size: 11px; color: rgba(232,232,240,0.35);
+    margin-bottom: 28px; display: block;
+  }
+
+  /* ─── Section header ─── */
+  .section-header {
+    display: flex; align-items: center; gap: 12px; margin-bottom: 16px;
+  }
+  .section-tag {
+    font-size: 9px; letter-spacing: 0.25em; text-transform: uppercase;
+    color: #ff8080; padding: 3px 10px;
+    border: 1px solid rgba(255,44,44,0.25); background: rgba(255,44,44,0.05);
+    white-space: nowrap;
+  }
+  .section-line { flex:1; height:1px; background: linear-gradient(90deg, rgba(255,44,44,0.2), transparent); }
+
+  /* ─── Cards accordéon ─── */
+  .scenarios-list {
+    display: flex; flex-direction: column; gap: 8px; margin-bottom: 40px;
+  }
+  .scenario-card {
+    background: rgba(8,8,12,0.95);
+    border: 1px solid rgba(255,44,44,0.18);
+    border-left: 3px solid rgba(255,44,44,0.4);
+    overflow: hidden;
+    transition: border-color 0.15s;
+  }
+  .scenario-card.is-open {
+    border-left-color: #ff4444;
+    border-color: rgba(255,44,44,0.4);
+  }
+  .scenario-card:hover { border-left-color: #ff4444; }
+
+  /* Trigger (zone cliquable) */
+  .card-trigger {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 20px;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.12s;
+  }
+  .card-trigger:hover { background: rgba(255,44,44,0.04); }
+  .scenario-card.is-open .card-trigger { background: rgba(255,44,44,0.06); }
+
+  .card-num {
+    font-size: 9px; letter-spacing: 0.2em; color: rgba(255,44,44,0.4);
+    flex-shrink: 0; width: 24px;
+  }
+  .card-icon { font-size: 22px; flex-shrink: 0; }
+  .card-text { flex: 1; min-width: 0; }
+  .card-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 15px; font-weight: 700; color: #e8e8f0;
+    display: block; margin-bottom: 2px;
+  }
+  .card-subtitle {
+    font-size: 10px; color: rgba(232,232,240,0.38);
+    display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .card-chevron {
+    flex-shrink: 0;
+    width: 18px; height: 18px;
+    border: 1px solid rgba(255,44,44,0.3);
+    border-radius: 2px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; color: rgba(255,44,44,0.6);
+    transition: transform 0.2s, background 0.1s;
+  }
+  .scenario-card.is-open .card-chevron {
+    transform: rotate(180deg);
+    background: rgba(255,44,44,0.1);
     color: #ff4444;
   }
-  .page-subtitle {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 12px;
-    color: rgba(232, 232, 240, 0.4);
+
+  /* Panneau expandé */
+  .card-panel {
+    display: none;
+    padding: 0 20px 20px 20px;
+    border-top: 1px solid rgba(255,44,44,0.12);
   }
+  .scenario-card.is-open .card-panel { display: block; }
+
+  /* Steps */
+  .steps-list {
+    display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px;
+    padding-top: 16px;
+  }
+  .step-item {
+    display: grid;
+    grid-template-columns: 24px 1fr;
+    gap: 0 12px;
+  }
+  .step-bullet {
+    width: 20px; height: 20px; border-radius: 50%;
+    background: rgba(255,44,44,0.12);
+    border: 1px solid rgba(255,44,44,0.3);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 9px; color: rgba(255,44,44,0.7);
+    flex-shrink: 0; margin-top: 2px;
+    font-weight: 700;
+  }
+  .step-body {}
+  .step-label {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 13px; font-weight: 600; color: #e8e8f0;
+    display: block; margin-bottom: 3px;
+  }
+  .step-detail {
+    font-size: 11px; color: rgba(232,232,240,0.45); line-height: 1.6;
+    display: block; margin-bottom: 6px;
+  }
+  .step-phrase {
+    font-size: 11px; color: #ffaaaa;
+    background: rgba(255,44,44,0.07);
+    border-left: 2px solid rgba(255,44,44,0.4);
+    padding: 6px 10px;
+    font-style: italic;
+    display: block;
+  }
+  .step-phrase::before { content: '▶ '; font-style: normal; color: rgba(255,44,44,0.6); }
+
+  /* Contacts inline */
+  .card-contacts {
+    display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px;
+  }
+  .card-contact {
+    display: flex; flex-direction: column; gap: 2px;
+    padding: 8px 12px;
+    background: rgba(0,255,159,0.04);
+    border: 1px solid rgba(0,255,159,0.15);
+    border-left: 2px solid rgba(0,255,159,0.4);
+    text-decoration: none;
+    transition: border-color 0.12s, background 0.12s;
+    min-width: 160px;
+  }
+  .card-contact:hover {
+    background: rgba(0,255,159,0.07);
+    border-color: rgba(0,255,159,0.35);
+  }
+  .card-contact-label {
+    font-size: 8px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: rgba(0,255,159,0.4);
+  }
+  .card-contact-value {
+    font-size: 12px; font-weight: 700; color: #e8e8f0;
+  }
+
+  /* Lien wiki */
+  .card-wiki-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: rgba(232,232,240,0.3);
+    text-decoration: none;
+    transition: color 0.12s;
+    padding-top: 10px;
+    border-top: 1px solid rgba(42,42,58,0.6);
+    width: 100%;
+  }
+  .card-wiki-link:hover { color: rgba(0,255,159,0.7); }
+  .card-wiki-link::before { content: '→ '; }
+
+  /* ─── Protocole 4 étapes ─── */
+  .protocol-steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 10px; margin-bottom: 40px;
+  }
+  .protocol-step {
+    position: relative; overflow: hidden;
+    padding: 18px 16px;
+    background: rgba(8,8,12,0.9);
+    border: 1px solid rgba(42,42,58,0.8);
+    border-bottom: 3px solid rgba(255,44,44,0.35);
+  }
+  .step-number {
+    position: absolute; top: 10px; right: 14px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 32px; font-weight: 700; line-height: 1;
+    color: rgba(255,44,44,0.1);
+    user-select: none;
+  }
+  .step-label-p { font-family: 'Space Grotesk', sans-serif; font-size: 14px; font-weight: 700; color: #e8e8f0; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 6px; display: block; }
+  .step-detail-p { font-size: 11px; color: rgba(232,232,240,0.4); line-height: 1.6; display: block; }
+  .step-quote-p { margin-top: 8px; font-size: 11px; color: #ff9f9f; background: rgba(255,44,44,0.06); border-left: 2px solid rgba(255,44,44,0.35); padding: 5px 8px; font-style: italic; display: block; }
+
+  /* ─── Contacts strip ─── */
+  .contacts-strip {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 10px; margin-bottom: 24px;
+  }
+  .contact-block {
+    display: flex; flex-direction: column; gap: 4px;
+    padding: 14px 18px;
+    background: rgba(8,8,12,0.9);
+    border: 1px solid rgba(42,42,58,0.8);
+    border-left: 3px solid rgba(0,255,159,0.35);
+  }
+  .contact-label { font-size: 8px; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(0,255,159,0.45); }
+  .contact-value { font-size: 13px; font-weight: 700; color: #e8e8f0; text-decoration: none; transition: color 0.1s; }
+  .contact-value:hover { color: #00ff9f; }
+  .contact-sub { font-size: 10px; color: rgba(232,232,240,0.28); }
+
+  /* ─── Liens secondaires ─── */
+  .secondary-links {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 8px;
+  }
+  .sec-link {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 14px;
+    background: rgba(8,8,12,0.9);
+    border: 1px solid rgba(42,42,58,0.7);
+    text-decoration: none;
+    font-size: 11px; color: rgba(232,232,240,0.45);
+    transition: color 0.12s, border-color 0.12s;
+  }
+  .sec-link:hover { color: #00ff9f; border-color: rgba(0,255,159,0.25); }
 </style>
 
-<!-- Titre de page -->
-<div class="page-title-block">
-  <p class="page-eyebrow">▲ PROTOCOLE CRITIQUE</p>
+<div class="urgence-root">
+
+  <!-- ─── Titre ─── -->
+  <span class="page-eyebrow">▲ PROTOCOLE CRITIQUE</span>
   <h1 class="page-title">URGENCE <span>IMMÉDIATE</span></h1>
-  <p class="page-subtitle">Fiches réflexes terrain · Aucune lecture requise</p>
-</div>
+  <span class="page-subtitle">Fiches réflexes terrain · Clique sur ta situation</span>
 
-<!-- Bandeau d'alerte -->
-<div class="alert-banner">
-  <span class="alert-dot"></span>
-  <span>Ce document est conçu pour être lu en 10 secondes sous stress. Repère ta situation ci-dessous et clique.</span>
-</div>
+  <div class="alert-banner">
+    <span class="alert-dot"></span>
+    <span>Repère ta situation · Clique · Lis les réflexes. Zéro navigation supplémentaire.</span>
+  </div>
 
-<!-- ═══ SCÉNARIOS ═══ -->
-<div class="section-header">
-  <span class="section-tag">01 · Identifie ta situation</span>
-  <div class="section-line"></div>
-</div>
+  <!-- ═══ SCÉNARIOS ═══ -->
+  <div class="section-header">
+    <span class="section-tag">01 · Identifie ta situation</span>
+    <div class="section-line"></div>
+  </div>
 
-<div class="scenarios-grid">
+  <div class="scenarios-list" id="scenarios-list">
+    {scenarios.map((s, idx) => (
+      <div class="scenario-card" data-card-id={s.id}>
 
-  <a href="/wiki/Modus-Operandi" class="scenario-card" style="text-decoration:none;">
-    <span class="scenario-num">Situation 01</span>
-    <span class="scenario-icon">🚔</span>
-    <h2 class="scenario-title">Contrôle routier / Barrage</h2>
-    <p class="scenario-action">Tu es arrêté sur la route. Les forces de l'ordre veulent voir les papiers et inspecter le véhicule.</p>
-    <span class="scenario-cta">▶ Réflexes à adopter</span>
-  </a>
+        <div class="card-trigger" data-trigger>
+          <span class="card-num">{s.num}</span>
+          <span class="card-icon">{s.icon}</span>
+          <span class="card-text">
+            <span class="card-title">{s.title}</span>
+            <span class="card-subtitle">{s.trigger}</span>
+          </span>
+          <span class="card-chevron">▾</span>
+        </div>
 
-  <a href="/wiki/recours-juridiques" class="scenario-card" style="text-decoration:none;">
-    <span class="scenario-num">Situation 02</span>
-    <span class="scenario-icon">🔍</span>
-    <h2 class="scenario-title">Fouille de véhicule</h2>
-    <p class="scenario-action">Les autorités veulent ouvrir le coffre ou inspecter l'intérieur du camion / van.</p>
-    <span class="scenario-cta">▶ Inspection vs Fouille : tes droits</span>
-  </a>
+        <div class="card-panel">
+          <div class="steps-list">
+            {s.steps.map((step, i) => (
+              <div class="step-item">
+                <span class="step-bullet">{i + 1}</span>
+                <span class="step-body">
+                  <span class="step-label">{step.label}</span>
+                  <span class="step-detail">{step.detail}</span>
+                  {step.phrase && <span class="step-phrase">{step.phrase}</span>}
+                </span>
+              </div>
+            ))}
+          </div>
 
-  <a href="/wiki/Templates-Recours" class="scenario-card" style="text-decoration:none;">
-    <span class="scenario-num">Situation 03</span>
-    <span class="scenario-icon">🎛️</span>
-    <h2 class="scenario-title">Saisie de matériel</h2>
-    <p class="scenario-action">Le son, le groupe électrogène ou les camions sont en cours de confiscation.</p>
-    <span class="scenario-cta">▶ Template restitution + FSJS</span>
-  </a>
+          {s.contacts.length > 0 && (
+            <div class="card-contacts">
+              {s.contacts.map(c => (
+                <a href={c.href} class="card-contact" target={c.href.startsWith('http') ? '_blank' : undefined} rel={c.href.startsWith('http') ? 'noopener' : undefined}>
+                  <span class="card-contact-label">{c.label}</span>
+                  <span class="card-contact-value">{c.value}</span>
+                </a>
+              ))}
+            </div>
+          )}
 
-  <a href="/wiki/Contacts-Allies#en-garde-à-vue--que-faire-dans-les-premières-minutes" class="scenario-card" style="text-decoration:none;">
-    <span class="scenario-num">Situation 04</span>
-    <span class="scenario-icon">🚨</span>
-    <h2 class="scenario-title">Garde à vue</h2>
-    <p class="scenario-action">Un membre du collectif est interpellé et emmené par les forces de l'ordre.</p>
-    <span class="scenario-cta">▶ Protocole GAV complet</span>
-  </a>
+          <a href={s.wiki.href} class="card-wiki-link">{s.wiki.label}</a>
+        </div>
 
-  <a href="/wiki/Contacts-Allies#urgence-juridique-immédiate" class="scenario-card" style="text-decoration:none;">
-    <span class="scenario-num">Situation 05</span>
-    <span class="scenario-icon">⚖️</span>
-    <h2 class="scenario-title">Besoin d'un avocat</h2>
-    <p class="scenario-action">Conseil juridique immédiat nécessaire. Barreau, permanence pénale, avocats spécialisés.</p>
-    <span class="scenario-cta">▶ Numéros et contacts actifs</span>
-  </a>
+      </div>
+    ))}
+  </div>
 
-</div>
-
-<!-- ═══ PROTOCOLE 4 ÉTAPES ═══ -->
-<div class="protocol-section">
+  <!-- ═══ PROTOCOLE 4 ÉTAPES ═══ -->
   <div class="section-header">
     <span class="section-tag">02 · Protocole réflexe universel</span>
     <div class="section-line"></div>
   </div>
-
-  <div class="protocol-steps">
-
+  <div class="protocol-steps" style="margin-bottom:40px;">
     <div class="protocol-step">
       <span class="step-number">1</span>
-      <span class="step-label">Déconnecte</span>
-      <p class="step-detail">Mode avion ou extinction totale. Pas de discussion avec le téléphone allumé.</p>
-      <div class="step-quote">Objectif : empêcher toute extraction de données</div>
+      <span class="step-label-p">Déconnecte</span>
+      <span class="step-detail-p">Mode avion ou extinction totale. Aucune communication avec le téléphone allumé.</span>
+      <span class="step-quote-p">Objectif : empêcher toute extraction de données</span>
     </div>
-
     <div class="protocol-step">
       <span class="step-number">2</span>
-      <span class="step-label">Silence</span>
-      <p class="step-detail">Tu n'es pas obligé de répondre aux questions. L'identité uniquement si demandée.</p>
-      <div class="step-quote">"Je n'ai rien à déclarer pour le moment."</div>
+      <span class="step-label-p">Silence</span>
+      <span class="step-detail-p">Identité uniquement si demandée. Le silence ne peut pas être retenu contre toi.</span>
+      <span class="step-quote-p">"Je n'ai rien à déclarer pour le moment."</span>
     </div>
-
     <div class="protocol-step">
       <span class="step-number">3</span>
-      <span class="step-label">Documente</span>
-      <p class="step-detail">Si safe, filme discrètement. Note heure, lieu, matricules. Ne filme pas les visages.</p>
-      <div class="step-quote">La preuve se construit maintenant</div>
+      <span class="step-label-p">Documente</span>
+      <span class="step-detail-p">Si safe : heure, lieu, matricules, photos discrètes. Ne filme pas les visages.</span>
+      <span class="step-quote-p">La preuve se construit maintenant</span>
     </div>
-
     <div class="protocol-step">
       <span class="step-number">4</span>
-      <span class="step-label">Active le réseau</span>
-      <p class="step-detail">Un membre resté libre contacte le FSJS et/ou l'avocat dès la première information.</p>
-      <div class="step-quote">Ne pas attendre pour contacter le FSJS</div>
+      <span class="step-label-p">Active le réseau</span>
+      <span class="step-detail-p">Un membre libre contacte FSJS et/ou l'avocat dès la première info.</span>
+      <span class="step-quote-p">Ne pas attendre pour activer</span>
     </div>
-
   </div>
+
+  <!-- ═══ CONTACTS ═══ -->
+  <div class="section-header">
+    <span class="section-tag">03 · Contacts d'urgence</span>
+    <div class="section-line"></div>
+  </div>
+  <div class="contacts-strip" style="margin-bottom:40px;">
+    <div class="contact-block">
+      <span class="contact-label">FSJS · Saisie matériel</span>
+      <a href="mailto:contact@fsjs.fr" class="contact-value">contact@fsjs.fr</a>
+      <span class="contact-sub">90% de taux de restitution avec accompagnement</span>
+    </div>
+    <div class="contact-block">
+      <span class="contact-label">Avocat · Barreau Paris 24h/24</span>
+      <a href="tel:+33144324800" class="contact-value">01 44 32 48 00</a>
+      <span class="contact-sub">Permanence pénale · GAV uniquement</span>
+    </div>
+    <div class="contact-block">
+      <span class="contact-label">Trouver un barreau local</span>
+      <a href="https://www.cnb.avocat.fr/fr/trouver-un-barreau" target="_blank" rel="noopener" class="contact-value">cnb.avocat.fr</a>
+      <span class="contact-sub">Annuaire national · permanences pénales</span>
+    </div>
+    <div class="contact-block">
+      <span class="contact-label">Violences policières</span>
+      <a href="https://www.flagrant-deni.fr" target="_blank" rel="noopener" class="contact-value">flagrant-deni.fr</a>
+      <span class="contact-sub">Flagrant Déni · conseils et dossiers</span>
+    </div>
+    <div class="contact-block">
+      <span class="contact-label">Signalement IGGN · Gendarmerie</span>
+      <a href="https://www.gendarmerie.interieur.gouv.fr/contact/reclamation-aupres-de-l-inspection-generale-de-la-gendarmerie-nationale-iggn" target="_blank" rel="noopener" class="contact-value">Formulaire IGGN</a>
+      <span class="contact-sub">Incidents impliquant la gendarmerie</span>
+    </div>
+    <div class="contact-block">
+      <span class="contact-label">Guide saisie FSJS</span>
+      <a href="https://drive.google.com/file/d/1LQp8x98UdDRAgh6cpCDCNhb2Py1EaKpl/view" target="_blank" rel="noopener" class="contact-value">Guide PDF complet</a>
+      <span class="contact-sub">Procédure de contestation étape par étape</span>
+    </div>
+  </div>
+
+  <!-- ═══ APPROFONDISSEMENT ═══ -->
+  <div class="section-header">
+    <span class="section-tag">04 · Approfondir</span>
+    <div class="section-line"></div>
+  </div>
+  <div class="secondary-links">
+    {[
+      { href: '/wiki/Strategie-contre-ripost', label: 'Stratégie contre RIPOST', icon: '↺' },
+      { href: '/wiki/recours-juridiques',      label: 'Recours juridiques',       icon: '⚖️' },
+      { href: '/wiki/Templates-Recours',       label: 'Templates de recours',     icon: '📋' },
+      { href: '/wiki/Contacts-Allies',         label: 'Contacts et alliés',       icon: '📞' },
+      { href: '/wiki/Sécurite-Numerique',      label: 'Sécurité numérique',       icon: '🔒' },
+      { href: '/decision',                     label: 'Arbre de décision',        icon: '◩' },
+    ].map(link => (
+      <a href={link.href} class="sec-link">
+        <span style="font-size:14px;flex-shrink:0;">{link.icon}</span>
+        {link.label}
+      </a>
+    ))}
+  </div>
+
 </div>
 
-<!-- ═══ CONTACTS ═══ -->
-<div class="section-header">
-  <span class="section-tag">03 · Contacts d'urgence</span>
-  <div class="section-line"></div>
-</div>
-
-<div class="contacts-strip">
-
-  <div class="contact-block">
-    <span class="contact-label">FSJS · Saisie matériel</span>
-    <a href="mailto:contact@fsjs.fr" class="contact-value">contact@fsjs.fr</a>
-    <span class="contact-sub">Fonds de Soutien Juridique des Sons · 90% de restitution</span>
-  </div>
-
-  <div class="contact-block">
-    <span class="contact-label">Avocat · Barreau Paris</span>
-    <a href="tel:+33144324800" class="contact-value">01 44 32 48 00</a>
-    <span class="contact-sub">Permanence pénale 24h/24 · GAV uniquement</span>
-  </div>
-
-  <div class="contact-block">
-    <span class="contact-label">Trouver un barreau local</span>
-    <a href="https://www.cnb.avocat.fr/fr/trouver-un-barreau" target="_blank" rel="noopener" class="contact-value">cnb.avocat.fr</a>
-    <span class="contact-sub">Annuaire national des barreaux · permanences pénales</span>
-  </div>
-
-  <div class="contact-block">
-    <span class="contact-label">Violences policières</span>
-    <a href="https://www.flagrant-deni.fr" target="_blank" rel="noopener" class="contact-value">flagrant-deni.fr</a>
-    <span class="contact-sub">Flagrant Déni · conseils et dossiers</span>
-  </div>
-
-  <div class="contact-block">
-    <span class="contact-label">Signalement IGGN</span>
-    <a href="https://www.gendarmerie.interieur.gouv.fr/contact/reclamation-aupres-de-l-inspection-generale-de-la-gendarmerie-nationale-iggn" target="_blank" rel="noopener" class="contact-value">Formulaire IGGN</a>
-    <span class="contact-sub">Incidents impliquant la gendarmerie</span>
-  </div>
-
-  <div class="contact-block">
-    <span class="contact-label">Guide saisie FSJS</span>
-    <a href="https://drive.google.com/file/d/1LQp8x98UdDRAgh6cpCDCNhb2Py1EaKpl/view" target="_blank" rel="noopener" class="contact-value">Guide PDF complet</a>
-    <span class="contact-sub">Procédure de contestation étape par étape</span>
-  </div>
-
-</div>
-
-<!-- ═══ LIENS APPROFONDISSEMENT ═══ -->
-<div class="section-header" style="margin-top:40px;">
-  <span class="section-tag">04 · Approfondir</span>
-  <div class="section-line"></div>
-</div>
-
-<div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:10px;">
-  {[
-    { href: '/wiki/Strategie-contre-ripost', label: 'Stratégie contre RIPOST', icon: '↺' },
-    { href: '/wiki/recours-juridiques',      label: 'Recours juridiques',       icon: '⚖️' },
-    { href: '/wiki/Templates-Recours',       label: 'Templates de recours',     icon: '📋' },
-    { href: '/wiki/Contacts-Allies',         label: 'Contacts et alliés',       icon: '📞' },
-    { href: '/wiki/Sécurite-Numerique',      label: 'Sécurité numérique',       icon: '🔒' },
-    { href: '/decision',                     label: 'Arbre de décision',        icon: '◩' },
-  ].map(link => (
-    <a
-      href={link.href}
-      style="display:flex;align-items:center;gap:10px;padding:12px 16px;background:rgba(8,8,12,0.9);border:1px solid rgba(42,42,58,0.8);text-decoration:none;font-family:'JetBrains Mono',monospace;font-size:11px;color:rgba(232,232,240,0.55);transition:color 0.15s,border-color 0.15s;letter-spacing:0.05em;"
-      onmouseover="this.style.color='#00ff9f';this.style.borderColor='rgba(0,255,159,0.3)'"
-      onmouseout="this.style.color='rgba(232,232,240,0.55)';this.style.borderColor='rgba(42,42,58,0.8)'"
-    >
-      <span style="font-size:14px;flex-shrink:0;">{link.icon}</span>
-      {link.label}
-    </a>
-  ))}
-</div>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.scenario-card').forEach(card => {
+      const trigger = card.querySelector('[data-trigger]');
+      trigger?.addEventListener('click', () => {
+        const isOpen = card.classList.contains('is-open');
+        // Fermer toutes les autres
+        document.querySelectorAll('.scenario-card.is-open').forEach(c => {
+          if (c !== card) c.classList.remove('is-open');
+        });
+        card.classList.toggle('is-open', !isOpen);
+        // Scroll doux vers la carte si elle s'ouvre
+        if (!isOpen) {
+          setTimeout(() => {
+            card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          }, 50);
+        }
+      });
+    });
+  });
+</script>
 
 </Layout>
