@@ -1,0 +1,472 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+
+<Layout
+  title="Contre RIPOST"
+  description="Guide opérationnel contre la loi RIPOST : AFD, droits terrain, stratégies de résistance, ressources et contacts."
+  category="WIKI"
+  categoryHref="/wiki"
+>
+
+<!-- ══════════════════════════════════════════════════
+     STATUT LÉGISLATIF
+═══════════════════════════════════════════════════ -->
+<div class="not-prose mb-10 border border-dedsec-border bg-dedsec-darker p-5">
+  <div class="flex items-start gap-4">
+    <div class="flex-shrink-0 flex flex-col items-center gap-1 pt-0.5">
+      <span style="width:10px;height:10px;border-radius:50%;background:#ffe600;box-shadow:0 0 8px #ffe600;display:block;animation:pulse-neon 2s ease-in-out infinite;"></span>
+    </div>
+    <div class="flex-1 min-w-0">
+      <div class="font-mono text-[10px] tracking-[0.3em] text-neon-yellow/70 uppercase mb-1">STATUT AU 8 JUIN 2026</div>
+      <div class="font-display font-bold text-dedsec-text text-sm leading-snug">
+        RIPOST n'est <span style="color:#ffe600">pas encore en vigueur</span>
+      </div>
+      <div class="font-mono text-[11px] text-dedsec-muted mt-2 leading-relaxed">
+        Adopté au Sénat le 26 mai 2026 (243 pour / 33 contre). L'Assemblée nationale n'a pas encore voté.
+        <br />Le droit actuel s'applique : <span class="text-neon-green font-bold">participation à une free party = légale</span>. Seuls les organisateurs risquent une contravention (1 500 €).
+      </div>
+    </div>
+    <div class="flex-shrink-0 hidden sm:block">
+      <a href="https://petitions.assemblee-nationale.fr/initiatives/i-5428" target="_blank" rel="noopener"
+         class="font-mono text-[10px] tracking-widest border border-neon-yellow/40 text-neon-yellow/70 hover:border-neon-yellow hover:text-neon-yellow px-3 py-2 no-underline transition-colors block whitespace-nowrap">
+        ✎ SIGNER LA PÉTITION
+      </a>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════
+     COMPARATIF AVANT / APRÈS
+═══════════════════════════════════════════════════ -->
+<div class="not-prose mb-10">
+  <div class="font-mono text-[10px] tracking-[0.3em] text-dedsec-muted/50 uppercase mb-4">01 / Ce qui change si RIPOST passe</div>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-px bg-dedsec-border">
+
+    <!-- AVANT -->
+    <div class="bg-dedsec-darker p-5">
+      <div class="font-mono text-[9px] tracking-[0.3em] text-neon-green/60 uppercase mb-3">DROIT ACTUEL</div>
+      <div class="space-y-3">
+        {[
+          { label: 'Participation', val: 'Légale', sub: 'aucune sanction' },
+          { label: 'Organisation', val: '1 500 €', sub: 'contravention 5e classe' },
+          { label: 'Seuil déclaration', val: '500 personnes', sub: 'obligation préfecture' },
+        ].map(r => (
+          <div class="flex items-start justify-between gap-4">
+            <span class="font-mono text-[10px] text-dedsec-muted/70 flex-shrink-0">{r.label}</span>
+            <div class="text-right">
+              <div class="font-mono text-[11px] text-neon-green font-bold">{r.val}</div>
+              <div class="font-mono text-[9px] text-dedsec-muted/50">{r.sub}</div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <!-- APRÈS -->
+    <div class="bg-dedsec-darker p-5" style="border-left:2px solid #ff2020;">
+      <div class="font-mono text-[9px] tracking-[0.3em] text-neon-red/60 uppercase mb-3">SI RIPOST EST ADOPTÉ</div>
+      <div class="space-y-3">
+        {[
+          { label: 'Participation', val: 'AFD 1 500 €', sub: 'ou 6 mois + 7 500 € au tribunal' },
+          { label: 'Organisation', val: '2 ans + 30 000 €', sub: 'délit pénal' },
+          { label: 'Seuil déclaration', val: '250 personnes', sub: 'abaissement de 50 %' },
+        ].map(r => (
+          <div class="flex items-start justify-between gap-4">
+            <span class="font-mono text-[10px] text-dedsec-muted/70 flex-shrink-0">{r.label}</span>
+            <div class="text-right">
+              <div class="font-mono text-[11px] font-bold" style="color:#ff2020">{r.val}</div>
+              <div class="font-mono text-[9px] text-dedsec-muted/50">{r.sub}</div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+
+  </div>
+
+  <!-- AFD expliqué -->
+  <div class="bg-dedsec-gray/20 border border-dedsec-border border-t-0 px-5 py-3">
+    <span class="font-mono text-[10px] text-dedsec-muted/60">AFD = Amende Forfaitaire Délictuelle. </span>
+    <span class="font-mono text-[10px] text-dedsec-muted/50">
+      Sanction pénale prononcée sans jugement par un agent. Payer = reconnaître sa culpabilité + casier 3 ans.
+      La Défenseure des droits a recommandé son abolition en 2023 pour atteinte aux droits fondamentaux.
+    </span>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════
+     FLOWCHART : "Je reçois une AFD — que faire ?"
+═══════════════════════════════════════════════════ -->
+<div class="not-prose mb-10">
+  <div class="font-mono text-[10px] tracking-[0.3em] text-dedsec-muted/50 uppercase mb-4">02 / Je reçois une AFD — arbre décision</div>
+
+  <div class="border border-dedsec-border bg-dedsec-darker p-5 space-y-0">
+
+    <!-- Nœud départ -->
+    <div class="flex justify-center mb-4">
+      <div class="border border-neon-cyan/40 px-5 py-3 text-center" style="background:rgba(0,217,255,0.05);">
+        <div class="font-mono text-[11px] text-neon-cyan font-bold">Forces de l'ordre te proposent une AFD</div>
+      </div>
+    </div>
+
+    <div class="flex justify-center mb-4">
+      <div class="w-px h-6 bg-dedsec-border"></div>
+    </div>
+
+    <!-- Choix niveau 1 -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-px bg-dedsec-border mb-4">
+      <!-- Payer -->
+      <div class="bg-dedsec-darker p-4 text-center">
+        <div class="font-mono text-[9px] tracking-widest text-neon-red/50 mb-2">MAUVAIS CHOIX</div>
+        <div class="font-mono text-[11px] font-bold text-neon-red mb-3">Tu paies sur place</div>
+        <div class="space-y-1.5">
+          <div class="font-mono text-[10px] text-dedsec-muted flex items-start gap-2">
+            <span style="color:#ff2020">✗</span> Reconnaissance de culpabilité
+          </div>
+          <div class="font-mono text-[10px] text-dedsec-muted flex items-start gap-2">
+            <span style="color:#ff2020">✗</span> Inscription casier judiciaire 3 ans
+          </div>
+          <div class="font-mono text-[10px] text-dedsec-muted flex items-start gap-2">
+            <span style="color:#ff2020">✗</span> Procédure close, impossible de contester
+          </div>
+        </div>
+      </div>
+
+      <!-- Refuser -->
+      <div class="bg-dedsec-darker p-4 text-center" style="border-left:2px solid #00ff9f;">
+        <div class="font-mono text-[9px] tracking-widest text-neon-green/60 mb-2">BON RÉFLEXE</div>
+        <div class="font-mono text-[11px] font-bold text-neon-green mb-3">Tu refuses de payer</div>
+        <div class="space-y-1.5">
+          <div class="font-mono text-[10px] text-dedsec-muted flex items-start gap-2">
+            <span class="text-neon-green">✓</span> Tu n'admets rien
+          </div>
+          <div class="font-mono text-[10px] text-dedsec-muted flex items-start gap-2">
+            <span class="text-neon-green">✓</span> 45 jours pour décider
+          </div>
+          <div class="font-mono text-[10px] text-dedsec-muted flex items-start gap-2">
+            <span class="text-neon-green">✓</span> Temps de contacter avocat / FSJS
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Suite du refus -->
+    <div class="ml-0 sm:ml-[50%] sm:border-l sm:border-dedsec-border pl-0 sm:pl-4">
+
+      <div class="font-mono text-[9px] tracking-[0.3em] text-dedsec-muted/40 uppercase mb-3 mt-2">Dans les 45 jours : tu choisis</div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-px bg-dedsec-border">
+
+        <div class="bg-dedsec-darker p-4">
+          <div class="font-mono text-[9px] tracking-widest text-neon-yellow/60 mb-2">OPTION A</div>
+          <div class="font-mono text-[11px] font-bold text-dedsec-text mb-2">Tu ne contestes pas</div>
+          <div class="font-mono text-[10px] text-dedsec-muted leading-relaxed">
+            Amende payée (minorée si dans les 15 jours), casier 3 ans. Mais tu as eu le temps de décider lucidement.
+          </div>
+        </div>
+
+        <div class="bg-dedsec-darker p-4" style="border-left:2px solid #00d9ff;">
+          <div class="font-mono text-[9px] tracking-widest text-neon-cyan/60 mb-2">OPTION B — 30 JOURS</div>
+          <div class="font-mono text-[11px] font-bold text-dedsec-text mb-2">Tu contestes auprès du Procureur</div>
+          <div class="font-mono text-[10px] text-dedsec-muted leading-relaxed">
+            Renvoi au tribunal. <span class="text-neon-yellow">Attention :</span> risque de sanction plus lourde (7 500 € / 6 mois). À faire uniquement si défense solide ou vice de procédure.
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- AFD illégale -->
+    <div class="mt-4 border border-neon-green/20 bg-neon-green/5 p-3">
+      <span class="font-mono text-[9px] tracking-widest text-neon-green/60 uppercase">Faille technique : </span>
+      <span class="font-mono text-[10px] text-dedsec-muted">
+        L'AFD est invalide si plusieurs infractions sont constatées simultanément. Ex : "participation" + "consommation de stupéfiants" = procédure AFD illégale → ouvre une procédure normale.
+      </span>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════
+     4 RÉFLEXES TERRAIN
+═══════════════════════════════════════════════════ -->
+<div class="not-prose mb-10">
+  <div class="font-mono text-[10px] tracking-[0.3em] text-dedsec-muted/50 uppercase mb-4">03 / Quatre réflexes sur le terrain</div>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-px bg-dedsec-border">
+    {[
+      {
+        n: '01',
+        title: 'Refuser de payer immédiatement',
+        color: '#00ff9f',
+        items: [
+          'Dire : "Je ne reconnais pas les faits"',
+          'Ne pas signer l\'AFD sur le terrain',
+          'Demander l\'avis écrit à recevoir à domicile',
+          'Garder une copie de tous les papiers',
+        ],
+        note: '→ Tu gagnes 45 jours pour décider',
+      },
+      {
+        n: '02',
+        title: 'Ne pas signer le PV',
+        color: '#00d9ff',
+        items: [
+          'Le refus de signature n\'est pas une infraction',
+          'L\'agent note "refus de signature"',
+          'Cela crée un doute sur la validité du PV',
+          'Exercer ton droit au silence',
+        ],
+        note: '→ Aucune infraction additionnelle',
+      },
+      {
+        n: '03',
+        title: 'Documenter l\'intervention',
+        color: '#ffe600',
+        items: [
+          'Numéros de matricule des agents',
+          'Heure, lieu, nombre de fonctionnaires',
+          'Photos de l\'avis d\'AFD reçu',
+          'Témoignages de tiers présents',
+        ],
+        note: '→ Matériau pour la contestation',
+      },
+      {
+        n: '04',
+        title: 'Résistance collective',
+        color: '#ff006e',
+        items: [
+          'Coordonner les refus de paiement sur Signal',
+          'Centraliser les avis AFD reçus',
+          'Contacter FSJS dès réception',
+          'Déclarer publiquement le refus collectif',
+        ],
+        note: '→ État ne peut pas poursuivre en masse',
+      },
+    ].map(card => (
+      <div class="bg-dedsec-darker p-5" style={`border-top:2px solid ${card.color};`}>
+        <div class="flex items-center gap-3 mb-3">
+          <span class="font-mono text-[9px] tracking-[0.2em]" style={`color:${card.color}60`}>{card.n}</span>
+          <span class="font-display font-bold text-sm text-dedsec-text">{card.title}</span>
+        </div>
+        <ul class="space-y-1.5 mb-3">
+          {card.items.map(item => (
+            <li class="flex items-start gap-2 font-mono text-[10px] text-dedsec-muted/80 list-none">
+              <span style={`color:${card.color};flex-shrink:0`}>▸</span>
+              {item}
+            </li>
+          ))}
+        </ul>
+        <div class="font-mono text-[9px] tracking-wide" style={`color:${card.color}80`}>{card.note}</div>
+      </div>
+    ))}
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════
+     RESSOURCES & CONTACTS
+═══════════════════════════════════════════════════ -->
+<div class="not-prose mb-10">
+  <div class="font-mono text-[10px] tracking-[0.3em] text-dedsec-muted/50 uppercase mb-4">04 / Ressources et contacts</div>
+
+  <div class="grid grid-cols-1 sm:grid-cols-3 gap-px bg-dedsec-border">
+
+    <!-- Juridique -->
+    <div class="bg-dedsec-darker p-4">
+      <div class="font-mono text-[9px] tracking-[0.3em] text-neon-green/60 uppercase mb-3">SOUTIEN JURIDIQUE</div>
+      <div class="space-y-3">
+        {[
+          {
+            name: 'FSJS',
+            desc: 'Fonds de Soutien Juridique des Sons — guide de contestation',
+            url: 'https://drive.google.com/file/d/1LQp8x98UdDRAgh6cpCDCNhb2Py1EaKpl/',
+            contact: 'contact@fsjs.fr',
+          },
+          {
+            name: 'Défenseure des droits',
+            desc: 'Saisine gratuite. A critiqué l\'AFD en 2023.',
+            url: 'https://www.defenseurdesdroits.fr/',
+            contact: null,
+          },
+          {
+            name: 'LDH',
+            desc: 'Ligue des Droits de l\'Homme — permanences juridiques',
+            url: 'https://www.ldh-france.org/',
+            contact: null,
+          },
+        ].map(r => (
+          <div>
+            <a href={r.url} target="_blank" rel="noopener"
+               class="font-mono text-[11px] font-bold text-neon-green hover:text-neon-green/70 transition-colors no-underline">
+              {r.name} ↗
+            </a>
+            <div class="font-mono text-[9px] text-dedsec-muted/60 mt-0.5">{r.desc}</div>
+            {r.contact && (
+              <div class="font-mono text-[9px] text-dedsec-muted/40 mt-0.5">{r.contact}</div>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <!-- Mobilisation -->
+    <div class="bg-dedsec-darker p-4">
+      <div class="font-mono text-[9px] tracking-[0.3em] text-neon-pink/60 uppercase mb-3">MOBILISATION</div>
+      <div class="space-y-3">
+        {[
+          {
+            name: 'Tekno Anti Rep',
+            desc: 'Coordination nationale des résistances',
+            url: 'https://t.me/teknoantirep',
+            contact: '@teknoantirep',
+          },
+          {
+            name: 'Pétition AN',
+            desc: 'Pétition Assemblée nationale contre RIPOST',
+            url: 'https://petitions.assemblee-nationale.fr/initiatives/i-5428',
+            contact: null,
+          },
+          {
+            name: 'Techno+',
+            desc: 'RdR et plaidoyer pour le mouvement',
+            url: 'https://technoplus.org',
+            contact: null,
+          },
+        ].map(r => (
+          <div>
+            <a href={r.url} target="_blank" rel="noopener"
+               class="font-mono text-[11px] font-bold text-neon-pink hover:text-neon-pink/70 transition-colors no-underline">
+              {r.name} ↗
+            </a>
+            <div class="font-mono text-[9px] text-dedsec-muted/60 mt-0.5">{r.desc}</div>
+            {r.contact && (
+              <div class="font-mono text-[9px] text-dedsec-muted/40 mt-0.5">{r.contact}</div>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <!-- Documentation -->
+    <div class="bg-dedsec-darker p-4">
+      <div class="font-mono text-[9px] tracking-[0.3em] text-neon-cyan/60 uppercase mb-3">DOCUMENTATION</div>
+      <div class="space-y-3">
+        {[
+          {
+            name: 'Décision Défenseure droits 2023',
+            desc: 'Critique officielle de l\'AFD — recommande son abolition',
+            url: 'https://juridique.defenseurdesdroits.fr/doc_num.php?explnum_id=21662',
+          },
+          {
+            name: 'Mars Infos : Résister à l\'AFD',
+            desc: 'Stratégies documentées, cas concrets',
+            url: 'https://mars-infos.org/resister-collectivement-a-l-amende-8622',
+          },
+          {
+            name: 'CNCDH : Généralisation AFD',
+            desc: 'Recul des droits — position officielle',
+            url: 'https://www.cncdh.fr/actualite/generalisation-de-lamende-forfaitaire-delictuelle-un-recul-des-droits-pour-les',
+          },
+        ].map(r => (
+          <div>
+            <a href={r.url} target="_blank" rel="noopener"
+               class="font-mono text-[11px] font-bold text-neon-cyan hover:text-neon-cyan/70 transition-colors no-underline">
+              {r.name} ↗
+            </a>
+            <div class="font-mono text-[9px] text-dedsec-muted/60 mt-0.5">{r.desc}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════
+     RÉCAPITULATIF RAPIDE
+═══════════════════════════════════════════════════ -->
+<div class="not-prose mb-10">
+  <div class="font-mono text-[10px] tracking-[0.3em] text-dedsec-muted/50 uppercase mb-4">05 / Matrice décision</div>
+
+  <div class="border border-dedsec-border overflow-x-auto">
+    <table class="w-full text-left" style="border-collapse:collapse;">
+      <thead>
+        <tr style="background:#13131a;border-bottom:1px solid #2a2a3a;">
+          {['Action', 'Effet immédiat', 'Risque', 'Impact collectif'].map(h => (
+            <th class="px-4 py-2 font-mono text-[9px] tracking-[0.2em] text-dedsec-muted/60 uppercase whitespace-nowrap">{h}</th>
+          ))}
+        </tr>
+      </thead>
+      <tbody>
+        {[
+          {
+            action: 'Refuser de payer sur place',
+            effet: '45 jours pour décider',
+            risque: 'Majoration possible',
+            collectif: 'Paralyse l\'administration si masse',
+            ok: true,
+          },
+          {
+            action: 'Refuser de signer le PV',
+            effet: 'Doute sur validité du PV',
+            risque: 'Aucun risque additionnel',
+            collectif: 'Crée une friction opérationnelle',
+            ok: true,
+          },
+          {
+            action: 'Contester auprès du Procureur',
+            effet: 'Renvoi au tribunal',
+            risque: 'Sanction plus lourde possible',
+            collectif: 'Crée un coût politique si masse',
+            ok: null,
+          },
+          {
+            action: 'Payer sur place',
+            effet: 'Fin immédiate',
+            risque: 'Casier 3 ans, culpabilité admise',
+            collectif: 'Valide le système',
+            ok: false,
+          },
+        ].map((row, i) => (
+          <tr style={`background:${i % 2 ? '#0a0a0f' : '#08080c'};border-bottom:1px solid #1a1a24;`}>
+            <td class="px-4 py-2.5 font-mono text-[10px] flex items-center gap-2">
+              <span style={`color:${row.ok === true ? '#00ff9f' : row.ok === false ? '#ff2020' : '#ffe600'}`}>
+                {row.ok === true ? '✓' : row.ok === false ? '✗' : '△'}
+              </span>
+              <span class="text-dedsec-text/80">{row.action}</span>
+            </td>
+            <td class="px-4 py-2.5 font-mono text-[10px] text-dedsec-muted/70">{row.effet}</td>
+            <td class="px-4 py-2.5 font-mono text-[10px] text-dedsec-muted/70">{row.risque}</td>
+            <td class="px-4 py-2.5 font-mono text-[10px] text-dedsec-muted/70">{row.collectif}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+<!-- Footer wiki -->
+<div class="not-prose border-t border-dedsec-border pt-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+  <div class="font-mono text-[10px] text-dedsec-muted/40">
+    Basé sur : Défenseure des droits (2023) · FSJS · jurisprudence AFD · CC BY-SA 4.0
+  </div>
+  <div class="flex gap-4">
+    <a href="/wiki/Contestation" class="font-mono text-[10px] text-dedsec-muted/50 hover:text-neon-green transition-colors no-underline">
+      ▸ CONTESTER UNE AMENDE
+    </a>
+    <a href="/wiki" class="font-mono text-[10px] text-dedsec-muted/50 hover:text-neon-green transition-colors no-underline">
+      ← WIKI
+    </a>
+  </div>
+</div>
+
+</Layout>
