@@ -1,93 +1,344 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { readdirSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 
-const wikiDir = join(process.cwd(), 'src/content/wiki');
-let files: string[] = [];
+// Lit le titre H1 depuis un fichier markdown
+function getTitle(slug: string): string {
+  try {
+    const content = readFileSync(
+      join(process.cwd(), 'src/content/wiki', `${slug}.md`),
+      'utf-8'
+    );
+    const m = content.match(/^#\s+(.+)$/m);
+    return m ? m[1].trim() : slug.replace(/-/g, ' ');
+  } catch {
+    return slug.replace(/-/g, ' ');
+  }
+}
 
+// Lit la première ligne **bold** comme sous-titre
+function getSub(slug: string): string {
+  try {
+    const content = readFileSync(
+      join(process.cwd(), 'src/content/wiki', `${slug}.md`),
+      'utf-8'
+    );
+    const m = content.match(/^\*\*([^*]{15,90})\*\*/m);
+    return m ? m[1].trim() : '';
+  } catch {
+    return '';
+  }
+}
+
+const EXCLUDE = new Set([
+  'Home', '_Footer', '_Sidebar',
+  'wiki-opsec_1',
+  'wiki-ports-reseau_1', 'wiki-ports-reseau_2',
+  'wiki-ports-reseau_3', 'wiki-ports-reseau_4',
+  'strategie-wiki', 'Axe-sanitaire',
+]);
+
+const wikiDir = join(process.cwd(), 'src/content/wiki');
+let allFiles: Set<string> = new Set();
 try {
-  files = readdirSync(wikiDir)
+  readdirSync(wikiDir)
     .filter(f => f.endsWith('.md') && !f.startsWith('_'))
     .map(f => f.replace('.md', ''))
-    .sort();
-} catch (e) {
-  files = [];
+    .filter(f => !EXCLUDE.has(f))
+    .forEach(f => allFiles.add(f));
+} catch {}
+
+type Page = { slug: string; title: string; sub: string };
+
+function pages(slugs: string[]): Page[] {
+  return slugs
+    .filter(s => allFiles.has(s))
+    .map(s => ({ slug: s, title: getTitle(s), sub: getSub(s) }));
 }
 
-// Categorize pages
-const categories: Record<string, string[]> = {
-  '🚨 URGENCE': ['Urgence-immédiate', 'Contestation'],
-  '⚖️ CONTRE RIPOST': ['Strategie-contre-ripost'],
-  '🎯 STRATÉGIE DE RÉSISTANCE': ['Stratégie-résistance', 'Juridique', 'Politique', 'Sanitaire', 'Axe-sanitaire', 'Organisationnel', 'Culturel', 'Coalitions'],
-  '📜 HISTOIRE & CULTURE': ['Histoire-&-Culture', 'Chronologie', 'Sound-System', 'Incidents-répressifs', 'Patrimoine-culturel', 'L\'esprit-des-teufeurs'],
-  '📣 MOBILISATION': ['Mobilisation', 'Manifesto', 'Templates-Recours', 'Contacts-Allies', 'Argumentaires'],
-  '🎯 MODUS OPERANDI': ['Modus-Operandi'],
-  '🗺️ Zones grises': ['ZAD-Pourquoi-État-Evite', 'Propriete-Privee-Fermee', 'Terrains-Abandonnes', 'Espaces-Semi-Publics', 'Zones-Limitrophes'],
-  '⚖️ Failles légales': ['Definition-Ambigue-Organisateur', 'Seuil-250-500-Personnes', 'Rassemblement-vs-Manifestation', 'Declaration-Preuve-Legitimite', 'Prescription-et-Delais'],
-  '⚙️ Failles opérationnelles': ['Manque-de-Ressources', 'Coordination-Defaillante'],
-  '🎭 Contournement': ['Camouflage-Evenement', 'Fragmentation-Geographique', 'Coordination-Decentralisee', 'Documentation-Preemptive'],
-  '📡 VEILLE': ['Vue-d\'ensemble-veille', 'Lois-En-Cours', 'Actualites-Repressions', 'Sources-Fiables', 'Changelog'],
-  '🔐 SÉCURITÉ': ['Sécurite-Numerique', 'Sécurité-des-communications', 'Repression'],
-};
+const sections = [
+  {
+    key: 'critique',
+    label: 'TERRAIN CRITIQUE',
+    desc: 'Ressources opérationnelles pour les situations de pression ou d\'urgence directe.',
+    accent: '#ff2020',
+    slugs: [
+      'Urgence-immédiate',
+      'Repression',
+      'Contestation',
+    ],
+  },
+  {
+    key: 'juridique',
+    label: 'ARSENAL JURIDIQUE',
+    desc: 'Cadre légal, décisions de justice, voies de recours et stratégie contre RIPOST.',
+    accent: '#00ff9f',
+    slugs: [
+      'arsenal-legislatif',
+      'jurisprudence',
+      'recours-juridiques',
+      'Strategie-contre-ripost',
+    ],
+  },
+  {
+    key: 'operandi',
+    label: 'MODUS OPERANDI',
+    desc: 'Zones grises, failles légales et opérationnelles, tactiques de contournement.',
+    accent: '#00d9ff',
+    slugs: [
+      'Modus-Operandi',
+      'ZAD-Pourquoi-État-Evite',
+      'Propriete-Privee-Fermee',
+      'Terrains-Abandonnes',
+      'Espaces-Semi-Publics',
+      'Zones-Limitrophes',
+      'Definition-Ambigue-Organisateur',
+      'Seuil-250-500-Personnes',
+      'Rassemblement-vs-Manifestation',
+      'Declaration-Preuve-Legitimite',
+      'Prescription-et-Delais',
+      'Manque-de-Ressources',
+      'Coordination-Defaillante',
+      'Camouflage-Evenement',
+      'Fragmentation-Geographique',
+      'Coordination-Decentralisee',
+      'Documentation-Preemptive',
+    ],
+  },
+  {
+    key: 'opsec',
+    label: 'SÉCURITÉ NUMÉRIQUE',
+    desc: 'OPSEC, chiffrement, anonymisation réseau, messagerie sécurisée et surveillance mobile.',
+    accent: '#b400ff',
+    slugs: [
+      'Sécurite-Numerique',
+      'Sécurité-des-communications',
+      'reseau-anonymisation',
+      'darknet-pgp-anonymat',
+      'messagerie-chiffree',
+      'surveillance-mobile',
+      'wiki-ports-reseau',
+      'wiki-opsec',
+    ],
+  },
+  {
+    key: 'strategie',
+    label: 'STRATÉGIE DE RÉSISTANCE',
+    desc: 'Vue d\'ensemble et axes de résistance : juridique, politique, sanitaire, culturel.',
+    accent: '#00ff9f',
+    slugs: [
+      'Stratégie-résistance',
+      'Juridique',
+      'Politique',
+      'Sanitaire',
+      'Organisationnel',
+      'Culturel',
+      'Coalitions',
+    ],
+  },
+  {
+    key: 'mobilisation',
+    label: 'MOBILISATION',
+    desc: 'Contacts alliés, templates de recours, argumentaires et manifeste.',
+    accent: '#ff6b00',
+    slugs: [
+      'Mobilisation',
+      'Templates-Recours',
+      'Contacts-Allies',
+      'Argumentaires',
+      'Manifesto',
+    ],
+  },
+  {
+    key: 'culture',
+    label: 'HISTOIRE & CULTURE',
+    desc: 'Mémoire du mouvement, chronologie, patrimoine sonore et incidents répressifs.',
+    accent: '#ff006e',
+    slugs: [
+      'Histoire-&-Culture',
+      "L'esprit-des-teufeurs",
+      'Chronologie',
+      'Sound-System',
+      'Incidents-répressifs',
+      'Patrimoine-culturel',
+      'Medias-Propriete',
+    ],
+  },
+  {
+    key: 'veille',
+    label: 'VEILLE',
+    desc: 'Anticipation législative, actualités de la répression, sources et changelog.',
+    accent: '#ffe600',
+    slugs: [
+      "Vue-d'ensemble-veille",
+      'Lois-En-Cours',
+      'Actualites-Repressions',
+      'Sources-Fiables',
+      'Changelog',
+    ],
+  },
+];
 
-// Pages not in any category
-const allCategorizedPages = Object.values(categories).flat();
-const otherPages = files.filter(f => !allCategorizedPages.includes(f) && f !== 'Home');
-if (otherPages.length > 0) {
-  categories['📄 AUTRES'] = otherPages;
-}
+// Pages non catégorisées
+const categorizedSlugs = new Set(sections.flatMap(s => s.slugs));
+const uncategorized = [...allFiles].filter(f => !categorizedSlugs.has(f)).sort();
+
+const totalPages = allFiles.size;
 ---
 
-<Layout title="Index Wiki" description="Index complet du wiki SoundSystemHardening" category="WIKI">
-  <h1>Index du Wiki</h1>
+<Layout
+  title="Wiki"
+  description={`Index complet du wiki SoundSystemHardening — ${totalPages} pages sur les droits, l'opsec et la résistance free party.`}
+  category="WIKI"
+>
 
-  <p class="text-lg text-dedsec-muted mb-8">
-    {files.length} pages documentées. Toutes les ressources techniques, juridiques et stratégiques classées par catégorie.
-  </p>
-
-  <div class="terminal mb-8">
-    <div class="text-neon-green text-sm mb-2">▸ stats.wiki</div>
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-xs">
-      <div>
-        <div class="text-2xl text-neon-green font-bold">{files.length}</div>
-        <div class="text-dedsec-muted uppercase">Pages</div>
-      </div>
-      <div>
-        <div class="text-2xl text-neon-cyan font-bold">{Object.keys(categories).length}</div>
-        <div class="text-dedsec-muted uppercase">Catégories</div>
-      </div>
-      <div>
-        <div class="text-2xl text-neon-pink font-bold">CC</div>
-        <div class="text-dedsec-muted uppercase">BY-SA 4.0</div>
-      </div>
-      <div>
-        <div class="text-2xl text-neon-green font-bold">●</div>
-        <div class="text-dedsec-muted uppercase">Live</div>
-      </div>
-    </div>
+  <!-- En-tête -->
+  <div class="mb-10 not-prose">
+    <div class="font-mono text-[10px] tracking-[0.3em] text-neon-green/60 uppercase mb-2">soundsystemhardening.fr / wiki</div>
+    <h1 class="font-display font-bold text-2xl text-dedsec-text m-0 leading-tight">Base de connaissances</h1>
+    <p class="font-mono text-xs text-dedsec-muted mt-2 mb-0">
+      {totalPages} pages &middot; {sections.length} sections &middot; CC BY-SA 4.0 &middot; MAJ juin 2026
+    </p>
   </div>
 
-  {Object.entries(categories).map(([cat, pages]) => {
-    const existingPages = pages.filter(p => files.includes(p));
-    if (existingPages.length === 0) return null;
-    
+  <!-- Accès rapide -->
+  <div class="not-prose grid grid-cols-1 sm:grid-cols-3 gap-px bg-dedsec-border mb-12">
+    {[
+      {
+        href: '/urgence',
+        label: 'URGENCE',
+        desc: 'Réflexes par situation critique',
+        accent: '#ff2020',
+        icon: '▲',
+      },
+      {
+        href: '/wiki/Strategie-contre-ripost',
+        label: 'CONTRE RIPOST',
+        desc: 'Résistance juridique et collective',
+        accent: '#00ff9f',
+        icon: '↺',
+      },
+      {
+        href: '/wiki/Contestation',
+        label: 'CONTESTATION',
+        desc: 'Contester une amende étape par étape',
+        accent: '#00d9ff',
+        icon: '◈',
+      },
+    ].map(item => (
+      <a
+        href={item.href}
+        class="group bg-dedsec-darker px-5 py-4 no-underline flex items-start gap-3 hover:bg-dedsec-gray/30 transition-colors"
+        style={`border-left: 2px solid ${item.accent};`}
+      >
+        <span class="font-mono text-base mt-px flex-shrink-0" style={`color:${item.accent}`}>{item.icon}</span>
+        <div>
+          <div class="font-mono text-[11px] font-bold tracking-widest mb-0.5" style={`color:${item.accent}`}>
+            {item.label}
+          </div>
+          <div class="font-mono text-[10px] text-dedsec-muted group-hover:text-dedsec-text/70 transition-colors leading-relaxed">
+            {item.desc}
+          </div>
+        </div>
+      </a>
+    ))}
+  </div>
+
+  <!-- Sections -->
+  {sections.map(section => {
+    const sectionPages = pages(section.slugs);
+    if (sectionPages.length === 0) return null;
     return (
-      <section class="mb-10">
-        <h2>{cat}</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-2 mt-4">
-          {existingPages.map(page => (
-            <a href={`/wiki/${page}`} class="card-neon py-3 px-4 no-underline group">
-              <div class="flex items-center gap-2">
-                <span class="text-neon-green text-xs">▸</span>
-                <span class="text-dedsec-text group-hover:text-neon-green transition-colors">
-                  {page.replace(/-/g, ' ').replace(/'/g, '\'')}
-                </span>
-              </div>
+      <div class="not-prose mb-12">
+
+        <!-- Header section -->
+        <div class="flex items-start gap-3 mb-4">
+          <div
+            class="w-[2px] flex-shrink-0 mt-1"
+            style={`height:2.5rem; background:${section.accent}; box-shadow:0 0 8px ${section.accent}60;`}
+          />
+          <div>
+            <div class="font-mono text-[9px] tracking-[0.35em] mb-1" style={`color:${section.accent}`}>
+              {section.key.toUpperCase()} &middot; {sectionPages.length} pages
+            </div>
+            <div class="font-display font-bold text-base text-dedsec-text leading-tight tracking-wide">
+              {section.label}
+            </div>
+            <div class="font-mono text-[10px] text-dedsec-muted mt-0.5 leading-relaxed">
+              {section.desc}
+            </div>
+          </div>
+        </div>
+
+        <!-- Grille de pages -->
+        <div
+          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px ml-5"
+          style="background-color: #2a2a3a;"
+        >
+          {sectionPages.map(page => (
+            <a
+              href={`/wiki/${page.slug}`}
+              class="group bg-dedsec-darker px-4 py-3 no-underline flex items-center gap-2.5 hover:bg-dedsec-gray/30 transition-colors min-w-0"
+            >
+              <span
+                class="flex-shrink-0 font-mono text-[10px] transition-colors"
+                style={`color:${section.accent}60`}
+              >▸</span>
+              <span class="font-mono text-[11px] text-dedsec-text/80 group-hover:text-dedsec-text transition-colors truncate leading-snug">
+                {page.title}
+              </span>
             </a>
           ))}
         </div>
-      </section>
+
+      </div>
     );
   })}
+
+  <!-- Pages non catégorisées (filet de sécurité) -->
+  {uncategorized.length > 0 && (
+    <div class="not-prose mb-12">
+      <div class="flex items-start gap-3 mb-4">
+        <div class="w-[2px] flex-shrink-0 mt-1" style="height:2.5rem; background:#7a7a8a;"/>
+        <div>
+          <div class="font-mono text-[9px] tracking-[0.35em] text-dedsec-muted/50 mb-1">
+            AUTRES &middot; {uncategorized.length} pages
+          </div>
+          <div class="font-display font-bold text-base text-dedsec-text/60 leading-tight">
+            Non classées
+          </div>
+        </div>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px ml-5" style="background-color:#2a2a3a;">
+        {uncategorized.map(slug => (
+          <a
+            href={`/wiki/${slug}`}
+            class="group bg-dedsec-darker px-4 py-3 no-underline flex items-center gap-2.5 hover:bg-dedsec-gray/30 transition-colors"
+          >
+            <span class="flex-shrink-0 font-mono text-[10px] text-dedsec-muted/30">▸</span>
+            <span class="font-mono text-[11px] text-dedsec-muted/60 group-hover:text-dedsec-text transition-colors truncate">
+              {getTitle(slug)}
+            </span>
+          </a>
+        ))}
+      </div>
+    </div>
+  )}
+
+  <!-- Footer wiki -->
+  <div class="not-prose border-t border-dedsec-border pt-6 mt-12 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+    <div class="font-mono text-[10px] text-dedsec-muted/40 tracking-widest uppercase">
+      Contenu sous licence CC BY-SA 4.0 &middot; Contributions bienvenues
+    </div>
+    <div class="flex gap-4">
+      <a href="/contribuer" class="font-mono text-[10px] text-dedsec-muted/50 hover:text-neon-green transition-colors no-underline tracking-widest">
+        ✎ CONTRIBUER
+      </a>
+      <a href="/search" class="font-mono text-[10px] text-dedsec-muted/50 hover:text-neon-green transition-colors no-underline tracking-widest">
+        ⌕ RECHERCHER
+      </a>
+    </div>
+  </div>
+
 </Layout>
