@@ -335,10 +335,11 @@ const totalIncidents = incidents.length;
     width: 100%;
   }
   .hero-logo {
-    width: 100%;
+    width: clamp(220px, 55vw, 560px);
     height: auto;
     object-fit: contain;
     display: block;
+    margin: 0 auto;
   }
 
   .hero-tagline {
@@ -415,19 +416,19 @@ const totalIncidents = incidents.length;
     align-items: center;
     gap: 12px;
     font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
+    font-size: 12px;
     flex-wrap: wrap;
     justify-content: center;
-    max-width: 680px;
+    max-width: 780px;
     margin: 0 auto;
   }
   .contrast-line {
     flex: 1; min-width: 32px; height: 1px;
     background: rgba(42, 42, 58, 0.5);
   }
-  .contrast-them  { color: rgba(122, 122, 138, 0.3); letter-spacing: 0.02em; }
-  .contrast-arrow { color: rgba(0, 255, 159, 0.35); }
-  .contrast-us    { color: rgba(0, 255, 159, 0.55); letter-spacing: 0.02em; }
+  .contrast-them  { color: rgba(122, 122, 138, 0.45); letter-spacing: 0.03em; }
+  .contrast-arrow { color: rgba(0, 255, 159, 0.45); }
+  .contrast-us    { color: rgba(0, 255, 159, 0.75); letter-spacing: 0.03em; }
 
   /* ═══════════════════════════════════════════════════════
      MODULES
