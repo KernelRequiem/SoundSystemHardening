@@ -1,13 +1,13 @@
 # Veille Législative : Projets et Propositions de Loi
 
-**Dernière mise à jour : 31 Mai 2026**
+**Dernière mise à jour : 8 juin 2026**
 
 Ce document assure le suivi des textes de loi ciblant spécifiquement ou indirectement l'organisation et la participation aux rassemblements festifs non déclarés. Il cartographie les menaces juridiques en cours d'adoption.
 
 ## 1. Proposition de loi n°1133 (PPL 1133)
 
 **Titre :** Proposition de loi visant à renforcer la répression des rassemblements festifs non déclarés et à lutter contre les dérives qui y sont liées.
-**Statut actuel :** Adoptée à l'Assemblée nationale en avril 2026.
+**Statut actuel :** Adoptée à l'Assemblée nationale le 9 avril 2026 (78 voix contre 67). Transmise au Sénat le 10 avril 2026. En attente d'examen par le Sénat. **Pas encore promulguée : non en vigueur.**
 
 ### L'exposé des motifs (Rhétorique institutionnelle)
 
@@ -24,8 +24,8 @@ Le texte s'appuie sur une rhétorique liant directement les free parties à la c
 ## 2. Projet de Loi RIPOST
 
 **Nom complet :** Réponses Immédiates aux Phénomènes troublant l'Ordre public, la Sécurité et la Tranquillité (RIPOST).
-**Origine :** Initié par Bruno Retailleau (Sénat).
-**Statut actuel :** Voté au Sénat en première lecture le 26 mai 2026. Attendu à l'Assemblée nationale (potentiellement lors de la session extraordinaire de l'été 2026).
+**Origine :** Projet de loi gouvernemental, présenté par Laurent Nuñez, ministre de l'Intérieur (gouvernement Bayrou).
+**Statut actuel :** Adopté au Sénat en première lecture le 26 mai 2026 (243 voix pour, 33 contre). En attente d'examen par l'Assemblée nationale (session extraordinaire de l'été ou rentrée 2026). **Pas encore promulgué : non en vigueur.**
 
 ### L'objectif du texte
 

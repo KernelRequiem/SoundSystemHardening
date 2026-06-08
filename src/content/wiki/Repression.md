@@ -178,7 +178,7 @@ L'audition libre concerne les personnes qui répondent à une convocation sans c
 
 ### Garde à vue
 
-La garde à vue n'est possible que pour un crime ou un délit (pas pour une simple contravention). Comme l'organisation de free party devient un délit avec la PPL 1133 / RIPOST, la GAV devient possible pour les organisateurs.
+La garde à vue n'est possible que pour un crime ou un délit (pas pour une simple contravention). En droit actuel, l'organisation sans déclaration est une contravention : pas de GAV possible sur ce seul fondement. Si la PPL 1133 ou le projet de loi RIPOST sont adoptés définitivement, l'organisation deviendrait un délit et la GAV deviendrait alors possible pour les organisateurs présumés.
 
 Mes droits en GAV (art. 63-1 CPP) :
 

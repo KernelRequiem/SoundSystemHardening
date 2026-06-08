@@ -1,10 +1,13 @@
 # Contester la répression : Guide de résistance juridique et collective
 
-**La loi RIPOST criminalise les free parties en passant la participation à un nouveau délit (6 mois prison + 7 500€ amende), au lieu d'une simple contravention. Cette loi repose sur des amendes forfaitaires délictuelles qui sont techniquement contestables. La résistance collective commence par comprendre tes droits, refuser de payer sans condition, et mobiliser ensemble.**
+> **Statut au 8 juin 2026 : RIPOST n'est pas encore en vigueur.**
+> Le projet de loi RIPOST a été adopté par le Sénat le 26 mai 2026. Il doit encore être examiné et adopté par l'Assemblée nationale pour devenir loi. Tant qu'il n'est pas promulgué, le droit actuel s'applique : la participation à une free party n'est soumise à aucune sanction spécifique. Seuls les organisateurs sont exposés à une contravention de 5e classe (1 500 €).
+
+**Le projet de loi RIPOST vise à criminaliser les free parties en instaurant un délit de participation (6 mois prison + 7 500 € d'amende). Si adopté, ce texte reposera sur des amendes forfaitaires délictuelles qui sont techniquement contestables. La résistance collective commence par comprendre tes droits, refuser de payer sans condition, et mobiliser ensemble.**
 
 ---
 
-## Ce que change la loi RIPOST (mai 2026)
+## Ce que changerait le projet de loi RIPOST (si adopté)
 
 ### Avant RIPOST : Simple contravention
 
