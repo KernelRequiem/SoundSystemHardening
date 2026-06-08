@@ -39,7 +39,10 @@ const totalIncidents = incidents.length;
     </div>
 
     <!-- Tagline + descriptor -->
-    <p class="hero-tagline">Déjouer. Documenter. Reprendre l'avantage.</p>
+    <p class="hero-tagline">
+      <span class="tagline-line1">La répression a ses outils</span><br>
+      <span class="tagline-line2">Vous avez maintenant les vôtres.</span>
+    </p>
     <p class="hero-descriptor">Droits · Terrain · OPSEC · Contre-mesures</p>
 
     <!-- Stats bar -->
@@ -343,14 +346,21 @@ const totalIncidents = incidents.length;
   }
 
   .hero-tagline {
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: clamp(18px, 2.4vw, 22px);
-    font-weight: 600;
-    color: #d0d0e0;
-    max-width: 400px;
-    margin: 0 auto 10px;
-    line-height: 1.4;
-    letter-spacing: -0.01em;
+    font-family: 'Bebas Neue', 'Space Grotesk', sans-serif;
+    font-size: clamp(32px, 5.5vw, 58px);
+    font-weight: 400;
+    line-height: 1.05;
+    letter-spacing: 0.04em;
+    margin: 0 auto 14px;
+    text-transform: uppercase;
+  }
+  .tagline-line1 {
+    display: block;
+    color: rgba(232, 232, 240, 0.38);
+  }
+  .tagline-line2 {
+    display: block;
+    color: #e8e8f0;
   }
 
   .hero-descriptor {
