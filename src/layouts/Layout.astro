@@ -307,13 +307,13 @@ const navigation = [
 
             <!-- Logo centré — lien home -->
             <a href="/"
-               class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 no-underline topbar-logo-link"
+               class="absolute left-1/2 top-0 -translate-x-1/2 no-underline topbar-logo-link"
                aria-label="Accueil SoundSystemHardening"
             >
               <img
                 src="/SoundSystemHardeninglogo.png"
                 alt="SoundSystemHardening"
-                class="h-14 w-auto object-contain topbar-logo-img"
+                class="h-[100px] w-auto object-contain topbar-logo-img"
               />
             </a>
             <!-- Breadcrumb -->
@@ -397,12 +397,12 @@ const navigation = [
 
           </div>
         </div>
-        <article class="px-6 py-8 lg:px-12 lg:py-12 max-w-4xl mx-auto prose-dedsec animate-fade-in">
+        <article class="px-6 py-8 lg:px-12 lg:py-12 max-w-6xl mx-auto prose-dedsec animate-fade-in">
           <slot />
         </article>
         <TableOfContents />
         <footer class="border-t border-dedsec-border mt-16 px-6 lg:px-12 py-8">
-          <div class="max-w-4xl mx-auto">
+          <div class="max-w-6xl mx-auto">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs font-mono">
               <div>
                 <div class="text-neon-green font-bold mb-2">▸ PROJECT</div>

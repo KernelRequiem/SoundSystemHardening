@@ -33,15 +33,16 @@ export const POST: APIRoute = async ({ request }) => {
   }
 
   // ── Envoi SMTP ────────────────────────────────────────────────────────────
-  const smtpPort = Number(import.meta.env.SMTP_PORT) || 587;
+  // process.env = lecture au runtime (Coolify injecte les vars sur le container)
+  const smtpPort = Number(process.env.SMTP_PORT) || 587;
 
   const transporter = nodemailer.createTransport({
-    host:   import.meta.env.SMTP_HOST || 'mail.infomaniak.com',
+    host:   process.env.SMTP_HOST || 'mail.infomaniak.com',
     port:   smtpPort,
     secure: smtpPort === 465,
     auth: {
-      user: import.meta.env.SMTP_USER,
-      pass: import.meta.env.SMTP_PASS,
+      user: process.env.SMTP_USER,
+      pass: process.env.SMTP_PASS,
     },
   });
 
@@ -59,8 +60,8 @@ export const POST: APIRoute = async ({ request }) => {
 
   try {
     await transporter.sendMail({
-      from:    `"SoundSystem Hardening" <${import.meta.env.SMTP_USER}>`,
-      to:      import.meta.env.CONTACT_TO,
+      from:    `"SoundSystem Hardening" <${process.env.SMTP_USER}>`,
+      to:      process.env.CONTACT_TO,
       subject: `[Signalement SSH] ${data.type}${data.page ? ' — ' + data.page : ''}`,
       text:    body,
     });
