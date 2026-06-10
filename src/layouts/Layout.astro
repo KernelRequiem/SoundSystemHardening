@@ -200,7 +200,7 @@ const navigation = [
   </head>
   <body>
 
-    <div id="progress-bar" class="fixed top-0 left-0 h-[2px] z-[9999] pointer-events-none" style="width: 0%; background: linear-gradient(90deg, #00ff9f, #00d9ff); box-shadow: 0 0 8px #00ff9f;"></div>
+    <div id="progress-bar" class="fixed top-0 right-0 w-[2px] z-[9999] pointer-events-none" style="height: 0%; background: linear-gradient(180deg, #00ff9f, #00d9ff); box-shadow: 0 0 8px #00ff9f;"></div>
     <button id="menu-toggle" class="fixed top-4 left-4 z-50 flex bg-dedsec-darker border border-neon-green p-2 rounded text-neon-green hover:bg-neon-green/10 transition-all" aria-label="Toggle menu">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <line x1="3" y1="12" x2="21" y2="12"/>
@@ -446,7 +446,7 @@ const navigation = [
         const update = () => {
           const scrollTop = window.scrollY;
           const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-          bar.style.width = (docHeight > 0 ? (scrollTop / docHeight) * 100 : 0) + '%';
+          bar.style.height = (docHeight > 0 ? (scrollTop / docHeight) * 100 : 0) + '%';
         };
         window.addEventListener('scroll', update, { passive: true });
         update();
