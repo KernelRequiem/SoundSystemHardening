@@ -19,6 +19,10 @@ COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package.json ./package.json
 
+# Fix @astrojs/node v8 : resolveClientDir() cherche dans dist/server/client/
+# au lieu de dist/client/ (décalage d'un niveau dû au chunk dans chunks/)
+RUN ln -sf /app/dist/client /app/dist/server/client
+
 # Variables d'environnement runtime (à surcharger dans Coolify)
 ENV HOST=0.0.0.0
 ENV PORT=4321
