@@ -34,16 +34,24 @@ export const POST: APIRoute = async ({ request }) => {
 
   // ── Envoi SMTP ────────────────────────────────────────────────────────────
   // process.env = lecture au runtime (Coolify injecte les vars sur le container)
-  const smtpPort = Number(process.env.SMTP_PORT) || 587;
+  const smtpHost = process.env.SMTP_HOST || import.meta.env.SMTP_HOST || 'mail.infomaniak.com';
+  const smtpPort = Number(process.env.SMTP_PORT || import.meta.env.SMTP_PORT) || 587;
+  const smtpUser = process.env.SMTP_USER || import.meta.env.SMTP_USER;
+  const smtpPass = process.env.SMTP_PASS || import.meta.env.SMTP_PASS;
+
+  if (!smtpUser || !smtpPass) {
+    console.error('[API /signalement] SMTP credentials manquants — vérifier les variables d\'environnement.');
+    return new Response(
+      JSON.stringify({ ok: false, error: 'Configuration serveur incomplète. Passez par Signal.' }),
+      { status: 500, headers: { 'Content-Type': 'application/json' } }
+    );
+  }
 
   const transporter = nodemailer.createTransport({
-    host:   process.env.SMTP_HOST || 'mail.infomaniak.com',
+    host:   smtpHost,
     port:   smtpPort,
     secure: smtpPort === 465,
-    auth: {
-      user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASS,
-    },
+    auth: { user: smtpUser, pass: smtpPass },
   });
 
   const body = [
@@ -60,8 +68,8 @@ export const POST: APIRoute = async ({ request }) => {
 
   try {
     await transporter.sendMail({
-      from:    `"SoundSystem Hardening" <${process.env.SMTP_USER}>`,
-      to:      process.env.CONTACT_TO,
+      from:    `"SoundSystem Hardening" <${smtpUser}>`,
+      to:      process.env.CONTACT_TO || import.meta.env.CONTACT_TO,
       subject: `[Signalement SSH] ${data.type}${data.page ? ' — ' + data.page : ''}`,
       text:    body,
     });
