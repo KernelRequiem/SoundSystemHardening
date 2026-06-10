@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>InfoCrypt — Chiffrement de fiches sensibles</title>
+<style>
+  :root {
+    --bg: #0d0d0d;
+    --surface: #161616;
+    --surface2: #1f1f1f;
+    --border: #2a2a2a;
+    --accent: #00e5a0;
+    --accent-dim: #00b37d;
+    --danger: #ff4757;
+    --text: #e8e8e8;
+    --text-dim: #888;
+    --radius: 6px;
+    --font: 'Courier New', Courier, monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font);
+    font-size: 14px;
+    min-height: 100vh;
+    padding: 24px 16px;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+
+  header h1 {
+    font-size: 28px;
+    letter-spacing: 6px;
+    color: var(--accent);
+    text-transform: uppercase;
+  }
+
+  header p {
+    color: var(--text-dim);
+    font-size: 12px;
+    margin-top: 6px;
+    letter-spacing: 1px;
+  }
+
+  .badge {
+    display: inline-block;
+    background: #1a2e27;
+    color: var(--accent);
+    border: 1px solid var(--accent-dim);
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 20px;
+    margin-top: 8px;
+    letter-spacing: 2px;
+  }
+
+  .container {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
+  .tabs {
+    display: flex;
+    gap: 2px;
+    margin-bottom: 24px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 4px;
+  }
+
+  .tab-btn {
+    flex: 1;
+    padding: 10px;
+    background: transparent;
+    border: none;
+    color: var(--text-dim);
+    cursor: pointer;
+    font-family: var(--font);
+    font-size: 13px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    border-radius: 4px;
+    transition: all 0.15s;
+  }
+
+  .tab-btn.active {
+    background: var(--accent);
+    color: #000;
+    font-weight: bold;
+  }
+
+  .tab-btn:not(.active):hover {
+    background: var(--surface2);
+    color: var(--text);
+  }
+
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  .section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+
+  .section-title {
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .field {
+    margin-bottom: 14px;
+  }
+
+  .field label {
+    display: block;
+    font-size: 11px;
+    letter-spacing: 1px;
+    color: var(--text-dim);
+    margin-bottom: 6px;
+    text-transform: uppercase;
+  }
+
+  .field label .req {
+    color: var(--accent);
+    margin-left: 2px;
+  }
+
+  .field input, .field textarea, .field select {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text);
+    font-family: var(--font);
+    font-size: 13px;
+    padding: 10px 12px;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+
+  .field input:focus, .field textarea:focus {
+    border-color: var(--accent);
+  }
+
+  .field textarea {
+    resize: vertical;
+    min-height: 80px;
+  }
+
+  .password-wrap {
+    position: relative;
+  }
+
+  .password-wrap input {
+    padding-right: 40px;
+  }
+
+  .toggle-pw {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--text-dim);
+    cursor: pointer;
+    font-size: 16px;
+    padding: 0;
+    line-height: 1;
+  }
+
+  .pw-strength {
+    height: 3px;
+    background: var(--border);
+    border-radius: 2px;
+    margin-top: 6px;
+    overflow: hidden;
+  }
+
+  .pw-strength-bar {
+    height: 100%;
+    width: 0%;
+    border-radius: 2px;
+    transition: width 0.2s, background 0.2s;
+  }
+
+  .pw-hint {
+    font-size: 10px;
+    color: var(--text-dim);
+    margin-top: 4px;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    border: none;
+    border-radius: var(--radius);
+    cursor: pointer;
+    font-family: var(--font);
+    font-size: 13px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    transition: all 0.15s;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #000;
+    font-weight: bold;
+  }
+
+  .btn-primary:hover { background: #00ffb3; }
+  .btn-primary:disabled { background: #1a3d2e; color: #555; cursor: not-allowed; }
+
+  .btn-secondary {
+    background: var(--surface2);
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+
+  .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+  .btn-danger {
+    background: transparent;
+    color: var(--danger);
+    border: 1px solid var(--danger);
+  }
+
+  .btn-danger:hover { background: var(--danger); color: #fff; }
+
+  .btn-group {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .output-block {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px;
+    font-size: 11px;
+    word-break: break-all;
+    max-height: 200px;
+    overflow-y: auto;
+    color: var(--text-dim);
+    line-height: 1.6;
+    font-family: var(--font);
+  }
+
+  .copy-btn {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    cursor: pointer;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-family: var(--font);
+    transition: all 0.15s;
+  }
+
+  .copy-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .copy-btn.copied { border-color: var(--accent); color: var(--accent); }
+
+  .result-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+
+  .result-label {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+
+  .alert {
+    padding: 12px 16px;
+    border-radius: var(--radius);
+    font-size: 12px;
+    margin-bottom: 16px;
+    display: none;
+  }
+
+  .alert.show { display: block; }
+  .alert-error { background: #2a1010; border: 1px solid var(--danger); color: var(--danger); }
+  .alert-success { background: #0d2a1e; border: 1px solid var(--accent); color: var(--accent); }
+  .alert-warn { background: #2a1f00; border: 1px solid #ffaa00; color: #ffaa00; }
+
+  .decrypted-card {
+    display: none;
+    background: var(--surface);
+    border: 1px solid var(--accent);
+    border-radius: var(--radius);
+    padding: 20px;
+    margin-top: 16px;
+  }
+
+  .decrypted-card.show { display: block; }
+
+  .card-title {
+    font-size: 16px;
+    color: var(--accent);
+    letter-spacing: 2px;
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .card-field {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .card-field:last-child { border-bottom: none; }
+
+  .card-field-label {
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    width: 120px;
+    flex-shrink: 0;
+    padding-top: 1px;
+  }
+
+  .card-field-value {
+    flex: 1;
+    font-size: 13px;
+    color: var(--text);
+    word-break: break-word;
+    white-space: pre-wrap;
+  }
+
+  .card-field-copy {
+    flex-shrink: 0;
+  }
+
+  .import-zone {
+    border: 2px dashed var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    text-align: center;
+    color: var(--text-dim);
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.15s;
+    margin-bottom: 14px;
+  }
+
+  .import-zone:hover, .import-zone.dragover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: #0d2a1e44;
+  }
+
+  .import-zone input[type=file] {
+    display: none;
+  }
+
+  .spinner {
+    display: none;
+    width: 16px;
+    height: 16px;
+    border: 2px solid #000;
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .metadata {
+    font-size: 10px;
+    color: var(--text-dim);
+    margin-top: 8px;
+    letter-spacing: 1px;
+  }
+
+  hr {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 20px 0;
+  }
+
+  footer {
+    text-align: center;
+    color: var(--text-dim);
+    font-size: 10px;
+    margin-top: 40px;
+    letter-spacing: 2px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>InfoCrypt</h1>
+    <p>Chiffrement de fiches sensibles — 100% client-side</p>
+    <span class="badge">AES-GCM 256 · PBKDF2 250k · ZÉRO SERVEUR</span>
+  </header>
+
+  <div id="alert-global" class="alert"></div>
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('encrypt')">🔒 Chiffrer</button>
+    <button class="tab-btn" onclick="switchTab('decrypt')">🔓 Déchiffrer</button>
+  </div>
+
+  <!-- ENCRYPT PANEL -->
+  <div id="panel-encrypt" class="panel active">
+    <div class="section">
+      <div class="section-title">Contenu de la fiche</div>
+
+      <div class="field">
+        <label>Titre <span class="req">*</span></label>
+        <input type="text" id="f-title" placeholder="ex: Infoline Sono Principal" autocomplete="off">
+      </div>
+
+      <div class="field">
+        <label>Téléphone</label>
+        <input type="text" id="f-phone" placeholder="+33 6 XX XX XX XX" autocomplete="off">
+      </div>
+
+      <div class="field">
+        <label>Rôle / Fonction</label>
+        <input type="text" id="f-role" placeholder="ex: Technicien sono, Référent logistique" autocomplete="off">
+      </div>
+
+      <div class="field">
+        <label>Lieu / Zone</label>
+        <input type="text" id="f-location" placeholder="ex: Forêt de X — 86" autocomplete="off">
+      </div>
+
+      <div class="field">
+        <label>Instructions / Notes</label>
+        <textarea id="f-instructions" placeholder="ex: Appeler 30 min avant l'arrivée..."></textarea>
+      </div>
+
+      <div class="field">
+        <label>Commentaire libre</label>
+        <textarea id="f-comment" placeholder="Informations supplémentaires..."></textarea>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Mot de passe</div>
+      <div class="field">
+        <label>Mot de passe <span class="req">*</span></label>
+        <div class="password-wrap">
+          <input type="password" id="enc-password" placeholder="Choisir un mot de passe fort" autocomplete="new-password" oninput="checkStrength(this.value)">
+          <button class="toggle-pw" onclick="togglePw('enc-password')" type="button">👁</button>
+        </div>
+        <div class="pw-strength"><div class="pw-strength-bar" id="pw-bar"></div></div>
+        <div class="pw-hint" id="pw-hint">— Entrez un mot de passe</div>
+      </div>
+      <div class="field">
+        <label>Confirmer le mot de passe <span class="req">*</span></label>
+        <div class="password-wrap">
+          <input type="password" id="enc-password2" placeholder="Répéter le mot de passe" autocomplete="new-password">
+          <button class="toggle-pw" onclick="togglePw('enc-password2')" type="button">👁</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="btn-group" style="margin-bottom:20px">
+      <button class="btn btn-primary" onclick="encryptData()" id="btn-encrypt">
+        <span class="spinner" id="spin-enc"></span>
+        <span>Chiffrer</span>
+      </button>
+      <button class="btn btn-danger" onclick="clearEncryptForm()">Effacer</button>
+    </div>
+
+    <div id="enc-result" style="display:none">
+      <div class="section">
+        <div class="section-title">Résultat chiffré</div>
+
+        <div class="result-header">
+          <span class="result-label">Texte chiffré (base64)</span>
+          <button class="copy-btn" onclick="copyText('enc-output', this)">Copier</button>
+        </div>
+        <div class="output-block" id="enc-output"></div>
+        <div class="metadata" id="enc-meta"></div>
+
+        <hr>
+
+        <div class="btn-group">
+          <button class="btn btn-secondary" onclick="downloadJSON()">⬇ Télécharger .json</button>
+          <button class="btn btn-secondary" onclick="downloadTXT()">⬇ Télécharger .txt</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DECRYPT PANEL -->
+  <div id="panel-decrypt" class="panel">
+    <div class="section">
+      <div class="section-title">Données chiffrées</div>
+
+      <div class="import-zone" id="drop-zone" onclick="document.getElementById('file-import').click()">
+        <input type="file" id="file-import" accept=".json,.txt" onchange="importFile(this)">
+        <div>📂 Cliquer pour importer un fichier <strong>.json</strong> ou <strong>.txt</strong></div>
+        <div style="font-size:10px;margin-top:4px;color:#555">ou glisser-déposer ici</div>
+      </div>
+
+      <div class="field">
+        <label>Ou coller le texte chiffré</label>
+        <textarea id="dec-input" placeholder="Coller ici le bloc chiffré (base64 ou JSON)..." style="min-height:120px;font-size:11px;"></textarea>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Mot de passe</div>
+      <div class="field">
+        <label>Mot de passe <span class="req">*</span></label>
+        <div class="password-wrap">
+          <input type="password" id="dec-password" placeholder="Entrer le mot de passe" autocomplete="current-password">
+          <button class="toggle-pw" onclick="togglePw('dec-password')" type="button">👁</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="btn-group" style="margin-bottom:20px">
+      <button class="btn btn-primary" onclick="decryptData()" id="btn-decrypt">
+        <span class="spinner" id="spin-dec"></span>
+        <span>Déchiffrer</span>
+      </button>
+      <button class="btn btn-danger" onclick="clearDecryptForm()">Effacer</button>
+    </div>
+
+    <div id="dec-alert-error" class="alert alert-error"></div>
+    <div id="dec-alert-success" class="alert alert-success"></div>
+
+    <div class="decrypted-card" id="decrypted-card">
+      <div class="card-title" id="card-title"></div>
+      <div id="card-fields"></div>
+      <div class="metadata" id="dec-meta"></div>
+    </div>
+  </div>
+
+  <footer>
+    INFOCRYPT V1 · CLIENT-SIDE ONLY · AUCUNE DONNÉE TRANSMISE · AES-GCM-256 + PBKDF2
+  </footer>
+</div>
+
+<script>
+// ── UTILS ──────────────────────────────────────────────────────────────────────
+
+function switchTab(name) {
+  document.querySelectorAll('.tab-btn').forEach((b,i) => {
+    b.classList.toggle('active', (i === 0 && name === 'encrypt') || (i === 1 && name === 'decrypt'));
+  });
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-' + name).classList.add('active');
+}
+
+function togglePw(id) {
+  const el = document.getElementById(id);
+  el.type = el.type === 'password' ? 'text' : 'password';
+}
+
+function showAlert(id, type, msg) {
+  const el = document.getElementById(id);
+  el.className = 'alert alert-' + type + ' show';
+  el.textContent = msg;
+}
+
+function hideAlert(id) {
+  document.getElementById(id).className = 'alert';
+}
+
+function setLoading(btnId, spinId, loading) {
+  document.getElementById(spinId).style.display = loading ? 'block' : 'none';
+  document.getElementById(btnId).disabled = loading;
+}
+
+function copyText(sourceId, btn) {
+  const text = document.getElementById(sourceId).textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = '✓ Copié';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copier'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+
+function copyRaw(text, btn) {
+  navigator.clipboard.writeText(text).then(() => {
+    const orig = btn.textContent;
+    btn.textContent = '✓';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = orig; btn.classList.remove('copied'); }, 2000);
+  });
+}
+
+// ── PASSWORD STRENGTH ──────────────────────────────────────────────────────────
+
+function checkStrength(pw) {
+  const bar = document.getElementById('pw-bar');
+  const hint = document.getElementById('pw-hint');
+  if (!pw) { bar.style.width='0%'; hint.textContent='— Entrez un mot de passe'; return; }
+  let score = 0;
+  if (pw.length >= 8) score++;
+  if (pw.length >= 14) score++;
+  if (/[A-Z]/.test(pw)) score++;
+  if (/[0-9]/.test(pw)) score++;
+  if (/[^A-Za-z0-9]/.test(pw)) score++;
+  const levels = [
+    { pct: '15%', color: '#ff4757', label: 'Très faible' },
+    { pct: '30%', color: '#ff6b35', label: 'Faible' },
+    { pct: '55%', color: '#ffaa00', label: 'Moyen' },
+    { pct: '80%', color: '#7bed9f', label: 'Fort' },
+    { pct: '100%', color: '#00e5a0', label: 'Très fort' },
+  ];
+  const lvl = levels[Math.min(score-1, 4)] || levels[0];
+  bar.style.width = lvl.pct;
+  bar.style.background = lvl.color;
+  hint.textContent = '— ' + lvl.label;
+  hint.style.color = lvl.color;
+}
+
+// ── CRYPTO ────────────────────────────────────────────────────────────────────
+
+const PBKDF2_ITERATIONS = 250000;
+const SALT_LEN = 16;
+const IV_LEN = 12;
+
+function bufToBase64(buf) {
+  return btoa(String.fromCharCode(...new Uint8Array(buf)));
+}
+
+function base64ToBuf(b64) {
+  return Uint8Array.from(atob(b64), c => c.charCodeAt(0)).buffer;
+}
+
+async function deriveKey(password, salt) {
+  const enc = new TextEncoder();
+  const keyMaterial = await crypto.subtle.importKey(
+    'raw', enc.encode(password), 'PBKDF2', false, ['deriveKey']
+  );
+  return crypto.subtle.deriveKey(
+    { name: 'PBKDF2', salt, iterations: PBKDF2_ITERATIONS, hash: 'SHA-256' },
+    keyMaterial,
+    { name: 'AES-GCM', length: 256 },
+    false,
+    ['encrypt', 'decrypt']
+  );
+}
+
+async function encrypt(plaintext, password) {
+  const salt = crypto.getRandomValues(new Uint8Array(SALT_LEN));
+  const iv   = crypto.getRandomValues(new Uint8Array(IV_LEN));
+  const key  = await deriveKey(password, salt);
+  const enc  = new TextEncoder();
+  const ct   = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, enc.encode(plaintext));
+
+  const payload = {
+    v: 1,
+    algo: 'AES-GCM-256',
+    kdf: 'PBKDF2-SHA256',
+    iter: PBKDF2_ITERATIONS,
+    salt: bufToBase64(salt),
+    iv:   bufToBase64(iv),
+    ct:   bufToBase64(ct),
+    ts:   new Date().toISOString(),
+  };
+  return payload;
+}
+
+async function decrypt(payload, password) {
+  const salt = base64ToBuf(payload.salt);
+  const iv   = base64ToBuf(payload.iv);
+  const ct   = base64ToBuf(payload.ct);
+
+  // Respect iterations from payload for forward compat
+  const iter = payload.iter || PBKDF2_ITERATIONS;
+  const enc  = new TextEncoder();
+  const keyMaterial = await crypto.subtle.importKey(
+    'raw', enc.encode(password), 'PBKDF2', false, ['deriveKey']
+  );
+  const key = await crypto.subtle.deriveKey(
+    { name: 'PBKDF2', salt, iterations: iter, hash: 'SHA-256' },
+    keyMaterial,
+    { name: 'AES-GCM', length: 256 },
+    false,
+    ['decrypt']
+  );
+
+  const pt = await crypto.subtle.decrypt({ name: 'AES-GCM', iv }, key, ct);
+  return new TextDecoder().decode(pt);
+}
+
+// ── CURRENT PAYLOAD (for download) ───────────────────────────────────────────
+
+let currentPayload = null;
+
+// ── ENCRYPT FLOW ──────────────────────────────────────────────────────────────
+
+async function encryptData() {
+  const title   = document.getElementById('f-title').value.trim();
+  const phone   = document.getElementById('f-phone').value.trim();
+  const role    = document.getElementById('f-role').value.trim();
+  const loc     = document.getElementById('f-location').value.trim();
+  const instr   = document.getElementById('f-instructions').value.trim();
+  const comment = document.getElementById('f-comment').value.trim();
+  const pw1     = document.getElementById('enc-password').value;
+  const pw2     = document.getElementById('enc-password2').value;
+
+  if (!title) { showAlert('alert-global', 'error', 'Le titre est obligatoire.'); return; }
+  if (!pw1)   { showAlert('alert-global', 'error', 'Le mot de passe est obligatoire.'); return; }
+  if (pw1 !== pw2) { showAlert('alert-global', 'error', 'Les mots de passe ne correspondent pas.'); return; }
+  hideAlert('alert-global');
+
+  setLoading('btn-encrypt', 'spin-enc', true);
+
+  try {
+    const data = { title };
+    if (phone)   data.phone    = phone;
+    if (role)    data.role     = role;
+    if (loc)     data.location = loc;
+    if (instr)   data.instructions = instr;
+    if (comment) data.comment  = comment;
+
+    const payload = await encrypt(JSON.stringify(data), pw1);
+    currentPayload = payload;
+
+    const outStr = JSON.stringify(payload);
+    document.getElementById('enc-output').textContent = btoa(outStr);
+    document.getElementById('enc-meta').textContent =
+      `Chiffré le ${new Date(payload.ts).toLocaleString('fr-FR')} · ` +
+      `AES-GCM-256 · PBKDF2 ${payload.iter.toLocaleString()} itérations`;
+
+    document.getElementById('enc-result').style.display = 'block';
+    showAlert('alert-global', 'success', 'Fiche chiffrée avec succès. Copiez le texte ou téléchargez le fichier.');
+    document.getElementById('enc-result').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  } catch(e) {
+    showAlert('alert-global', 'error', 'Erreur de chiffrement : ' + e.message);
+  } finally {
+    setLoading('btn-encrypt', 'spin-enc', false);
+  }
+}
+
+function downloadJSON() {
+  if (!currentPayload) return;
+  const blob = new Blob([JSON.stringify(currentPayload, null, 2)], { type: 'application/json' });
+  triggerDownload(blob, 'infocrypt_' + slugify(currentPayload.ts) + '.json');
+}
+
+function downloadTXT() {
+  if (!currentPayload) return;
+  const content = `INFOCRYPT V1\n${'='.repeat(40)}\n${btoa(JSON.stringify(currentPayload))}\n`;
+  const blob = new Blob([content], { type: 'text/plain' });
+  triggerDownload(blob, 'infocrypt_' + slugify(currentPayload.ts) + '.txt');
+}
+
+function triggerDownload(blob, name) {
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = name; a.click();
+  URL.revokeObjectURL(url);
+}
+
+function slugify(ts) {
+  return ts.replace(/[:.TZ]/g, '-').replace(/-+/g, '-').replace(/-$/, '');
+}
+
+function clearEncryptForm() {
+  ['f-title','f-phone','f-role','f-location','f-instructions','f-comment','enc-password','enc-password2']
+    .forEach(id => document.getElementById(id).value = '');
+  document.getElementById('enc-result').style.display = 'none';
+  document.getElementById('pw-bar').style.width = '0%';
+  document.getElementById('pw-hint').textContent = '— Entrez un mot de passe';
+  hideAlert('alert-global');
+  currentPayload = null;
+}
+
+// ── DECRYPT FLOW ──────────────────────────────────────────────────────────────
+
+function importFile(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    let text = e.target.result.trim();
+    // Strip header if .txt
+    if (text.startsWith('INFOCRYPT')) {
+      const lines = text.split('\n');
+      text = lines.find(l => l.length > 40 && !/^[=\s]|^INFO/.test(l)) || text;
+    }
+    document.getElementById('dec-input').value = text;
+  };
+  reader.readAsText(file);
+}
+
+// Drag-and-drop
+const dz = document.getElementById('drop-zone');
+dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('dragover'); });
+dz.addEventListener('dragleave', () => dz.classList.remove('dragover'));
+dz.addEventListener('drop', e => {
+  e.preventDefault(); dz.classList.remove('dragover');
+  const file = e.dataTransfer.files[0];
+  if (file) { const fi = document.getElementById('file-import'); fi.files = e.dataTransfer.files; importFile(fi); }
+});
+
+async function decryptData() {
+  hideAlert('dec-alert-error');
+  hideAlert('dec-alert-success');
+  document.getElementById('decrypted-card').classList.remove('show');
+
+  const raw = document.getElementById('dec-input').value.trim();
+  const pw  = document.getElementById('dec-password').value;
+
+  if (!raw) { showAlert('dec-alert-error', 'error', 'Collez un texte chiffré ou importez un fichier.'); return; }
+  if (!pw)  { showAlert('dec-alert-error', 'error', 'Le mot de passe est obligatoire.'); return; }
+
+  setLoading('btn-decrypt', 'spin-dec', true);
+
+  try {
+    let payload;
+
+    // Try JSON first
+    try { payload = JSON.parse(raw); }
+    catch(_) {
+      // Try base64 → JSON
+      try { payload = JSON.parse(atob(raw)); }
+      catch(_2) {
+        throw new Error('Format non reconnu. Le texte doit être un JSON ou base64 produit par InfoCrypt.');
+      }
+    }
+
+    if (!payload.ct || !payload.salt || !payload.iv) {
+      throw new Error('Structure de payload invalide (ct, salt ou iv manquant).');
+    }
+
+    const plaintext = await decrypt(payload, pw);
+    const data = JSON.parse(plaintext);
+
+    renderCard(data, payload);
+    showAlert('dec-alert-success', 'success', 'Déchiffrement réussi.');
+    document.getElementById('decrypted-card').scrollIntoView({ behavior: 'smooth' });
+
+  } catch(e) {
+    const msg = e.name === 'OperationError'
+      ? 'Mot de passe incorrect ou données corrompues.'
+      : e.message;
+    showAlert('dec-alert-error', 'error', '✗ ' + msg);
+  } finally {
+    setLoading('btn-decrypt', 'spin-dec', false);
+  }
+}
+
+function renderCard(data, payload) {
+  document.getElementById('card-title').textContent = data.title || '(Sans titre)';
+
+  const fields = [
+    { key: 'phone',        label: 'Téléphone' },
+    { key: 'role',         label: 'Rôle / Fonction' },
+    { key: 'location',     label: 'Lieu / Zone' },
+    { key: 'instructions', label: 'Instructions' },
+    { key: 'comment',      label: 'Commentaire' },
+  ];
+
+  const container = document.getElementById('card-fields');
+  container.innerHTML = '';
+
+  fields.forEach(f => {
+    if (!data[f.key]) return;
+    const row = document.createElement('div');
+    row.className = 'card-field';
+    row.innerHTML = `
+      <div class="card-field-label">${f.label}</div>
+      <div class="card-field-value">${escHtml(data[f.key])}</div>
+      <div class="card-field-copy">
+        <button class="copy-btn" onclick="copyRaw(${JSON.stringify(data[f.key])}, this)">⧉</button>
+      </div>`;
+    container.appendChild(row);
+  });
+
+  document.getElementById('dec-meta').textContent =
+    payload.ts
+      ? `Chiffré le ${new Date(payload.ts).toLocaleString('fr-FR')} · ${payload.algo} · PBKDF2 ${(payload.iter||0).toLocaleString()} itérations`
+      : '';
+
+  document.getElementById('decrypted-card').classList.add('show');
+}
+
+function escHtml(str) {
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function clearDecryptForm() {
+  document.getElementById('dec-input').value = '';
+  document.getElementById('dec-password').value = '';
+  document.getElementById('decrypted-card').classList.remove('show');
+  hideAlert('dec-alert-error');
+  hideAlert('dec-alert-success');
+  document.getElementById('file-import').value = '';
+}
+</script>
+</body>
+</html>

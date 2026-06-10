@@ -2,26 +2,30 @@
 import Layout from '../layouts/Layout.astro';
 ---
 
-<Layout title="Contribuer" description="Comment contribuer au wiki SoundSystemHardening  -  règles, canaux, contact direct.">
+<Layout title="Contribuer" description="Comment contribuer au wiki SoundSystemHardening — règles, canaux, contact direct.">
 
-  <h1 class="mb-2">▸ CONTRIBUER</h1>
+  <h1 class="mb-1">▸ CONTRIBUER</h1>
   <p class="text-dedsec-muted text-sm mb-10 font-mono">Ce wiki vit par ses contributions. Trois règles, plusieurs canaux.</p>
 
   <!-- RÈGLES -->
   <section class="mb-12">
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-3 font-mono text-sm">
-      <div class="border border-dedsec-border bg-dedsec-darker px-4 py-4">
-        <div class="text-neon-green font-bold mb-2 text-xs tracking-widest">[01] SOURCER</div>
-        <p class="text-dedsec-muted text-xs leading-relaxed">Toute affirmation factuelle doit être sourcée. Pas de rumeurs, pas d'approximations.</p>
-      </div>
-      <div class="border border-dedsec-border bg-dedsec-darker px-4 py-4">
-        <div class="text-neon-green font-bold mb-2 text-xs tracking-widest">[02] ANONYMISER</div>
-        <p class="text-dedsec-muted text-xs leading-relaxed">Aucun nom réel, aucune donnée permettant d'identifier des personnes ou des lieux précis.</p>
-      </div>
-      <div class="border border-dedsec-border bg-dedsec-darker px-4 py-4">
-        <div class="text-neon-green font-bold mb-2 text-xs tracking-widest">[03] VÉRIFIER</div>
-        <p class="text-dedsec-muted text-xs leading-relaxed">Les informations juridiques doivent être relues par quelqu'un avec des compétences légales.</p>
-      </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+      {[
+        { num: '01', label: 'SOURCER',    icon: '◎', desc: 'Toute affirmation factuelle doit être sourcée. Pas de rumeurs, pas d\'approximations.' },
+        { num: '02', label: 'ANONYMISER', icon: '◈', desc: 'Aucun nom réel, aucune donnée permettant d\'identifier des personnes ou des lieux précis.' },
+        { num: '03', label: 'VÉRIFIER',   icon: '◉', desc: 'Les informations juridiques doivent être relues par quelqu\'un avec des compétences légales.' },
+      ].map(r => (
+        <div class="card-neon px-5 py-5 flex flex-col gap-3">
+          <div class="flex items-center gap-3">
+            <span class="text-neon-green font-mono text-2xl leading-none">{r.icon}</span>
+            <div>
+              <div class="font-mono text-[9px] text-neon-green/40 tracking-widest">[{r.num}]</div>
+              <div class="font-mono text-sm text-neon-green font-bold tracking-widest">{r.label}</div>
+            </div>
+          </div>
+          <p class="text-dedsec-muted text-sm leading-relaxed m-0">{r.desc}</p>
+        </div>
+      ))}
     </div>
   </section>
 
@@ -29,31 +33,31 @@ import Layout from '../layouts/Layout.astro';
   <section class="mb-12">
     <h2 class="mb-6">▸ COMMENT CONTRIBUER</h2>
 
-    <div class="space-y-4">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
 
       <!-- GitHub -->
-      <div class="card-neon">
-        <h3 class="text-neon-green mt-0 mb-1">Via GitHub  -  méthode principale</h3>
-        <p class="text-xs text-dedsec-muted mb-4">Le wiki est open source. Méthode directe et traçable pour tout contenu.</p>
-        <div class="space-y-2 text-sm font-mono mb-4">
-          <div class="flex gap-3">
-            <span class="text-neon-green/50 shrink-0">01.</span>
-            <span class="text-dedsec-text">Fork le repo <span class="text-neon-green">KernelRequiem/SoundSystemHardening</span></span>
-          </div>
-          <div class="flex gap-3">
-            <span class="text-neon-green/50 shrink-0">02.</span>
-            <span class="text-dedsec-text">Crée ou modifie un fichier <span class="text-neon-green">.md</span> dans <span class="text-neon-green">src/content/wiki/</span></span>
-          </div>
-          <div class="flex gap-3">
-            <span class="text-neon-green/50 shrink-0">03.</span>
-            <span class="text-dedsec-text">Ouvre une Pull Request avec une description claire</span>
-          </div>
-          <div class="flex gap-3">
-            <span class="text-neon-green/50 shrink-0">04.</span>
-            <span class="text-dedsec-text">Le contenu est relu, vérifié, puis mergé</span>
+      <div class="card-neon px-5 py-5 md:col-span-2">
+        <div class="flex items-center gap-3 mb-4">
+          <span class="text-neon-green font-mono text-xl leading-none">⊞</span>
+          <div>
+            <div class="font-mono text-xs font-bold text-neon-green tracking-widest">VIA GITHUB</div>
+            <div class="text-dedsec-muted/60 text-[10px] font-mono">Méthode principale · Traçable · Open source</div>
           </div>
         </div>
-        <div class="flex gap-3">
+        <div class="space-y-2 font-mono text-xs mb-5">
+          {[
+            ['01', 'Fork le repo', 'KernelRequiem/SoundSystemHardening'],
+            ['02', 'Crée ou modifie un fichier', '.md dans src/content/wiki/'],
+            ['03', 'Ouvre une Pull Request avec une description claire', null],
+            ['04', 'Le contenu est relu, vérifié, puis mergé', null],
+          ].map(([n, text, highlight]) => (
+            <div class="flex gap-3 items-start">
+              <span class="text-neon-green/40 shrink-0 w-5">{n}.</span>
+              <span class="text-dedsec-muted">{text}{highlight && <span class="text-neon-green ml-1">{highlight}</span>}</span>
+            </div>
+          ))}
+        </div>
+        <div class="flex gap-3 flex-wrap">
           <a href="https://github.com/KernelRequiem/SoundSystemHardening" target="_blank" rel="noopener noreferrer" class="btn-neon no-underline text-xs">
             ▸ Repo GitHub
           </a>
@@ -63,32 +67,42 @@ import Layout from '../layouts/Layout.astro';
         </div>
       </div>
 
-      <!-- Témoignage terrain -->
-      <div class="card-neon">
-        <h3 class="text-neon-green mt-0 mb-1">Partager un cas terrain ou un témoignage</h3>
-        <p class="text-xs text-dedsec-muted mb-3">Tu as vécu une saisie, une GAV, une intervention ? Ce retour enrichit le wiki.</p>
-        <div class="border border-red-500/30 bg-red-500/5 px-3 py-2 mb-4 font-mono text-xs text-dedsec-muted">
-          <span class="text-red-400 font-bold">Sécurité obligatoire :</span> Anonymise systématiquement  -  aucun nom, aucun lieu précis, aucune date permettant l'identification. Supprime les métadonnées des fichiers joints.
+      <!-- Compétences spécialisées -->
+      <div class="card-neon px-5 py-5">
+        <div class="flex items-center gap-3 mb-4">
+          <span class="text-neon-green font-mono text-xl leading-none">◧</span>
+          <div>
+            <div class="font-mono text-xs font-bold text-neon-green tracking-widest">EXPERTISES</div>
+            <div class="text-dedsec-muted/60 text-[10px] font-mono">Profils recherchés</div>
+          </div>
         </div>
-        <p class="text-xs text-dedsec-muted">Utilise l'un des canaux de contact ci-dessous : email ou formulaire.</p>
+        <div class="space-y-3">
+          {[
+            { role: 'Juriste / avocat', desc: 'Droits, RIPOST, recours', icon: '⚖' },
+            { role: 'Profil cyber',     desc: 'OPSEC, corrections techniques', icon: '⊡' },
+            { role: 'Traducteur',       desc: 'EN · DE · ES', icon: '◈' },
+          ].map(({ role, desc, icon }) => (
+            <div class="flex items-center gap-3 border-b border-dedsec-border/40 pb-3 last:border-0 last:pb-0">
+              <span class="text-neon-green/60 font-mono text-base shrink-0">{icon}</span>
+              <div>
+                <div class="font-mono text-xs font-bold text-dedsec-text">{role}</div>
+                <div class="text-[10px] text-dedsec-muted/60 font-mono">{desc}</div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
 
-      <!-- Compétences spécialisées -->
-      <div class="card-neon">
-        <h3 class="text-neon-green mt-0 mb-1">Compétences spécialisées</h3>
-        <p class="text-xs text-dedsec-muted mb-3">Tu as une expertise utile ?</p>
-        <div class="space-y-1.5 text-sm font-mono">
-          <div class="flex gap-3">
-            <span class="text-neon-green/50 shrink-0">▸</span>
-            <span class="text-dedsec-text"><span class="text-neon-green">Juriste / avocat</span>  -  relecture des pages Droits, RIPOST, recours</span>
-          </div>
-          <div class="flex gap-3">
-            <span class="text-neon-green/50 shrink-0">▸</span>
-            <span class="text-dedsec-text"><span class="text-neon-green">Profil cyber</span>  -  audit des pages OPSEC, corrections techniques</span>
-          </div>
-          <div class="flex gap-3">
-            <span class="text-neon-green/50 shrink-0">▸</span>
-            <span class="text-dedsec-text"><span class="text-neon-green">Traducteur</span>  -  EN, DE, ES pour les collectifs européens</span>
+      <!-- Témoignage terrain -->
+      <div class="card-neon px-5 py-5 md:col-span-3">
+        <div class="flex items-start gap-4">
+          <span class="text-red-400/80 font-mono text-xl leading-none shrink-0 mt-0.5">▲</span>
+          <div class="flex-1 min-w-0">
+            <div class="font-mono text-xs font-bold text-neon-green tracking-widest mb-1">PARTAGER UN CAS TERRAIN</div>
+            <p class="text-dedsec-muted text-sm m-0 mb-3">Tu as vécu une saisie, une GAV, une intervention ? Ce retour enrichit le wiki.</p>
+            <div class="border border-red-500/30 bg-red-500/5 px-4 py-3 font-mono text-xs text-dedsec-muted">
+              <span class="text-red-400 font-bold">Sécurité :</span> Anonymise systématiquement — aucun nom, aucun lieu précis, aucune date identifiante. Supprime les métadonnées des fichiers joints.
+            </div>
           </div>
         </div>
       </div>
@@ -99,38 +113,66 @@ import Layout from '../layouts/Layout.astro';
   <!-- CONTACT DIRECT -->
   <section class="mb-12">
     <h2 class="mb-2">▸ CONTACT DIRECT</h2>
-    <p class="text-xs text-dedsec-muted font-mono mb-6">Pour les échanges sensibles, préférer ProtonMail.</p>
+    <p class="text-xs text-dedsec-muted font-mono mb-6">Pour les échanges sensibles, préférer Signal ou Session.</p>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
 
-      <!-- Email -->
-      <div class="border border-dedsec-border bg-dedsec-darker px-5 py-4">
-        <div class="font-mono text-xs text-neon-green font-bold tracking-widest mb-3">◆ EMAIL CHIFFRÉ</div>
+      <!-- Email principal -->
+      <div class="card-neon px-5 py-5">
+        <div class="font-mono text-xs text-neon-green font-bold tracking-widest mb-4">◆ EMAIL</div>
         <a
-          href="mailto:crxzydiam0nd@protonmail.com"
-          class="font-mono text-sm text-dedsec-text hover:text-neon-green no-underline transition-colors block mb-2"
-        >crxzydiam0nd@protonmail.com</a>
-        <p class="text-[10px] text-dedsec-muted/50 font-mono">ProtonMail · Chiffrement end-to-end</p>
+          href="mailto:contact@soundsystemhardening.fr"
+          class="font-mono text-xs text-neon-green hover:text-white no-underline transition-colors block mb-2 break-all"
+          style="word-break: break-all; overflow-wrap: anywhere;"
+        >contact@soundsystemhardening.fr</a>
+        <p class="text-[10px] text-dedsec-muted/50 font-mono m-0 mt-2">Chiffré · Hébergé en Suisse</p>
       </div>
 
       <!-- PGP -->
-      <div class="border border-dedsec-border bg-dedsec-darker px-5 py-4">
-        <div class="font-mono text-xs text-neon-green font-bold tracking-widest mb-3">◆ PGP</div>
-        <p class="font-mono text-sm text-dedsec-muted mb-2">Chiffrement des emails sensibles.</p>
-        <div class="flex flex-wrap gap-2 mt-2">
-          <a href="/pgp-public-key.asc" download class="btn-neon no-underline text-xs">▸ Télécharger la clé</a>
-          <a href="https://keys.openpgp.org/search?q=crxzydiam0nd%40protonmail.com" target="_blank" rel="noopener noreferrer" class="font-mono text-[10px] text-neon-green/50 hover:text-neon-green transition-colors no-underline self-center">keys.openpgp.org →</a>
+      <div class="card-neon px-5 py-5">
+        <div class="font-mono text-xs text-neon-green font-bold tracking-widest mb-4">◆ PGP</div>
+        <p class="font-mono text-xs text-dedsec-muted mb-4">Pour chiffrer les emails sensibles avant envoi.</p>
+        <div class="flex flex-col gap-2 mb-4">
+          <a href="/pgp-public-key.asc" download class="btn-neon no-underline text-xs w-fit">▸ Télécharger la clé</a>
+          <a href="https://keys.openpgp.org/search?q=contact%40soundsystemhardening.fr" target="_blank" rel="noopener noreferrer"
+             class="font-mono text-[10px] text-neon-green/50 hover:text-neon-green transition-colors no-underline">
+            keys.openpgp.org →
+          </a>
         </div>
-        <p class="text-[10px] text-dedsec-muted/40 font-mono mt-2">Fingerprint : 1399 F26F 66A3 D65C FC76 B496 BF9D E339 889F D4FD</p>
+        <p class="text-[10px] text-dedsec-muted/40 font-mono m-0 break-all" style="word-break: break-all;">
+          Fingerprint : 1399 F26F 66A3 D65C FC76 B496 BF9D E339 889F D4FD
+        </p>
       </div>
 
       <!-- Formulaire -->
-      <div class="border border-dedsec-border bg-dedsec-darker px-5 py-4">
-        <div class="font-mono text-xs text-neon-green font-bold tracking-widest mb-3">◆ FORMULAIRE</div>
-        <p class="font-mono text-sm text-dedsec-muted mb-3">Aucun compte requis. Aucune donnée conservée côté site.</p>
-        <a href="/contact" class="btn-neon no-underline text-xs">▸ Accéder au formulaire</a>
+      <div class="card-neon px-5 py-5">
+        <div class="font-mono text-xs text-neon-green font-bold tracking-widest mb-4">◆ FORMULAIRE</div>
+        <p class="font-mono text-xs text-dedsec-muted mb-6">Aucun compte requis. Aucune donnée conservée côté site.</p>
+        <a href="/contact" class="btn-neon no-underline text-xs w-fit block">▸ Accéder au formulaire</a>
       </div>
 
+    </div>
+
+    <!-- Canaux sécurisés -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+      {[
+        { name: 'Signal',  icon: '⊕', desc: 'Chiffrement E2E · Messages éphémères', sub: 'Standard de référence',      url: 'https://signal.org',        link: 'signal.org →'       },
+        { name: 'Session', icon: '⊗', desc: 'Sans numéro de téléphone requis',       sub: 'Anonymat renforcé',          url: 'https://getsession.org',    link: 'getsession.org →'   },
+        { name: 'Briar',   icon: '⊘', desc: 'P2P · Sans serveur central',            sub: 'Fonctionne sans internet',   url: 'https://briarproject.org',  link: 'briarproject.org →' },
+      ].map(c => (
+        <div class="card-neon px-4 py-4 flex items-center gap-4">
+          <span class="text-neon-green font-mono text-2xl leading-none shrink-0">{c.icon}</span>
+          <div class="flex-1 min-w-0">
+            <div class="font-mono text-xs font-bold text-neon-green tracking-widest">{c.name}</div>
+            <div class="text-[10px] text-dedsec-muted/70 font-mono mt-0.5">{c.desc}</div>
+            <div class="text-[9px] text-dedsec-muted/40 font-mono">{c.sub}</div>
+          </div>
+          <a href={c.url} target="_blank" rel="noopener"
+             class="font-mono text-[10px] text-neon-green/40 hover:text-neon-green transition-colors no-underline shrink-0">
+            {c.link}
+          </a>
+        </div>
+      ))}
     </div>
   </section>
 
@@ -141,18 +183,18 @@ import Layout from '../layouts/Layout.astro';
 
     <div class="space-y-2">
       {[
-        { label: 'Templates de recours',      desc: '6 templates cités mais non rédigés  -  GAV, saisie, AFD, référé',            priority: 'CRITIQUE' },
-        { label: 'Après l\'événement',         desc: 'Que faire dans les 72h après une intervention ? Processus complet absent', priority: 'CRITIQUE' },
-        { label: 'Veille RIPOST',             desc: 'Tableau de bord de la navette parlementaire en cours',                     priority: 'URGENT'   },
-        { label: 'Jurisprudence',             desc: 'Compiler les décisions exploitables (TA Montpellier, Cass. 2020...)',       priority: 'IMPORTANT'},
-        { label: 'Guide débutant',            desc: 'Monter un collectif, acquérir du matériel, premiers réflexes',             priority: 'IMPORTANT'},
-        { label: 'Carte ressources régionales', desc: 'Contacts, avocats, assos par région',                                   priority: 'SOUHAITABLE'},
+        { label: 'Templates de recours',        desc: '6 templates cités mais non rédigés — GAV, saisie, AFD, référé',             priority: 'CRITIQUE'    },
+        { label: 'Après l\'événement',           desc: 'Que faire dans les 72h après une intervention ? Processus complet absent',   priority: 'CRITIQUE'    },
+        { label: 'Veille RIPOST',               desc: 'Tableau de bord de la navette parlementaire en cours',                       priority: 'URGENT'      },
+        { label: 'Jurisprudence',               desc: 'Compiler les décisions exploitables (TA Montpellier, Cass. 2020...)',         priority: 'IMPORTANT'   },
+        { label: 'Guide débutant',              desc: 'Monter un collectif, acquérir du matériel, premiers réflexes',               priority: 'IMPORTANT'   },
+        { label: 'Carte ressources régionales', desc: 'Contacts, avocats, assos par région',                                        priority: 'SOUHAITABLE' },
       ].map(item => (
-        <div class="flex items-start gap-4 bg-dedsec-darker border border-dedsec-border hover:border-dedsec-text/20 px-4 py-3 transition-all">
+        <div class="flex items-start gap-4 bg-dedsec-darker border border-dedsec-border hover:border-neon-green/20 px-4 py-3 transition-all group">
           <span class={`font-mono text-[9px] shrink-0 mt-0.5 tracking-widest border px-1.5 py-0.5 ${
-            item.priority === 'CRITIQUE'    ? 'text-red-400 border-red-400/40'         :
-            item.priority === 'URGENT'      ? 'text-red-400/60 border-red-400/25'      :
-            item.priority === 'IMPORTANT'   ? 'text-neon-green/70 border-neon-green/30':
+            item.priority === 'CRITIQUE'    ? 'text-red-400 border-red-400/40'          :
+            item.priority === 'URGENT'      ? 'text-red-400/60 border-red-400/25'       :
+            item.priority === 'IMPORTANT'   ? 'text-neon-green/70 border-neon-green/30' :
                                               'text-dedsec-muted border-dedsec-border'
           }`}>
             {item.priority}
@@ -164,7 +206,7 @@ import Layout from '../layouts/Layout.astro';
           <a
             href="https://github.com/KernelRequiem/SoundSystemHardening/issues/new"
             target="_blank"
-            class="text-[10px] font-mono text-dedsec-muted hover:text-neon-green no-underline transition-colors shrink-0 self-center"
+            class="text-[10px] font-mono text-dedsec-muted/50 group-hover:text-neon-green no-underline transition-colors shrink-0 self-center"
           >Je contribue →</a>
         </div>
       ))}
@@ -175,12 +217,12 @@ import Layout from '../layouts/Layout.astro';
   <section class="mb-8">
     <div class="terminal text-xs font-mono">
       <div class="text-neon-green font-bold mb-2 tracking-widest">▸ LICENCE</div>
-      <p class="text-dedsec-muted">
+      <p class="text-dedsec-muted m-0">
         Ce wiki est publié sous <span class="text-neon-green">Creative Commons BY-SA 4.0</span>.
         Copie, modification et redistribution libres, à condition de citer la source et de publier sous la même licence.
       </p>
-      <p class="text-dedsec-muted mt-2">
-        Zéro tracking · Zéro cookies · Zéro publicité · Code sur GitHub · Hébergé sur Vercel.
+      <p class="text-dedsec-muted mt-2 mb-0">
+        Zéro tracking · Zéro cookies · Zéro publicité · Code sur GitHub · Self-hosted en Suisse.
       </p>
     </div>
   </section>

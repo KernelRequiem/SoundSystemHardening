@@ -52,14 +52,9 @@ import Layout from '../layouts/Layout.astro';
     <div id="contact-form-wrap">
       <!-- Formulaire détecté par Netlify au build via data-netlify="true" -->
       <form
-        name="contact"
-        method="POST"
-        data-netlify="true"
-        netlify-honeypot="bot-field"
         id="contactForm"
         class="form-block"
       >
-        <input type="hidden" name="form-name" value="contact" />
         <p class="hidden"><label>Ne pas remplir : <input name="bot-field" /></label></p>
 
         <div class="field">
@@ -115,14 +110,9 @@ import Layout from '../layouts/Layout.astro';
 
     <div id="signaler-form-wrap">
       <form
-        name="signalement"
-        method="POST"
-        data-netlify="true"
-        netlify-honeypot="bot-field"
         id="signalerForm"
         class="form-block"
       >
-        <input type="hidden" name="form-name" value="signalement" />
         <p class="hidden"><label>Ne pas remplir : <input name="bot-field" /></label></p>
 
         <div class="field">
@@ -183,15 +173,8 @@ import Layout from '../layouts/Layout.astro';
       });
     });
 
-    // ---- Utilitaire encode Netlify Forms ----
-    function encode(data) {
-      return Object.keys(data)
-        .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(data[k] || ''))
-        .join('&');
-    }
-
     // ---- Soumission AJAX générique ----
-    async function submitForm(formEl, submitBtn, errorEl, wrapEl, successEl) {
+    async function submitForm(formEl, endpoint, submitBtn, errorEl, wrapEl, successEl) {
       const data = {};
       new FormData(formEl).forEach((v, k) => { data[k] = v; });
 
@@ -200,20 +183,22 @@ import Layout from '../layouts/Layout.astro';
       errorEl.style.display = 'none';
 
       try {
-        const res = await fetch('/', {
+        const res = await fetch(endpoint, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          body: encode(data),
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
         });
 
-        if (res.ok) {
+        const json = await res.json().catch(() => ({}));
+
+        if (res.ok && json.ok) {
           wrapEl.style.display = 'none';
           successEl.style.display = 'block';
         } else {
-          throw new Error('Erreur réseau (' + res.status + ')');
+          throw new Error(json.error || 'Erreur réseau (' + res.status + ')');
         }
       } catch (err) {
-        errorEl.textContent = 'Erreur : ' + err.message + '. Réessayez ou ouvrez une issue GitHub.';
+        errorEl.textContent = 'Erreur : ' + err.message;
         errorEl.style.display = 'block';
         submitBtn.disabled = false;
         submitBtn.textContent = submitBtn.dataset.label;
@@ -228,7 +213,7 @@ import Layout from '../layouts/Layout.astro';
 
     cForm.addEventListener('submit', e => {
       e.preventDefault();
-      submitForm(cForm, cSubmit, cError,
+      submitForm(cForm, '/api/contact', cSubmit, cError,
         document.getElementById('contact-form-wrap'),
         document.getElementById('contact-success'));
     });
@@ -249,7 +234,7 @@ import Layout from '../layouts/Layout.astro';
 
     sForm.addEventListener('submit', e => {
       e.preventDefault();
-      submitForm(sForm, sSubmit, sError,
+      submitForm(sForm, '/api/signalement', sSubmit, sError,
         document.getElementById('signaler-form-wrap'),
         document.getElementById('signaler-success'));
     });

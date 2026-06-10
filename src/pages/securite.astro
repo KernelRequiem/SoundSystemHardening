@@ -5,53 +5,90 @@ import Layout from '../layouts/Layout.astro';
 <Layout
   title="Sécurité & Confidentialité"
   category="PROJET"
-  description="Ce qui arrive aux informations que vous partagez sur SoundSystemHardening. Garanties, limites, droits RGPD, recommandations opsec."
+  description="Les garanties techniques et juridiques mises en place pour protéger les utilisateurs de SoundSystemHardening."
 >
 
-  <h1>Vos données, notre responsabilité</h1>
+  <h1>Conçu pour vous protéger</h1>
   <p class="text-dedsec-muted text-sm font-mono tracking-wider mb-10">
-    ▸ Ce que vous partagez · Ce qu'on en fait · Comment vous protéger
+    ▸ Garanties · Formulaires · Droits RGPD · Canaux sécurisés
   </p>
 
-  <!-- Statuts clés -->
-  <div class="grid grid-cols-3 gap-3 mb-10">
-    <div class="card-neon text-center py-4">
-      <div class="text-neon-green font-mono font-bold text-xs tracking-widest">ZÉRO COOKIE</div>
-      <div class="text-dedsec-muted/60 text-[10px] font-mono mt-1.5 uppercase tracking-wider">Aucun traceur</div>
-    </div>
-    <div class="card-neon text-center py-4">
-      <div class="text-neon-green font-mono font-bold text-xs tracking-widest">IP MAX 7J</div>
-      <div class="text-dedsec-muted/60 text-[10px] font-mono mt-1.5 uppercase tracking-wider">Logs hébergeur seulement</div>
-    </div>
-    <div class="card-neon text-center py-4">
-      <div class="text-neon-green font-mono font-bold text-xs tracking-widest">0 TIERS</div>
-      <div class="text-dedsec-muted/60 text-[10px] font-mono mt-1.5 uppercase tracking-wider">Aucune transmission</div>
-    </div>
+  <!-- STATUTS CLÉS -->
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-10">
+    {[
+      { label: 'ZÉRO COOKIE', sub: 'Aucun traceur' },
+      { label: 'ZÉRO JS TIERS', sub: 'Pages wiki' },
+      { label: 'HÉBERGEMENT 🇨🇭', sub: 'Juridiction suisse' },
+      { label: 'MODÉRATION', sub: 'Avant toute publication' },
+    ].map(s => (
+      <div class="card-neon text-center py-4 px-2">
+        <div class="text-neon-green font-mono font-bold text-[10px] tracking-widest">{s.label}</div>
+        <div class="text-dedsec-muted/60 text-[9px] font-mono mt-1.5 uppercase tracking-wider">{s.sub}</div>
+      </div>
+    ))}
   </div>
 
   <div class="info-box mb-12">
-    Cette page concerne les visiteurs qui utilisent les formulaires du site : signalement carte, contact, report de problème. Si vous naviguez uniquement en lecture, rien n'est collecté. Les détails techniques de l'infrastructure sont sur <a href="/a-propos">À propos & Transparence</a>.
+    En lecture seule, <strong>rien n'est collecté</strong>. Cette page détaille uniquement ce qui se passe quand vous utilisez les formulaires du site. Les détails techniques de l'infrastructure sont sur <a href="/a-propos">À propos & Transparence</a>.
   </div>
 
   <!-- ═══════════════════════════════════════════════════════ -->
-  <!-- 1. CE QUE VOUS PARTAGEZ VIA LES FORMULAIRES            -->
+  <!-- 1. GARANTIES                                            -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+
+  <h2>Les garanties</h2>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-10">
+    {[
+      {
+        title: 'Aucun cookie, aucun tracker',
+        desc: 'Navigation en lecture : zéro donnée collectée. Pas de cookie, pas de fingerprinting, pas d\'analytics.',
+      },
+      {
+        title: 'Hébergement en Suisse',
+        desc: 'Serveur physique sous législation suisse sur la protection des données. Aucune dépendance à une infrastructure cloud étrangère.',
+      },
+      {
+        title: 'Infrastructure auto-gérée',
+        desc: 'Aucun cloud commercial tiers n\'héberge le site. L\'infrastructure est contrôlée et auditée en interne.',
+      },
+      {
+        title: 'Code source public',
+        desc: 'L\'intégralité du code est sur GitHub, lisible et auditable par n\'importe qui.',
+      },
+      {
+        title: 'Modération systématique',
+        desc: 'Aucun signalement n\'est publié sans vérification et anonymisation préalable.',
+      },
+      {
+        title: 'Transparence totale',
+        desc: 'Tout changement majeur de politique ou d\'infrastructure est publié dans le changelog du wiki.',
+      },
+    ].map(item => (
+      <div class="card-neon px-4 py-4 flex gap-3 items-start">
+        <span class="text-neon-green font-mono text-sm mt-0.5 flex-shrink-0">✓</span>
+        <div>
+          <div class="font-mono text-xs font-bold text-neon-green tracking-wider mb-1">{item.title}</div>
+          <p class="text-dedsec-muted/70 text-sm m-0" style="font-family:'Space Grotesk',sans-serif;">{item.desc}</p>
+        </div>
+      </div>
+    ))}
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- 2. CE QUE VOUS PARTAGEZ VIA LES FORMULAIRES            -->
   <!-- ═══════════════════════════════════════════════════════ -->
 
   <h2>Ce que vous partagez via les formulaires</h2>
 
-  <p>
-    Trois formulaires existent sur le site. Voici exactement ce que chacun collecte,
-    où les données vont et combien de temps elles restent.
-  </p>
-
-  <!-- AVERTISSEMENT PRINCIPAL -->
-  <div class="card-neon-critical mt-6 mb-8 px-6 py-5">
+  <!-- AVERTISSEMENT -->
+  <div class="card-neon-critical mt-4 mb-8 px-6 py-5">
     <div class="font-mono text-xs font-bold uppercase tracking-widest mb-4" style="color:rgba(255,68,68,0.9);">
-      ⚠ Ce que vous ne devez jamais inclure dans un signalement
+      ⚠ Ne jamais inclure dans un signalement
     </div>
     <ul class="space-y-1.5 m-0 p-0 list-none">
       {[
-        'Aucun nom réel ou prénom : ni le vôtre, ni celui d\'autres personnes',
+        'Aucun nom réel ou prénom — ni le vôtre, ni celui d\'autres personnes',
         'Aucune adresse personnelle ou professionnelle',
         'Aucun numéro de téléphone',
         'Aucune donnée permettant d\'identifier un participant ou un organisateur',
@@ -67,104 +104,45 @@ import Layout from '../layouts/Layout.astro';
     </p>
   </div>
 
-  <h3>Signalement de la carte de la répression</h3>
-  <p class="text-dedsec-muted/60 text-xs font-mono mb-3 tracking-wide">
-    Destination : Airtable (modérateurs uniquement) · Publication après validation · IP : logs Netlify, 7 jours max
-  </p>
+  <!-- 3 formulaires en cartes -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
 
-  <table>
-    <thead>
-      <tr><th>Champ</th><th>Requis</th><th>Visible publiquement</th></tr>
-    </thead>
-    <tbody>
-      <tr><td>Lieu (ville, département)</td><td>Oui</td><td>Oui, après validation</td></tr>
-      <tr><td>Date</td><td>Oui</td><td>Oui, après validation</td></tr>
-      <tr><td>Type de répression</td><td>Oui</td><td>Oui, après validation</td></tr>
-      <tr><td>Description</td><td>Oui</td><td>Oui, après validation</td></tr>
-      <tr><td>Bilan</td><td>Non</td><td>Oui, après validation</td></tr>
-      <tr><td>Source (URL)</td><td>Non</td><td>Oui, après validation</td></tr>
-    </tbody>
-  </table>
+    <div class="card-neon px-5 py-5">
+      <div class="font-mono text-xs font-bold text-neon-green tracking-widest mb-1 uppercase">Signalement carte</div>
+      <div class="text-dedsec-muted/40 text-[9px] font-mono mb-3 tracking-wider">Modérateurs · Publié après validation · IP : 7j max</div>
+      <ul class="m-0 p-0 list-none space-y-1">
+        {['Lieu (ville, département)', 'Date', 'Type de répression', 'Description', 'Bilan (optionnel)', 'Source URL (optionnel)'].map(f => (
+          <li class="text-xs flex gap-2 items-center" style="font-family:'Space Grotesk',sans-serif;color:rgba(200,200,216,0.65);">
+            <span class="text-neon-green/40 text-[10px]">›</span>{f}
+          </li>
+        ))}
+      </ul>
+    </div>
 
-  <h3>Formulaire de contact</h3>
-  <p class="text-dedsec-muted/60 text-xs font-mono mb-3 tracking-wide">
-    Destination : dashboard Netlify (modérateurs) · Non publié · Supprimé après traitement · IP : logs Netlify, 7 jours max
-  </p>
+    <div class="card-neon px-5 py-5">
+      <div class="font-mono text-xs font-bold text-neon-green tracking-widest mb-1 uppercase">Contact</div>
+      <div class="text-dedsec-muted/40 text-[9px] font-mono mb-3 tracking-wider">Modérateurs · Non publié · Supprimé après traitement · IP : 7j max</div>
+      <ul class="m-0 p-0 list-none space-y-1">
+        {['Objet', 'Message', 'Moyen de réponse (optionnel)'].map(f => (
+          <li class="text-xs flex gap-2 items-center" style="font-family:'Space Grotesk',sans-serif;color:rgba(200,200,216,0.65);">
+            <span class="text-neon-green/40 text-[10px]">›</span>{f}
+          </li>
+        ))}
+      </ul>
+    </div>
 
-  <table>
-    <thead>
-      <tr><th>Champ</th><th>Requis</th><th>Visible publiquement</th></tr>
-    </thead>
-    <tbody>
-      <tr><td>Objet</td><td>Oui</td><td>Non</td></tr>
-      <tr><td>Message</td><td>Oui</td><td>Non</td></tr>
-      <tr><td>Moyen de réponse</td><td>Non</td><td>Non</td></tr>
-    </tbody>
-  </table>
+    <div class="card-neon px-5 py-5">
+      <div class="font-mono text-xs font-bold text-neon-green tracking-widest mb-1 uppercase">Problème wiki</div>
+      <div class="text-dedsec-muted/40 text-[9px] font-mono mb-3 tracking-wider">Modérateurs · Non publié · Supprimé après résolution · IP : 7j max</div>
+      <ul class="m-0 p-0 list-none space-y-1">
+        {['Type de problème', 'Page concernée (optionnel)', 'Description'].map(f => (
+          <li class="text-xs flex gap-2 items-center" style="font-family:'Space Grotesk',sans-serif;color:rgba(200,200,216,0.65);">
+            <span class="text-neon-green/40 text-[10px]">›</span>{f}
+          </li>
+        ))}
+      </ul>
+    </div>
 
-  <h3>Signalement de problème sur le wiki</h3>
-  <p class="text-dedsec-muted/60 text-xs font-mono mb-3 tracking-wide">
-    Destination : dashboard Netlify (modérateurs) · Non publié · Supprimé après traitement · IP : logs Netlify, 7 jours max
-  </p>
-
-  <table>
-    <thead>
-      <tr><th>Champ</th><th>Requis</th><th>Visible publiquement</th></tr>
-    </thead>
-    <tbody>
-      <tr><td>Type de problème</td><td>Oui</td><td>Non</td></tr>
-      <tr><td>Page concernée</td><td>Non</td><td>Non</td></tr>
-      <tr><td>Description</td><td>Oui</td><td>Non</td></tr>
-    </tbody>
-  </table>
-
-  <!-- ═══════════════════════════════════════════════════════ -->
-  <!-- 2. CE QUE NOUS FAISONS DE VOS DONNÉES                  -->
-  <!-- ═══════════════════════════════════════════════════════ -->
-
-  <h2>Ce que nous faisons de vos données</h2>
-
-  <ul>
-    <li>
-      <strong>Signalements carte :</strong> lecture, vérification de la source, géocodage,
-      passage en statut "Valide" si le cas est sourcé. Le signalement original reste dans
-      Airtable, accessible uniquement aux modérateurs.
-    </li>
-    <li>
-      <strong>Messages de contact :</strong> lecture et réponse si vous avez laissé un moyen
-      de contact. Suppression manuelle après traitement.
-    </li>
-    <li>
-      <strong>Signalements de problème :</strong> traitement, correction du wiki, suppression
-      de la soumission après résolution.
-    </li>
-  </ul>
-
-  <!-- ═══════════════════════════════════════════════════════ -->
-  <!-- 3. CE QUE NOUS NE FAISONS JAMAIS                       -->
-  <!-- ═══════════════════════════════════════════════════════ -->
-
-  <h2>Ce que nous ne faisons jamais</h2>
-
-  <ul>
-    <li>Transmettre des données à des tiers, annonceurs ou partenaires commerciaux</li>
-    <li>Vendre, louer ou céder des données, sous quelque forme que ce soit</li>
-    <li>Recouper les informations reçues pour identifier des personnes</li>
-    <li>Publier un signalement sans l'avoir anonymisé et vérifié</li>
-    <li>Conserver les messages de contact au-delà de leur traitement</li>
-    <li>
-      Coopérer avec les demandes judiciaires ou policières.
-      Si une telle demande nous parvient, nous la rendrons publique sur ce wiki avant toute réponse.
-    </li>
-  </ul>
-
-  <div class="warning-box mt-2 mb-12">
-    <strong>Important sur les réquisitions judiciaires :</strong> nous ne sommes pas une association
-    déclarée et n'avons pas de représentant légal. En pratique, une réquisition adressée à
-    Netlify (hébergeur) ou Airtable (base de données) est traitée directement par ces sociétés
-    américaines, selon leur propre politique, sans obligation de nous notifier.<br /><br />
-    <strong>Conséquence directe :</strong> si ce que vous partagez pourrait vous exposer légalement,
-    ne le soumettez pas via ces formulaires. Utilisez les canaux sécurisés décrits ci-dessous.
   </div>
 
   <!-- ═══════════════════════════════════════════════════════ -->
@@ -173,37 +151,46 @@ import Layout from '../layouts/Layout.astro';
 
   <h2>Comment vous protéger</h2>
 
-  <p>
-    Si votre situation est sensible : témoignage sur une garde à vue, signalement d'une violence
-    policière, contact depuis une zone réprimée : prenez ces précautions avant d'envoyer quoi que ce soit.
-  </p>
-
-  <h3>Avant de remplir un formulaire</h3>
-
-  <ul>
-    <li>
-      <strong>Utilisez Tor ou un VPN.</strong> Votre IP est la seule métadonnée collectée automatiquement.
-      Tor la masque complètement : <a href="https://www.torproject.org" target="_blank" rel="noopener">torproject.org</a>.
-    </li>
-    <li>
-      <strong>Restez factuel, pas identifiable.</strong> Décrivez les faits, pas vos émotions ni votre
-      rôle. Ville et département suffisent pour la carte : une adresse exacte peut identifier un site ou des personnes.
-    </li>
-    <li>
-      <strong>Aucune donnée personnelle.</strong> Ni le vôtre, ni celui d'autres personnes : voir
-      l'avertissement en tête de page.
-    </li>
-  </ul>
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-8">
+    {[
+      {
+        label: '01 · Tor ou VPN',
+        desc: 'Votre IP est la seule métadonnée collectée automatiquement. Tor la masque complètement.',
+        link: 'https://www.torproject.org',
+        linkLabel: 'torproject.org →',
+      },
+      {
+        label: '02 · Restez factuel',
+        desc: 'Décrivez les faits, pas votre rôle. Ville et département suffisent — jamais d\'adresse exacte.',
+        link: null,
+        linkLabel: null,
+      },
+      {
+        label: '03 · Zéro données perso',
+        desc: 'Ni noms, ni numéros, ni aucune donnée pouvant identifier un participant ou un organisateur.',
+        link: null,
+        linkLabel: null,
+      },
+    ].map(item => (
+      <div class="card-neon px-4 py-4">
+        <div class="font-mono text-[10px] font-bold text-neon-green tracking-widest mb-2 uppercase">{item.label}</div>
+        <p class="text-dedsec-muted/70 text-sm leading-relaxed m-0" style="font-family:'Space Grotesk',sans-serif;">{item.desc}</p>
+        {item.link && (
+          <a href={item.link} target="_blank" rel="noopener"
+             class="inline-block mt-3 font-mono text-[10px] text-neon-green/50 hover:text-neon-green tracking-widest transition-colors no-underline after:hidden uppercase">
+            {item.linkLabel}
+          </a>
+        )}
+      </div>
+    ))}
+  </div>
 
   <h3>Pour les communications sensibles</h3>
-
   <p>
-    Si vous avez des informations trop sensibles pour les formulaires : vidéo d'une intervention,
-    preuves d'une saisie abusive, témoignage d'une personne en GAV : n'utilisez pas ce site.
-    Passez par ces canaux :
+    Vidéo d'une intervention, preuve d'une saisie abusive, témoignage depuis une GAV :
+    n'utilisez pas les formulaires. Passez par ces canaux :
   </p>
 
-  <!-- Cartes outils sécurisés -->
   <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6 mb-4">
 
     <div class="card-neon-tool">
@@ -231,7 +218,7 @@ import Layout from '../layouts/Layout.astro';
     <div class="card-neon-tool">
       <div class="font-mono text-sm font-bold text-neon-green mb-2">Briar</div>
       <p class="text-dedsec-muted/80 text-sm leading-relaxed m-0" style="font-family:'Space Grotesk',sans-serif;">
-        Messagerie P2P sans serveur central. Fonctionne même via Bluetooth ou Wi-Fi direct, sans internet.
+        Messagerie P2P sans serveur central. Fonctionne via Bluetooth ou Wi-Fi direct, sans internet.
       </p>
       <a href="https://briarproject.org" target="_blank" rel="noopener"
          class="inline-block mt-3 font-mono text-[10px] text-neon-green/50 hover:text-neon-green tracking-widest transition-colors no-underline after:hidden uppercase">
@@ -242,69 +229,66 @@ import Layout from '../layouts/Layout.astro';
   </div>
 
   <div class="info-box mt-4 mb-12">
-    Pour nous contacter via ces canaux, utilisez le formulaire de contact en laissant votre
-    identifiant (Session ID, etc.) dans le champ "Moyen de réponse". Nous prenons contact de notre côté.
+    Pour nous contacter via ces canaux, laissez votre identifiant (Session ID, etc.)
+    dans le champ "Moyen de réponse" du formulaire de contact. Nous prenons contact de notre côté.
   </div>
 
   <!-- ═══════════════════════════════════════════════════════ -->
-  <!-- 5. INTÉGRITÉ DES INFORMATIONS PUBLIÉES                 -->
+  <!-- 5. INTÉGRITÉ DU CONTENU                                 -->
   <!-- ═══════════════════════════════════════════════════════ -->
 
   <h2>Intégrité du contenu publié</h2>
 
-  <ul>
-    <li>
-      <strong>Sourçage obligatoire.</strong> Aucun fait juridique ou incident répressif n'est publié
-      sans source vérifiable : article de presse, décision de justice, rapport d'ONG, texte de loi.
-    </li>
-    <li>
-      <strong>Versionnement public.</strong> Chaque modification du wiki est enregistrée dans
-      l'historique Git sur GitHub. Tout changement est traçable, horodaté et public.
-    </li>
-    <li>
-      <strong>Corrections ouvertes.</strong> Si une information vous semble incorrecte, signalez-le.
-      Si une correction est refusée, on explique pourquoi.
-    </li>
-  </ul>
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-10">
+    {[
+      {
+        title: 'Sourçage obligatoire',
+        desc: 'Aucun fait juridique ou incident n\'est publié sans source vérifiable : presse, décision de justice, rapport d\'ONG, texte de loi.',
+      },
+      {
+        title: 'Versionnement public',
+        desc: 'Chaque modification du wiki est dans l\'historique Git sur GitHub. Tout changement est traçable, horodaté, public.',
+      },
+      {
+        title: 'Corrections ouvertes',
+        desc: 'Si une information vous semble incorrecte, signalez-le. Si une correction est refusée, on explique pourquoi.',
+      },
+    ].map(item => (
+      <div class="card-neon px-4 py-4">
+        <div class="font-mono text-xs font-bold text-neon-green tracking-wider mb-2 uppercase">{item.title}</div>
+        <p class="text-dedsec-muted/70 text-sm leading-relaxed m-0" style="font-family:'Space Grotesk',sans-serif;">{item.desc}</p>
+      </div>
+    ))}
+  </div>
 
   <!-- ═══════════════════════════════════════════════════════ -->
-  <!-- 6. VOS DROITS (RGPD)                                   -->
+  <!-- 6. VOS DROITS RGPD                                      -->
   <!-- ═══════════════════════════════════════════════════════ -->
 
   <h2>Vos droits (RGPD)</h2>
 
-  <ul>
-    <li>
-      <strong>Droit d'accès :</strong> vous pouvez demander ce que nous avons reçu de vous.
-    </li>
-    <li>
-      <strong>Droit de suppression :</strong> vous pouvez demander la suppression de toute
-      soumission vous concernant. Traitement sous 72 heures.
-    </li>
-    <li>
-      <strong>Droit de rectification :</strong> si une information publiée sur la carte est inexacte,
-      signalez-le via le formulaire.
-    </li>
-    <li>
-      <strong>Comment exercer ces droits :</strong> via le <a href="/contact">formulaire de contact</a>,
-      objet "Autre". Aucune preuve d'identité exigée : décrivez précisément ce que vous avez soumis.
-    </li>
-  </ul>
-
-  <div class="info-box mt-6 mb-10">
-    <strong>Cas particulier :</strong> si vous avez soumis un signalement sous Tor sans laisser de moyen
-    de contact, nous ne pouvons pas vous identifier. Décrivez le contenu de votre soumission dans le
-    formulaire de contact : nous supprimons manuellement.
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-6">
+    {[
+      { droit: 'Accès', desc: 'Vous pouvez demander ce que nous avons reçu de vous.' },
+      { droit: 'Suppression', desc: 'Suppression de toute soumission vous concernant. Traitement sous 72h.' },
+      { droit: 'Rectification', desc: 'Si une information publiée sur la carte est inexacte, signalez-le via le formulaire.' },
+      { droit: 'Exercice', desc: 'Via le formulaire de contact, objet "Autre". Aucune preuve d\'identité exigée.' },
+    ].map(item => (
+      <div class="card-neon px-4 py-3 flex gap-3 items-start">
+        <span class="font-mono text-[9px] text-neon-green/60 tracking-widest mt-1 flex-shrink-0 uppercase">Droit de<br/>{item.droit}</span>
+        <p class="text-dedsec-muted/70 text-sm m-0 border-l border-neon-green/10 pl-3" style="font-family:'Space Grotesk',sans-serif;">{item.desc}</p>
+      </div>
+    ))}
   </div>
 
   <!-- CTA -->
-  <div class="flex flex-wrap gap-4 mt-4">
+  <div class="flex flex-wrap gap-4 mt-8">
     <a href="/contact" class="btn-neon no-underline after:hidden">
       ▸ Formulaire de contact
     </a>
     <a href="/a-propos" class="btn-neon no-underline after:hidden"
       style="border-color:rgba(0,217,255,0.5);color:rgba(0,217,255,0.8)">
-      ▸ Architecture technique du site
+      ▸ Architecture technique
     </a>
   </div>
 

@@ -38,12 +38,33 @@ const totalIncidents = incidents.length;
       />
     </div>
 
-    <!-- Tagline + descriptor -->
-    <p class="hero-tagline">
-      <span class="tagline-line1">La répression a ses outils</span><br>
-      <span class="tagline-line2">Vous avez maintenant les vôtres.</span>
-    </p>
-    <p class="hero-descriptor">Droits · Terrain · OPSEC · Contre-mesures</p>
+    <!-- Bandeau ticker -->
+    <div class="ticker-wrap">
+      <div class="ticker-label">ACTUS</div>
+      <div class="ticker-mask">
+        <div class="ticker-track">
+          {[
+            '[ JUIN 2026 ] Migration infra vers VPS souverain — Hébergement Suisse, juridiction nLPD',
+            '[ VEILLE ] Loi RIPOST votée au Sénat le 26 mai 2026 — industrialisation des AFD et saisies destructives',
+            '[ WIKI ] Nouvelle page : Stratégie contre-RIPOST — parades et éléments de langage face aux médias',
+            '[ WIKI ] Nouvelle page : Drones thermiques et nasses logistiques — adaptation des infrastructures critiques',
+            '[ OPSEC ] Protocoles burners Telegram/Signal via Fragment mis à jour',
+            '[ INFRA ] Zéro script tiers — aucun outil de monitoring externe sur les pages wiki',
+            '[ DROIT ] Jurisprudences GAV et forçage biométrique mises à jour — mai 2026',
+          ].concat([
+            '[ JUIN 2026 ] Migration infra vers VPS souverain — Hébergement Suisse, juridiction nLPD',
+            '[ VEILLE ] Loi RIPOST votée au Sénat le 26 mai 2026 — industrialisation des AFD et saisies destructives',
+            '[ WIKI ] Nouvelle page : Stratégie contre-RIPOST — parades et éléments de langage face aux médias',
+            '[ WIKI ] Nouvelle page : Drones thermiques et nasses logistiques — adaptation des infrastructures critiques',
+            '[ OPSEC ] Protocoles burners Telegram/Signal via Fragment mis à jour',
+            '[ INFRA ] Zéro script tiers — aucun outil de monitoring externe sur les pages wiki',
+            '[ DROIT ] Jurisprudences GAV et forçage biométrique mises à jour — mai 2026',
+          ]).map(item => (
+            <span class="ticker-item">{item}</span>
+          ))}
+        </div>
+      </div>
+    </div>
 
     <!-- Stats bar -->
     <div class="hero-stats">
@@ -76,9 +97,11 @@ const totalIncidents = incidents.length;
     <!-- Ligne de contraste -->
     <div class="hero-contrast">
       <div class="contrast-line"></div>
-      <span class="contrast-them">Ils produisent des arrêtés, des contrôles et des saisies.</span>
-      <span class="contrast-arrow">▸</span>
-      <span class="contrast-us">Nous avons maintenant les outils pour déjouer et documenter.</span>
+      <div style="display:flex; justify-content:space-between; align-items:center; width:100%; gap:1rem;">
+        <span class="contrast-them" style="font-size:1.25rem; text-align:left;">Ils produisent des arrêtés, des contrôles et des saisies.</span>
+        <span class="contrast-arrow" style="font-size:1.25rem; flex-shrink:0;">▸</span>
+        <span class="contrast-us" style="font-size:1.25rem; text-align:right;">Nous avons maintenant les outils pour déjouer et documenter.</span>
+      </div>
       <div class="contrast-line"></div>
     </div>
 
@@ -363,13 +386,62 @@ const totalIncidents = incidents.length;
     color: #e8e8f0;
   }
 
-  .hero-descriptor {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    color: rgba(0, 255, 159, 0.32);
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
+  /* ── TICKER ── */
+  .ticker-wrap {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 680px;
     margin: 0 auto 32px;
+    border: 1px solid rgba(0, 255, 159, 0.18);
+    background: rgba(0, 255, 159, 0.03);
+    overflow: hidden;
+    height: 28px;
+  }
+  .ticker-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    color: rgba(0, 255, 159, 0.9);
+    background: rgba(0, 255, 159, 0.1);
+    border-right: 1px solid rgba(0, 255, 159, 0.18);
+    padding: 0 10px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    text-transform: uppercase;
+  }
+  .ticker-mask {
+    flex: 1;
+    overflow: hidden;
+    height: 100%;
+    display: flex;
+    align-items: center;
+  }
+  .ticker-track {
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+    animation: ticker-scroll 60s linear infinite;
+  }
+  .ticker-track:hover {
+    animation-play-state: paused;
+  }
+  .ticker-item {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: rgba(200, 200, 216, 0.6);
+    letter-spacing: 0.06em;
+    padding: 0 28px;
+    border-right: 1px solid rgba(0, 255, 159, 0.1);
+    flex-shrink: 0;
+  }
+  .ticker-item:first-word { color: rgba(0, 255, 159, 0.8); }
+  @keyframes ticker-scroll {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
   }
 
   .hero-stats {

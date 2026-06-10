@@ -7,6 +7,16 @@ Une documentation de sécurité opérationnelle ou de droit pénal qui n'est pas
 
 ---
 
+## [Juin 2026] - Migration infrastructure vers souveraineté suisse
+
+### Modifications techniques
+* **[Infrastructure]** Migration de l'hébergement vers un VPS Infomaniak (Genève, Suisse). *Pourquoi : hébergement souverain en Suisse, protection des données renforcée (nLPD), aucune dépendance à une plateforme cloud américaine pour l'hébergement du site.*
+* **[Infrastructure]** Remplacement de la stack cloud (Vercel) par un déploiement auto-géré via Coolify (open-source) et Traefik. Aucun tiers ne dispose désormais d'un accès opérationnel à l'infrastructure.
+* **[Transparence]** Suppression de l'intégration Vercel Speed Insights : le site ne charge plus aucun script tiers lors de la navigation. Zéro contact externe hors consultation de la carte.
+* **[Pages]** Mise à jour des pages `/a-propos` et `/securite` pour refléter le nouveau profil de risque juridique et technique de l'infrastructure.
+
+---
+
 ## [Mai 2026] - Refonte Cyber-OpSec et Veille RIPOST
 
 ### Ajouts

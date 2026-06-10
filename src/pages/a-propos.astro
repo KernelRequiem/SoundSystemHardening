@@ -6,7 +6,7 @@ import Layout from '../layouts/Layout.astro';
 <Layout
   title="À propos & Transparence"
   category="PROJET"
-  description="Ce que SoundSystemHardening est, comment il fonctionne, ce qu'il collecte et ce qu'il ne collecte pas. Preuves vérifiables, architecture ouverte."
+  description="Ce que SoundSystemHardening est, comment il fonctionne, et les garanties techniques et juridiques mises en place pour protéger ses utilisateurs."
 >
 
   <h1>Ce site, sans filtre</h1>
@@ -14,7 +14,26 @@ import Layout from '../layouts/Layout.astro';
     ▸ Présentation · Architecture · Sécurité · Transparence
   </p>
 
-  <!-- 1. CE QUE C'EST -->
+  <!-- STATUTS CLÉS -->
+  <div class="grid grid-cols-2 md:grid-cols-5 gap-3 mb-12">
+    {[
+      { label: 'ZÉRO COOKIE', sub: 'Aucun traceur' },
+      { label: 'ZÉRO JS TIERS', sub: 'Pages wiki' },
+      { label: 'CODE OUVERT', sub: 'GitHub public' },
+      { label: 'SUISSE', sub: 'Protection des données' },
+      { label: 'STATIQUE', sub: 'Zéro backend' },
+    ].map(s => (
+      <div class="card-neon text-center py-4 px-2">
+        <div class="text-neon-green font-mono font-bold text-[10px] tracking-widest">{s.label}</div>
+        <div class="text-dedsec-muted/60 text-[9px] font-mono mt-1.5 uppercase tracking-wider">{s.sub}</div>
+      </div>
+    ))}
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- 1. CE QUE C'EST                                         -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+
   <h2>Ce que c'est</h2>
 
   <p>
@@ -37,7 +56,10 @@ import Layout from '../layouts/Layout.astro';
     L'autogestion, c'est aussi ça : des outils collectifs sans hiérarchie ni intermédiaire.
   </div>
 
-  <!-- 2. QUI EST DERRIÈRE -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- 2. QUI EST DERRIÈRE                                     -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+
   <h2>Qui est derrière</h2>
 
   <p>
@@ -48,26 +70,56 @@ import Layout from '../layouts/Layout.astro';
     en dehors des circuits commerciaux.
   </p>
   <p>
-    Ce wiki est notre façon de rendre utile ce qu'on sait. Les droits, les failles légales,
-    la sécurité numérique, les stratégies de résistance  -  tout ça existe dans des livres de droit,
-    dans des forums spécialisés, dans des discussions privées. On l'a centralisé, structuré,
-    et rendu accessible à quelqu'un qui n'a pas cinq ans de formation juridique ou technique.
-  </p>
-  <p>
     Le contenu est collectif et évolutif. N'importe qui peut proposer une page, corriger
     une information, signaler un incident. On modère avant publication. La seule contrainte :
     ce qui est publié doit être sourcé et vérifiable.
   </p>
 
-  <!-- 3. COMMENT C'EST CONSTRUIT -->
-  <h2>Comment c'est construit</h2>
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- 3. INFRASTRUCTURE                                        -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+
+  <h2>Infrastructure</h2>
 
   <p>
-    Le site est <strong>entièrement statique</strong>. Pas de serveur qui tourne en arrière-plan,
-    pas de base de données, pas de session, pas d'authentification. Quand vous chargez une page,
-    vous recevez du HTML et du CSS. Point.
+    Le site est <strong>entièrement statique</strong>. Quand vous chargez une page, vous recevez
+    du HTML et du CSS pré-compilés. Pas de serveur applicatif, pas de base de données exposée,
+    pas de session, pas d'authentification. Il n'y a rien à compromettre côté serveur.
   </p>
 
+  <!-- Cartes infra sécurité -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6 mb-8">
+
+    <div class="card-neon px-5 py-5">
+      <div class="font-mono text-xs font-bold text-neon-green mb-1 tracking-widest uppercase">Hébergement Suisse</div>
+      <div class="text-dedsec-muted/50 text-[10px] font-mono mb-3 tracking-wider">Infomaniak · Genève</div>
+      <p class="text-dedsec-muted/80 text-sm leading-relaxed m-0" style="font-family:'Space Grotesk',sans-serif;">
+        Serveur physique en Suisse, soumis à la loi suisse sur la protection des données (nLPD),
+        parmi les plus protectrices d'Europe. Aucune dépendance à un opérateur cloud américain.
+      </p>
+    </div>
+
+    <div class="card-neon px-5 py-5">
+      <div class="font-mono text-xs font-bold text-neon-green mb-1 tracking-widest uppercase">Déploiement Open Source</div>
+      <div class="text-dedsec-muted/50 text-[10px] font-mono mb-3 tracking-wider">Coolify · Auto-hébergé</div>
+      <p class="text-dedsec-muted/80 text-sm leading-relaxed m-0" style="font-family:'Space Grotesk',sans-serif;">
+        Aucune dépendance à un cloud commercial. L'infrastructure est entièrement contrôlée
+        et auditée par le collectif.
+      </p>
+    </div>
+
+    <div class="card-neon px-5 py-5">
+      <div class="font-mono text-xs font-bold text-neon-green mb-1 tracking-widest uppercase">Chiffrement TLS</div>
+      <div class="text-dedsec-muted/50 text-[10px] font-mono mb-3 tracking-wider">Traefik v3 · Let's Encrypt</div>
+      <p class="text-dedsec-muted/80 text-sm leading-relaxed m-0" style="font-family:'Space Grotesk',sans-serif;">
+        Toutes les connexions sont chiffrées de bout en bout. Les headers de sécurité HTTP
+        sont injectés à chaque réponse.
+      </p>
+    </div>
+
+  </div>
+
+  <!-- Stack technique résumée -->
   <table>
     <thead>
       <tr>
@@ -89,8 +141,18 @@ import Layout from '../layouts/Layout.astro';
       </tr>
       <tr>
         <td>Hébergement</td>
-        <td>Netlify (CDN)</td>
-        <td>Distribution mondiale, HTTPS automatique</td>
+        <td>VPS Infomaniak — Genève, Suisse</td>
+        <td>Serveur physique, juridiction suisse, auto-géré</td>
+      </tr>
+      <tr>
+        <td>Déploiement</td>
+        <td>Coolify (open-source)</td>
+        <td>PaaS auto-hébergé, aucune dépendance cloud</td>
+      </tr>
+      <tr>
+        <td>Reverse proxy</td>
+        <td>Traefik v3</td>
+        <td>TLS automatique, headers de sécurité</td>
       </tr>
       <tr>
         <td>Code source</td>
@@ -100,47 +162,48 @@ import Layout from '../layouts/Layout.astro';
       <tr>
         <td>Carte</td>
         <td>Leaflet + tuiles CartoDB</td>
-        <td>Open source, sans clé API</td>
+        <td>Open source, sans clé API propriétaire</td>
       </tr>
       <tr>
-        <td>Signalements carte</td>
-        <td>Netlify Function + Airtable</td>
-        <td>Serverless, token write-only, modération humaine</td>
-      </tr>
-      <tr>
-        <td>Sync données carte</td>
+        <td>Données carte</td>
         <td>GitHub Actions (cron horaire)</td>
-        <td>Tire depuis Airtable, commit JSON statique</td>
+        <td>JSON statique versionné, aucune requête dynamique</td>
       </tr>
     </tbody>
   </table>
 
-  <p>
-    La conséquence directe : il n'y a rien à pirater côté serveur, parce qu'il n'y a pas de serveur.
-    Les données de la carte sont un fichier JSON statique dans le repo. Les signalements soumis via
-    le formulaire sont stockés dans Airtable, accessible uniquement aux modérateurs, avec un token
-    limité à l'écriture seule.
-  </p>
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- 4. CE QU'ON NE COLLECTE PAS                             -->
+  <!-- ═══════════════════════════════════════════════════════ -->
 
-  <!-- 4. CE QU'ON NE COLLECTE PAS -->
   <h2>Ce qu'on ne collecte pas</h2>
 
   <p>La réponse est simple : <strong>rien sur vous</strong>.</p>
 
-  <ul>
-    <li>Pas de compte utilisateur, pas d'email, pas de mot de passe</li>
-    <li>Pas de cookie de session, pas de cookie tiers</li>
-    <li>Pas de Google Analytics, pas de Facebook Pixel, pas de Hotjar, pas de Matomo</li>
-    <li>Pas d'historique de navigation enregistré</li>
-    <li>Pas de fingerprinting (empreinte navigateur)</li>
-    <li>Pas de géolocalisation demandée (bloquée dans les headers HTTP)</li>
-    <li>Pas d'accès micro ou caméra (bloqué dans les headers HTTP)</li>
-    <li>Pas de données de formulaire stockées côté site  -  les signalements de la carte
-        vont directement dans Airtable, sans transit ni copie sur les serveurs du site</li>
-  </ul>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-6 mb-8">
+    {[
+      { title: 'Zéro cookie', desc: 'Aucun cookie de session, de tracking ou publicitaire.' },
+      { title: 'Zéro analytics', desc: 'Pas de Google Analytics, Facebook Pixel, Hotjar, Matomo, ni aucun équivalent.' },
+      { title: 'Zéro fingerprinting', desc: 'Aucune empreinte navigateur collectée.' },
+      { title: 'Zéro JS tiers', desc: 'Sur les pages wiki, aucun script externe n\'est chargé.' },
+      { title: 'Zéro géolocalisation', desc: 'Bloquée dans les headers HTTP. Le navigateur ne peut pas la demander.' },
+      { title: 'Zéro micro / caméra', desc: 'Accès bloqué au niveau des headers de sécurité.' },
+    ].map(item => (
+      <div class="card-neon px-4 py-4 flex gap-3 items-start">
+        <span class="text-neon-green font-mono text-sm mt-0.5 flex-shrink-0">✓</span>
+        <div>
+          <div class="font-mono text-xs font-bold text-neon-green tracking-wider mb-1">{item.title}</div>
+          <p class="text-dedsec-muted/70 text-sm m-0" style="font-family:'Space Grotesk',sans-serif;">{item.desc}</p>
+        </div>
+      </div>
+    ))}
+  </div>
 
-  <!-- 5. LES PREUVES VÉRIFIABLES -->
-  <h2>Les preuves  -  vérifiables maintenant</h2>
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- 5. PREUVES VÉRIFIABLES                                  -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+
+  <h2>Preuves — vérifiables maintenant</h2>
 
   <p>
     Chaque affirmation ci-dessus est vérifiable. Pas besoin de nous faire confiance sur parole.
@@ -162,35 +225,26 @@ import Layout from '../layouts/Layout.astro';
 
   <h3>2. Headers de sécurité HTTP</h3>
   <p>
-    Ces headers sont déclarés dans <code>netlify.toml</code>, visible dans le repo.
-    Ils sont envoyés avec chaque réponse HTTP du site.
+    Ces headers sont envoyés avec chaque réponse HTTP. Vérifiez-le vous-même :
+    DevTools → onglet Network → clic sur n'importe quelle requête → Response Headers.
   </p>
 
-  <pre><code>[[headers]]
-  for = "/*"
-  [headers.values]
-    X-Frame-Options = "DENY"
-    # Bloque l'intégration du site dans un iframe (protection clickjacking)
+  <pre><code>X-Frame-Options: DENY
+# Bloque l'intégration du site dans un iframe (protection clickjacking)
 
-    X-Content-Type-Options = "nosniff"
-    # Interdit au navigateur de deviner le type MIME (protection MIME sniffing)
+X-Content-Type-Options: nosniff
+# Interdit au navigateur de deviner le type MIME
 
-    Referrer-Policy = "strict-origin-when-cross-origin"
-    # Limite ce qui est transmis dans le header Referer aux sites externes
+Referrer-Policy: strict-origin-when-cross-origin
+# Limite ce qui est transmis dans le header Referer aux sites externes
 
-    Permissions-Policy = "geolocation=(), microphone=(), camera=()"
-    # Interdit l'accès à la géolocalisation, au micro et à la caméra</code></pre>
+Permissions-Policy: geolocation=(), microphone=(), camera=()
+# Interdit l'accès à la géolocalisation, au micro et à la caméra</code></pre>
 
+  <h3>3. Aucun script tiers</h3>
   <p>
-    Vérifiez-le vous-même : DevTools du navigateur, onglet Network, clic sur n'importe quelle
-    requête, Response Headers.
-  </p>
-
-  <h3>3. Architecture statique vérifiable</h3>
-  <p>
-    Faites <code>View Source</code> sur n'importe quelle page. Pas de script de tracking dans le HTML.
-    La seule dépendance JavaScript tierce sur les pages wiki est Vercel Speed Insights,
-    documentée dans la section "limites honnêtes" ci-dessous.
+    Faites <code>View Source</code> sur n'importe quelle page wiki. Aucun script externe dans le HTML.
+    Aucun outil de monitoring, aucun CDN tiers, aucun pixel publicitaire.
   </p>
 
   <h3>4. Licence libre</h3>
@@ -200,64 +254,29 @@ import Layout from '../layouts/Layout.astro';
     Aucun verrou, aucune propriété intellectuelle revendiquée.
   </p>
 
-  <h3>5. Token Airtable en écriture seule</h3>
-  <p>
-    Le token utilisé par le formulaire de signalement est configuré avec un scope
-    <code>data.records:write</code> uniquement. Il peut créer des enregistrements, il ne peut
-    pas lire les données existantes, ni modifier, ni supprimer. Même extrait des requêtes réseau,
-    son seul effet possible est de créer un faux signalement  -  rejeté à la modération.
-  </p>
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- 6. NOTE CARTE                                           -->
+  <!-- ═══════════════════════════════════════════════════════ -->
 
-  <!-- 6. LES LIMITES HONNÊTES -->
-  <h2>Les limites honnêtes</h2>
+  <h2>Note sur la carte interactive</h2>
 
   <p>
-    Deux points de contact avec des tiers existent. On les documente ici parce que prétendre
-    le contraire serait mentir.
+    La carte de la répression charge ses tuiles depuis les serveurs CartoDB (OpenStreetMap).
+    C'est le seul composant du site qui contacte un service externe lors de la navigation —
+    les serveurs CartoDB voient votre adresse IP quand vous consultez <a href="/carte">/carte</a>.
+    CartoDB ne construit pas de profil publicitaire. Si vous souhaitez une couverture complète :
+    utilisez un VPN ou Tor avant de consulter la carte.
   </p>
 
-  <div class="warning-box mb-6">
-    <strong>Tuiles de carte (CartoDB / OpenStreetMap)</strong><br/>
-    La carte de la répression charge ses tuiles depuis les serveurs CartoDB. Quand vous consultez
-    <a href="/carte">/carte</a>, les serveurs CartoDB voient votre adresse IP. CartoDB ne
-    construit pas de profil publicitaire, contrairement à Google Maps. Mais votre IP circule.
-    Si cela vous pose problème : VPN ou Tor avant de consulter la carte.
-  </div>
-
-  <div class="warning-box mb-6">
-    <strong>Vercel Speed Insights</strong><br/>
-    Le site intègre <code>@vercel/speed-insights</code>, un outil de mesure de performance.
-    Il envoie à Vercel des données anonymisées : temps de chargement, type de navigateur, pays
-    (pas la ville). On l'utilise pour détecter les problèmes de performance sur certains appareils.
-    Si vous êtes sur une connexion sensible : bloquez-le avec uBlock Origin ou désactivez le JS.
-  </div>
-
-  <p>
-    En dehors de ces deux points, le site ne contacte aucun service tiers lors de la navigation
-    sur les pages wiki. La carte est le seul composant qui charge du contenu externe au runtime.
-  </p>
-
-  <!-- 7. SI VOUS AVEZ UN DOUTE -->
-  <h2>Si vous avez un doute</h2>
-
-  <p>
-    Lisez le code. Ouvrez les DevTools. Utilisez un bloqueur de contenu. Consultez depuis Tor
-    si votre situation l'exige. Ce site est fait pour des gens qui ont de bonnes raisons de ne
-    pas faire confiance par défaut  -  c'est cohérent de l'appliquer ici aussi.
-  </p>
-  <p>
-    Si vous trouvez quelque chose qui contredit ce qu'on écrit ici  -  un tracker caché, une fuite
-    de données, une affirmation fausse  -  ouvrez une issue sur GitHub. On corrige.
-  </p>
-
-  <div class="flex flex-wrap gap-4 mt-8">
+  <!-- CTA -->
+  <div class="flex flex-wrap gap-4 mt-10">
     <a
-      href="https://github.com/KernelRequiem/SoundSystemHardening/issues"
+      href="https://github.com/KernelRequiem/SoundSystemHardening"
       target="_blank"
       rel="noopener noreferrer"
       class="btn-neon no-underline after:hidden"
     >
-      ▸ Ouvrir une issue GitHub
+      ▸ Lire le code source
     </a>
     <a
       href="/contribuer"
