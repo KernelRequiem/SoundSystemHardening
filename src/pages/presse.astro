@@ -1,0 +1,261 @@
+---
+// src/pages/presse.astro
+// Dossier de presse compact, transmissible aux allie.es et journalistes.
+// Exportable en PDF via le bouton Imprimer (page A4 noir sur blanc).
+import Layout from '../layouts/Layout.astro';
+
+const stats = [
+  { n: '60+', l: 'Pages de wiki',          s: 'Droits, opsec, stratégie' },
+  { n: '24',  l: 'Incidents cartographiés', s: 'Saisies, GAV, opérations' },
+  { n: '8',   l: 'Outils interactifs',      s: '100% client-side' },
+  { n: '6',   l: 'Organisations alliées',   s: 'Référencées' },
+];
+
+const outils = [
+  { nom: 'OpSec Tools', desc: 'Modèle de menace + Rig Splitting', href: '/opsec-tools' },
+  { nom: 'TimeSeal',    desc: 'Manifeste de saisie horodaté',     href: '/timeseal' },
+  { nom: 'InfoCrypt',   desc: 'Chiffrement AES-GCM de fiches',    href: '/infocrypt' },
+  { nom: 'StripMeta',   desc: 'Épuration EXIF / XMP / GPS',       href: '/stripmeta' },
+  { nom: 'RASSO',       desc: 'Coordination décentralisée',       href: '/hide/rasso' },
+  { nom: 'Décision',    desc: 'Assistant réflexes terrain',       href: '/decision' },
+  { nom: 'Carte',       desc: 'Incidents répressifs géolocalisés', href: '/map' },
+  { nom: 'Urgence',     desc: 'Protocole contrôle / saisie / GAV', href: '/urgence' },
+];
+
+const captures = [
+  { src: '/presse/home.png',    titre: "Page d'accueil" },
+  { src: '/presse/urgence.png', titre: "Protocole d'urgence" },
+  { src: '/presse/carte.png',   titre: 'Carte des incidents' },
+];
+
+const visuels = [
+  { src: '/og-cover.png',                  titre: 'Bannière (1200x630)', note: 'Réseaux / preview' },
+  { src: '/SoundSystemHardeninglogo.png',  titre: 'Logo (512x512)',      note: 'PNG transparent' },
+  { src: '/flyer-qr.png',                  titre: 'QR code',             note: 'Vers le site' },
+];
+---
+
+<Layout
+  title="Dossier de presse"
+  category="DIFFUSION"
+  description="Dossier de presse SoundSystemHardening : contexte, chiffres clés, outils, visuels. Format compact transmissible, exportable en PDF."
+>
+
+  <!-- Barre d'actions (écran uniquement) -->
+  <div class="no-print flex flex-wrap items-center justify-between gap-3 mb-8">
+    <p class="text-dedsec-muted text-sm font-mono tracking-widest uppercase m-0">
+      ▸ Format compact · Transmissible · PDF
+    </p>
+    <div class="flex flex-wrap gap-3">
+      <button id="printBtn" class="btn-neon" type="button">⎙ Exporter en PDF</button>
+      <a href="/flyer" class="btn-neon" style="border-color:rgba(122,122,138,0.4);color:#7a7a8a;">→ Flyer A6</a>
+    </div>
+  </div>
+
+  <!-- ZONE IMPRIMÉE -->
+  <div class="presse-doc">
+
+    <header class="presse-head">
+      <img src="/SoundSystemHardeninglogo.png" alt="SoundSystemHardening" class="presse-logo no-border" />
+      <div>
+        <div class="presse-kicker">DOSSIER DE PRESSE</div>
+        <h1 class="presse-h1">SoundSystemHardening</h1>
+        <div class="presse-sub">Wiki collectif : droits, opsec et résistance · mouvement free party</div>
+        <div class="presse-url">soundsystemhardening.fr</div>
+      </div>
+    </header>
+
+    <!-- CONTEXTE 5 LIGNES -->
+    <section class="presse-section">
+      <h2 class="presse-h2">Contexte</h2>
+      <p class="presse-lede">
+        SoundSystemHardening est un wiki collectif, libre et gratuit, qui centralise les informations
+        pratiques pour organiser ou participer à une free party face à un État qui durcit sa législation
+        chaque année. Il couvre les droits face aux forces de l'ordre, la sécurité numérique avant,
+        pendant et après un événement, les recours juridiques pour contester saisies et gardes à vue,
+        et documente les incidents répressifs sur une carte. Pas une association, pas un parti, pas un
+        service commercial : un dépôt de connaissances maintenu par des gens qui vivent ce sujet, sans
+        tracker, sans cookie, sous licence libre.
+      </p>
+    </section>
+
+    <!-- CHIFFRES CLÉS -->
+    <section class="presse-section">
+      <h2 class="presse-h2">Chiffres clés</h2>
+      <div class="presse-stats">
+        {stats.map(s => (
+          <div class="presse-stat">
+            <div class="presse-stat-n">{s.n}</div>
+            <div class="presse-stat-l">{s.l}</div>
+            <div class="presse-stat-s">{s.s}</div>
+          </div>
+        ))}
+      </div>
+      <div class="presse-badges">
+        <span>ZÉRO COOKIE</span><span>ZÉRO JS TIERS</span><span>CODE OUVERT</span>
+        <span>HÉBERGEMENT SUISSE</span><span>CC BY-SA 4.0</span>
+      </div>
+    </section>
+
+    <!-- OUTILS -->
+    <section class="presse-section">
+      <h2 class="presse-h2">Outils interactifs</h2>
+      <p class="presse-note no-print">Tous les traitements sensibles s'exécutent dans le navigateur. Aucune donnée n'est envoyée au serveur.</p>
+      <div class="presse-tools">
+        {outils.map(o => (
+          <div class="presse-tool">
+            <span class="presse-tool-n">{o.nom}</span>
+            <span class="presse-tool-d">{o.desc}</span>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- CAPTURES -->
+    <section class="presse-section">
+      <h2 class="presse-h2">Captures d'écran</h2>
+      <div class="presse-shots">
+        {captures.map(c => (
+          <figure class="presse-shot">
+            <img src={c.src} alt={c.titre} class="presse-shot-img no-border" data-shot loading="lazy" />
+            <div class="presse-shot-ph">Capture à venir<br/><span>{c.src}</span></div>
+            <figcaption>{c.titre}</figcaption>
+          </figure>
+        ))}
+      </div>
+    </section>
+
+    <!-- VISUELS TÉLÉCHARGEABLES (écran) -->
+    <section class="presse-section no-print">
+      <h2 class="presse-h2">Visuels téléchargeables</h2>
+      <div class="presse-shots">
+        {visuels.map(v => (
+          <figure class="presse-shot">
+            <img src={v.src} alt={v.titre} class="presse-shot-img no-border" style="background:#08080c;" />
+            <figcaption>{v.titre} · {v.note} · <a href={v.src} download class="text-neon-green">⬇</a></figcaption>
+          </figure>
+        ))}
+      </div>
+    </section>
+
+    <!-- MANIFESTE -->
+    <section class="presse-section">
+      <h2 class="presse-h2">Le manifeste</h2>
+      <p class="presse-lede">
+        La raison d'être du projet et la position politique du collectif sont détaillées dans le manifeste.
+      </p>
+      <a href="/wiki/Manifesto" class="presse-link">→ soundsystemhardening.fr/wiki/Manifesto</a>
+    </section>
+
+    <!-- CONTACT -->
+    <footer class="presse-foot">
+      <div>
+        <strong>Contact presse</strong><br/>
+        Formulaire : soundsystemhardening.fr/contact (objet « Presse / média »)
+      </div>
+      <div>
+        <strong>Licence</strong><br/>
+        Contenu CC BY-SA 4.0 · réutilisation libre avec attribution
+      </div>
+    </footer>
+
+  </div>
+
+  <script>
+    document.getElementById('printBtn')?.addEventListener('click', () => window.print());
+    // Masque l'image et révèle le placeholder si la capture n'existe pas encore.
+    document.querySelectorAll('img[data-shot]').forEach((img) => {
+      const el = img as HTMLImageElement;
+      const fail = () => el.closest('.presse-shot')?.classList.add('shot-missing');
+      if (el.complete && el.naturalWidth === 0) fail();
+      el.addEventListener('error', fail);
+    });
+  </script>
+
+</Layout>
+
+<style is:global>
+  /* ═══════════ ÉCRAN ═══════════ */
+  .presse-doc { max-width: 100%; font-family: 'JetBrains Mono', monospace; }
+
+  .presse-head {
+    display: flex; align-items: center; gap: 20px;
+    border-bottom: 2px solid rgba(0,255,159,0.4); padding-bottom: 20px; margin-bottom: 28px;
+  }
+  .presse-logo { width: 84px; height: 84px; flex-shrink: 0; }
+  .presse-kicker { font-size: 10px; letter-spacing: 0.3em; color: #00ff9f; font-weight: 700; }
+  .presse-h1 { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 30px; color: #e8e8f0; margin: 4px 0 2px; line-height: 1; }
+  .presse-sub { font-size: 12px; color: #7a7a8a; }
+  .presse-url { font-size: 13px; color: #00ff9f; font-weight: 700; margin-top: 4px; }
+
+  .presse-section { margin-bottom: 30px; }
+  .presse-h2 {
+    font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 15px;
+    color: #00ff9f; text-transform: uppercase; letter-spacing: 0.12em;
+    border-left: 3px solid #00ff9f; padding-left: 10px; margin: 0 0 14px;
+  }
+  .presse-lede { font-size: 13px; line-height: 1.7; color: #c8c8d8; margin: 0; }
+  .presse-note { font-size: 11px; color: #7a7a8a; margin: 0 0 12px; }
+
+  .presse-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  .presse-stat { border: 1px solid #2a2a3a; background: #08080c; padding: 14px 10px; text-align: center; }
+  .presse-stat-n { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 26px; color: #00ff9f; line-height: 1; }
+  .presse-stat-l { font-size: 10px; color: #e8e8f0; text-transform: uppercase; letter-spacing: 0.08em; margin-top: 6px; }
+  .presse-stat-s { font-size: 9px; color: #7a7a8a; margin-top: 3px; }
+
+  .presse-badges { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+  .presse-badges span {
+    font-size: 9px; letter-spacing: 0.12em; color: #7a7a8a;
+    border: 1px solid #2a2a3a; padding: 3px 8px;
+  }
+
+  .presse-tools { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .presse-tool { display: flex; align-items: baseline; gap: 8px; border-bottom: 1px solid #1a1a24; padding: 6px 2px; }
+  .presse-tool-n { font-weight: 700; font-size: 12px; color: #00ff9f; min-width: 92px; }
+  .presse-tool-d { font-size: 11px; color: #7a7a8a; }
+
+  .presse-shots { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .presse-shot { margin: 0; border: 1px solid #2a2a3a; background: #08080c; }
+  .presse-shot-img { display: block; width: 100%; aspect-ratio: 16/10; object-fit: cover; }
+  .presse-shot-ph {
+    display: none; aspect-ratio: 16/10; align-items: center; justify-content: center;
+    flex-direction: column; text-align: center; color: #5a5a6a; font-size: 10px; line-height: 1.6;
+    background: repeating-linear-gradient(45deg,#0c0c12,#0c0c12 8px,#0a0a0f 8px,#0a0a0f 16px);
+  }
+  .presse-shot-ph span { color: #00ff9f; opacity: 0.5; }
+  .presse-shot.shot-missing .presse-shot-img { display: none; }
+  .presse-shot.shot-missing .presse-shot-ph { display: flex; }
+  .presse-shot figcaption { font-size: 10px; color: #7a7a8a; padding: 6px 8px; border-top: 1px solid #1a1a24; }
+
+  .presse-link { font-size: 13px; color: #00ff9f; font-weight: 700; }
+
+  .presse-foot {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+    border-top: 2px solid rgba(0,255,159,0.4); padding-top: 16px; margin-top: 30px;
+    font-size: 11px; color: #c8c8d8; line-height: 1.6;
+  }
+  .presse-foot strong { color: #00ff9f; font-weight: 700; }
+
+  /* ═══════════ IMPRESSION / PDF : A4 NOIR SUR BLANC ═══════════ */
+  @media print {
+    @page { size: A4; margin: 14mm 14mm; }
+    body { visibility: hidden; background: #fff !important; }
+    .presse-doc, .presse-doc * { visibility: visible; }
+    .presse-doc { position: absolute; top: 0; left: 0; width: 100%; }
+    .no-print { display: none !important; }
+
+    .presse-doc, .presse-lede, .presse-tool-d, .presse-stat-s, .presse-foot { color: #000 !important; }
+    .presse-h1, .presse-stat-l { color: #000 !important; }
+    .presse-kicker, .presse-h2, .presse-url, .presse-stat-n, .presse-tool-n,
+    .presse-link, .presse-foot strong, .presse-shot-ph span { color: #000 !important; }
+
+    .presse-head, .presse-foot { border-color: #000 !important; }
+    .presse-h2 { border-left-color: #000 !important; }
+    .presse-stat, .presse-shot, .presse-badges span { border-color: #888 !important; background: #fff !important; }
+    .presse-tool { border-bottom-color: #ccc !important; }
+    .presse-sub, .presse-note, .presse-stat-s, .presse-tool-d, .presse-shot figcaption { color: #444 !important; }
+    .presse-badges span { color: #000 !important; }
+    .presse-section { break-inside: avoid; }
+    .presse-shot-img { filter: grayscale(1) contrast(1.05); }
+  }
+</style>

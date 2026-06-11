@@ -7,6 +7,14 @@ import nodemailer from 'nodemailer';
 
 export const prerender = false;
 
+// Origine autorisée — doit correspondre à la valeur dans middleware.ts
+const CORS_ORIGIN = 'https://soundsystemhardening.fr';
+const corsHeaders = {
+  'Access-Control-Allow-Origin':  CORS_ORIGIN,
+  'Access-Control-Allow-Methods': 'POST, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type',
+} as const;
+
 export const POST: APIRoute = async ({ request }) => {
   // ── Parse body (JSON ou form-urlencoded) ──────────────────────────────────
   const ct = request.headers.get('content-type') || '';
@@ -21,14 +29,14 @@ export const POST: APIRoute = async ({ request }) => {
 
   // ── Honeypot anti-bot ────────────────────────────────────────────────────
   if (data['bot-field']) {
-    return new Response(JSON.stringify({ ok: true }), { status: 200 });
+    return new Response(JSON.stringify({ ok: true }), { status: 200, headers: corsHeaders });
   }
 
   // ── Validation ────────────────────────────────────────────────────────────
   if (!data.objet?.trim() || !data.message?.trim()) {
     return new Response(
       JSON.stringify({ ok: false, error: 'Champs requis manquants (objet, message).' }),
-      { status: 400, headers: { 'Content-Type': 'application/json' } }
+      { status: 400, headers: { 'Content-Type': 'application/json', ...corsHeaders } }
     );
   }
 
@@ -44,7 +52,7 @@ export const POST: APIRoute = async ({ request }) => {
     console.error('[API /contact] SMTP credentials manquants - vérifier les variables d\'environnement.');
     return new Response(
       JSON.stringify({ ok: false, error: 'Configuration serveur incomplète. Passez par Signal.' }),
-      { status: 500, headers: { 'Content-Type': 'application/json' } }
+      { status: 500, headers: { 'Content-Type': 'application/json', ...corsHeaders } }
     );
   }
 
@@ -78,13 +86,13 @@ export const POST: APIRoute = async ({ request }) => {
 
     return new Response(JSON.stringify({ ok: true }), {
       status: 200,
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', ...corsHeaders },
     });
   } catch (err) {
     console.error('[API /contact] SMTP error:', err);
     return new Response(
       JSON.stringify({ ok: false, error: 'Erreur lors de l\'envoi. Réessayez ou passez par Signal.' }),
-      { status: 500, headers: { 'Content-Type': 'application/json' } }
+      { status: 500, headers: { 'Content-Type': 'application/json', ...corsHeaders } }
     );
   }
 };
