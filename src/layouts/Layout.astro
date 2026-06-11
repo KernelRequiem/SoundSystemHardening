@@ -183,19 +183,12 @@ const navigation = [
         0%, 100% { filter: drop-shadow(0 0 4px rgba(0,255,159,0.3)); }
         50%       { filter: drop-shadow(0 0 10px rgba(0,255,159,0.7)) drop-shadow(0 0 18px rgba(0,255,159,0.3)); }
       }
-      /* Sur mobile : logo repositionné en haut à droite, taille réduite, dans le flux */
-      @media (max-width: 767px) {
-        .topbar-logo-link {
-          position: static !important;
-          transform: none !important;
-          margin-top: 0 !important;
-          padding: 0 8px !important;
-          flex-shrink: 0;
-        }
-        .topbar-logo-img {
-          height: 32px !important;
-          width: auto !important;
-        }
+      /* Logo mobile compact dans le flux — pas de media query, géré par Tailwind flex/hidden */
+      .topbar-logo-mobile img {
+        height: 30px;
+        width: auto;
+        filter: drop-shadow(0 0 4px rgba(0,255,159,0.45));
+        display: block;
       }
 
       /* Animation pin carte dans la topbar */
@@ -477,13 +470,12 @@ const navigation = [
                 <span class="hidden md:inline font-mono text-[10px] tracking-[0.18em] text-dedsec-muted/60 uppercase">SECURE</span>
                 <!-- Logo compact mobile : haut droite, dans le flux, taille réduite -->
                 <a href="/"
-                   class="flex md:hidden no-underline items-center topbar-logo-link"
+                   class="flex md:hidden no-underline items-center topbar-logo-mobile"
                    aria-label="Accueil SoundSystemHardening"
                 >
                   <img
                     src="/SoundSystemHardeninglogo.png"
                     alt="SoundSystemHardening"
-                    class="topbar-logo-img"
                   />
                 </a>
               </div>
