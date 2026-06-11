@@ -14,10 +14,13 @@ FROM node:20-alpine AS runner
 
 WORKDIR /app
 
-# Copier uniquement le dist et les dépendances de prod
+# Copier le dist, les dépendances de prod, et le contenu source nécessaire au runtime
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package.json ./package.json
+# En mode output:server, les pages lisent src/content et src/data à chaque requête
+COPY --from=builder /app/src/content ./src/content
+COPY --from=builder /app/src/data ./src/data
 
 # Fix @astrojs/node v8 : resolveClientDir() cherche dans dist/server/client/
 # au lieu de dist/client/ (décalage d'un niveau dû au chunk dans chunks/)
