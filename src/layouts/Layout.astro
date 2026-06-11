@@ -41,7 +41,7 @@ const navigation = [
     { href: '/wiki/repression', label: 'Répression', emoji: '⚠️' },
   ]},
   { section: 'CONTRE RIPOST', icon: 'shield', links: [
-    { href: '/wiki/Strategie-contre-ripost', label: 'Stratégie contre RIPOST', emoji: '🛡️' },
+    { href: '/wiki/ripost', label: 'RIPOST', emoji: '🛡️' },
     { href: '/wiki/Contestation', label: 'Contester les amendes', emoji: '📋' },
   ]},
   { section: 'STRATÉGIE', icon: 'crosshair', links: [
@@ -159,6 +159,7 @@ const navigation = [
         align-items: center;
         justify-content: center;
         padding: 3px 10px;
+        margin-top: -14px;
       }
       .topbar-logo-link:hover {
         animation: none;
@@ -286,7 +287,7 @@ const navigation = [
 
         <!-- FOOTER -->
         <div class="shrink-0 border-t border-dedsec-border px-4 py-3">
-          <div class="flex items-center justify-between text-[9px] font-mono text-dedsec-muted/50 uppercase tracking-widest">
+          <div class="flex items-center justify-between text-[10px] font-mono text-dedsec-muted/65 uppercase tracking-widest">
             <span>v1.0.0 · CC BY-SA 4.0</span>
             <a href="https://github.com/KernelRequiem/SoundSystemHardening" target="_blank" class="text-neon-green/40 hover:text-neon-green transition-colors no-underline">GH</a>
           </div>
@@ -313,17 +314,17 @@ const navigation = [
               <img
                 src="/SoundSystemHardeninglogo.png"
                 alt="SoundSystemHardening"
-                class="h-[100px] w-auto object-contain topbar-logo-img"
+                class="h-[120px] w-auto object-contain topbar-logo-img"
               />
             </a>
             <!-- Breadcrumb -->
             <nav class="flex items-center gap-1.5 font-mono text-[11px] flex-1 min-w-0">
               {categoryHref
-                ? <a href={categoryHref} class="text-dedsec-muted/60 hover:text-neon-green transition-colors no-underline flex-shrink-0 tracking-wider">{category || 'WIKI'}</a>
-                : <span class="text-dedsec-muted/60 tracking-wider flex-shrink-0">{category || 'WIKI'}</span>
+                ? <a href={categoryHref} class="text-dedsec-muted/80 hover:text-neon-green transition-colors no-underline flex-shrink-0 tracking-wider">{category || 'WIKI'}</a>
+                : <span class="text-dedsec-muted/80 tracking-wider flex-shrink-0">{category || 'WIKI'}</span>
               }
-              <span class="text-dedsec-border/50 flex-shrink-0">›</span>
-              <span class="text-dedsec-text/50 truncate tracking-wide">{title}</span>
+              <span class="text-dedsec-border/70 flex-shrink-0">›</span>
+              <span class="text-dedsec-text/70 truncate tracking-wide">{title}</span>
             </nav>
             <!-- Contrôles droite -->
             <div class="flex items-center flex-shrink-0 self-stretch">
@@ -335,7 +336,7 @@ const navigation = [
               </button>
               <div class="flex items-center gap-2 self-stretch px-4 border-l border-dedsec-border">
                 <span style="width:6px; height:6px; border-radius:50%; background:#00ff9f; box-shadow:0 0 6px #00ff9f; flex-shrink:0; display:inline-block;"></span>
-                <span class="hidden md:inline font-mono text-[9px] tracking-[0.2em] text-dedsec-muted/35 uppercase">SECURE</span>
+                <span class="hidden md:inline font-mono text-[10px] tracking-[0.18em] text-dedsec-muted/60 uppercase">SECURE</span>
               </div>
             </div>
           </div>
@@ -347,11 +348,12 @@ const navigation = [
             <div class="flex items-end overflow-x-auto scrollbar-none flex-1 min-w-0" style="padding-left:52px;">
               {[
                 { href: '/urgence',                       label: 'URGENCE',   icon: '▲', critical: true  },
-                { href: '/wiki/Strategie-contre-ripost', label: 'RIPOST',   icon: '↺', critical: false },
+                { href: '/alerte',                       label: 'ALERTE',   icon: '⊚', critical: false },
+                { href: '/wiki/ripost', label: 'RIPOST',   icon: '↺', critical: false },
                 { href: '/decision',                     label: 'DÉCISION', icon: '◩', critical: false },
                 { href: '/wiki',                         label: 'WIKI',     icon: '◫', critical: false },
                 { href: '/map',                          label: 'MAP',      icon: '⊞', critical: false },
-                { href: '/rig-lock',                     label: 'RIG-LOCK', icon: '⊡', critical: false },
+                { href: '/timeseal',                     label: 'TIMESEAL', icon: '⊡', critical: false },
                 { href: '/infocrypt',                    label: 'INFOCRYPT',icon: '⊕', critical: false },
               ].map(tool => (
                 <a
@@ -425,7 +427,7 @@ const navigation = [
                 </div>
               </div>
               <div>
-                <div class="text-neon-pink font-bold mb-2">▸ LEGAL</div>
+                <div class="text-dedsec-muted font-bold mb-2">▸ LEGAL</div>
                 <div class="space-y-1 text-dedsec-muted">
                   <div>CC BY-SA 4.0</div>
                   <div>Pas de tracking</div>
