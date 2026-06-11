@@ -183,7 +183,16 @@ const navigation = [
         0%, 100% { filter: drop-shadow(0 0 4px rgba(0,255,159,0.3)); }
         50%       { filter: drop-shadow(0 0 10px rgba(0,255,159,0.7)) drop-shadow(0 0 18px rgba(0,255,159,0.3)); }
       }
-      /* Logo mobile compact dans le flux — pas de media query, géré par Tailwind flex/hidden */
+      /* Logo desktop centré : masqué sur mobile */
+      .topbar-logo-desktop { display: none; }
+      @media (min-width: 768px) {
+        .topbar-logo-desktop { display: flex; }
+      }
+      /* Logo mobile compact : visible sur mobile, masqué sur desktop */
+      .topbar-logo-mobile { display: flex; }
+      @media (min-width: 768px) {
+        .topbar-logo-mobile { display: none; }
+      }
       .topbar-logo-mobile img {
         height: 30px;
         width: auto;
@@ -431,7 +440,7 @@ const navigation = [
 
             <!-- Logo centré desktop uniquement (absolute, hors flux) -->
             <a href="/"
-               class="hidden md:flex absolute left-1/2 top-0 -translate-x-1/2 no-underline topbar-logo-link"
+               class="topbar-logo-desktop absolute left-1/2 top-0 -translate-x-1/2 no-underline topbar-logo-link"
                aria-label="Accueil SoundSystemHardening"
             >
               <img
