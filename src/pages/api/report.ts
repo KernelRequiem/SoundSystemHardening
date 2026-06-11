@@ -1,5 +1,5 @@
 // src/pages/api/report.ts
-// Endpoint SSR — reçoit un signalement d'incident depuis le formulaire de la carte
+// Endpoint SSR - reçoit un signalement d'incident depuis le formulaire de la carte
 // et l'écrit dans Airtable avec Statut = "En attente" (validation manuelle par un modérateur).
 // Remplace l'ancienne fonction Netlify /.netlify/functions/report.
 //

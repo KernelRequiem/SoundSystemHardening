@@ -44,7 +44,7 @@ import Layout from '../layouts/Layout.astro';
       style="background:#08080c;">
       <div>
         <div class="font-mono text-[10px] text-dedsec-muted tracking-widest uppercase mb-0.5">Documentation</div>
-        <div class="font-bold text-neon-green" style="font-family:'Space Grotesk',sans-serif;font-size:18px;">StripMeta — Guide</div>
+        <div class="font-bold text-neon-green" style="font-family:'Space Grotesk',sans-serif;font-size:18px;">StripMeta - Guide</div>
       </div>
       <button id="smGuideClose" aria-label="Fermer"
         class="text-dedsec-muted hover:text-neon-green transition-colors font-mono text-xl leading-none p-1">×</button>
@@ -67,8 +67,8 @@ import Layout from '../layouts/Layout.astro';
             { level: 'high',     label: 'Device ID',     detail: 'Marque, modèle, numéro de série de l\'appareil. Permet l\'identification croisée.' },
             { level: 'high',     label: 'Timestamp',     detail: 'Date et heure exactes de la prise de vue. Reconstitue une timeline.' },
             { level: 'med',      label: 'Thumbnail EXIF',detail: 'Miniature de l\'image AVANT retouche. Si tu as flouté un visage, la miniature peut l\'avoir gardé net.' },
-            { level: 'med',      label: 'Logiciel',      detail: 'Version de Lightroom, Photoshop, OS — fingerprinting de l\'environnement.' },
-            { level: 'low',      label: 'ICC Profile',   detail: 'Profil colorimétrique — fingerprinting de l\'écran/appareil.' },
+            { level: 'med',      label: 'Logiciel',      detail: 'Version de Lightroom, Photoshop, OS - fingerprinting de l\'environnement.' },
+            { level: 'low',      label: 'ICC Profile',   detail: 'Profil colorimétrique - fingerprinting de l\'écran/appareil.' },
             { level: 'low',      label: 'XMP / IPTC',    detail: 'Commentaires, auteur, copyright, légendes ajoutées par un logiciel d\'édition.' },
           ].map(item => (
             <div class="flex gap-3 items-start text-sm">
@@ -80,7 +80,7 @@ import Layout from '../layouts/Layout.astro';
               }>{item.level.toUpperCase()}</span>
               <div>
                 <span class="text-dedsec-text/90 font-medium">{item.label}</span>
-                <span class="text-dedsec-muted"> — {item.detail}</span>
+                <span class="text-dedsec-muted"> - {item.detail}</span>
               </div>
             </div>
           ))}
@@ -466,14 +466,14 @@ import Layout from '../layouts/Layout.astro';
 ═══════════════════════════════════════════════════════════════ -->
 <script is:inline>
 /* ============================================================
-   STRIPMETA — Moteur de nettoyage 100% client-side
+   STRIPMETA - Moteur de nettoyage 100% client-side
    Architecture :
-   1. parseExifJpeg()   — parsing binaire JPEG APP1/APP0/APP13
-   2. cleanJpegBinary() — reconstruction JPEG sans segments meta
-   3. cleanPngBinary()  — suppression chunks PNG meta
-   4. canvasReencode()  — filet de sécurité Canvas
-   5. extractMeta()     — lecture EXIF pour le rapport
-   6. processFile()     — pipeline complet par fichier
+   1. parseExifJpeg()   - parsing binaire JPEG APP1/APP0/APP13
+   2. cleanJpegBinary() - reconstruction JPEG sans segments meta
+   3. cleanPngBinary()  - suppression chunks PNG meta
+   4. canvasReencode()  - filet de sécurité Canvas
+   5. extractMeta()     - lecture EXIF pour le rapport
+   6. processFile()     - pipeline complet par fichier
    7. UI + batch + ZIP
    ============================================================ */
 
@@ -1003,7 +1003,7 @@ var SM = {
 };
 
 // ────────────────────────────────────────────────────────────
-// 7. UI — RENDU DES CARTES
+// 7. UI - RENDU DES CARTES
 // ────────────────────────────────────────────────────────────
 function renderCard(entry, index) {
   var card = document.createElement('div');
@@ -1062,7 +1062,7 @@ function renderCardBody(entry) {
       '<div class="sm-gps-alert">'
     + '  <span class="sm-gps-alert-icon">⚠</span>'
     + '  <div>'
-    + '    <div class="sm-gps-alert-title">⚠ GPS DÉTECTÉ — Supprimé</div>'
+    + '    <div class="sm-gps-alert-title">⚠ GPS DÉTECTÉ - Supprimé</div>'
     + '    <div class="sm-gps-alert-val">Lat ' + r.gps.lat + ' · Lon ' + r.gps.lon + '</div>'
     + '    <a href="' + mapsUrl + '" target="_blank" rel="noopener" class="sm-gps-maps-link">↗ Voir sur OpenStreetMap</a>'
     + '  </div>'
@@ -1261,7 +1261,7 @@ async function processAll() {
 }
 
 // ────────────────────────────────────────────────────────────
-// 10. INIT — BINDING DES ÉVÉNEMENTS
+// 10. INIT - BINDING DES ÉVÉNEMENTS
 // ────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', function() {
   var dropzone  = document.getElementById('sm-dropzone');

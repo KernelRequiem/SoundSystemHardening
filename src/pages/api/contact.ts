@@ -1,5 +1,5 @@
 // src/pages/api/contact.ts
-// Endpoint SSR — reçoit le formulaire de contact, envoie un email via SMTP Infomaniak.
+// Endpoint SSR - reçoit le formulaire de contact, envoie un email via SMTP Infomaniak.
 // Variables d'environnement requises : SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, CONTACT_TO
 
 import type { APIRoute } from 'astro';
@@ -41,7 +41,7 @@ export const POST: APIRoute = async ({ request }) => {
   const smtpPass = process.env.SMTP_PASS || import.meta.env.SMTP_PASS;
 
   if (!smtpUser || !smtpPass) {
-    console.error('[API /contact] SMTP credentials manquants — vérifier les variables d\'environnement.');
+    console.error('[API /contact] SMTP credentials manquants - vérifier les variables d\'environnement.');
     return new Response(
       JSON.stringify({ ok: false, error: 'Configuration serveur incomplète. Passez par Signal.' }),
       { status: 500, headers: { 'Content-Type': 'application/json' } }

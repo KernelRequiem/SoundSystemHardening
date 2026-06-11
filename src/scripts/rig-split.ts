@@ -307,9 +307,9 @@ function renderOutput(): void {
     const count = items.filter(i => i.cat === cat).length;
     const sev = spread >= 2 ? 'green' : 'red';
     const note = spread >= 2
-      ? `répartie sur ${spread} contenants — perdre un contenant n'élimine pas la catégorie`
-      : `concentrée sur 1 seul contenant — point unique de défaillance`;
-    return `<div class="ot-row"><span class="bullet"><span class="ot-badge ot-badge--${sev}">${spread >= 2 ? 'redondant' : 'fragile'}</span></span><span class="txt"><strong style="color:rgba(232,232,240,0.95)">${CAT_LABELS[cat]}</strong> (${count} unité·s) — ${note}</span></div>`;
+      ? `répartie sur ${spread} contenants - perdre un contenant n'élimine pas la catégorie`
+      : `concentrée sur 1 seul contenant - point unique de défaillance`;
+    return `<div class="ot-row"><span class="bullet"><span class="ot-badge ot-badge--${sev}">${spread >= 2 ? 'redondant' : 'fragile'}</span></span><span class="txt"><strong style="color:rgba(232,232,240,0.95)">${CAT_LABELS[cat]}</strong> (${count} unité·s) - ${note}</span></div>`;
   }).join('');
 
   out.innerHTML = `
@@ -385,7 +385,7 @@ function copyPlan(bins: Item[][], risk: RiskResult): void {
   });
   L.push('');
   L.push('Conseils : contenants séparés (pas de convoi), factures chez un tiers, 2+ contenants par catégorie clé.');
-  L.push('Généré localement via soundsystemhardening.fr/opsec-tools — aucune donnée transmise.');
+  L.push('Généré localement via soundsystemhardening.fr/opsec-tools - aucune donnée transmise.');
 
   navigator.clipboard?.writeText(L.join('\n')).then(() => {
     const btn = document.getElementById('rig-copy');

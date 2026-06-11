@@ -1,5 +1,5 @@
 // src/pages/api/health.ts
-// Diagnostic endpoint — vérifie que le serveur SSR tourne et que les vars d'env sont présentes.
+// Diagnostic endpoint - vérifie que le serveur SSR tourne et que les vars d'env sont présentes.
 // À SUPPRIMER après débogage.
 
 import type { APIRoute } from 'astro';

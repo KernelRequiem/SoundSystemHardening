@@ -23,7 +23,7 @@ import Layout from '../layouts/Layout.astro';
   <p class="ic-subtitle">Chiffrer une fiche sensible · La transmettre sur n'importe quel canal · Déchiffrer avec le mot de passe</p>
   <div class="ic-local-notice">
     <span class="ic-notice-icon">⚿</span>
-    <span>Tout le chiffrement se fait <strong>dans ton navigateur</strong>. Aucune donnée ne quitte ta machine. Le mot de passe doit être transmis séparément (Signal, en présentiel) — InfoCrypt chiffre l'information, pas le canal.</span>
+    <span>Tout le chiffrement se fait <strong>dans ton navigateur</strong>. Aucune donnée ne quitte ta machine. Le mot de passe doit être transmis séparément (Signal, en présentiel) - InfoCrypt chiffre l'information, pas le canal.</span>
   </div>
 </div>
 
@@ -43,7 +43,7 @@ import Layout from '../layouts/Layout.astro';
       style="background:#08080c;">
       <div>
         <div class="font-mono text-[10px] text-dedsec-muted tracking-widest uppercase mb-0.5">Documentation</div>
-        <div class="font-bold text-neon-green" style="font-family:'Space Grotesk',sans-serif;font-size:18px;">InfoCrypt — Guide d'utilisation</div>
+        <div class="font-bold text-neon-green" style="font-family:'Space Grotesk',sans-serif;font-size:18px;">InfoCrypt - Guide d'utilisation</div>
       </div>
       <button onclick="icGuideClose()" aria-label="Fermer"
         class="text-dedsec-muted hover:text-neon-green transition-colors font-mono text-xl leading-none p-1">
@@ -58,7 +58,7 @@ import Layout from '../layouts/Layout.astro';
       <section>
         <div class="ic-guide-section-title">Qu'est-ce que c'est</div>
         <p class="text-dedsec-text/90 text-sm leading-relaxed mb-3">
-          InfoCrypt chiffre une fiche d'information structurée (téléphone, lieu, rôle, consignes) avec un mot de passe, et produit un bloc de texte illisible que tu peux envoyer sur n'importe quel canal — Signal, Telegram, email, SMS.
+          InfoCrypt chiffre une fiche d'information structurée (téléphone, lieu, rôle, consignes) avec un mot de passe, et produit un bloc de texte illisible que tu peux envoyer sur n'importe quel canal - Signal, Telegram, email, SMS.
         </p>
         <p class="text-dedsec-text/90 text-sm leading-relaxed">
           Ce n'est pas une messagerie chiffrée. C'est une couche de protection supplémentaire sur le contenu, avant qu'il transite par un canal qui n'est pas entièrement sous ton contrôle.
@@ -67,7 +67,7 @@ import Layout from '../layouts/Layout.astro';
 
       <!-- Ce que ça fait / pas -->
       <section>
-        <div class="ic-guide-section-title">Ce que ça fait — et pas</div>
+        <div class="ic-guide-section-title">Ce que ça fait - et pas</div>
         <div class="space-y-2">
           {[
             { ok: true,  txt: 'Chiffre le contenu : sans le mot de passe, le texte est illisible' },
@@ -75,7 +75,7 @@ import Layout from '../layouts/Layout.astro';
             { ok: true,  txt: 'Fonctionne hors ligne et sans compte, 100% dans le navigateur' },
             { ok: false, txt: 'Ne cache pas le fait qu\'un message chiffré a été envoyé (métadonnées)' },
             { ok: false, txt: 'Ne protège pas le canal de transmission (utilise Signal pour ça)' },
-            { ok: false, txt: 'Ne transmet pas le mot de passe — tu dois le faire par un autre canal' },
+            { ok: false, txt: 'Ne transmet pas le mot de passe - tu dois le faire par un autre canal' },
           ].map(item => (
             <div class="flex gap-3 text-sm items-start">
               <span class={item.ok ? 'text-neon-green mt-0.5 shrink-0' : 'text-red-400/70 mt-0.5 shrink-0'}>
@@ -93,9 +93,9 @@ import Layout from '../layouts/Layout.astro';
         <ol class="space-y-3 list-none p-0 m-0 counter-reset-item">
           {[
             { n:'01', titre:'Convenir d\'un mot de passe', detail:'En présentiel ou via Signal (vocal). Jamais écrit dans le même canal que la fiche.' },
-            { n:'02', titre:'Remplir la fiche', detail:'Titre obligatoire. Remplis uniquement les champs nécessaires — moins il y a d\'info, moins il y a de surface d\'attaque.' },
+            { n:'02', titre:'Remplir la fiche', detail:'Titre obligatoire. Remplis uniquement les champs nécessaires - moins il y a d\'info, moins il y a de surface d\'attaque.' },
             { n:'03', titre:'Chiffrer', detail:'Clique Chiffrer. L\'opération est instantanée et locale. Le texte produit est inerte sans le mot de passe.' },
-            { n:'04', titre:'Transmettre le bloc chiffré', detail:'Copie le texte ou télécharge le .json. Envoie-le sur le canal de ton choix — même non chiffré, il est illisible.' },
+            { n:'04', titre:'Transmettre le bloc chiffré', detail:'Copie le texte ou télécharge le .json. Envoie-le sur le canal de ton choix - même non chiffré, il est illisible.' },
             { n:'05', titre:'Déchiffrer à réception', detail:'Le destinataire colle le texte sur cette page, entre le mot de passe, et voit la fiche en clair. Rien n\'est stocké.' },
           ].map(step => (
             <li class="flex gap-4 items-start">
@@ -118,7 +118,7 @@ import Layout from '../layouts/Layout.astro';
         <div class="space-y-2">
           {[
             'Utilise une phrase de passe longue (4+ mots aléatoires) plutôt qu\'un mot complexe court',
-            'Minimum 14 caractères — PBKDF2 ralentit le brute-force mais ne l\'annule pas',
+            'Minimum 14 caractères - PBKDF2 ralentit le brute-force mais ne l\'annule pas',
             'Varie le mot de passe selon le niveau de sensibilité de la fiche',
             'Ne réutilise pas un mot de passe déjà utilisé ailleurs',
             'Ne le note pas dans le même canal que la fiche chiffrée',
@@ -136,7 +136,7 @@ import Layout from '../layouts/Layout.astro';
         <div class="ic-guide-section-title">Ce qui se passe sous le capot</div>
         <div class="ic-guide-tech-block space-y-3">
           {[
-            { label:'AES-GCM 256-bit', detail:'Chiffrement authentifié. Fournit à la fois la confidentialité et l\'intégrité — toute modification du ciphertext est détectée.' },
+            { label:'AES-GCM 256-bit', detail:'Chiffrement authentifié. Fournit à la fois la confidentialité et l\'intégrité - toute modification du ciphertext est détectée.' },
             { label:'PBKDF2 / SHA-256 / 250 000 iter.', detail:'Dérive une clé de 256 bits à partir du mot de passe. Les 250k itérations rendent chaque tentative de brute-force coûteuse (~0,25s/essai sur CPU standard).' },
             { label:'Salt aléatoire (16 octets)', detail:'Généré à chaque chiffrement. Empêche les attaques par précalcul (rainbow tables) même si deux fiches partagent le même mot de passe.' },
             { label:'IV aléatoire (12 octets)', detail:'Garantit que deux chiffrements identiques produisent des ciphertexts différents. Critique pour AES-GCM.' },
@@ -158,7 +158,7 @@ import Layout from '../layouts/Layout.astro';
             'Si ton navigateur est compromis (malware, extension malveillante), InfoCrypt ne peut rien.',
             'Le mot de passe transmis sur un canal non chiffré annule la protection.',
             'InfoCrypt ne gère pas plusieurs fiches simultanément en V1.',
-            'Pas d\'auto-destruction — la fiche chiffrée peut être conservée indéfiniment par le destinataire.',
+            'Pas d\'auto-destruction - la fiche chiffrée peut être conservée indéfiniment par le destinataire.',
           ].map(limit => (
             <div class="flex gap-3 text-sm items-start">
               <span class="text-yellow-500/70 mt-0.5 shrink-0 font-mono text-xs">!</span>
@@ -254,7 +254,7 @@ import Layout from '../layouts/Layout.astro';
           <button class="ic-pw-eye" onclick="icTogglePw('enc-pw1')" type="button">👁</button>
         </div>
         <div class="ic-pw-bar-track mt-1.5"><div id="ic-pw-bar" class="ic-pw-bar-fill"></div></div>
-        <div id="ic-pw-hint" class="font-mono text-[10px] text-dedsec-muted mt-1">— Entrez un mot de passe</div>
+        <div id="ic-pw-hint" class="font-mono text-[10px] text-dedsec-muted mt-1">- Entrez un mot de passe</div>
       </div>
       <div class="ic-field">
         <label class="ic-label">Confirmer <span class="text-neon-green">*</span></label>
@@ -355,7 +355,7 @@ import Layout from '../layouts/Layout.astro';
 <style is:global>
 
   /* ══════════════════════════════════════════════════════════
-     INFOCRYPT — DESIGN SYSTEM
+     INFOCRYPT - DESIGN SYSTEM
      Typo : Bebas Neue (titre) · Space Grotesk (corps) · JetBrains Mono (codes)
   ══════════════════════════════════════════════════════════ */
 
@@ -788,7 +788,7 @@ import Layout from '../layouts/Layout.astro';
   window.icPwStrength = function (pw) {
     const bar  = document.getElementById('ic-pw-bar');
     const hint = document.getElementById('ic-pw-hint');
-    if (!pw) { bar.style.width='0%'; hint.textContent='— Entrez un mot de passe'; hint.style.color=''; return; }
+    if (!pw) { bar.style.width='0%'; hint.textContent='- Entrez un mot de passe'; hint.style.color=''; return; }
     let score = 0;
     if (pw.length >= 8)  score++;
     if (pw.length >= 14) score++;
@@ -804,7 +804,7 @@ import Layout from '../layouts/Layout.astro';
     ];
     const l = levels[Math.min(score-1,4)] || levels[0];
     bar.style.width = l.pct; bar.style.background = l.color;
-    hint.textContent = '— ' + l.label; hint.style.color = l.color;
+    hint.textContent = '- ' + l.label; hint.style.color = l.color;
   };
 
   // ── CRYPTO UTILS ──────────────────────────────────────────────
@@ -911,7 +911,7 @@ import Layout from '../layouts/Layout.astro';
     document.getElementById('enc-result').classList.add('hidden');
     document.getElementById('ic-alert').className='hidden';
     document.getElementById('ic-pw-bar').style.width='0%';
-    document.getElementById('ic-pw-hint').textContent='— Entrez un mot de passe';
+    document.getElementById('ic-pw-hint').textContent='- Entrez un mot de passe';
     currentPayload=null;
   };
 

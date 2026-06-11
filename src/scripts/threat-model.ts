@@ -238,7 +238,7 @@ function threatScore(): { score: number; level: 'green'|'orange'|'red'; label: s
 function renderReport(): void {
   if (!root) return;
   const role = (answers.role || [])[0];
-  const roleLabel = STEPS[0].options.find(o => o.value === role)?.label || '—';
+  const roleLabel = STEPS[0].options.find(o => o.value === role)?.label || '-';
   const threat = threatScore();
 
   // Actifs
@@ -258,7 +258,7 @@ function renderReport(): void {
     .map(p => `
       <div class="ot-row">
         <span class="bullet"><span class="ot-badge ot-badge--${p.sev}">${p.sev === 'red' ? 'critique' : p.sev === 'orange' ? 'modéré' : 'sûr'}</span></span>
-        <span class="txt"><strong style="color:rgba(232,232,240,0.95)">${esc(p.label)}</strong> — ${esc(p.note)}</span>
+        <span class="txt"><strong style="color:rgba(232,232,240,0.95)">${esc(p.label)}</strong> - ${esc(p.note)}</span>
       </div>`).join('');
 
   // Contre-mesures : actifs + canaux à risque, dédupliquées
@@ -350,7 +350,7 @@ function copyReport(role: string, threat: { score: number; label: string }, asse
   lines.push('# Contre-mesures');
   cms.forEach(cm => lines.push(`- ${cm.txt}`));
   lines.push('');
-  lines.push('Généré localement via soundsystemhardening.fr/opsec-tools — aucune donnée transmise.');
+  lines.push('Généré localement via soundsystemhardening.fr/opsec-tools - aucune donnée transmise.');
 
   const txt = lines.join('\n');
   navigator.clipboard?.writeText(txt).then(() => {
