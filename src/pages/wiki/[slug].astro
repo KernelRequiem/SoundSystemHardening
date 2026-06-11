@@ -1,34 +1,15 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { readFileSync, readdirSync } from 'node:fs';
+import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
-export function getStaticPaths() {
-  const wikiDir = join(process.cwd(), 'src/content/wiki');
-  let files: string[] = [];
-  
-  try {
-    files = readdirSync(wikiDir).filter((f: string) => f.endsWith('.md') && !f.startsWith('_'));
-  } catch (e) {
-    return [];
-  }
-  
-  return files.map((file: string) => {
-    const slug = file.replace('.md', '');
-    return {
-      params: { slug },
-      props: { filename: file, slug }
-    };
-  });
-}
-
-const { filename, slug } = Astro.props;
+const { slug } = Astro.params;
 
 const wikiDir = join(process.cwd(), 'src/content/wiki');
 let rawContent = '';
 
 try {
-  rawContent = readFileSync(join(wikiDir, filename), 'utf-8');
+  rawContent = readFileSync(join(wikiDir, `${slug}.md`), 'utf-8');
 } catch (e) {
   rawContent = '# Page non trouvée\n\nCe contenu n\'est pas encore disponible.';
 }
