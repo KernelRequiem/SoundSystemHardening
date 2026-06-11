@@ -869,4 +869,15 @@
   .scrollbar-none::-webkit-scrollbar {
     display: none;
   }
+
+  /* ── Mobile topbar : tabs plus compacts ── */
+  @media (max-width: 767px) {
+    /* Réduit le padding horizontal des onglets outils en ligne 2 */
+    .topbar-tool-tab {
+      padding-left: 10px !important;
+      padding-right: 10px !important;
+      font-size: 10px !important;
+      letter-spacing: 0.08em !important;
+    }
+  }
 }
