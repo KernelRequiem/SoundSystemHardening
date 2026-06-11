@@ -1,8 +1,24 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import incidents from '../data/incidents.json';
+import { tickerItems } from '../data/ticker';
+import { readdirSync } from 'node:fs';
+import { join } from 'node:path';
 
 const totalIncidents = incidents.length;
+
+const WIKI_EXCLUDE = new Set([
+  'Home', '_Footer', '_Sidebar',
+  'wiki-opsec_1',
+  'wiki-ports-reseau_1', 'wiki-ports-reseau_2',
+  'wiki-ports-reseau_3', 'wiki-ports-reseau_4',
+  'strategie-wiki', 'Axe-sanitaire',
+]);
+const totalWikiPages = readdirSync(join(process.cwd(), 'src/content/wiki'))
+  .filter(f => f.endsWith('.md') && !f.startsWith('_'))
+  .map(f => f.replace('.md', ''))
+  .filter(f => !WIKI_EXCLUDE.has(f))
+  .length;
 ---
 
 <Layout
@@ -18,23 +34,7 @@ const totalIncidents = incidents.length;
       <div class="ticker-label">ACTUS</div>
       <div class="ticker-mask">
         <div class="ticker-track">
-          {[
-            '[ JUIN 2026 ] Migration infra vers VPS souverain - Hébergement Suisse, juridiction nLPD',
-            '[ VEILLE ] Loi RIPOST votée au Sénat le 26 mai 2026 - industrialisation des AFD et saisies destructives',
-            '[ WIKI ] Nouvelle page : Stratégie contre-RIPOST - parades et éléments de langage face aux médias',
-            '[ WIKI ] Nouvelle page : Drones thermiques et nasses logistiques - adaptation des infrastructures critiques',
-            '[ OPSEC ] Protocoles burners Telegram/Signal via Fragment mis à jour',
-            '[ INFRA ] Zéro script tiers - aucun outil de monitoring externe sur les pages wiki',
-            '[ DROIT ] Jurisprudences GAV et forçage biométrique mises à jour - mai 2026',
-          ].concat([
-            '[ JUIN 2026 ] Migration infra vers VPS souverain - Hébergement Suisse, juridiction nLPD',
-            '[ VEILLE ] Loi RIPOST votée au Sénat le 26 mai 2026 - industrialisation des AFD et saisies destructives',
-            '[ WIKI ] Nouvelle page : Stratégie contre-RIPOST - parades et éléments de langage face aux médias',
-            '[ WIKI ] Nouvelle page : Drones thermiques et nasses logistiques - adaptation des infrastructures critiques',
-            '[ OPSEC ] Protocoles burners Telegram/Signal via Fragment mis à jour',
-            '[ INFRA ] Zéro script tiers - aucun outil de monitoring externe sur les pages wiki',
-            '[ DROIT ] Jurisprudences GAV et forçage biométrique mises à jour - mai 2026',
-          ]).map(item => (
+          {[...tickerItems, ...tickerItems].map(item => (
             <span class="ticker-item">{item}</span>
           ))}
         </div>
@@ -62,7 +62,7 @@ const totalIncidents = incidents.length;
       {[
         { val: String(totalIncidents), label: 'INCIDENTS' },
         { val: '19',  label: 'DEPTS' },
-        { val: '60+', label: 'PAGES WIKI' },
+        { val: String(totalWikiPages), label: 'PAGES WIKI' },
         { val: 'EN COURS', label: 'LOI RIPOST' },
       ].map(s => (
         <div class="hero-stat">
