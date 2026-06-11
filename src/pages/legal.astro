@@ -1,0 +1,248 @@
+---
+// src/pages/legal.astro
+import Layout from '../layouts/Layout.astro';
+
+const lastUpdate = '12 juin 2026';
+---
+
+<Layout
+  title="Mentions légales"
+  category="LÉGAL"
+  description="Mentions légales, éditeur, hébergeur et avertissement du wiki SoundSystemHardening. Contenu à but pédagogique et informatif, zéro collecte de données."
+>
+
+  <h1>Mentions légales</h1>
+  <p class="text-dedsec-muted text-sm font-mono tracking-widest uppercase mb-8">
+    ▸ Éditeur · Hébergeur · Avertissement · Données personnelles
+  </p>
+
+  <div class="info-box mb-12">
+    Conformément à l'article 6-III de la loi n° 2004-575 du 21 juin 2004 pour la confiance
+    dans l'économie numérique (LCEN), les informations ci-dessous sont mises à disposition
+    des visiteurs du site. Dernière mise à jour : <strong>{lastUpdate}</strong>.
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- 1. ÉDITEUR                                              -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+
+  <h2>1. Éditeur du site</h2>
+
+  <p>
+    Le site <strong>SoundSystemHardening</strong> (<code>soundsystemhardening.fr</code>) est édité
+    par un collectif informel de personnes physiques, à titre non professionnel et non lucratif.
+    Le collectif n'est ni une association déclarée, ni une société, ni une structure commerciale.
+    Il ne perçoit aucun revenu, ne vend aucun produit ni service, et ne diffuse aucune publicité.
+  </p>
+  <p>
+    Le site étant édité par des personnes physiques à titre non professionnel, et afin de préserver
+    la sécurité et l'anonymat des contributeurs, l'identité de l'éditeur n'est pas rendue publique,
+    conformément à la faculté ouverte par l'article 6-III-2 de la LCEN. Ces informations sont
+    tenues à la disposition de l'hébergeur, seul habilité à les communiquer sur réquisition de
+    l'autorité judiciaire.
+  </p>
+  <p>
+    Tout échange avec l'éditeur peut se faire par les canaux indiqués sur la page
+    <a href="/contact">Contact & Signalement</a>, y compris par messagerie chiffrée (Signal) ou
+    courriel chiffré (clé PGP publique disponible sur le site).
+  </p>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- 2. DIRECTEUR DE PUBLICATION                             -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+
+  <h2>2. Directeur de la publication</h2>
+
+  <p>
+    La direction de la publication est assurée collectivement par les membres du collectif éditeur.
+    Pour les mêmes raisons de sécurité que celles exposées ci-dessus, l'identité du directeur de
+    la publication n'est pas rendue publique et reste à la disposition de l'autorité judiciaire
+    via l'hébergeur.
+  </p>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- 3. HÉBERGEUR                                            -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+
+  <h2>3. Hébergeur</h2>
+
+  <p>
+    Le site est hébergé sur un serveur physique situé en Suisse, soumis à la loi fédérale suisse
+    sur la protection des données (nLPD), par&nbsp;:
+  </p>
+
+  <div class="card-neon px-5 py-5 my-6">
+    <div class="font-mono text-xs font-bold text-neon-green mb-2 tracking-widest uppercase">Hébergeur</div>
+    <p class="text-dedsec-muted/85 text-sm leading-relaxed m-0" style="font-family:'Space Grotesk',sans-serif;">
+      Infomaniak Network SA<br/>
+      Rue Eugène-Marziano 25<br/>
+      1227 Les Acacias, Genève, Suisse<br/>
+      Téléphone : +41 22 820 35 44<br/>
+      Site : <a href="https://www.infomaniak.com" target="_blank" rel="noopener">infomaniak.com</a>
+    </p>
+  </div>
+
+  <p>
+    Le déploiement s'effectue via une infrastructure auto-gérée (Coolify, open source), sans
+    dépendance à un opérateur cloud commercial. Les détails techniques figurent sur la page
+    <a href="/a-propos">À propos & Transparence</a>.
+  </p>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- 4. NATURE ET OBJET DU SITE                              -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+
+  <h2>4. Nature et objet du site</h2>
+
+  <div class="warning-box mb-6">
+    L'intégralité du contenu de ce site est publiée à des fins <strong>strictement pédagogiques
+    et informatives</strong>. Il s'agit d'un travail de documentation, de vulgarisation et de
+    référencement de droits, de pratiques de sécurité numérique et de ressources juridiques.
+  </div>
+
+  <p>
+    SoundSystemHardening est un wiki collectif, libre et gratuit, qui centralise des informations
+    relatives aux droits des personnes, à la sécurité numérique (OpSec) et aux stratégies
+    juridiques dans le contexte du mouvement free party. Le contenu vise à informer les visiteurs
+    de leurs droits et des moyens légaux de les protéger.
+  </p>
+  <p>
+    La consultation, la lecture ou l'utilisation de ce site, de ses ressources ou de ses outils
+    <strong>ne confère à aucun visiteur la qualité d'organisateur</strong> d'un quelconque
+    rassemblement, événement ou manifestation, et ne saurait être interprétée comme une telle
+    qualité. Sauf preuve contraire dûment établie par les voies de droit, un visiteur est et
+    demeure un simple lecteur d'un contenu informatif. La simple consultation d'une page ne
+    caractérise ni une intention, ni une participation, ni une organisation, ni une complicité
+    d'aucune sorte.
+  </p>
+  <p>
+    Le contenu ne constitue ni un conseil juridique individualisé, ni une incitation à commettre
+    une infraction. Chaque visiteur reste seul responsable de l'usage qu'il fait des informations
+    consultées et du respect des lois applicables dans sa juridiction.
+  </p>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- 5. LIMITATION DE RESPONSABILITÉ                         -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+
+  <h2>5. Avertissement et limitation de responsabilité</h2>
+
+  <p>
+    Les informations diffusées sont fournies en l'état, à titre indicatif, sans garantie
+    d'exhaustivité ni d'actualité permanente. Le droit évolue&nbsp;: une information exacte à sa
+    date de publication peut ne plus l'être ultérieurement. L'éditeur s'efforce de vérifier et
+    de sourcer le contenu, mais ne saurait être tenu responsable d'éventuelles erreurs, omissions,
+    ou de l'interprétation faite des informations par les visiteurs.
+  </p>
+  <p>
+    L'éditeur décline toute responsabilité quant aux conséquences directes ou indirectes de
+    l'utilisation des informations et outils mis à disposition. Le site peut renvoyer vers des
+    ressources externes&nbsp;: leur contenu relève de la seule responsabilité de leurs auteurs
+    respectifs.
+  </p>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- 6. DONNÉES PERSONNELLES                                 -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+
+  <h2>6. Données personnelles et confidentialité</h2>
+
+  <div class="info-box mb-6">
+    <strong>Aucune donnée n'est collectée sur ce site.</strong> Rien ne permet à quiconque
+    d'identifier un visiteur, ni de relier une consultation à une personne.
+  </div>
+
+  <p>
+    Le site est entièrement statique. En navigation, aucune donnée personnelle n'est collectée,
+    traitée ni stockée&nbsp;: aucun cookie, aucun traceur, aucun outil d'analyse d'audience,
+    aucune empreinte de navigateur (fingerprinting), aucune géolocalisation, aucun log serveur
+    nominatif. Aucune information ne permet d'identifier directement ou indirectement un visiteur.
+  </p>
+  <p>
+    Le site n'étant soumis à aucune obligation de consentement faute de traitement, aucune
+    bannière de cookies n'est nécessaire. Les seuls échanges de données interviennent si un
+    visiteur choisit volontairement d'utiliser un formulaire de contact ou de signalement&nbsp;;
+    les garanties applicables dans ce cas sont détaillées sur la page
+    <a href="/securite">Sécurité & Confidentialité</a>.
+  </p>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- 7. RECOMMANDATIONS DE SÉCURITÉ                          -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+
+  <h2>7. Recommandations de sécurité aux visiteurs</h2>
+
+  <p>
+    Bien que le site ne collecte aucune donnée, la consultation de tout site web laisse des
+    traces au niveau du fournisseur d'accès à Internet et des intermédiaires réseau. Par
+    précaution, et pour préserver leur vie privée, il est recommandé aux visiteurs de&nbsp;:
+  </p>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-3 my-6">
+    <div class="card-neon px-4 py-4 flex gap-3 items-start">
+      <span class="text-neon-green font-mono text-sm mt-0.5 flex-shrink-0">▸</span>
+      <div>
+        <div class="font-mono text-xs font-bold text-neon-green tracking-wider mb-1">Utiliser un VPN</div>
+        <p class="text-dedsec-muted/70 text-sm m-0" style="font-family:'Space Grotesk',sans-serif;">
+          Un réseau privé virtuel de confiance chiffre le trafic et masque l'adresse IP réelle
+          vis-à-vis du fournisseur d'accès.
+        </p>
+      </div>
+    </div>
+    <div class="card-neon px-4 py-4 flex gap-3 items-start">
+      <span class="text-neon-green font-mono text-sm mt-0.5 flex-shrink-0">▸</span>
+      <div>
+        <div class="font-mono text-xs font-bold text-neon-green tracking-wider mb-1">Préférer Tor</div>
+        <p class="text-dedsec-muted/70 text-sm m-0" style="font-family:'Space Grotesk',sans-serif;">
+          Le navigateur Tor offre une protection supérieure en anonymisant l'origine de la
+          connexion via plusieurs relais successifs. Solution recommandée pour les besoins
+          de confidentialité les plus élevés.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <p>
+    Pour aller plus loin, des outils et systèmes orientés vie privée (dont Tails OS) sont
+    référencés sur les pages <a href="/opsec-tools">OpSec Tools</a> et <a href="/tools">Index outils</a>.
+  </p>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- 8. PROPRIÉTÉ INTELLECTUELLE                             -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+
+  <h2>8. Propriété intellectuelle et licence</h2>
+
+  <p>
+    Sauf mention contraire, l'ensemble des contenus rédactionnels du site est mis à disposition
+    sous licence <strong>Creative Commons Attribution - Partage dans les Mêmes Conditions 4.0
+    International (CC BY-SA 4.0)</strong>. Chacun est libre de reproduire, diffuser et adapter
+    ces contenus, à condition d'en créditer la source et de partager les œuvres dérivées sous la
+    même licence.
+  </p>
+  <p>
+    Le code source du site est public et auditable sur le dépôt
+    <a href="https://github.com/KernelRequiem/SoundSystemHardening" target="_blank" rel="noopener">GitHub du projet</a>.
+    Les marques, logos et contenus tiers cités restent la propriété de leurs détenteurs respectifs.
+  </p>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- 9. DROIT APPLICABLE                                     -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+
+  <h2>9. Droit applicable</h2>
+
+  <p>
+    Les présentes mentions légales sont régies par le droit français. Le site étant hébergé en
+    Suisse, le droit suisse s'applique pour ce qui relève de l'hébergement et de la protection
+    des données. Tout litige relatif à l'utilisation du site relève de la compétence des
+    juridictions compétentes, après recherche d'une solution amiable.
+  </p>
+
+  <div class="info-box mt-12">
+    Pour toute question relative aux présentes mentions, au contenu du site ou à un signalement,
+    la page <a href="/contact">Contact & Signalement</a> détaille les canaux disponibles, y compris
+    chiffrés.
+  </div>
+
+</Layout>
