@@ -7,7 +7,7 @@ import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
   site: 'https://soundsystemhardening.fr',
-  output: 'hybrid',
+  output: 'server',
   adapter: node({ mode: 'standalone' }),
   integrations: [tailwind(), mdx(), sitemap()],
   markdown: {
