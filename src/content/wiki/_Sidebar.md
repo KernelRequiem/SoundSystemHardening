@@ -7,7 +7,7 @@
 ---
 ## 🫯 Contre RIPOST
 
-* [Stratégie CONTRE RIPOST](Strategie-contre-ripost)
+* [Stratégie CONTRE RIPOST](ripost)
 
 ---
 

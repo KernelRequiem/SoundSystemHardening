@@ -1,0 +1,1041 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+
+<Layout
+  title="RIPOST"
+  description="Guide opérationnel contre la loi RIPOST : AFD, droits terrain, stratégies de résistance, ressources et contacts."
+  category="WIKI"
+  categoryHref="/wiki"
+>
+
+<style is:global>
+
+  /* ══════════════════════════════════════════════════════
+     RIPOST — DESIGN SYSTEM
+     Typo : Bebas Neue (titres) · Space Grotesk (corps) · JetBrains Mono (codes)
+  ══════════════════════════════════════════════════════ */
+
+  .rp-header {
+    margin-bottom: 40px;
+    padding-bottom: 28px;
+    border-bottom: 1px solid rgba(42,42,58,0.60);
+    position: relative;
+  }
+  .rp-header::before {
+    content: '';
+    position: absolute;
+    left: -28px; top: 0; bottom: 0;
+    width: 2px;
+    background: linear-gradient(180deg, #ff4444 0%, rgba(255,68,68,0.03) 100%);
+  }
+
+  .rp-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(255,68,68,0.90);
+    border: 1px solid rgba(255,68,68,0.28);
+    background: rgba(255,68,68,0.04);
+    padding: 4px 12px;
+    margin-bottom: 16px;
+  }
+
+  .rp-title {
+    font-family: 'Bebas Neue', sans-serif !important;
+    font-size: 64px !important;
+    color: #e8e8f0 !important;
+    letter-spacing: 0.08em !important;
+    line-height: 1 !important;
+    margin: 0 0 12px !important;
+    padding: 0 !important;
+    border: none !important;
+  }
+
+  .rp-subtitle {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 15px;
+    color: rgba(180,180,200,0.80);
+    line-height: 1.65;
+    margin-bottom: 22px;
+    max-width: 680px;
+  }
+
+  /* Status banner */
+  .rp-status {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    background: rgba(255,230,0,0.03);
+    border: 1px solid rgba(255,230,0,0.15);
+    border-left: 3px solid rgba(255,200,0,0.60);
+    padding: 16px 20px;
+    margin-bottom: 0;
+  }
+  .rp-status-dot {
+    width: 9px; height: 9px;
+    border-radius: 50%;
+    background: #ffd600;
+    box-shadow: 0 0 8px #ffd600;
+    flex-shrink: 0;
+    margin-top: 5px;
+    animation: rp-pulse 2s ease-in-out infinite;
+  }
+  @keyframes rp-pulse {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.45; }
+  }
+  .rp-status-date {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.20em;
+    text-transform: uppercase;
+    color: rgba(255,214,0,0.65);
+    margin-bottom: 4px;
+  }
+  .rp-status-main {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: #e8e8f0;
+    margin-bottom: 5px;
+  }
+  .rp-status-main em {
+    font-style: normal;
+    color: #ffd600;
+  }
+  .rp-status-sub {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 13px;
+    color: rgba(160,160,185,0.85);
+    line-height: 1.60;
+  }
+  .rp-status-sub strong { color: #00ff9f; }
+  .rp-petition-btn {
+    flex-shrink: 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(255,214,0,0.72);
+    border: 1px solid rgba(255,214,0,0.28);
+    padding: 9px 14px;
+    text-decoration: none;
+    transition: all 0.15s;
+    white-space: nowrap;
+    display: none;
+  }
+  .rp-petition-btn:hover {
+    color: #ffd600;
+    border-color: rgba(255,214,0,0.60);
+    background: rgba(255,214,0,0.04);
+  }
+  @media (min-width: 600px) { .rp-petition-btn { display: inline-block; } }
+
+  /* Section wrapper */
+  .rp-section {
+    margin-bottom: 44px;
+  }
+  .rp-section-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: rgba(122,122,138,0.45);
+    margin-bottom: 8px;
+  }
+  .rp-section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    color: #e8e8f0;
+    letter-spacing: 0.06em;
+    line-height: 1;
+    margin-bottom: 20px;
+  }
+
+  /* Comparatif avant/après */
+  .rp-compare-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    border: 1px solid rgba(42,42,58,0.70);
+    overflow: hidden;
+  }
+  @media (max-width: 560px) { .rp-compare-grid { grid-template-columns: 1fr; } }
+
+  .rp-col {
+    padding: 24px;
+    background: rgba(8,8,12,0.70);
+  }
+  .rp-col-left { border-right: 1px solid rgba(42,42,58,0.60); }
+  .rp-col-right { border-left: 3px solid rgba(255,68,68,0.50); }
+
+  .rp-col-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .rp-col-label.ok { color: rgba(0,255,159,0.65); }
+  .rp-col-label.ko { color: rgba(255,68,68,0.65); }
+
+  .rp-compare-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(42,42,58,0.40);
+  }
+  .rp-compare-row:last-child { border-bottom: none; }
+  .rp-compare-lbl {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 13px;
+    color: rgba(160,160,185,0.80);
+  }
+  .rp-compare-val {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    text-align: right;
+  }
+  .rp-compare-sub {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 10px;
+    color: rgba(122,122,138,0.65);
+    text-align: right;
+    margin-top: 2px;
+  }
+  .val-green { color: #00ff9f; }
+  .val-red   { color: #ff4444; }
+
+  .rp-note {
+    border-left: 3px solid rgba(122,122,138,0.25);
+    background: rgba(8,8,12,0.50);
+    padding: 12px 16px;
+    margin-top: 0;
+    border-top: none;
+    border-right: 1px solid rgba(42,42,58,0.50);
+    border-bottom: 1px solid rgba(42,42,58,0.50);
+  }
+  .rp-note-text {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 12px;
+    color: rgba(140,140,165,0.80);
+    line-height: 1.60;
+  }
+  .rp-note-text strong { color: rgba(255,68,68,0.88); }
+  .rp-note-text em { font-style: normal; color: rgba(200,200,220,0.75); }
+
+  /* AFD décision flowchart */
+  .rp-flow {
+    border: 1px solid rgba(42,42,58,0.70);
+    background: rgba(8,8,12,0.70);
+    padding: 28px;
+  }
+  .rp-flow-start {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .rp-flow-start-box {
+    display: inline-block;
+    border: 1px solid rgba(122,122,138,0.35);
+    background: rgba(20,20,30,0.80);
+    padding: 14px 24px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: #e8e8f0;
+  }
+  .rp-flow-arrow {
+    display: flex;
+    justify-content: center;
+    margin: 12px 0;
+  }
+  .rp-flow-arrow::after {
+    content: '↓';
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 18px;
+    color: rgba(122,122,138,0.50);
+  }
+  .rp-flow-choice {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  @media (max-width: 560px) { .rp-flow-choice { grid-template-columns: 1fr; } }
+
+  .rp-flow-bad {
+    border: 1px solid rgba(255,68,68,0.22);
+    border-top: 3px solid rgba(255,68,68,0.55);
+    background: rgba(255,68,68,0.03);
+    padding: 20px;
+  }
+  .rp-flow-good {
+    border: 1px solid rgba(0,255,159,0.22);
+    border-top: 3px solid rgba(0,255,159,0.55);
+    background: rgba(0,255,159,0.03);
+    padding: 20px;
+  }
+
+  .rp-flow-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .rp-flow-tag.bad { color: rgba(255,68,68,0.60); }
+  .rp-flow-tag.good { color: rgba(0,255,159,0.60); }
+
+  .rp-flow-choice-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+  .rp-flow-choice-title.bad { color: #ff4444; }
+  .rp-flow-choice-title.good { color: #00ff9f; }
+
+  .rp-flow-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 13px;
+    color: rgba(160,160,185,0.88);
+    margin-bottom: 6px;
+    line-height: 1.50;
+  }
+  .rp-flow-item .icon-bad  { color: #ff4444; flex-shrink: 0; }
+  .rp-flow-item .icon-good { color: #00ff9f; flex-shrink: 0; }
+
+  .rp-flow-sub {
+    background: rgba(12,12,18,0.80);
+    border: 1px solid rgba(42,42,58,0.55);
+    border-left: 3px solid rgba(0,255,159,0.25);
+    padding: 20px;
+  }
+  .rp-flow-sub-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.20em;
+    text-transform: uppercase;
+    color: rgba(122,122,138,0.55);
+    margin-bottom: 14px;
+  }
+  .rp-flow-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  @media (max-width: 560px) { .rp-flow-options { grid-template-columns: 1fr; } }
+
+  .rp-flow-opt {
+    background: rgba(8,8,12,0.80);
+    border: 1px solid rgba(42,42,58,0.55);
+    padding: 16px;
+  }
+  .rp-flow-opt-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.20em;
+    text-transform: uppercase;
+    color: rgba(122,122,138,0.55);
+    margin-bottom: 6px;
+  }
+  .rp-flow-opt-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #e8e8f0;
+    margin-bottom: 8px;
+  }
+  .rp-flow-opt-body {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 12px;
+    color: rgba(140,140,165,0.80);
+    line-height: 1.60;
+  }
+  .rp-flow-opt-body em { font-style: normal; color: rgba(255,200,0,0.85); }
+
+  /* Faille technique */
+  .rp-faille {
+    margin-top: 16px;
+    border: 1px solid rgba(0,255,159,0.18);
+    border-left: 3px solid rgba(0,255,159,0.50);
+    background: rgba(0,255,159,0.03);
+    padding: 14px 18px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .rp-faille-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(0,255,159,0.65);
+    flex-shrink: 0;
+    padding-top: 3px;
+  }
+  .rp-faille-text {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 13px;
+    color: rgba(180,180,200,0.85);
+    line-height: 1.60;
+  }
+  .rp-faille-text strong { color: #00ff9f; }
+
+  /* 4 réflexes */
+  .rp-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  @media (max-width: 560px) { .rp-cards { grid-template-columns: 1fr; } }
+
+  .rp-card {
+    background: rgba(8,8,12,0.80);
+    border: 1px solid rgba(42,42,58,0.60);
+    border-top: 3px solid rgba(0,255,159,0.45);
+    padding: 22px;
+    transition: border-top-color 0.20s, transform 0.20s;
+  }
+  .rp-card:hover {
+    border-top-color: rgba(0,255,159,0.85);
+    transform: translateY(-2px);
+  }
+  .rp-card-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    color: rgba(0,255,159,0.45);
+    margin-bottom: 8px;
+  }
+  .rp-card-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    color: #e8e8f0;
+    letter-spacing: 0.05em;
+    margin-bottom: 14px;
+    line-height: 1.1;
+  }
+  .rp-card-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 13px;
+    color: rgba(160,160,185,0.88);
+    margin-bottom: 7px;
+    line-height: 1.50;
+  }
+  .rp-card-item-arrow {
+    color: rgba(0,255,159,0.65);
+    flex-shrink: 0;
+    font-size: 11px;
+    padding-top: 1px;
+  }
+  .rp-card-note {
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(42,42,58,0.50);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    color: rgba(0,255,159,0.55);
+  }
+
+  /* Mobilisation collective */
+  .rp-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    border: 1px solid rgba(42,42,58,0.60);
+    overflow: hidden;
+  }
+  .rp-action {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    padding: 22px 24px;
+    background: rgba(8,8,12,0.70);
+    border-bottom: 1px solid rgba(42,42,58,0.45);
+    transition: background 0.15s;
+  }
+  .rp-action:last-child { border-bottom: none; }
+  .rp-action:hover { background: rgba(0,255,159,0.02); }
+  .rp-action-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    font-weight: 700;
+    color: rgba(0,255,159,0.40);
+    flex-shrink: 0;
+    min-width: 32px;
+  }
+  .rp-action-body {}
+  .rp-action-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: #e8e8f0;
+    margin-bottom: 6px;
+  }
+  .rp-action-desc {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 13px;
+    color: rgba(155,155,180,0.85);
+    line-height: 1.60;
+  }
+  .rp-action-desc strong { color: #00ff9f; }
+
+  /* Ressources */
+  .rp-resources {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    border: 1px solid rgba(42,42,58,0.60);
+  }
+  @media (max-width: 680px) { .rp-resources { grid-template-columns: 1fr; } }
+
+  .rp-res-col {
+    padding: 22px;
+    background: rgba(8,8,12,0.70);
+    border-right: 1px solid rgba(42,42,58,0.45);
+  }
+  .rp-res-col:last-child { border-right: none; }
+
+  .rp-res-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(0,255,159,0.55);
+    margin-bottom: 18px;
+  }
+  .rp-res-item { margin-bottom: 18px; }
+  .rp-res-item:last-child { margin-bottom: 0; }
+  .rp-res-link {
+    display: block;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #00ff9f;
+    text-decoration: none;
+    margin-bottom: 4px;
+    transition: color 0.12s;
+  }
+  .rp-res-link:hover { color: rgba(0,255,159,0.70); }
+  .rp-res-desc {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 12px;
+    color: rgba(122,122,138,0.80);
+    line-height: 1.55;
+  }
+  .rp-res-contact {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: rgba(100,100,120,0.65);
+    margin-top: 3px;
+  }
+
+  /* Matrice */
+  .rp-matrix {
+    border: 1px solid rgba(42,42,58,0.60);
+    overflow-x: auto;
+  }
+  .rp-matrix table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  .rp-matrix th {
+    padding: 12px 18px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.20em;
+    text-transform: uppercase;
+    color: rgba(122,122,138,0.55);
+    background: rgba(12,12,20,0.90);
+    border-bottom: 1px solid rgba(42,42,58,0.65);
+    text-align: left;
+    white-space: nowrap;
+  }
+  .rp-matrix td {
+    padding: 13px 18px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 13px;
+    color: rgba(160,160,185,0.85);
+    border-bottom: 1px solid rgba(42,42,58,0.35);
+    vertical-align: top;
+    line-height: 1.50;
+  }
+  .rp-matrix tr:last-child td { border-bottom: none; }
+  .rp-matrix tr:nth-child(odd) td { background: rgba(8,8,12,0.55); }
+  .rp-matrix tr:nth-child(even) td { background: rgba(10,10,16,0.55); }
+  .rp-matrix .col-action {
+    color: #e8e8f0;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .rp-matrix .m-ok  { color: #00ff9f; font-size: 15px; }
+  .rp-matrix .m-bad { color: #ff4444; font-size: 15px; }
+  .rp-matrix .m-mid { color: rgba(255,200,0,0.80); font-size: 15px; }
+
+  /* Footer */
+  .rp-footer {
+    border-top: 1px solid rgba(42,42,58,0.55);
+    padding-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  @media (min-width: 600px) {
+    .rp-footer { flex-direction: row; justify-content: space-between; align-items: center; }
+  }
+  .rp-footer-credits {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.10em;
+    color: rgba(100,100,120,0.55);
+  }
+  .rp-footer-links {
+    display: flex;
+    gap: 20px;
+  }
+  .rp-footer-link {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(122,122,138,0.55);
+    text-decoration: none;
+    transition: color 0.12s;
+  }
+  .rp-footer-link:hover { color: #00ff9f; }
+
+</style>
+
+<!-- ══════════════════════════════════════════════════
+     EN-TÊTE
+═══════════════════════════════════════════════════ -->
+<div class="not-prose rp-header">
+  <div class="rp-badge">⚖ LOI EN COURS D'ADOPTION</div>
+  <h1 class="rp-title">RIPOST</h1>
+  <p class="rp-subtitle">
+    Le projet de loi RIPOST veut criminaliser les free parties. Voici ce que ça change, comment résister, et comment contester une amende forfaitaire.
+  </p>
+
+  <div class="rp-status">
+    <span class="rp-status-dot"></span>
+    <div style="flex:1">
+      <div class="rp-status-date">Statut au 8 juin 2026</div>
+      <div class="rp-status-main">RIPOST <em>n'est pas encore en vigueur</em></div>
+      <div class="rp-status-sub">
+        Adopté au Sénat le 26 mai 2026 (243 pour / 33 contre). L'Assemblée nationale n'a pas encore voté.
+        Le droit actuel s'applique : <strong>participer à une free party est légal</strong>. Seuls les organisateurs risquent une contravention de 1 500 €.
+      </div>
+    </div>
+    <a href="https://petitions.assemblee-nationale.fr/initiatives/i-5428" target="_blank" rel="noopener" class="rp-petition-btn">
+      ✎ Signer la pétition
+    </a>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════
+     01 — CE QUI CHANGE
+═══════════════════════════════════════════════════ -->
+<div class="not-prose rp-section">
+  <div class="rp-section-num">01 / Ce qui change si RIPOST passe</div>
+  <div class="rp-section-title">Avant et après la loi</div>
+
+  <div class="rp-compare-grid">
+
+    <div class="rp-col rp-col-left">
+      <div class="rp-col-label ok">Droit actuel</div>
+      <div class="rp-compare-row">
+        <span class="rp-compare-lbl">Participation</span>
+        <div>
+          <div class="rp-compare-val val-green">Légale</div>
+          <div class="rp-compare-sub">aucune sanction</div>
+        </div>
+      </div>
+      <div class="rp-compare-row">
+        <span class="rp-compare-lbl">Organisation</span>
+        <div>
+          <div class="rp-compare-val val-green">1 500 €</div>
+          <div class="rp-compare-sub">contravention 5e classe</div>
+        </div>
+      </div>
+      <div class="rp-compare-row">
+        <span class="rp-compare-lbl">Seuil déclaration</span>
+        <div>
+          <div class="rp-compare-val" style="color:#e8e8f0">500 pers.</div>
+          <div class="rp-compare-sub">obligation préfecture</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rp-col rp-col-right">
+      <div class="rp-col-label ko">Si RIPOST est adopté</div>
+      <div class="rp-compare-row">
+        <span class="rp-compare-lbl">Participation</span>
+        <div>
+          <div class="rp-compare-val val-red">AFD 1 500 €</div>
+          <div class="rp-compare-sub">ou 6 mois + 7 500 € au tribunal</div>
+        </div>
+      </div>
+      <div class="rp-compare-row">
+        <span class="rp-compare-lbl">Organisation</span>
+        <div>
+          <div class="rp-compare-val val-red">2 ans + 30 000 €</div>
+          <div class="rp-compare-sub">délit pénal</div>
+        </div>
+      </div>
+      <div class="rp-compare-row">
+        <span class="rp-compare-lbl">Seuil déclaration</span>
+        <div>
+          <div class="rp-compare-val val-red">250 pers.</div>
+          <div class="rp-compare-sub">abaissé de 50 %</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="rp-note">
+    <p class="rp-note-text">
+      <strong>AFD = Amende Forfaitaire Délictuelle.</strong> <em>Sanction pénale prononcée sans jugement par un agent sur le terrain. Payer = reconnaître sa culpabilité + inscription au casier judiciaire pendant 3 ans. La Défenseure des droits a recommandé son abolition en 2023 pour atteinte aux droits fondamentaux.</em>
+    </p>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════
+     02 — ARBRE DE DÉCISION AFD
+═══════════════════════════════════════════════════ -->
+<div class="not-prose rp-section">
+  <div class="rp-section-num">02 / Je reçois une AFD — que faire ?</div>
+  <div class="rp-section-title">Arbre de décision</div>
+
+  <div class="rp-flow">
+
+    <div class="rp-flow-start">
+      <div class="rp-flow-start-box">Les forces de l'ordre te proposent une AFD de 1 500 €</div>
+    </div>
+
+    <div class="rp-flow-arrow"></div>
+
+    <div class="rp-flow-choice">
+      <div class="rp-flow-bad">
+        <div class="rp-flow-tag bad">Mauvais réflexe</div>
+        <div class="rp-flow-choice-title bad">Tu paies sur place</div>
+        <div class="rp-flow-item">
+          <span class="icon-bad">✗</span>
+          Reconnaissance de culpabilité immédiate
+        </div>
+        <div class="rp-flow-item">
+          <span class="icon-bad">✗</span>
+          Casier judiciaire pendant 3 ans
+        </div>
+        <div class="rp-flow-item">
+          <span class="icon-bad">✗</span>
+          Procédure close, impossible de contester
+        </div>
+      </div>
+
+      <div class="rp-flow-good">
+        <div class="rp-flow-tag good">Bon réflexe</div>
+        <div class="rp-flow-choice-title good">Tu refuses de payer</div>
+        <div class="rp-flow-item">
+          <span class="icon-good">✓</span>
+          Tu n'admets rien
+        </div>
+        <div class="rp-flow-item">
+          <span class="icon-good">✓</span>
+          45 jours pour décider
+        </div>
+        <div class="rp-flow-item">
+          <span class="icon-good">✓</span>
+          Temps de contacter un avocat ou le FSJS
+        </div>
+      </div>
+    </div>
+
+    <div class="rp-flow-arrow"></div>
+
+    <div class="rp-flow-sub">
+      <div class="rp-flow-sub-label">Dans les 45 jours : tu choisis l'une de ces deux options</div>
+      <div class="rp-flow-options">
+        <div class="rp-flow-opt">
+          <div class="rp-flow-opt-tag">Option A</div>
+          <div class="rp-flow-opt-title">Tu ne contestes pas</div>
+          <div class="rp-flow-opt-body">
+            Amende payée (minorée si dans les 15 jours). Casier 3 ans. Tu as eu le temps de décider lucidement.
+          </div>
+        </div>
+        <div class="rp-flow-opt" style="border-left:2px solid rgba(0,255,159,0.30);">
+          <div class="rp-flow-opt-tag">Option B — dans les 30 jours</div>
+          <div class="rp-flow-opt-title">Tu contestes auprès du Procureur</div>
+          <div class="rp-flow-opt-body">
+            Renvoi au tribunal. <em>Attention : risque de sanction plus lourde (7 500 € / 6 mois). À faire uniquement avec une défense solide ou un vice de procédure.</em>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rp-faille">
+      <span class="rp-faille-label">Faille</span>
+      <p class="rp-faille-text">
+        L'AFD est <strong>invalide</strong> si plusieurs infractions sont constatées simultanément. Exemple : "participation" + "consommation de stupéfiants" = procédure AFD illégale, ce qui ouvre une procédure judiciaire classique.
+      </p>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════
+     03 — 4 RÉFLEXES TERRAIN
+═══════════════════════════════════════════════════ -->
+<div class="not-prose rp-section">
+  <div class="rp-section-num">03 / Quatre réflexes sur le terrain</div>
+  <div class="rp-section-title">Ce que tu fais face aux agents</div>
+
+  <div class="rp-cards">
+
+    <div class="rp-card">
+      <div class="rp-card-num">01</div>
+      <div class="rp-card-title">Refuser de payer sur place</div>
+      <div class="rp-card-item"><span class="rp-card-item-arrow">▸</span>Dire : "Je ne reconnais pas les faits"</div>
+      <div class="rp-card-item"><span class="rp-card-item-arrow">▸</span>Ne pas signer l'AFD sur le terrain</div>
+      <div class="rp-card-item"><span class="rp-card-item-arrow">▸</span>Demander l'avis écrit à recevoir à domicile</div>
+      <div class="rp-card-item"><span class="rp-card-item-arrow">▸</span>Garder une copie de tous les papiers</div>
+      <div class="rp-card-note">→ 45 jours pour décider</div>
+    </div>
+
+    <div class="rp-card">
+      <div class="rp-card-num">02</div>
+      <div class="rp-card-title">Ne pas signer le PV</div>
+      <div class="rp-card-item"><span class="rp-card-item-arrow">▸</span>Le refus de signature n'est pas une infraction</div>
+      <div class="rp-card-item"><span class="rp-card-item-arrow">▸</span>L'agent note "refus de signature"</div>
+      <div class="rp-card-item"><span class="rp-card-item-arrow">▸</span>Cela crée un doute sur la validité du PV</div>
+      <div class="rp-card-item"><span class="rp-card-item-arrow">▸</span>Exercer ton droit au silence</div>
+      <div class="rp-card-note">→ Aucune infraction additionnelle</div>
+    </div>
+
+    <div class="rp-card">
+      <div class="rp-card-num">03</div>
+      <div class="rp-card-title">Documenter l'intervention</div>
+      <div class="rp-card-item"><span class="rp-card-item-arrow">▸</span>Numéros de matricule des agents</div>
+      <div class="rp-card-item"><span class="rp-card-item-arrow">▸</span>Heure, lieu, nombre de fonctionnaires présents</div>
+      <div class="rp-card-item"><span class="rp-card-item-arrow">▸</span>Photos de l'avis d'AFD reçu</div>
+      <div class="rp-card-item"><span class="rp-card-item-arrow">▸</span>Témoignages de tiers présents</div>
+      <div class="rp-card-note">→ Matériau pour la contestation</div>
+    </div>
+
+    <div class="rp-card">
+      <div class="rp-card-num">04</div>
+      <div class="rp-card-title">Résistance collective</div>
+      <div class="rp-card-item"><span class="rp-card-item-arrow">▸</span>Coordonner les refus de paiement via Signal</div>
+      <div class="rp-card-item"><span class="rp-card-item-arrow">▸</span>Centraliser les avis AFD reçus</div>
+      <div class="rp-card-item"><span class="rp-card-item-arrow">▸</span>Contacter le FSJS dès réception</div>
+      <div class="rp-card-item"><span class="rp-card-item-arrow">▸</span>Déclarer publiquement le refus collectif</div>
+      <div class="rp-card-note">→ L'État ne peut pas poursuivre en masse</div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════
+     04 — MOBILISATION COLLECTIVE
+═══════════════════════════════════════════════════ -->
+<div class="not-prose rp-section">
+  <div class="rp-section-num">04 / Agir ensemble</div>
+  <div class="rp-section-title">Mobilisation collective</div>
+
+  <div class="rp-actions">
+    <div class="rp-action">
+      <div class="rp-action-num">01</div>
+      <div class="rp-action-body">
+        <div class="rp-action-title">Refus collectif de paiement</div>
+        <div class="rp-action-desc">
+          Si 1 000 participants refusent de payer, l'administration est paralysée. Coordonner le réseau de soutien, partager les stratégies sur un canal sécurisé (Signal), centraliser les numéros de matricule des agents. <strong>L'État ne peut pas poursuivre des milliers de dossiers simultanément.</strong>
+        </div>
+      </div>
+    </div>
+
+    <div class="rp-action">
+      <div class="rp-action-num">02</div>
+      <div class="rp-action-body">
+        <div class="rp-action-title">Déclaration publique de non-reconnaissance</div>
+        <div class="rp-action-desc">
+          Un collectif publie une déclaration commune : "Nous refusons les AFD émises. Nous exigeons un procès public." Cela crée une responsabilité politique : l'État doit choisir entre poursuivre 500 personnes publiquement ou abandonner les dossiers.
+        </div>
+      </div>
+    </div>
+
+    <div class="rp-action">
+      <div class="rp-action-num">03</div>
+      <div class="rp-action-body">
+        <div class="rp-action-title">Support juridique coordonné</div>
+        <div class="rp-action-desc">
+          Identifier un avocat référent spécialisé AFD + RIPOST. Constituer un fonds collectif pour couvrir les frais. Documenter les stratégies qui fonctionnent dans une base partagée.
+        </div>
+      </div>
+    </div>
+
+    <div class="rp-action">
+      <div class="rp-action-num">04</div>
+      <div class="rp-action-body">
+        <div class="rp-action-title">Saisines d'organes indépendants</div>
+        <div class="rp-action-desc">
+          La <strong>Défenseure des droits</strong> a déjà critiqué les AFD en 2023 — une saisine de masse aurait du poids. La <strong>CNIL</strong> si des données personnelles ont été mal traitées. La pétition à l'<strong>Assemblée nationale</strong> contre RIPOST reste active.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════
+     05 — RESSOURCES ET CONTACTS
+═══════════════════════════════════════════════════ -->
+<div class="not-prose rp-section">
+  <div class="rp-section-num">05 / Ressources et contacts</div>
+  <div class="rp-section-title">Qui contacter, quoi lire</div>
+
+  <div class="rp-resources">
+
+    <div class="rp-res-col">
+      <div class="rp-res-label">Soutien juridique</div>
+      <div class="rp-res-item">
+        <a href="https://drive.google.com/file/d/1LQp8x98UdDRAgh6cpCDCNhb2Py1EaKpl/" target="_blank" rel="noopener" class="rp-res-link">FSJS ↗</a>
+        <div class="rp-res-desc">Fonds de Soutien Juridique des Sons — guide de contestation des AFD</div>
+        <div class="rp-res-contact">contact@fsjs.fr</div>
+      </div>
+      <div class="rp-res-item">
+        <a href="https://www.defenseurdesdroits.fr/" target="_blank" rel="noopener" class="rp-res-link">Défenseure des droits ↗</a>
+        <div class="rp-res-desc">Saisine gratuite. A recommandé l'abolition de l'AFD en 2023.</div>
+      </div>
+      <div class="rp-res-item">
+        <a href="https://www.ldh-france.org/" target="_blank" rel="noopener" class="rp-res-link">LDH ↗</a>
+        <div class="rp-res-desc">Ligue des Droits de l'Homme — permanences juridiques locales</div>
+      </div>
+    </div>
+
+    <div class="rp-res-col">
+      <div class="rp-res-label">Mobilisation</div>
+      <div class="rp-res-item">
+        <a href="https://t.me/teknoantirep" target="_blank" rel="noopener" class="rp-res-link">Tekno Anti Rep ↗</a>
+        <div class="rp-res-desc">Coordination nationale des résistances</div>
+        <div class="rp-res-contact">@teknoantirep</div>
+      </div>
+      <div class="rp-res-item">
+        <a href="https://petitions.assemblee-nationale.fr/initiatives/i-5428" target="_blank" rel="noopener" class="rp-res-link">Pétition AN ↗</a>
+        <div class="rp-res-desc">Pétition officielle à l'Assemblée nationale contre RIPOST</div>
+      </div>
+      <div class="rp-res-item">
+        <a href="https://technoplus.org" target="_blank" rel="noopener" class="rp-res-link">Techno+ ↗</a>
+        <div class="rp-res-desc">Réduction des risques et plaidoyer pour le mouvement</div>
+      </div>
+    </div>
+
+    <div class="rp-res-col">
+      <div class="rp-res-label">Documentation</div>
+      <div class="rp-res-item">
+        <a href="https://juridique.defenseurdesdroits.fr/doc_num.php?explnum_id=21662" target="_blank" rel="noopener" class="rp-res-link">Décision Défenseure 2023 ↗</a>
+        <div class="rp-res-desc">Critique officielle de l'AFD — recommande son abolition</div>
+      </div>
+      <div class="rp-res-item">
+        <a href="https://mars-infos.org/resister-collectivement-a-l-amende-8622" target="_blank" rel="noopener" class="rp-res-link">Mars Infos : résister à l'AFD ↗</a>
+        <div class="rp-res-desc">Stratégies documentées, cas concrets de contestation réussie</div>
+      </div>
+      <div class="rp-res-item">
+        <a href="https://www.cncdh.fr/actualite/generalisation-de-lamende-forfaitaire-delictuelle-un-recul-des-droits-pour-les" target="_blank" rel="noopener" class="rp-res-link">CNCDH : généralisation AFD ↗</a>
+        <div class="rp-res-desc">Recul des droits — position officielle de la Commission nationale</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════
+     06 — MATRICE DE DÉCISION
+═══════════════════════════════════════════════════ -->
+<div class="not-prose rp-section">
+  <div class="rp-section-num">06 / Récapitulatif</div>
+  <div class="rp-section-title">Matrice décision</div>
+
+  <div class="rp-matrix">
+    <table>
+      <thead>
+        <tr>
+          <th>Action</th>
+          <th>Effet immédiat</th>
+          <th>Risque</th>
+          <th>Impact collectif</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <div class="col-action"><span class="m-ok">✓</span> Refuser de payer sur place</div>
+          </td>
+          <td>45 jours pour décider</td>
+          <td>Majoration possible si délai dépassé</td>
+          <td>Paralyse l'administration si masse</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="col-action"><span class="m-ok">✓</span> Refuser de signer le PV</div>
+          </td>
+          <td>Doute sur la validité du PV</td>
+          <td>Aucun risque additionnel</td>
+          <td>Crée une friction opérationnelle</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="col-action"><span class="m-mid">△</span> Contester auprès du Procureur</div>
+          </td>
+          <td>Renvoi au tribunal correctionnel</td>
+          <td>Sanction plus lourde possible</td>
+          <td>Coût politique si contestation en masse</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="col-action"><span class="m-bad">✗</span> Payer sur place</div>
+          </td>
+          <td>Procédure close immédiatement</td>
+          <td>Casier 3 ans, culpabilité admise</td>
+          <td>Valide le système répressif</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+<!-- Footer -->
+<div class="not-prose rp-footer">
+  <div class="rp-footer-credits">
+    Sources : Défenseure des droits (2023) · FSJS · jurisprudence AFD · CC BY-SA 4.0
+  </div>
+  <div class="rp-footer-links">
+    <a href="/wiki/Contestation" class="rp-footer-link">▸ Contester une amende</a>
+    <a href="/wiki" class="rp-footer-link">← Wiki</a>
+  </div>
+</div>
+
+</Layout>

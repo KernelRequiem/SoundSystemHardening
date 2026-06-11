@@ -2,7 +2,7 @@
 
 ## Concept : "Operational Terminal"
 
-L'identité visuelle est pensée autour d'un terminal opérationnel — un outil de travail, pas une vitrine. L'esthétique hacker/cypherpunk est assumée : fond très sombre, accents néon vert, typographie monospace, grille subtile en fond. Mais c'est au service d'une lisibilité maximale, pas d'un effet purement décoratif.
+L'identité visuelle est pensée autour d'un terminal opérationnel : un outil de travail, pas une vitrine. L'esthétique hacker/cypherpunk est assumée : fond très sombre, accents néon vert, typographie monospace, grille subtile en fond. Mais c'est au service d'une lisibilité maximale, pas d'un effet purement décoratif.
 
 **Règles absolues définies dans le code source :**
 - Pas de `neon-cyan` dans l'interface (réservé aux liens si besoin)
@@ -176,4 +176,4 @@ Le thème clair est défini via l'attribut `data-theme="light"` sur `<html>`. En
 }
 ```
 
-Toutes les couleurs qui utilisent les variables CSS custom (`var(--color-bg)`) s'adaptent automatiquement. Les classes Tailwind hardcodées (`bg-dedsec-black`) ne s'adaptent pas — c'est un compromis de l'implémentation actuelle.
+Toutes les couleurs qui utilisent les variables CSS custom (`var(--color-bg)`) s'adaptent automatiquement. Les classes Tailwind hardcodées (`bg-dedsec-black`) ne s'adaptent pas : c'est un compromis de l'implémentation actuelle.

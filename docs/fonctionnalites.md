@@ -1,93 +1,48 @@
 # Fonctionnalités
 
-## 1. Wiki : rendu de Markdown en pages HTML
+Je décris ici chaque fonctionnalité du site : ce qu'elle fait, et comment elle fonctionne techniquement. L'objectif est qu'un contributeur comprenne le mécanisme sous le capot.
 
-**Fichiers concernés :** `src/pages/wiki/[slug].astro`, `src/content/wiki/*.md`
+## 1. Wiki : du Markdown vers des pages HTML
 
-### Ce que ça fait
+**Fichiers :** `src/pages/wiki/[slug].astro`, `src/content/wiki/*.md`
 
-Chaque fichier `.md` du dossier wiki devient une page web accessible via `/wiki/nom-du-fichier`. Un visiteur qui accède à `/wiki/Contacts-Allies` reçoit une page HTML complète, avec mise en forme, table des matières et navigation.
+Chaque fichier Markdown du wiki devient une page web. Un visiteur qui ouvre `/wiki/Contacts-Allies` reçoit une page HTML complète, mise en forme, avec table des matières et navigation.
 
-### Comment ça fonctionne techniquement
+Le fichier `[slug].astro` contient une fonction qui s'exécute à la construction : elle liste les fichiers Markdown et déclare une page à générer pour chacun. C'est le principe de la génération de site statique. Le Markdown est converti en HTML par la bibliothèque `marked`, puis injecté dans le layout commun.
 
-Le fichier `[slug].astro` contient une fonction `getStaticPaths()` qui s'exécute au moment du build. Elle lit la liste des fichiers `.md`, et pour chacun, déclare une route à générer. C'est ce qu'Astro appelle le **Static Site Generation** (SSG).
-
-Le Markdown est ensuite converti en HTML par un parser maison. Ce parser utilise des **expressions régulières** (des patterns de recherche/remplacement) pour transformer la syntaxe Markdown en balises HTML :
-
-```
-# Titre  →  <h1>Titre</h1>
-**gras**  →  <strong>gras</strong>
-[lien](url)  →  <a href="url">lien</a>
-```
-
-Les blocs de code (délimités par ```) sont préservés avant le remplacement pour éviter que leur contenu soit altéré, puis réinsérés après.
-
-### Pourquoi pas le Content Collections d'Astro ?
-
-Astro propose un système natif appelé "Content Collections" pour gérer du contenu Markdown. Il n'est pas utilisé ici car le projet a besoin de plus de contrôle sur le rendu HTML (styles spécifiques, comportement des liens, etc.).
+L'intérêt : aucune dépendance à un système de gestion de contenu. Les fichiers Markdown sont la source de vérité, éditables directement sur GitHub par n'importe qui, sans toucher au code.
 
 ---
 
 ## 2. Recherche fulltext sans serveur
 
-**Fichiers concernés :** `src/pages/search.astro`, `src/pages/search-index.json.ts`
+**Fichiers :** `src/pages/search.astro`, `src/pages/search-index.json.ts`
 
-### Ce que ça fait
+Un champ de recherche permet de trouver n'importe quelle information dans les pages du wiki, avec tolérance aux fautes de frappe.
 
-Un champ de recherche sur `/search` permet de trouver n'importe quelle information dans les ~60 pages wiki en temps réel, avec tolérance aux fautes de frappe. Taper "gav" trouve les pages qui parlent de garde à vue. Taper "ripost" trouve la stratégie contre RIPOST 2026.
+À la construction, je génère un fichier `/search-index.json` qui contient, pour chaque page, son titre, ses sous-titres et un extrait de contenu. Quand un visiteur ouvre la recherche, le navigateur télécharge cet index une fois, et la bibliothèque Fuse.js effectue toutes les recherches localement, en mémoire.
 
-### Comment ça fonctionne techniquement
-
-**Étape 1 — Build :** Le fichier `search-index.json.ts` s'exécute au moment du build. Il lit chaque fichier `.md`, en extrait le titre (premier `# H1`), les sous-titres (`## H2` et `### H3`), et un extrait du contenu en texte brut (500 caractères, balises Markdown supprimées). Il génère un fichier JSON statique à `/search-index.json`.
-
-```json
-[
-  {
-    "slug": "Contacts-Allies",
-    "title": "Contacts Alliés",
-    "content": "Les structures, collectifs...",
-    "headings": ["Urgence juridique", "FSJS", "..."],
-    "url": "/wiki/Contacts-Allies"
-  },
-  ...
-]
-```
-
-**Étape 2 — Navigateur :** Quand un visiteur ouvre `/search`, la page télécharge ce fichier JSON. Fuse.js charge l'index en mémoire. Chaque frappe au clavier déclenche une recherche Fuse sur les champs `title` (poids 50%), `headings` (30%), `content` (20%). L'algorithme calcule un score de similarité pour chaque page et affiche les résultats triés par pertinence.
-
-**L'avantage :** zéro serveur, zéro base de données, zéro API. La recherche fonctionne même hors ligne (si la page a déjà été chargée), et aucune requête de recherche n'est enregistrée nulle part.
+L'avantage est double : la recherche fonctionne même hors ligne une fois la page chargée, et aucune requête de recherche n'est jamais envoyée à un serveur ni enregistrée. Ce que cherche un visiteur ne quitte jamais son navigateur.
 
 ---
 
 ## 3. Carte interactive des incidents
 
-**Fichiers concernés :** `src/pages/map.astro`, `src/data/incidents.json`
+**Fichiers :** `src/pages/map.astro`, `src/data/incidents.json`
 
-### Ce que ça fait
+Une carte de France affiche les incidents répressifs documentés. Chaque marqueur est cliquable, et la carte est filtrable par type et par département.
 
-Une carte de France interactive affiche les incidents répressifs documentés (saisies, GAV, charges, blessures, interdictions préfectorales). Chaque marqueur est cliquable et affiche les détails de l'incident. La carte est filtrable par type d'incident et par département.
-
-### Comment ça fonctionne techniquement
-
-Leaflet est chargé via CDN uniquement sur la page `/map` (pas sur tout le site, pour ne pas alourdir les autres pages). Les tuiles de fond de carte viennent d'OpenStreetMap (open source, sans clé API, sans tracking Google).
-
-Les données viennent de `incidents.json`. Au chargement de la page, JavaScript parcourt ce fichier et crée un marqueur Leaflet pour chaque incident, en colorant selon le type. La sidebar latérale est générée dynamiquement depuis les mêmes données.
-
-Le fichier `incidents.json` est la seule "base de données" du projet. L'ajouter un incident = ajouter un objet JSON dans ce fichier, pusher sur GitHub, et le site se met à jour automatiquement au prochain déploiement.
+Leaflet est chargé uniquement sur la page carte, pas sur tout le site, pour ne pas alourdir le reste. Les tuiles de fond viennent d'OpenStreetMap, sans clé API ni tracking publicitaire. Les marqueurs sont créés dynamiquement à partir d'`incidents.json`. Ajouter un incident revient à ajouter un objet dans ce fichier et à pusher sur GitHub : le site se met à jour au déploiement suivant.
 
 ---
 
 ## 4. Arbre de décision interactif
 
-**Fichiers concernés :** `src/pages/decision.astro`, `src/data/decision.ts`
+**Fichiers :** `src/pages/decision.astro`, `src/data/decision.ts`
 
-### Ce que ça fait
+Une interface guidée pose des questions (avant, pendant, après un contrôle) et mène l'utilisateur vers des conseils adaptés à sa situation exacte : contrôle d'identité, fouille, interpellation, garde à vue.
 
-Une interface guidée pose des questions à l'utilisateur (Avant / Pendant / Après un contrôle) et le mène vers des conseils adaptés à sa situation exacte : contrôle d'identité, fouille, interpellation, garde à vue. Chaque nœud terminal affiche les droits applicables, les actions recommandées, les pièges à éviter, et des liens vers les ressources pertinentes.
-
-### Comment ça fonctionne techniquement
-
-L'arbre de décision est un **graphe orienté** : chaque nœud a un identifiant unique (`id`), un texte, et une liste de choix possibles, chaque choix pointant vers l'identifiant du nœud suivant.
+L'arbre est un graphe orienté : chaque nœud a un identifiant, un texte, et des choix qui pointent vers le nœud suivant.
 
 ```typescript
 {
@@ -100,78 +55,83 @@ L'arbre de décision est un **graphe orienté** : chaque nœud a un identifiant 
 }
 ```
 
-Le moteur de rendu JavaScript charge le nœud initial, affiche ses choix sous forme de boutons, et remplace le contenu avec le nœud suivant à chaque clic. Il n'y a pas de rechargement de page. L'état actuel (quel nœud est affiché) est géré en mémoire JavaScript.
-
-Les types TypeScript (`NodeType`, `Phase`, `Severity`, `Resource`) garantissent que chaque nœud de données respecte la structure attendue. Si un contributeur ajoute un nœud mal formé, TypeScript signale l'erreur au moment du build plutôt qu'en production.
+Le moteur JavaScript affiche le nœud courant et remplace le contenu à chaque clic, sans rechargement de page. Les types TypeScript garantissent qu'un nœud mal formé ajouté par un contributeur déclenche une erreur dès la construction.
 
 ---
 
 ## 5. RIG-LOCK : générateur de manifeste de saisie
 
-**Fichier concerné :** `src/pages/rig-lock.astro`
+**Fichier :** `src/pages/rig-lock.astro`
 
-### Ce que ça fait
+RIG-LOCK génère un PDF horodaté de manifeste de saisie (matériel confisqué, identité des agents, circonstances, valeur estimée), destiné à servir de pièce dans un recours.
 
-RIG-LOCK est un outil de terrain qui génère un PDF de manifeste de saisie horodaté : liste du matériel confisqué, identité des agents, circonstances, estimation de valeur. Ce document sert de pièce dans un recours juridique.
-
-### Comment ça fonctionne techniquement
-
-Tout se passe dans le navigateur, côté client. Aucune donnée n'est envoyée à un serveur. Le formulaire collecte les informations, JavaScript les assemble dans une structure documentaire, et une bibliothèque de génération PDF (chargée en local) produit le fichier téléchargeable.
-
-L'horodatage utilise `new Date()` du navigateur, en heure locale. Le PDF est généré en mémoire (objet `Blob`), puis proposé au téléchargement via un lien temporaire (`URL.createObjectURL`).
-
-**Implication sécurité :** comme tout le traitement est local, aucune requête réseau n'est effectuée lors de la génération. Un outil de surveillance réseau ne peut pas intercepter le contenu du manifeste.
+Tout se passe dans le navigateur, côté client. Le formulaire collecte les informations, et une bibliothèque de génération PDF produit le fichier en mémoire, proposé ensuite au téléchargement. Aucune donnée n'est envoyée à un serveur. Un outil de surveillance réseau ne peut donc pas intercepter le contenu du manifeste, puisqu'il n'y a aucune requête lors de la génération.
 
 ---
 
-## 6. Page urgence avec accordéons
+## 6. InfoCrypt : chiffrement de messages côté client
 
-**Fichier concerné :** `src/pages/urgence.astro`
+**Fichier :** `src/pages/infocrypt.astro`
 
-### Ce que ça fait
+InfoCrypt chiffre et déchiffre un message à partir d'un mot de passe partagé. C'est l'outil le plus solide du site sur le plan cryptographique, et il sert de référence pour ce qu'une implémentation correcte doit être.
 
-La page `/urgence` propose 5 scénarios terrain (contrôle routier, fouille, saisie, garde à vue, besoin d'avocat). Cliquer sur un scénario l'ouvre en accordéon et affiche immédiatement les réflexes applicables, les phrases exactes à prononcer, et les contacts d'urgence cliquables. Zéro navigation vers une autre page.
+Il utilise la Web Crypto API native du navigateur : chiffrement AES-GCM 256 bits, dérivation de clé PBKDF2 sur SHA-256 avec 250 000 itérations, sel et vecteur d'initialisation régénérés aléatoirement à chaque chiffrement. Aucune bibliothèque tierce, aucun envoi réseau, aucun stockage du mot de passe. Le mot de passe ne quitte jamais le navigateur.
 
-### Comment ça fonctionne techniquement
-
-L'UX est pilotée par une classe CSS `.is-open` toggleée par JavaScript. Quand un utilisateur clique sur une card :
-
-1. La classe `.is-open` est retirée de toutes les autres cards (accordéon exclusif)
-2. La classe `.is-open` est ajoutée à la card cliquée
-3. En CSS, `.scenario-card.is-open .card-panel { display: block; }` révèle le contenu
-4. Un `scrollIntoView()` fait défiler doucement vers la card ouverte si elle est hors écran
-
-Le contenu de chaque card (réflexes, contacts) est directement embarqué dans le HTML de la page. Il n'y a aucun appel réseau lors de l'ouverture d'une card.
-
-Les contacts sensibles (numéros de téléphone, emails) utilisent des liens natifs `tel://` et `mailto://` : sur mobile, cliquer sur un numéro ouvre directement le téléphone.
+Le guide intégré est honnête sur les limites : l'outil chiffre le contenu mais ne cache pas les métadonnées (le fait que vous communiquez), et la sécurité dépend entièrement de la force du mot de passe et du canal par lequel vous le partagez.
 
 ---
 
-## 7. Sidebar avec accordéons de navigation
+## 7. StripMeta : nettoyage des métadonnées d'images
 
-**Fichier concerné :** `src/layouts/Layout.astro`
+**Fichier :** `src/pages/stripmeta.astro`
 
-### Ce que ça fait
+Une photo prise au téléphone contient souvent des métadonnées invisibles (données EXIF) : coordonnées GPS du lieu, modèle d'appareil, date et heure précises. Publier une telle photo peut révéler où et quand elle a été prise. StripMeta retire ces données.
 
-La sidebar contient ~10 sections de navigation (Droits & Libertés, Contre RIPOST, Stratégie, etc.). Chaque section est un accordéon : cliquer sur le titre de section déroule la liste des pages, cliquer à nouveau la referme. La section contenant la page actuellement visitée s'ouvre automatiquement.
-
-### Comment ça fonctionne techniquement
-
-Astro transmet le `currentPath` (l'URL actuelle) à chaque lien de la sidebar. Un lien dont `href === currentPath` reçoit la classe `active`. Au chargement de la page, JavaScript vérifie si un lien `active` est présent dans chaque section. Si oui, la section est ouverte par défaut.
-
-Les accordéons sont gérés avec les classes CSS `open` / sans `open`, et un `max-height` en CSS pour l'animation de fermeture/ouverture.
+Le traitement est entièrement local, dans le navigateur. L'image est chargée, ré-encodée sans ses métadonnées, et proposée au téléchargement. L'image originale ne quitte jamais l'appareil. C'est un outil OpSec direct : il neutralise un vecteur de déanonymisation très courant.
 
 ---
 
-## 8. Barre de progression de lecture
+## 8. TimeSeal : horodatage de document
 
-**Fichier concerné :** `src/layouts/Layout.astro` (script inline)
+**Fichier :** `src/pages/timeseal.astro`
 
-### Ce que ça fait
+TimeSeal produit une preuve d'existence d'un document à une date donnée, utile pour dater une pièce avant un recours. Le traitement se fait côté client, sans envoi du document à un serveur.
 
-Une ligne verte en haut de page avance proportionnellement à la progression du scroll, indiquant où on en est dans la lecture d'une page.
+---
 
-### Comment ça fonctionne techniquement
+## 9. Page urgence avec accordéons
+
+**Fichier :** `src/pages/urgence.astro`
+
+La page urgence propose des scénarios de terrain (contrôle routier, fouille, saisie, garde à vue, besoin d'avocat). Cliquer sur un scénario l'ouvre et affiche immédiatement les réflexes, les phrases exactes à dire, et les contacts cliquables, sans navigation vers une autre page.
+
+L'interface est un accordéon exclusif piloté par une classe CSS basculée en JavaScript : ouvrir une carte ferme les autres. Tout le contenu est embarqué dans le HTML, donc aucun appel réseau à l'ouverture. Les numéros utilisent des liens natifs `tel:` et `mailto:` : sur mobile, un clic lance l'appel directement. Cette page fait partie des ressources mises en cache hors ligne (voir PWA).
+
+---
+
+## 10. PWA et fonctionnement hors ligne
+
+**Fichiers :** `public/manifest.json`, `public/sw.js`
+
+Le site peut être installé sur un téléphone comme une application, avec une icône sur l'écran d'accueil et un affichage plein écran sans barre d'adresse.
+
+Surtout, un service worker (`sw.js`) met en cache les ressources critiques dès la première visite : l'accueil, les pages d'urgence et de sécurité numérique, la stratégie, le modus operandi. Une fois ces pages chargées une fois, elles restent disponibles même sans connexion. C'est une décision opérationnelle : en rave, en zone blanche ou après une coupure réseau, les informations vitales restent accessibles.
+
+---
+
+## 11. Sidebar avec accordéons de navigation
+
+**Fichier :** `src/layouts/Layout.astro`
+
+La sidebar contient les sections de navigation, chacune sous forme d'accordéon. La section contenant la page visitée s'ouvre automatiquement : à la construction, Astro marque le lien correspondant à l'URL courante comme actif, et au chargement, le JavaScript ouvre la section qui contient ce lien actif.
+
+---
+
+## 12. Barre de progression de lecture
+
+**Fichier :** `src/layouts/Layout.astro`
+
+Une ligne en haut de page avance avec le scroll pour indiquer la progression de lecture.
 
 ```javascript
 const update = () => {
@@ -182,55 +142,24 @@ const update = () => {
 window.addEventListener('scroll', update, { passive: true });
 ```
 
-L'event listener `scroll` est déclaré avec `{ passive: true }`, ce qui signifie qu'il ne bloquera jamais le rendu de la page (il ne peut pas appeler `preventDefault()`). C'est une optimisation de performance standard.
+L'écouteur est déclaré en `{ passive: true }` : il ne peut jamais bloquer le rendu, ce qui est une bonne pratique de performance.
 
 ---
 
-## 9. Thème clair / sombre
+## 13. Formulaires serveur : contact et signalement
 
-**Fichier concerné :** `src/layouts/Layout.astro`
+**Fichiers :** `src/pages/api/contact.ts`, `src/pages/api/signalement.ts`
 
-### Ce que ça fait
+Ce sont les seules parties du site qui s'exécutent côté serveur, parce qu'elles ont besoin d'agir au-delà du navigateur.
 
-Un bouton dans la topbar permet de basculer entre le thème sombre (par défaut) et un thème clair. Le choix est mémorisé entre les sessions.
+Le formulaire de contact envoie un email via un serveur SMTP, avec des identifiants stockés uniquement côté serveur. Il intègre un piège anti-robot : un champ caché invisible pour un humain mais souvent rempli par les bots. Si ce champ est rempli, la requête est ignorée silencieusement.
 
-### Comment ça fonctionne techniquement
-
-Le thème est stocké dans `localStorage` sous la clé `theme`. À chaque chargement de page, le script lit cette valeur et applique l'attribut `data-theme="dark"` ou `data-theme="light"` sur la balise `<html>`. En CSS, les variables de couleur changent selon cet attribut.
+Le formulaire de signalement enregistre un incident dans Airtable avec le statut « En attente », jusqu'à validation manuelle avant publication sur la carte. Le jeton utilisé est limité à l'écriture seule.
 
 ---
 
-## 10. PWA (Progressive Web App)
+## 14. SEO et prévisualisations sociales
 
-**Fichiers concernés :** `public/manifest.json`, balises `<meta>` dans le layout
+**Fichier :** `src/layouts/Layout.astro`
 
-### Ce que ça fait
-
-Le site peut être "installé" sur un téléphone Android ou iOS comme une application native. Il apparaît sur l'écran d'accueil avec une icône et s'ouvre sans la barre d'adresse du navigateur.
-
-### Comment ça fonctionne techniquement
-
-Le fichier `manifest.json` déclare le nom, les icônes, la couleur de thème et le mode d'affichage de l'application. Les balises `<meta>` spécifiques Apple (`apple-mobile-web-app-capable`, etc.) activent ce comportement sur iOS. Aucun Service Worker n'est implémenté (pas de fonctionnalité hors ligne complète), mais l'installation est possible.
-
----
-
-## 11. SEO et Open Graph
-
-**Fichier concerné :** `src/layouts/Layout.astro`
-
-### Ce que ça fait
-
-Chaque page a des métadonnées adaptées pour les moteurs de recherche et les prévisualisations sur réseaux sociaux (quand on partage un lien sur Signal, Telegram, Twitter, etc.).
-
-### Comment ça fonctionne techniquement
-
-Le layout accepte `title`, `description` et `ogImage` comme props. Il génère les balises standard :
-
-```html
-<meta name="description" content="..." />
-<meta property="og:title" content="..." />
-<meta property="og:image" content="..." />
-<link rel="canonical" href="https://soundsystemhardening.fr/..." />
-```
-
-La balise `canonical` indique aux moteurs de recherche l'URL officielle d'une page, évitant les problèmes de contenu dupliqué. Le sitemap généré par `@astrojs/sitemap` liste toutes les URLs pour faciliter l'indexation.
+Chaque page a des métadonnées adaptées aux moteurs de recherche et aux prévisualisations quand on partage un lien (sur Signal, Telegram, etc.). Le layout génère les balises de description, les balises Open Graph (titre, image), et une balise canonique qui désigne l'URL officielle de la page. Le plan de site généré automatiquement liste toutes les URLs pour faciliter l'indexation.

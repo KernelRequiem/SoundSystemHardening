@@ -62,7 +62,7 @@ const sections = [
     key: 'critique',
     label: 'TERRAIN CRITIQUE',
     desc: 'Ressources opérationnelles pour les situations de pression ou d\'urgence directe.',
-    accent: '#ff2020',
+    accent: '#ff4444',
     slugs: [
       'Urgence-immédiate',
       'Repression',
@@ -78,14 +78,14 @@ const sections = [
       'arsenal-legislatif',
       'jurisprudence',
       'recours-juridiques',
-      'Strategie-contre-ripost',
+      'ripost',
     ],
   },
   {
     key: 'operandi',
     label: 'MODUS OPERANDI',
     desc: 'Zones grises, failles légales et opérationnelles, tactiques de contournement.',
-    accent: '#00d9ff',
+    accent: '#00ff9f',
     slugs: [
       'Modus-Operandi',
       'ZAD-Pourquoi-État-Evite',
@@ -110,7 +110,7 @@ const sections = [
     key: 'opsec',
     label: 'SÉCURITÉ NUMÉRIQUE',
     desc: 'OPSEC, chiffrement, anonymisation réseau, messagerie sécurisée et surveillance mobile.',
-    accent: '#b400ff',
+    accent: '#00ff9f',
     slugs: [
       'Sécurite-Numerique',
       'Sécurité-des-communications',
@@ -141,7 +141,7 @@ const sections = [
     key: 'mobilisation',
     label: 'MOBILISATION',
     desc: 'Contacts alliés, templates de recours, argumentaires et manifeste.',
-    accent: '#ff6b00',
+    accent: '#e8e8f0',
     slugs: [
       'Mobilisation',
       'Templates-Recours',
@@ -154,7 +154,7 @@ const sections = [
     key: 'culture',
     label: 'HISTOIRE & CULTURE',
     desc: 'Mémoire du mouvement, chronologie, patrimoine sonore et incidents répressifs.',
-    accent: '#ff006e',
+    accent: '#e8e8f0',
     slugs: [
       'Histoire-&-Culture',
       "L'esprit-des-teufeurs",
@@ -169,7 +169,7 @@ const sections = [
     key: 'veille',
     label: 'VEILLE',
     desc: 'Anticipation législative, actualités de la répression, sources et changelog.',
-    accent: '#ffe600',
+    accent: '#e8e8f0',
     slugs: [
       "Vue-d'ensemble-veille",
       'Lois-En-Cours',
@@ -195,9 +195,9 @@ const totalPages = allFiles.size;
 
   <!-- En-tête -->
   <div class="mb-10 not-prose">
-    <div class="font-mono text-[10px] tracking-[0.3em] text-neon-green/60 uppercase mb-2">soundsystemhardening.fr / wiki</div>
+    <div class="font-mono text-[11px] tracking-[0.25em] text-neon-green/70 uppercase mb-2">soundsystemhardening.fr / wiki</div>
     <h1 class="font-display font-bold text-2xl text-dedsec-text m-0 leading-tight">Base de connaissances</h1>
-    <p class="font-mono text-xs text-dedsec-muted mt-2 mb-0">
+    <p class="font-mono text-[11px] text-dedsec-muted mt-2 mb-0">
       {totalPages} pages &middot; {sections.length} sections &middot; CC BY-SA 4.0 &middot; MAJ juin 2026
     </p>
   </div>
@@ -209,11 +209,11 @@ const totalPages = allFiles.size;
         href: '/urgence',
         label: 'URGENCE',
         desc: 'Réflexes par situation critique',
-        accent: '#ff2020',
+        accent: '#ff4444',
         icon: '▲',
       },
       {
-        href: '/wiki/Strategie-contre-ripost',
+        href: '/wiki/ripost',
         label: 'CONTRE RIPOST',
         desc: 'Résistance juridique et collective',
         accent: '#00ff9f',
@@ -223,7 +223,7 @@ const totalPages = allFiles.size;
         href: '/wiki/Contestation',
         label: 'CONTESTATION',
         desc: 'Contester une amende étape par étape',
-        accent: '#00d9ff',
+        accent: '#e8e8f0',
         icon: '◈',
       },
     ].map(item => (
@@ -234,10 +234,10 @@ const totalPages = allFiles.size;
       >
         <span class="font-mono text-base mt-px flex-shrink-0" style={`color:${item.accent}`}>{item.icon}</span>
         <div>
-          <div class="font-mono text-[11px] font-bold tracking-widest mb-0.5" style={`color:${item.accent}`}>
+          <div class="font-mono text-[12px] font-bold tracking-widest mb-0.5" style={`color:${item.accent}`}>
             {item.label}
           </div>
-          <div class="font-mono text-[10px] text-dedsec-muted group-hover:text-dedsec-text/70 transition-colors leading-relaxed">
+          <div class="font-mono text-[11px] text-dedsec-muted group-hover:text-dedsec-text/80 transition-colors leading-relaxed">
             {item.desc}
           </div>
         </div>
@@ -259,13 +259,13 @@ const totalPages = allFiles.size;
             style={`height:2.5rem; background:${section.accent}; box-shadow:0 0 8px ${section.accent}60;`}
           />
           <div>
-            <div class="font-mono text-[9px] tracking-[0.35em] mb-1" style={`color:${section.accent}`}>
+            <div class="font-mono text-[10px] tracking-[0.28em] mb-1" style={`color:${section.accent}`}>
               {section.key.toUpperCase()} &middot; {sectionPages.length} pages
             </div>
             <div class="font-display font-bold text-base text-dedsec-text leading-tight tracking-wide">
               {section.label}
             </div>
-            <div class="font-mono text-[10px] text-dedsec-muted mt-0.5 leading-relaxed">
+            <div class="font-mono text-[11px] text-dedsec-muted mt-0.5 leading-relaxed">
               {section.desc}
             </div>
           </div>
@@ -285,7 +285,7 @@ const totalPages = allFiles.size;
                 class="flex-shrink-0 font-mono text-[10px] transition-colors"
                 style={`color:${section.accent}60`}
               >▸</span>
-              <span class="font-mono text-[11px] text-dedsec-text/80 group-hover:text-dedsec-text transition-colors truncate leading-snug">
+              <span class="font-mono text-[12px] text-dedsec-text/85 group-hover:text-dedsec-text transition-colors truncate leading-snug">
                 {page.title}
               </span>
             </a>

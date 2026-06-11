@@ -1,0 +1,437 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+  title="Outils"
+  description="Index de tous les outils interactifs du site : URGENCE, DÉCISION, MAP, TimeSeal, InfoCrypt, StripMeta, RASSO. Chaque outil est 100% client-side, sans compte, sans serveur."
+  category="OUTILS"
+>
+
+  <h1 class="mb-2">⊛ OUTILS</h1>
+  <p class="text-dedsec-muted text-sm mb-2 font-mono leading-relaxed">
+    Outils interactifs · 100% client-side · Sans compte · Sans serveur · Sans trace
+  </p>
+  <p class="text-dedsec-muted/75 text-xs mb-10 font-mono">
+    Tous les outils de ce site s'exécutent dans ton navigateur. Aucune donnée ne transite vers un serveur externe.
+    Chaque outil est conçu pour un usage terrain précis : avant, pendant, ou après une intervention.
+  </p>
+
+  <!-- ═══ GRILLE OUTILS TERRAIN ═══ -->
+  <div class="section-divider"><span class="font-mono text-[11px] tracking-[0.2em] text-neon-green/70 uppercase">Outils terrain · Situation d'urgence</span></div>
+
+  <div class="tools-grid mb-14">
+
+    <!-- URGENCE -->
+    <a href="/urgence" class="tool-card tool-card--critical">
+      <div class="tool-card-head">
+        <span class="tool-icon">▲</span>
+        <div>
+          <div class="tool-name">URGENCE</div>
+          <div class="tool-tag tool-tag--critical">TERRAIN · IMMÉDIAT</div>
+        </div>
+        <span class="tool-arrow">→</span>
+      </div>
+      <p class="tool-desc">
+        Fiches réflexes pour les 5 scénarios critiques : contrôle routier, fouille, saisie de matériel, garde à vue, demande du code PIN. Chaque fiche liste les gestes obligatoires, les phrases exactes à prononcer, et les erreurs à éviter. Conçu pour être consulté en 10 secondes sous pression.
+      </p>
+      <div class="tool-meta">
+        <span>Aucune donnée · Lecture seule</span>
+        <span>5 scénarios</span>
+      </div>
+    </a>
+
+    <!-- DÉCISION -->
+    <a href="/decision" class="tool-card">
+      <div class="tool-card-head">
+        <span class="tool-icon">◩</span>
+        <div>
+          <div class="tool-name">DÉCISION</div>
+          <div class="tool-tag">TERRAIN · INTERACTIF</div>
+        </div>
+        <span class="tool-arrow">→</span>
+      </div>
+      <p class="tool-desc">
+        Arbre de décision interactif structuré en trois phases : Avant (préparer l'opsec), Pendant (réagir face aux forces de l'ordre), Après (recours juridiques). Réponds aux questions, l'outil adapte les conseils à ta situation précise. Complément de URGENCE quand tu as le temps de réfléchir.
+      </p>
+      <div class="tool-meta">
+        <span>Logique client-side · Sans stockage</span>
+        <span>3 phases</span>
+      </div>
+    </a>
+
+    <!-- MAP -->
+    <a href="/map" class="tool-card">
+      <div class="tool-card-head">
+        <span class="tool-icon">⊞</span>
+        <div>
+          <div class="tool-name">MAP</div>
+          <div class="tool-tag">VEILLE · CARTOGRAPHIE</div>
+        </div>
+        <span class="tool-arrow">→</span>
+      </div>
+      <p class="tool-desc">
+        Carte interactive de la répression en France depuis 1996. Index territorial des incidents : charges, blessures, saisies de matériel, gardes à vue, interdictions préfectorales. Données filtrables par type et département. Alimentée par un fichier JSON local + sync Airtable optionnelle.
+      </p>
+      <div class="tool-meta">
+        <span>Leaflet · Données locales + Airtable</span>
+        <span>Index 1996–2026</span>
+      </div>
+    </a>
+
+    <!-- RASSO -->
+    <a href="/hide/rasso" class="tool-card tool-card--beta">
+      <div class="tool-card-head">
+        <span class="tool-icon">⊚</span>
+        <div>
+          <div class="tool-name">RASSO <span class="beta-chip">BÊTA</span></div>
+          <div class="tool-tag">TERRAIN · COMMUNICATION</div>
+        </div>
+        <span class="tool-arrow">→</span>
+      </div>
+      <p class="tool-desc">
+        Architecture de coordination décentralisée en 4 couches dégradables : signal analogique (corne de brume, sifflet), backbone LoRa/Meshtastic, mesh téléphonique Briar, diffusion de masse WiFi/FM. Chaque couche fonctionne seule si les autres tombent. Outil de documentation et de checklist matériel pour organisateurs.
+      </p>
+      <div class="tool-meta">
+        <span>Documentation + checklist budget</span>
+        <span>4 couches RF/mesh</span>
+      </div>
+    </a>
+
+  </div>
+
+  <!-- ═══ GRILLE OUTILS CYBER-OPSEC ═══ -->
+  <div class="section-divider"><span class="font-mono text-[11px] tracking-[0.2em] text-neon-green/70 uppercase">Outils Cyber-OpSec · Protection des données</span></div>
+
+  <div class="tools-grid mb-14">
+
+    <!-- OPSEC TOOLS -->
+    <a href="/opsec-tools" class="tool-card">
+      <div class="tool-card-head">
+        <span class="tool-icon">⊠</span>
+        <div>
+          <div class="tool-name">OPSEC TOOLS</div>
+          <div class="tool-tag">CONCEPTION · INTERACTIF</div>
+        </div>
+        <span class="tool-arrow">→</span>
+      </div>
+      <p class="tool-desc">
+        Deux outils de conception réunis. Le Threat Model Builder construit ta fiche de modèle de menace via un questionnaire guidé (rôle, contexte, adversaire, canaux, actifs) et la relie au wiki OpSec. Le Rig Splitting calcule la répartition optimale de ton sound system sur plusieurs véhicules et points de stockage, et chiffre l'espérance de perte par scénario de saisie.
+      </p>
+      <div class="tool-meta">
+        <span>Logique client-side · Calcul probabiliste</span>
+        <span>2 outils</span>
+      </div>
+    </a>
+
+    <!-- TIMESEAL -->
+    <a href="/timeseal" class="tool-card">
+      <div class="tool-card-head">
+        <span class="tool-icon">⊡</span>
+        <div>
+          <div class="tool-name">TIMESEAL</div>
+          <div class="tool-tag">JURIDIQUE · DOCUMENTATION</div>
+        </div>
+        <span class="tool-arrow">→</span>
+      </div>
+      <p class="tool-desc">
+        Générateur de manifeste de saisie horodaté au format PDF. Documente chaque bien confisqué (marque, modèle, numéro de série), l'identité des agents, les circonstances. Le PDF est généré localement via jsPDF — aucune donnée ne quitte ta machine. Utilisable comme pièce dans un recours ou un dépôt de plainte.
+      </p>
+      <div class="tool-meta">
+        <span>jsPDF · 100% local · Zéro upload</span>
+        <span>Export PDF</span>
+      </div>
+    </a>
+
+    <!-- INFOCRYPT -->
+    <a href="/infocrypt" class="tool-card">
+      <div class="tool-card-head">
+        <span class="tool-icon">⊕</span>
+        <div>
+          <div class="tool-name">INFOCRYPT</div>
+          <div class="tool-tag">CYBER-OPSEC · CHIFFREMENT</div>
+        </div>
+        <span class="tool-arrow">→</span>
+      </div>
+      <p class="tool-desc">
+        Chiffrement de fiches sensibles par mot de passe. Algorithme AES-GCM 256-bit, dérivation PBKDF2 à 250 000 itérations via Web Crypto API. Produit un bloc de texte illisible transmissible sur n'importe quel canal. Le destinataire déchiffre avec le même mot de passe. Zéro serveur, zéro compte, zéro stockage.
+      </p>
+      <div class="tool-meta">
+        <span>AES-GCM 256 · PBKDF2 · Web Crypto API</span>
+        <span>Chiffrement symétrique</span>
+      </div>
+    </a>
+
+    <!-- STRIPMETA -->
+    <a href="/stripmeta" class="tool-card">
+      <div class="tool-card-head">
+        <span class="tool-icon">⊘</span>
+        <div>
+          <div class="tool-name">STRIPMETA</div>
+          <div class="tool-tag">CYBER-OPSEC · MÉTADONNÉES</div>
+        </div>
+        <span class="tool-arrow">→</span>
+      </div>
+      <p class="tool-desc">
+        Épurateur de métadonnées EXIF/XMP/IPTC pour images JPEG, PNG et WebP. Supprime GPS, numéro de série de l'appareil, horodatage, logiciel d'édition, thumbnail embarqué (souvent non édité). Double méthode : parsing binaire chirurgical + re-encodage Canvas. Rapport détaillé par fichier. Batch multi-fichiers avec export ZIP.
+      </p>
+      <div class="tool-meta">
+        <span>Canvas API · Parsing binaire · 100% local</span>
+        <span>JPEG · PNG · WebP</span>
+      </div>
+    </a>
+
+  </div>
+
+  <!-- ═══ TABLEAU COMPARATIF ═══ -->
+  <div class="section-divider"><span class="font-mono text-[11px] tracking-[0.2em] text-neon-green/70 uppercase">Comparatif · Quand utiliser quoi</span></div>
+
+  <div class="overflow-x-auto mb-14">
+    <table class="tools-table">
+      <thead>
+        <tr>
+          <th>Outil</th>
+          <th>Quand</th>
+          <th>Pour qui</th>
+          <th>Connexion requise</th>
+          <th>Données stockées</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="row-critical">
+          <td><a href="/urgence" class="tools-table-link">▲ URGENCE</a></td>
+          <td>Interaction en cours avec les forces de l'ordre</td>
+          <td>Tout le monde</td>
+          <td><span class="no">✕ Non</span></td>
+          <td><span class="no">Aucune</span></td>
+        </tr>
+        <tr>
+          <td><a href="/decision" class="tools-table-link">◩ DÉCISION</a></td>
+          <td>Avant ou juste après une interaction</td>
+          <td>Orgas, participants</td>
+          <td><span class="no">✕ Non</span></td>
+          <td><span class="no">Aucune</span></td>
+        </tr>
+        <tr>
+          <td><a href="/map" class="tools-table-link">⊞ MAP</a></td>
+          <td>Veille, préparation, signalement</td>
+          <td>Orgas, collectifs</td>
+          <td><span class="no">✕ Non</span></td>
+          <td><span class="no">Aucune (lecture)</span></td>
+        </tr>
+        <tr>
+          <td><a href="/timeseal" class="tools-table-link">⊡ TIMESEAL</a></td>
+          <td>Juste après une saisie de matériel</td>
+          <td>Orgas son, techniciens</td>
+          <td><span class="no">✕ Non</span></td>
+          <td><span class="no">Aucune (PDF local)</span></td>
+        </tr>
+        <tr>
+          <td><a href="/infocrypt" class="tools-table-link">⊕ INFOCRYPT</a></td>
+          <td>Avant de transmettre une info sensible</td>
+          <td>Noyau organisateur</td>
+          <td><span class="no">✕ Non</span></td>
+          <td><span class="no">Aucune</span></td>
+        </tr>
+        <tr>
+          <td><a href="/stripmeta" class="tools-table-link">⊘ STRIPMETA</a></td>
+          <td>Avant de partager une photo</td>
+          <td>Tout le monde</td>
+          <td><span class="no">✕ Non</span></td>
+          <td><span class="no">Aucune</span></td>
+        </tr>
+        <tr class="row-beta">
+          <td><a href="/hide/rasso" class="tools-table-link">⊚ RASSO <span class="beta-chip">β</span></a></td>
+          <td>Préparation coordination RF/mesh</td>
+          <td>Noyau technique</td>
+          <td><span class="no">✕ Non</span></td>
+          <td><span class="no">Aucune</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ═══ PRINCIPE COMMUN ═══ -->
+  <div class="info-box mb-6">
+    <strong>Principe commun à tous les outils :</strong> aucun outil de ce site n'envoie de données à un serveur. Tout s'exécute dans le navigateur. Pas de compte, pas de cookie de session, pas de log serveur. Si tu veux vérifier, inspecte le trafic réseau avec les DevTools (onglet Network) pendant l'utilisation — tu ne verras aucune requête sortante liée aux données que tu traites.
+  </div>
+
+  <div class="flex flex-wrap gap-3 mt-8">
+    <a href="/wiki/Sécurite-Numerique" class="btn-neon">↳ Wiki : Sécurité numérique</a>
+    <a href="/wiki/Sécurité-des-communications" class="btn-secondary">↳ Communications sécurisées</a>
+    <a href="/urgence" class="btn-secondary">↳ Fiches réflexes urgence</a>
+  </div>
+
+</Layout>
+
+<style is:global>
+/* ── Grille outils ── */
+.tools-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+@media (min-width: 768px) {
+  .tools-grid { grid-template-columns: 1fr 1fr; }
+}
+
+/* ── Carte outil ── */
+.tool-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 18px 20px;
+  border: 1px solid rgba(42,42,58,0.85);
+  border-left: 3px solid rgba(0,255,159,0.3);
+  background: rgba(8,8,12,0.5);
+  text-decoration: none;
+  transition: border-color 0.18s, background 0.18s;
+}
+.tool-card:hover {
+  border-color: rgba(0,255,159,0.5);
+  border-left-color: rgba(0,255,159,0.8);
+  background: rgba(0,255,159,0.03);
+}
+.tool-card--critical {
+  border-left-color: rgba(255,68,68,0.5);
+}
+.tool-card--critical:hover {
+  border-color: rgba(255,68,68,0.5);
+  border-left-color: rgba(255,68,68,0.9);
+  background: rgba(255,68,68,0.03);
+}
+.tool-card--beta {
+  border-left-color: rgba(255,180,0,0.35);
+}
+.tool-card--beta:hover {
+  border-color: rgba(255,180,0,0.4);
+  border-left-color: rgba(255,180,0,0.7);
+  background: rgba(255,160,0,0.03);
+}
+
+.tool-card-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.tool-icon {
+  font-size: 20px;
+  color: rgba(0,255,159,0.6);
+  flex-shrink: 0;
+  width: 28px;
+  text-align: center;
+  line-height: 1;
+}
+.tool-card--critical .tool-icon { color: rgba(255,68,68,0.7); }
+.tool-card--beta    .tool-icon { color: rgba(255,180,0,0.6); }
+
+.tool-name {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 15px;
+  font-weight: 800;
+  color: #e8e8f0;
+  letter-spacing: 0.04em;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.tool-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(0,255,159,0.5);
+  margin-top: 2px;
+}
+.tool-tag--critical { color: rgba(255,68,68,0.6); }
+
+.tool-arrow {
+  margin-left: auto;
+  font-size: 16px;
+  color: rgba(0,255,159,0.2);
+  flex-shrink: 0;
+  transition: color 0.15s, transform 0.15s;
+}
+.tool-card:hover .tool-arrow { color: rgba(0,255,159,0.7); transform: translateX(4px); }
+.tool-card--critical:hover .tool-arrow { color: rgba(255,68,68,0.7); }
+.tool-card--beta:hover .tool-arrow { color: rgba(255,180,0,0.7); }
+
+.tool-desc {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 12.5px;
+  line-height: 1.65;
+  color: rgba(192,192,210,0.8);
+  margin: 0;
+}
+.tool-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  color: rgba(122,122,138,0.5);
+  border-top: 1px solid rgba(42,42,58,0.5);
+  padding-top: 8px;
+  margin-top: 2px;
+}
+
+/* ── Tableau comparatif ── */
+.tools-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  min-width: 600px;
+}
+.tools-table th {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(122,122,138,0.7);
+  text-align: left;
+  padding: 8px 12px;
+  border-bottom: 1px solid rgba(42,42,58,0.8);
+  white-space: nowrap;
+}
+.tools-table td {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 12px;
+  padding: 9px 12px;
+  border-bottom: 1px solid rgba(42,42,58,0.4);
+  color: rgba(192,192,210,0.75);
+  vertical-align: middle;
+}
+.tools-table tr:last-child td { border-bottom: none; }
+.tools-table tr:hover td { background: rgba(0,255,159,0.02); }
+.row-critical td { border-left: 2px solid rgba(255,68,68,0.4); }
+.row-beta td     { border-left: 2px solid rgba(255,180,0,0.3); }
+.tools-table-link {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  color: rgba(0,255,159,0.8);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.tools-table-link:hover { color: #00ff9f; }
+.tools-table .no  { color: rgba(0,255,159,0.7); }
+
+/* ── Beta chip ── */
+.beta-chip {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 2px 5px;
+  border: 1px solid rgba(255,180,0,0.5);
+  color: rgba(255,180,0,0.85);
+  background: rgba(255,160,0,0.08);
+  vertical-align: middle;
+  line-height: 1;
+}
+</style>

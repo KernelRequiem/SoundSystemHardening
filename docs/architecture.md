@@ -5,88 +5,96 @@
 ```
 sound-system-hardening-new/
 │
-├── docs/                        ← Ce dossier. Non publié.
+├── docs/                        ← Ce dossier. Documentation publique, non publiée sur le site.
+├── private/                     ← Documentation interne sensible. Exclue de git.
 │
 ├── src/                         ← Tout le code source du site
-│   ├── components/              ← Composants réutilisables
-│   │   └── TableOfContents.astro
+│   ├── components/              ← Composants réutilisables (table des matières, etc.)
 │   ├── content/
-│   │   └── wiki/                ← Les ~60 fichiers Markdown du wiki
+│   │   └── wiki/                ← Les fichiers Markdown du wiki
 │   ├── data/
-│   │   ├── incidents.json       ← Base de données des incidents répressifs
+│   │   ├── incidents.json       ← Base des incidents répressifs (alimente la carte)
 │   │   └── decision.ts          ← Arbre de décision (données + types)
 │   ├── layouts/
 │   │   └── Layout.astro         ← Layout universel (sidebar, topbar, footer)
 │   ├── pages/                   ← Une page = un fichier = une URL
-│   │   ├── index.astro          ← / (page d'accueil)
+│   │   ├── index.astro          ← / (accueil)
 │   │   ├── urgence.astro        ← /urgence
-│   │   ├── map.astro            ← /map
-│   │   ├── decision.astro       ← /decision
-│   │   ├── rig-lock.astro       ← /rig-lock
-│   │   ├── search.astro         ← /search
-│   │   ├── search-index.json.ts ← /search-index.json (généré au build)
+│   │   ├── map.astro            ← /map (carte)
+│   │   ├── decision.astro       ← /decision (arbre de décision)
+│   │   ├── opsec-tools.astro    ← /opsec-tools (boîte à outils OpSec)
+│   │   ├── infocrypt.astro      ← /infocrypt (chiffrement de messages)
+│   │   ├── stripmeta.astro      ← /stripmeta (nettoyage de métadonnées)
+│   │   ├── timeseal.astro       ← /timeseal (horodatage)
+│   │   ├── rig-lock.astro       ← /rig-lock (manifeste de saisie)
+│   │   ├── search.astro         ← /search (recherche)
 │   │   ├── securite.astro       ← /securite
-│   │   ├── strategie.astro      ← /strategie
-│   │   ├── terrain.astro        ← /terrain
 │   │   ├── a-propos.astro       ← /a-propos
 │   │   ├── contact.astro        ← /contact
-│   │   ├── contribuer.astro     ← /contribuer
+│   │   ├── api/                 ← Routes serveur (voir plus bas)
+│   │   │   ├── contact.ts        ← reçoit le formulaire de contact, envoie un email
+│   │   │   ├── signalement.ts    ← reçoit un signalement, l'écrit dans Airtable
+│   │   │   └── health.ts         ← vérification d'état (monitoring du conteneur)
 │   │   └── wiki/
-│   │       ├── index.astro      ← /wiki (index du wiki)
+│   │       ├── index.astro      ← /wiki
 │   │       └── [slug].astro     ← /wiki/[n'importe-quelle-page]
 │   └── styles/
-│       └── global.css           ← CSS global (~800 lignes)
+│       └── global.css           ← CSS global + polices auto-hébergées
 │
-├── public/                      ← Fichiers copiés tels quels dans le build
+├── public/                      ← Fichiers copiés tels quels dans la construction
+│   ├── fonts/                   ← Polices auto-hébergées (zéro Google Fonts)
 │   ├── favicon.ico
-│   ├── manifest.json            ← PWA manifest
-│   └── SoundSystemHardeninglogo.png
+│   ├── manifest.json            ← Manifeste PWA
+│   └── sw.js                    ← Service worker (cache hors ligne)
 │
-├── astro.config.mjs             ← Configuration Astro
+├── astro.config.mjs             ← Configuration Astro (mode hybrid, adapter Node)
+├── Dockerfile                   ← Recette de construction du conteneur
 ├── tailwind.config.mjs          ← Configuration Tailwind
 └── package.json                 ← Dépendances npm
 ```
 
 ---
 
+## Statique d'abord, serveur quand il le faut
+
+Le site fonctionne en mode `hybrid`. Concrètement :
+
+- La quasi-totalité des pages (accueil, wiki, urgence, outils de terrain) sont **pré-générées en HTML statique** au moment de la construction. Elles ne sollicitent aucun serveur quand un visiteur les ouvre. C'est rapide et la surface d'attaque est minimale.
+- Trois routes seulement sont **rendues côté serveur** à la demande, parce qu'elles ont besoin de faire quelque chose qu'un fichier statique ne peut pas : envoyer un email, écrire dans une base, répondre à un test de santé. Elles sont déclarées avec `export const prerender = false`.
+
+Cette séparation est volontaire : tout ce qui peut être statique l'est, et le serveur n'est exposé que sur le strict nécessaire.
+
+---
+
 ## Le routing : comment une URL devient une page
 
-Astro utilise un système de routing basé sur les fichiers. Chaque fichier dans `src/pages/` correspond directement à une URL :
+Astro utilise un routing basé sur les fichiers. Chaque fichier dans `src/pages/` correspond à une URL.
 
-| Fichier | URL générée |
-|---|---|
-| `src/pages/index.astro` | `/` |
-| `src/pages/urgence.astro` | `/urgence` |
-| `src/pages/map.astro` | `/map` |
-| `src/pages/wiki/index.astro` | `/wiki` |
-| `src/pages/wiki/[slug].astro` | `/wiki/*` (toutes les pages wiki) |
-| `src/pages/search-index.json.ts` | `/search-index.json` |
+| Fichier | URL générée | Type |
+|---|---|---|
+| `src/pages/index.astro` | `/` | Statique |
+| `src/pages/map.astro` | `/map` | Statique |
+| `src/pages/wiki/[slug].astro` | `/wiki/*` (toutes les pages wiki) | Statique |
+| `src/pages/search-index.json.ts` | `/search-index.json` | Généré à la construction |
+| `src/pages/api/contact.ts` | `/api/contact` | Serveur (à la demande) |
+| `src/pages/api/signalement.ts` | `/api/signalement` | Serveur (à la demande) |
 
-Le fichier `[slug].astro` est un fichier de routing dynamique. Les crochets signifient "paramètre variable". Ce fichier unique génère autant de pages HTML qu'il y a de fichiers `.md` dans `src/content/wiki/`. C'est ce qu'on appelle le **Static Site Generation (SSG)** : au moment du build, Astro génère une page HTML pour chaque fichier Markdown.
+Le fichier `[slug].astro` est une route dynamique : les crochets signifient « paramètre variable ». Ce fichier unique génère autant de pages HTML qu'il y a de fichiers Markdown dans le wiki. C'est le principe de la génération de site statique.
 
 ---
 
 ## Le layout universel
 
-`src/layouts/Layout.astro` est le squelette commun à toutes les pages du site. Il contient :
+`src/layouts/Layout.astro` est le squelette commun à toutes les pages. Il contient les métadonnées (SEO, prévisualisations sociales, manifeste PWA), la barre de progression de lecture, le menu mobile, la sidebar de navigation, la topbar avec les outils rapides, le footer, et les scripts d'interface (menu, thème, accordéons).
 
-- Les balises `<head>` avec les métadonnées SEO, les balises Open Graph (prévisualisations sur réseaux sociaux), le manifest PWA
-- La barre de progression de lecture (la ligne verte en haut qui avance en scrollant)
-- Le bouton hamburger (menu mobile)
-- La sidebar latérale avec navigation accordéon
-- La topbar avec le fil d'Ariane et les onglets d'outils rapides
-- Le footer avec les liens alliés et les informations légales
-- Les scripts JavaScript pour : sidebar mobile, progress bar, thème clair/sombre, accordéons de navigation
-
-Chaque page passe ses propriétés au layout via les props Astro :
+Chaque page passe ses propriétés au layout :
 
 ```astro
 ---
-// Dans une page
 import Layout from '../layouts/Layout.astro';
 ---
 <Layout title="MAP" category="OUTILS">
-  <!-- contenu spécifique à la page -->
+  <!-- contenu de la page -->
 </Layout>
 ```
 
@@ -96,39 +104,29 @@ import Layout from '../layouts/Layout.astro';
 
 ### incidents.json
 
-Fichier JSON structuré contenant chaque incident répressif documenté. Chaque entrée comporte au minimum : date, département, type d'incident, description courte, et coordonnées GPS pour la carte. Ce fichier est la "base de données" de la carte.
-
-```json
-{
-  "date": "2026-05-15",
-  "dept": "26",
-  "type": "saisie",
-  "titre": "Saisie Salles-sous-Bois",
-  "lat": 44.7,
-  "lng": 4.9
-}
-```
-
-Il est importé à la fois dans `index.astro` (pour le compteur de la homepage) et dans `map.astro` (pour alimenter la carte Leaflet).
+La « base de données » de la carte. Chaque entrée décrit un incident répressif : date, département, type, description, coordonnées GPS. Le fichier est lu à la fois par l'accueil (pour le compteur) et par la carte (pour les marqueurs).
 
 ### decision.ts
 
-Fichier TypeScript qui contient toutes les données de l'arbre de décision : les questions, les réponses possibles, les nœuds de résultat avec les actions à entreprendre et les ressources associées. TypeScript (par rapport à JSON) permet de typer précisément la structure des données, ce qui évite les erreurs lors de l'édition.
+Toutes les données de l'arbre de décision : questions, réponses possibles, nœuds de résultat avec actions et ressources. C'est du TypeScript plutôt que du JSON, ce qui permet de typer la structure et d'attraper les erreurs de saisie dès la construction plutôt qu'en production.
 
 ---
 
-## Le système wiki : comment les pages .md deviennent des pages web
+## Le système wiki : du Markdown vers des pages web
 
 1. Un fichier `src/content/wiki/Contacts-Allies.md` existe.
-2. Au build, `src/pages/wiki/[slug].astro` lit tous les fichiers `.md` du dossier wiki.
-3. Pour chaque fichier, il génère une page statique accessible à `/wiki/Contacts-Allies`.
-4. Le contenu Markdown est converti en HTML via un parser maison basé sur `marked` et des expressions régulières.
-5. Le HTML généré est injecté dans le layout via `<slot />`.
+2. À la construction, `src/pages/wiki/[slug].astro` lit tous les fichiers Markdown du wiki.
+3. Pour chaque fichier, il génère une page accessible à `/wiki/Contacts-Allies`.
+4. Le Markdown est converti en HTML via `marked`.
+5. Le HTML est injecté dans le layout via `<slot />`.
 
-Ce pipeline évite toute dépendance à un CMS (système de gestion de contenu). Les fichiers `.md` sont la source de vérité. Ils peuvent être édités directement sur GitHub, via l'interface web GitHub, ou avec n'importe quel éditeur de texte.
+Ce pipeline évite tout CMS. Les fichiers Markdown sont la source de vérité, éditables directement sur GitHub.
 
 ---
 
 ## Ce qui n'est PAS publié
 
-Le dossier `docs/` est à la racine du projet, en dehors de `src/`. Astro ne construit que le contenu de `src/pages/`. Tout ce qui est à la racine du projet (hors `public/`) est ignoré lors du build. Ce dossier est donc visible sur GitHub mais jamais servi sur le site.
+Deux dossiers ne sont jamais servis sur le site :
+
+- `docs/` (cette documentation) est en dehors de `src/`, donc ignoré à la construction. Il reste visible sur GitHub mais n'apparaît pas sur le site.
+- `private/` contient la documentation interne sensible (infra détaillée, schémas, feuille de route). Il est exclu de git, donc ni sur le site, ni sur GitHub.

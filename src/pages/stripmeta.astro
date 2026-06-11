@@ -1,0 +1,1366 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+  title="StripMeta"
+  category="CYBER-OPSEC"
+  categoryHref="/wiki/Sécurite-Numerique"
+  description="Épurateur de métadonnées EXIF/XMP/IPTC 100% client-side. Aucune image ne quitte ton navigateur. JPEG, PNG, WebP."
+>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     EN-TÊTE
+═══════════════════════════════════════════════════════════════ -->
+<div class="sm-header">
+  <div class="sm-badge">⊡ OUTIL CYBER-OPSEC</div>
+  <div class="flex items-start justify-between gap-4 flex-wrap">
+    <h1 class="sm-title">StripMeta</h1>
+    <button id="smGuideBtn" class="sm-guide-open-btn" aria-label="Ouvrir le guide">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true">
+        <circle cx="12" cy="12" r="10"/><path d="M12 16v-4m0-4h.01" stroke-linecap="round"/>
+      </svg>
+      Guide
+    </button>
+  </div>
+  <p class="sm-subtitle">Supprimer EXIF · XMP · IPTC · GPS · ICC profiles · Thumbnails embarqués</p>
+  <div class="sm-local-notice">
+    <span class="sm-notice-icon">⚿</span>
+    <span>Tes images ne quittent <strong>jamais ton navigateur</strong>. Tout le traitement est local. Aucun pixel ne transite vers un serveur.</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     GUIDE MODAL
+═══════════════════════════════════════════════════════════════ -->
+<div id="sm-guide-overlay"
+  class="fixed inset-0 z-50 hidden"
+  style="background:rgba(5,5,10,0.93);backdrop-filter:blur(4px);">
+
+  <div class="absolute inset-y-0 right-0 w-full max-w-xl flex flex-col"
+    style="background:#08080c;border-left:1px solid #2a2a3a;overflow-y:auto;">
+
+    <div class="flex items-center justify-between px-6 py-4 border-b border-dedsec-border sticky top-0 z-10"
+      style="background:#08080c;">
+      <div>
+        <div class="font-mono text-[10px] text-dedsec-muted tracking-widest uppercase mb-0.5">Documentation</div>
+        <div class="font-bold text-neon-green" style="font-family:'Space Grotesk',sans-serif;font-size:18px;">StripMeta — Guide</div>
+      </div>
+      <button id="smGuideClose" aria-label="Fermer"
+        class="text-dedsec-muted hover:text-neon-green transition-colors font-mono text-xl leading-none p-1">×</button>
+    </div>
+
+    <div class="px-6 py-6 space-y-7" style="font-family:'Space Grotesk',sans-serif;">
+
+      <section>
+        <div class="sm-guide-section-title">Qu'est-ce que c'est</div>
+        <p class="text-dedsec-text/90 text-sm leading-relaxed">
+          StripMeta supprime toutes les métadonnées embarquées dans tes images avant que tu les partages. Ces métadonnées peuvent contenir : les coordonnées GPS exactes où la photo a été prise, le modèle de ton téléphone et son numéro de série, la date et l'heure précises, ton logiciel d'édition, et parfois une miniature non éditée de l'image originale.
+        </p>
+      </section>
+
+      <section>
+        <div class="sm-guide-section-title">Ce que contient une photo non nettoyée</div>
+        <div class="space-y-2 mt-2">
+          {[
+            { level: 'critical', label: 'GPS (lat/lon)', detail: 'Localisation exacte à quelques mètres. Révèle l\'adresse, le site, le trajet.' },
+            { level: 'high',     label: 'Device ID',     detail: 'Marque, modèle, numéro de série de l\'appareil. Permet l\'identification croisée.' },
+            { level: 'high',     label: 'Timestamp',     detail: 'Date et heure exactes de la prise de vue. Reconstitue une timeline.' },
+            { level: 'med',      label: 'Thumbnail EXIF',detail: 'Miniature de l\'image AVANT retouche. Si tu as flouté un visage, la miniature peut l\'avoir gardé net.' },
+            { level: 'med',      label: 'Logiciel',      detail: 'Version de Lightroom, Photoshop, OS — fingerprinting de l\'environnement.' },
+            { level: 'low',      label: 'ICC Profile',   detail: 'Profil colorimétrique — fingerprinting de l\'écran/appareil.' },
+            { level: 'low',      label: 'XMP / IPTC',    detail: 'Commentaires, auteur, copyright, légendes ajoutées par un logiciel d\'édition.' },
+          ].map(item => (
+            <div class="flex gap-3 items-start text-sm">
+              <span class={
+                item.level === 'critical' ? 'font-mono text-[9px] border px-1.5 py-0.5 shrink-0 mt-0.5 text-red-400 border-red-400/50 bg-red-400/08' :
+                item.level === 'high'     ? 'font-mono text-[9px] border px-1.5 py-0.5 shrink-0 mt-0.5 text-orange-400 border-orange-400/50 bg-orange-400/08' :
+                item.level === 'med'      ? 'font-mono text-[9px] border px-1.5 py-0.5 shrink-0 mt-0.5 text-yellow-400/80 border-yellow-400/40 bg-yellow-400/05' :
+                                            'font-mono text-[9px] border px-1.5 py-0.5 shrink-0 mt-0.5 text-dedsec-muted border-dedsec-border'
+              }>{item.level.toUpperCase()}</span>
+              <div>
+                <span class="text-dedsec-text/90 font-medium">{item.label}</span>
+                <span class="text-dedsec-muted"> — {item.detail}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section>
+        <div class="sm-guide-section-title">Méthode de nettoyage</div>
+        <p class="text-dedsec-text/90 text-sm leading-relaxed mb-3">
+          StripMeta utilise deux techniques complémentaires pour garantir un nettoyage complet :
+        </p>
+        <div class="space-y-3">
+          <div class="sm-method-block">
+            <div class="sm-method-title">1. Parsing binaire (JPEG/PNG)</div>
+            <p class="text-sm text-dedsec-muted leading-relaxed">Lecture octet par octet du fichier. Identification et suppression chirurgicale des segments de métadonnées (APP1 EXIF, APP1 XMP, APP13 IPTC pour JPEG ; chunks tEXt, iTXt, zTXt, eXIf pour PNG) sans toucher aux données d'image.</p>
+          </div>
+          <div class="sm-method-block">
+            <div class="sm-method-title">2. Re-encodage Canvas (filet de sécurité)</div>
+            <p class="text-sm text-dedsec-muted leading-relaxed">L'image est dessinée dans un canvas HTML5 et re-exportée. Le canvas ne transporte aucune métadonnée. Garantit un résultat propre même si des métadonnées sont encodées de façon non standard.</p>
+          </div>
+        </div>
+        <div class="sm-guide-opsec mt-4">
+          <span class="sm-guide-opsec-icon">⚠</span>
+          <div class="text-sm text-dedsec-muted leading-relaxed">
+            <strong class="text-yellow-400/80">Limite connue :</strong> le re-encodage JPEG introduit une légère perte de qualité (contrôlable via le curseur). Pour les images qui ne peuvent pas tolérer de perte, utilise le mode PNG en sortie.
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="sm-guide-section-title">Formats supportés</div>
+        <div class="grid grid-cols-2 gap-2 mt-2">
+          {[
+            { fmt: 'JPEG', status: 'full', detail: 'Parsing EXIF + re-encodage Canvas' },
+            { fmt: 'PNG',  status: 'full', detail: 'Suppression chunks + re-encodage' },
+            { fmt: 'WebP', status: 'canvas', detail: 'Re-encodage Canvas uniquement' },
+            { fmt: 'HEIC/HEIF', status: 'warn', detail: 'Converti en JPEG en sortie' },
+            { fmt: 'TIFF', status: 'warn', detail: 'Converti en JPEG en sortie' },
+            { fmt: 'GIF',  status: 'no', detail: 'Non supporté' },
+          ].map(f => (
+            <div class="flex items-center gap-2 text-xs font-mono">
+              <span class={
+                f.status === 'full'   ? 'text-neon-green' :
+                f.status === 'canvas' ? 'text-yellow-400/80' :
+                f.status === 'warn'   ? 'text-orange-400' : 'text-dedsec-muted/50'
+              }>{f.status === 'full' ? '●' : f.status === 'canvas' ? '◐' : f.status === 'warn' ? '◌' : '○'}</span>
+              <span class="text-dedsec-text/80 w-16 shrink-0">{f.fmt}</span>
+              <span class="text-dedsec-muted/70">{f.detail}</span>
+            </div>
+          ))}
+        </div>
+      </section>
+
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     ZONE DE DROP
+═══════════════════════════════════════════════════════════════ -->
+<div id="sm-dropzone"
+  class="sm-dropzone"
+  role="button"
+  tabindex="0"
+  aria-label="Zone de dépôt de fichiers">
+  <div class="sm-drop-inner">
+    <div class="sm-drop-icon">⊞</div>
+    <div class="sm-drop-title">Dépose tes images ici</div>
+    <div class="sm-drop-sub">JPEG · PNG · WebP · HEIC · TIFF · ou clique pour sélectionner</div>
+    <div class="sm-drop-sub" style="margin-top:4px;font-size:10px;color:rgba(122,122,138,0.5);">Plusieurs fichiers acceptés · Aucune donnée ne quitte le navigateur</div>
+  </div>
+  <input id="sm-file-input" type="file" accept="image/*" multiple class="hidden" aria-hidden="true" />
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     OPTIONS GLOBALES
+═══════════════════════════════════════════════════════════════ -->
+<div id="sm-options" class="hidden sm-options-bar">
+  <div class="sm-opt-group">
+    <label class="sm-opt-label" for="sm-quality">Qualité JPEG sortie</label>
+    <div class="flex items-center gap-3">
+      <input id="sm-quality" type="range" min="70" max="99" value="92" class="sm-range" />
+      <span id="sm-quality-val" class="font-mono text-neon-green text-sm w-8">92</span>
+    </div>
+  </div>
+  <div class="sm-opt-group">
+    <label class="sm-opt-label">Format de sortie</label>
+    <div class="flex gap-2">
+      <button class="sm-fmt-btn active" data-fmt="original">Original</button>
+      <button class="sm-fmt-btn" data-fmt="jpeg">JPEG</button>
+      <button class="sm-fmt-btn" data-fmt="png">PNG</button>
+      <button class="sm-fmt-btn" data-fmt="webp">WebP</button>
+    </div>
+  </div>
+  <div class="sm-opt-group">
+    <label class="sm-opt-label">Renommer les fichiers</label>
+    <div class="flex items-center gap-2">
+      <div id="sm-rename-toggle" class="sm-toggle" role="switch" aria-checked="false" tabindex="0">
+        <div class="sm-toggle-thumb"></div>
+      </div>
+      <span class="text-xs font-mono text-dedsec-muted">Ajouter suffixe <code class="text-neon-green/70">_clean</code></span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     LISTE DES FICHIERS
+═══════════════════════════════════════════════════════════════ -->
+<div id="sm-file-list" class="hidden space-y-3 mb-6"></div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     ACTIONS GLOBALES
+═══════════════════════════════════════════════════════════════ -->
+<div id="sm-actions" class="hidden sm-actions-bar">
+  <div class="flex items-center gap-3 flex-wrap">
+    <button id="sm-process-all" class="sm-btn-primary">
+      <span>⊘</span> Nettoyer tout
+    </button>
+    <button id="sm-download-all" class="sm-btn-secondary hidden">
+      <span>↓</span> Télécharger tout (ZIP)
+    </button>
+    <button id="sm-clear-all" class="sm-btn-ghost">
+      <span>×</span> Vider
+    </button>
+  </div>
+  <div id="sm-global-status" class="text-xs font-mono text-dedsec-muted"></div>
+</div>
+
+</Layout>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     STYLES
+═══════════════════════════════════════════════════════════════ -->
+<style is:global>
+
+/* ── Header ── */
+.sm-header { margin-bottom: 32px; }
+.sm-badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase;
+  color: rgba(0,255,159,0.7); border: 1px solid rgba(0,255,159,0.25);
+  display: inline-block; padding: 3px 8px; margin-bottom: 10px;
+}
+.sm-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(28px,5vw,42px); font-weight: 800;
+  color: #e8e8f0; letter-spacing: -0.01em; margin: 0 0 6px;
+}
+.sm-subtitle {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px; color: rgba(122,122,138,0.85); margin-bottom: 14px; letter-spacing: 0.04em;
+}
+.sm-local-notice {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 10px 14px;
+  border: 1px solid rgba(0,255,159,0.2);
+  border-left: 3px solid rgba(0,255,159,0.6);
+  background: rgba(0,255,159,0.04);
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 12.5px; color: rgba(232,232,240,0.75);
+}
+.sm-notice-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+.sm-guide-open-btn {
+  display: flex; align-items: center; gap: 6px;
+  padding: 6px 12px; border: 1px solid rgba(0,255,159,0.25);
+  background: transparent; color: rgba(0,255,159,0.7);
+  font-family: 'JetBrains Mono', monospace; font-size: 10px;
+  font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
+  cursor: pointer; transition: all 0.15s ease;
+}
+.sm-guide-open-btn:hover { border-color: rgba(0,255,159,0.6); color: #00ff9f; background: rgba(0,255,159,0.06); }
+
+/* ── Guide ── */
+.sm-guide-section-title {
+  font-family: 'JetBrains Mono', monospace; font-size: 9px; font-weight: 700;
+  letter-spacing: 0.2em; text-transform: uppercase; color: rgba(0,255,159,0.6);
+  margin-bottom: 10px; padding-bottom: 6px; border-bottom: 1px solid rgba(42,42,58,0.6);
+}
+.sm-method-block {
+  border: 1px solid rgba(42,42,58,0.8); border-left: 2px solid rgba(0,255,159,0.3);
+  padding: 10px 14px; background: rgba(8,8,12,0.5);
+}
+.sm-method-title {
+  font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700;
+  color: rgba(0,255,159,0.7); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 6px;
+}
+.sm-guide-opsec {
+  display: flex; gap: 10px; padding: 10px 14px;
+  border: 1px solid rgba(255,180,0,0.2); background: rgba(255,160,0,0.05);
+}
+.sm-guide-opsec-icon { flex-shrink: 0; font-size: 14px; color: rgba(255,180,0,0.7); margin-top: 1px; }
+
+/* ── Dropzone ── */
+.sm-dropzone {
+  border: 2px dashed rgba(0,255,159,0.25);
+  background: rgba(0,255,159,0.02);
+  padding: 48px 24px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-bottom: 20px;
+  position: relative;
+}
+.sm-dropzone:hover,
+.sm-dropzone.drag-over {
+  border-color: rgba(0,255,159,0.6);
+  background: rgba(0,255,159,0.05);
+}
+.sm-drop-icon { font-size: 36px; color: rgba(0,255,159,0.35); margin-bottom: 12px; line-height: 1; }
+.sm-drop-title { font-family: 'Space Grotesk', sans-serif; font-size: 16px; font-weight: 700; color: rgba(232,232,240,0.7); margin-bottom: 6px; }
+.sm-drop-sub { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: rgba(122,122,138,0.6); letter-spacing: 0.08em; }
+
+/* ── Options bar ── */
+.sm-options-bar {
+  display: flex; flex-wrap: wrap; gap: 24px; align-items: center;
+  padding: 14px 18px; border: 1px solid rgba(42,42,58,0.8);
+  background: rgba(8,8,12,0.5); margin-bottom: 20px;
+}
+.sm-opt-group { display: flex; flex-direction: column; gap: 6px; }
+.sm-opt-label { font-family: 'JetBrains Mono', monospace; font-size: 9px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(122,122,138,0.7); }
+.sm-range { -webkit-appearance: none; appearance: none; width: 120px; height: 3px; background: rgba(42,42,58,1); outline: none; }
+.sm-range::-webkit-slider-thumb { -webkit-appearance: none; width: 14px; height: 14px; background: #00ff9f; cursor: pointer; border-radius: 0; }
+.sm-fmt-btn {
+  padding: 5px 10px; font-family: 'JetBrains Mono', monospace; font-size: 10px;
+  font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+  border: 1px solid rgba(42,42,58,0.8); background: transparent;
+  color: rgba(122,122,138,0.7); cursor: pointer; transition: all 0.15s;
+}
+.sm-fmt-btn:hover { border-color: rgba(0,255,159,0.4); color: rgba(0,255,159,0.8); }
+.sm-fmt-btn.active { border-color: rgba(0,255,159,0.6); color: #00ff9f; background: rgba(0,255,159,0.06); }
+.sm-toggle {
+  width: 36px; height: 20px; border: 1px solid rgba(42,42,58,0.9);
+  background: rgba(8,8,12,0.8); cursor: pointer; position: relative;
+  transition: background 0.2s, border-color 0.2s;
+}
+.sm-toggle[aria-checked="true"] { background: rgba(0,255,159,0.15); border-color: rgba(0,255,159,0.4); }
+.sm-toggle-thumb {
+  position: absolute; top: 3px; left: 3px; width: 12px; height: 12px;
+  background: rgba(122,122,138,0.5); transition: transform 0.2s, background 0.2s;
+}
+.sm-toggle[aria-checked="true"] .sm-toggle-thumb { transform: translateX(16px); background: #00ff9f; }
+
+/* ── File card ── */
+.sm-file-card {
+  border: 1px solid rgba(42,42,58,0.8);
+  background: rgba(8,8,12,0.5);
+  transition: border-color 0.2s;
+}
+.sm-file-card.state-done { border-color: rgba(0,255,159,0.25); }
+.sm-file-card.state-error { border-color: rgba(255,68,68,0.3); }
+.sm-file-card.state-warn { border-color: rgba(255,180,0,0.3); }
+
+.sm-card-head {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 16px; cursor: pointer; user-select: none;
+}
+.sm-card-head:hover { background: rgba(0,255,159,0.02); }
+.sm-thumb {
+  width: 44px; height: 44px; object-fit: cover; flex-shrink: 0;
+  border: 1px solid rgba(42,42,58,0.8);
+}
+.sm-card-info { flex: 1; min-width: 0; }
+.sm-card-name { font-family: 'Space Grotesk', sans-serif; font-size: 13px; font-weight: 700; color: #e8e8f0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sm-card-meta { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: rgba(122,122,138,0.7); margin-top: 2px; }
+.sm-card-status {
+  font-family: 'JetBrains Mono', monospace; font-size: 9px; font-weight: 700;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  padding: 3px 7px; border: 1px solid; flex-shrink: 0;
+}
+.sm-card-status.pending  { color: rgba(122,122,138,0.7); border-color: rgba(42,42,58,0.9); }
+.sm-card-status.working  { color: rgba(0,255,159,0.7);   border-color: rgba(0,255,159,0.3); animation: sm-pulse 0.8s ease-in-out infinite; }
+.sm-card-status.done     { color: rgba(0,255,159,1);     border-color: rgba(0,255,159,0.5); background: rgba(0,255,159,0.05); }
+.sm-card-status.error    { color: rgba(255,68,68,0.9);   border-color: rgba(255,68,68,0.4); }
+.sm-card-status.warn     { color: rgba(255,180,0,0.9);   border-color: rgba(255,180,0,0.4); }
+@keyframes sm-pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+.sm-card-body { display: none; padding: 0 16px 16px; }
+.sm-card-body.open { display: block; }
+
+/* Alerte GPS */
+.sm-gps-alert {
+  display: flex; gap: 10px; padding: 10px 14px; margin-bottom: 12px;
+  border: 1px solid rgba(255,68,68,0.5); border-left: 3px solid rgba(255,68,68,0.8);
+  background: rgba(255,68,68,0.06);
+}
+.sm-gps-alert-icon { font-size: 16px; flex-shrink: 0; }
+.sm-gps-alert-title { font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; letter-spacing: 0.14em; color: rgba(255,68,68,0.9); text-transform: uppercase; margin-bottom: 4px; }
+.sm-gps-alert-val { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: rgba(255,68,68,0.7); }
+.sm-gps-maps-link { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: rgba(255,68,68,0.6); text-decoration: underline; margin-top: 3px; display: inline-block; }
+
+/* Rapport de métadonnées */
+.sm-meta-table { width: 100%; border-collapse: collapse; font-size: 11px; margin-bottom: 12px; }
+.sm-meta-table th {
+  font-family: 'JetBrains Mono', monospace; font-size: 9px; font-weight: 700;
+  letter-spacing: 0.16em; text-transform: uppercase; color: rgba(122,122,138,0.7);
+  text-align: left; padding: 5px 8px; border-bottom: 1px solid rgba(42,42,58,0.8);
+}
+.sm-meta-table td {
+  font-family: 'JetBrains Mono', monospace; font-size: 10px;
+  padding: 5px 8px; border-bottom: 1px solid rgba(42,42,58,0.4);
+  vertical-align: top;
+}
+.sm-meta-table tr:last-child td { border-bottom: none; }
+.sm-meta-table td:first-child { color: rgba(122,122,138,0.7); width: 38%; }
+.sm-meta-table td:nth-child(2) { color: rgba(232,232,240,0.75); word-break: break-all; }
+.sm-meta-tag-gps    { color: rgba(255,68,68,0.85) !important; }
+.sm-meta-tag-device { color: rgba(255,140,0,0.85) !important; }
+.sm-meta-tag-soft   { color: rgba(255,220,0,0.75) !important; }
+
+.sm-no-meta {
+  font-family: 'JetBrains Mono', monospace; font-size: 11px;
+  color: rgba(122,122,138,0.5); font-style: italic; padding: 8px 0;
+}
+
+/* Stats du nettoyage */
+.sm-clean-stats {
+  display: flex; gap: 16px; flex-wrap: wrap; padding: 10px 0; margin-bottom: 12px;
+  border-top: 1px solid rgba(42,42,58,0.5); border-bottom: 1px solid rgba(42,42,58,0.5);
+}
+.sm-stat-block { text-align: center; }
+.sm-stat-val { font-family: 'JetBrains Mono', monospace; font-size: 18px; font-weight: 700; color: #00ff9f; }
+.sm-stat-label { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(122,122,138,0.6); margin-top: 2px; }
+
+.sm-card-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+
+/* ── Actions bar ── */
+.sm-actions-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; flex-wrap: wrap; padding: 14px 0; margin-bottom: 8px;
+  border-top: 1px solid rgba(42,42,58,0.6);
+}
+.sm-btn-primary {
+  display: flex; align-items: center; gap: 8px;
+  padding: 10px 20px; font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
+  background: rgba(0,255,159,0.1); border: 1px solid rgba(0,255,159,0.5);
+  color: #00ff9f; cursor: pointer; transition: all 0.15s;
+}
+.sm-btn-primary:hover { background: rgba(0,255,159,0.18); border-color: rgba(0,255,159,0.8); }
+.sm-btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
+.sm-btn-secondary {
+  display: flex; align-items: center; gap: 8px;
+  padding: 10px 20px; font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
+  background: transparent; border: 1px solid rgba(42,42,58,0.9);
+  color: rgba(232,232,240,0.7); cursor: pointer; transition: all 0.15s;
+}
+.sm-btn-secondary:hover { border-color: rgba(0,255,159,0.3); color: rgba(0,255,159,0.8); }
+.sm-btn-ghost {
+  display: flex; align-items: center; gap: 6px;
+  padding: 10px 16px; font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
+  background: transparent; border: 1px solid transparent;
+  color: rgba(122,122,138,0.5); cursor: pointer; transition: all 0.15s;
+}
+.sm-btn-ghost:hover { border-color: rgba(255,68,68,0.3); color: rgba(255,68,68,0.7); }
+.sm-btn-small {
+  padding: 5px 12px; font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+  background: transparent; border: 1px solid rgba(0,255,159,0.3);
+  color: rgba(0,255,159,0.8); cursor: pointer; transition: all 0.15s;
+}
+.sm-btn-small:hover { background: rgba(0,255,159,0.08); border-color: rgba(0,255,159,0.6); }
+.sm-btn-small-sec {
+  padding: 5px 12px; font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+  background: transparent; border: 1px solid rgba(42,42,58,0.8);
+  color: rgba(122,122,138,0.6); cursor: pointer; transition: all 0.15s;
+}
+.sm-btn-small-sec:hover { border-color: rgba(122,122,138,0.5); color: rgba(232,232,240,0.7); }
+
+/* Aperçu nettoyé */
+.sm-preview-pair {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 10px;
+}
+@media (max-width: 600px) { .sm-preview-pair { grid-template-columns: 1fr; } }
+.sm-preview-label { font-family: 'JetBrains Mono', monospace; font-size: 9px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(122,122,138,0.6); margin-bottom: 6px; }
+.sm-preview-img { width: 100%; max-height: 200px; object-fit: contain; border: 1px solid rgba(42,42,58,0.7); display: block; }
+</style>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SCRIPT PRINCIPAL
+═══════════════════════════════════════════════════════════════ -->
+<script is:inline>
+/* ============================================================
+   STRIPMETA — Moteur de nettoyage 100% client-side
+   Architecture :
+   1. parseExifJpeg()   — parsing binaire JPEG APP1/APP0/APP13
+   2. cleanJpegBinary() — reconstruction JPEG sans segments meta
+   3. cleanPngBinary()  — suppression chunks PNG meta
+   4. canvasReencode()  — filet de sécurité Canvas
+   5. extractMeta()     — lecture EXIF pour le rapport
+   6. processFile()     — pipeline complet par fichier
+   7. UI + batch + ZIP
+   ============================================================ */
+
+// ── Constantes JPEG ──
+var JPEG_SOI  = 0xFFD8;
+var JPEG_EOI  = 0xFFD9;
+var JPEG_APP0 = 0xFFE0;  // JFIF
+var JPEG_APP1 = 0xFFE1;  // EXIF / XMP
+var JPEG_APP2 = 0xFFE2;  // ICC Profile
+var JPEG_APP12= 0xFFEC;  // Picture Info (Ducky)
+var JPEG_APP13= 0xFFED;  // IPTC / Photoshop
+var JPEG_APP14= 0xFFEE;  // Adobe
+var JPEG_COM  = 0xFFFE;  // Commentaire
+var JPEG_SOS  = 0xFFDA;  // Start of Scan (données image)
+var JPEG_DQT  = 0xFFDB;  // Table de quantification
+var JPEG_SOF0 = 0xFFC0;  // Start of Frame
+
+// Segments à supprimer : APP0 (JFIF, peut contenir thumb), APP1, APP2, APP12, APP13, APP14, COM
+var STRIP_MARKERS = [0xFFE0,0xFFE1,0xFFE2,0xFFEC,0xFFED,0xFFEE,0xFFFE];
+
+// ── EXIF TAG MAP (subset utile pour le rapport) ──
+var EXIF_TAGS = {
+  0x010F: 'Make',
+  0x0110: 'Model',
+  0x0112: 'Orientation',
+  0x011A: 'XResolution',
+  0x011B: 'YResolution',
+  0x0128: 'ResolutionUnit',
+  0x0131: 'Software',
+  0x0132: 'DateTime',
+  0x013B: 'Artist',
+  0x013E: 'WhitePoint',
+  0x013F: 'PrimaryChromaticities',
+  0x0211: 'YCbCrCoefficients',
+  0x0213: 'YCbCrPositioning',
+  0x021A: 'SamplesPerPixel',
+  0x0214: 'ReferenceBlackWhite',
+  0x8298: 'Copyright',
+  0x8769: 'ExifIFD',
+  0x8825: 'GPSIFD',
+  // ExifIFD
+  0x829A: 'ExposureTime',
+  0x829D: 'FNumber',
+  0x8822: 'ExposureProgram',
+  0x8827: 'ISOSpeedRatings',
+  0x9000: 'ExifVersion',
+  0x9003: 'DateTimeOriginal',
+  0x9004: 'DateTimeDigitized',
+  0x9201: 'ShutterSpeedValue',
+  0x9202: 'ApertureValue',
+  0x9203: 'BrightnessValue',
+  0x9204: 'ExposureBiasValue',
+  0x9207: 'MeteringMode',
+  0x9208: 'LightSource',
+  0x9209: 'Flash',
+  0x920A: 'FocalLength',
+  0x927C: 'MakerNote',
+  0x9286: 'UserComment',
+  0xA000: 'FlashPixVersion',
+  0xA001: 'ColorSpace',
+  0xA002: 'PixelXDimension',
+  0xA003: 'PixelYDimension',
+  0xA20E: 'FocalPlaneXResolution',
+  0xA20F: 'FocalPlaneYResolution',
+  0xA210: 'FocalPlaneResolutionUnit',
+  0xA301: 'SceneType',
+  0xA302: 'CFAPattern',
+  0xA401: 'CustomRendered',
+  0xA402: 'ExposureMode',
+  0xA403: 'WhiteBalance',
+  0xA404: 'DigitalZoomRatio',
+  0xA405: 'FocalLengthIn35mmFilm',
+  0xA406: 'SceneCaptureType',
+  0xA407: 'GainControl',
+  0xA408: 'Contrast',
+  0xA409: 'Saturation',
+  0xA40A: 'Sharpness',
+  0xA40C: 'SubjectDistanceRange',
+  0xA420: 'ImageUniqueID',
+  0xA430: 'CameraOwnerName',
+  0xA431: 'BodySerialNumber',
+  0xA432: 'LensSpecification',
+  0xA433: 'LensMake',
+  0xA434: 'LensModel',
+  0xA435: 'LensSerialNumber',
+  // GPS
+  0x0000: 'GPSVersionID',
+  0x0001: 'GPSLatitudeRef',
+  0x0002: 'GPSLatitude',
+  0x0003: 'GPSLongitudeRef',
+  0x0004: 'GPSLongitude',
+  0x0005: 'GPSAltitudeRef',
+  0x0006: 'GPSAltitude',
+  0x0007: 'GPSTimeStamp',
+  0x0008: 'GPSSatellites',
+  0x0009: 'GPSStatus',
+  0x000A: 'GPSMeasureMode',
+  0x000B: 'GPSDOP',
+  0x000C: 'GPSSpeedRef',
+  0x000D: 'GPSSpeed',
+  0x000E: 'GPSTrackRef',
+  0x000F: 'GPSTrack',
+  0x0010: 'GPSImgDirectionRef',
+  0x0011: 'GPSImgDirection',
+  0x0012: 'GPSMapDatum',
+  0x0013: 'GPSDestLatitudeRef',
+  0x0014: 'GPSDestLatitude',
+  0x0015: 'GPSDestLongitudeRef',
+  0x0016: 'GPSDestLongitude',
+  0x001D: 'GPSDateStamp',
+  0x001F: 'GPSHPositioningError',
+};
+
+// ────────────────────────────────────────────────────────────
+// 1. PARSEUR EXIF JPEG (pour rapport uniquement)
+// ────────────────────────────────────────────────────────────
+function parseExifJpeg(buffer) {
+  var view = new DataView(buffer);
+  var tags = {};
+  var gps  = null;
+
+  // Chercher APP1 EXIF
+  var i = 2;
+  while (i < view.byteLength - 4) {
+    var marker = view.getUint16(i);
+    if (marker === JPEG_SOS) break;
+    if ((marker & 0xFF00) !== 0xFF00) { i++; continue; }
+    var segLen = view.getUint16(i + 2);
+    if (marker === JPEG_APP1) {
+      // Tenter EXIF
+      try {
+        if (segLen > 6) {
+          var sig = String.fromCharCode(
+            view.getUint8(i+4), view.getUint8(i+5),
+            view.getUint8(i+6), view.getUint8(i+7)
+          );
+          if (sig === 'Exif') {
+            var exifStart = i + 10; // après "Exif\0\0"
+            var exifBuf = buffer.slice(exifStart, i + 2 + segLen);
+            var parsed = parseExifBlock(exifBuf);
+            tags = Object.assign(tags, parsed.tags);
+            if (parsed.gps) gps = parsed.gps;
+          }
+        }
+      } catch(e) {}
+    }
+    i += 2 + segLen;
+  }
+  return { tags: tags, gps: gps };
+}
+
+function parseExifBlock(buf) {
+  var view = new DataView(buf);
+  if (buf.byteLength < 8) return { tags: {}, gps: null };
+
+  // Byte order
+  var bo = view.getUint16(0);
+  var le = (bo === 0x4949); // little-endian = Intel
+
+  function r16(off) { return view.getUint16(off, le); }
+  function r32(off) { return view.getUint32(off, le); }
+  function rs(off, len) {
+    var s = '';
+    for (var k = 0; k < len && view.getUint8(off+k) !== 0; k++)
+      s += String.fromCharCode(view.getUint8(off+k));
+    return s.trim();
+  }
+  function readVal(type, off, count) {
+    try {
+      if (type === 2) return rs(off, count); // ASCII
+      if (type === 3) return r16(off);       // SHORT
+      if (type === 4) return r32(off);       // LONG
+      if (type === 5) { // RATIONAL
+        var n = r32(off), d = r32(off+4);
+        return d ? (n/d).toFixed(4) : n + '/0';
+      }
+      if (type === 10) { // SRATIONAL
+        var sn = view.getInt32(off, le), sd = view.getInt32(off+4, le);
+        return sd ? (sn/sd).toFixed(4) : sn + '/0';
+      }
+      return null;
+    } catch(e) { return null; }
+  }
+
+  var tags = {};
+  var gpsOffset = null;
+
+  function readIFD(ifdOffset) {
+    if (ifdOffset + 2 > buf.byteLength) return;
+    var count = r16(ifdOffset);
+    for (var e = 0; e < count; e++) {
+      var entryOff = ifdOffset + 2 + e * 12;
+      if (entryOff + 12 > buf.byteLength) break;
+      var tag   = r16(entryOff);
+      var type  = r16(entryOff + 2);
+      var cnt   = r32(entryOff + 4);
+      var valOff= entryOff + 8;
+
+      // Tailles par type en octets
+      var sizes = [0,1,1,2,4,8,1,1,2,4,8,4,8];
+      var sz = (type < sizes.length ? sizes[type] : 1) * cnt;
+      var dataOff = sz > 4 ? r32(valOff) : valOff;
+
+      if (tag === 0x8825) { gpsOffset = r32(valOff); continue; }
+      if (tag === 0x8769) { try { readIFD(r32(valOff)); } catch(e) {} continue; }
+      if (tag === 0x927C) { tags['MakerNote'] = '[présent, opaque]'; continue; }
+
+      var name = EXIF_TAGS[tag] || ('0x' + tag.toString(16).toUpperCase());
+      var val  = readVal(type, dataOff, cnt);
+      if (val !== null && val !== '') tags[name] = String(val);
+    }
+  }
+
+  // IFD0
+  var ifd0 = r32(4);
+  try { readIFD(ifd0); } catch(e) {}
+
+  // GPS IFD
+  var gps = null;
+  if (gpsOffset !== null) {
+    var gpsTags = {};
+    try {
+      var cnt = r16(gpsOffset);
+      for (var e = 0; e < cnt; e++) {
+        var entryOff = gpsOffset + 2 + e * 12;
+        if (entryOff + 12 > buf.byteLength) break;
+        var tag   = r16(entryOff);
+        var type  = r16(entryOff + 2);
+        var count = r32(entryOff + 4);
+        var valOff= entryOff + 8;
+        var sizes2 = [0,1,1,2,4,8,1,1,2,4,8,4,8];
+        var sz = (type < sizes2.length ? sizes2[type] : 1) * count;
+        var dataOff = sz > 4 ? r32(valOff) : valOff;
+        var name = EXIF_TAGS[tag] || ('GPS_0x'+tag.toString(16));
+        var val = null;
+        if (type === 5 && count >= 3) {
+          // Rational array : lat/lon
+          var arr = [];
+          for (var k = 0; k < 3; k++) {
+            var n = r32(dataOff + k*8), d = r32(dataOff + k*8 + 4);
+            arr.push(d ? n/d : 0);
+          }
+          val = arr[0] + '° ' + arr[1] + "' " + arr[2].toFixed(3) + '"';
+          tags['GPS_' + name] = val;
+        } else if (type === 2) {
+          val = '';
+          for (var k = 0; k < count && view.getUint8(dataOff+k) !== 0; k++)
+            val += String.fromCharCode(view.getUint8(dataOff+k));
+          tags['GPS_' + name] = val.trim();
+        } else if (type === 3) {
+          val = r16(dataOff);
+          tags['GPS_' + name] = val;
+        } else if (type === 4) {
+          val = r32(dataOff);
+          tags['GPS_' + name] = val;
+        }
+        gpsTags[name] = val;
+      }
+    } catch(e) {}
+
+    // Calculer lat/lon décimaux si on a LatRef+Lat+LonRef+Lon
+    if (gpsTags['GPSLatitude'] !== undefined && gpsTags['GPSLongitude'] !== undefined) {
+      try {
+        // Extraire les degrés/min/sec depuis le tag brut
+        function dmsFromRat3(off) {
+          var arr = [];
+          for (var k = 0; k < 3; k++) {
+            var n = r32(gpsOffset + off + k*8);
+            var d = r32(gpsOffset + off + k*8 + 4);
+            arr.push(d ? n/d : 0);
+          }
+          return arr[0] + arr[1]/60 + arr[2]/3600;
+        }
+        // Retrouver offsets depuis le bloc GPS
+        var latDec = null, lonDec = null, latRef = 'N', lonRef = 'E';
+        var gcnt = r16(gpsOffset);
+        for (var e2 = 0; e2 < gcnt; e2++) {
+          var eo = gpsOffset + 2 + e2*12;
+          var gt = r16(eo), gtype = r16(eo+2), gcnt2 = r32(eo+4);
+          var gvo = eo + 8;
+          if (gt === 1) { latRef = String.fromCharCode(view.getUint8(gvo)); }
+          if (gt === 3) { lonRef = String.fromCharCode(view.getUint8(gvo)); }
+          if (gt === 2 && gtype === 5 && gcnt2 === 3) {
+            var doff = r32(gvo);
+            latDec = 0;
+            for (var k = 0; k < 3; k++) {
+              var n = r32(doff + k*8), d = r32(doff + k*8+4);
+              latDec += (d ? n/d : 0) / Math.pow(60, k);
+            }
+          }
+          if (gt === 4 && gtype === 5 && gcnt2 === 3) {
+            var doff = r32(gvo);
+            lonDec = 0;
+            for (var k = 0; k < 3; k++) {
+              var n = r32(doff + k*8), d = r32(doff + k*8+4);
+              lonDec += (d ? n/d : 0) / Math.pow(60, k);
+            }
+          }
+        }
+        if (latDec !== null && lonDec !== null) {
+          if (latRef === 'S') latDec = -latDec;
+          if (lonRef === 'W') lonDec = -lonDec;
+          gps = { lat: latDec.toFixed(6), lon: lonDec.toFixed(6) };
+        }
+      } catch(e) {}
+    }
+  }
+
+  return { tags: tags, gps: gps };
+}
+
+// ────────────────────────────────────────────────────────────
+// 2. NETTOYAGE BINAIRE JPEG
+// ────────────────────────────────────────────────────────────
+function cleanJpegBinary(buffer) {
+  var src = new Uint8Array(buffer);
+  var out = [];
+  var i   = 0;
+  var stripped = 0;
+
+  // SOI
+  out.push(src[0], src[1]);
+  i = 2;
+
+  while (i < src.length - 1) {
+    if (src[i] !== 0xFF) { out.push(src[i++]); continue; }
+    var marker = (src[i] << 8) | src[i+1];
+
+    // EOI ou marqueur sans longueur
+    if (marker === 0xFFD9 || marker === 0xFFD8) {
+      out.push(src[i], src[i+1]); i += 2; continue;
+    }
+    // SOS : copier jusqu'à la fin
+    if (marker === JPEG_SOS) {
+      for (var j = i; j < src.length; j++) out.push(src[j]);
+      break;
+    }
+    // Longueur du segment
+    if (i + 3 >= src.length) break;
+    var segLen = (src[i+2] << 8) | src[i+3];
+    if (segLen < 2) { i += 2; continue; }
+
+    if (STRIP_MARKERS.indexOf(marker) !== -1) {
+      // Supprimer ce segment
+      stripped++;
+      i += 2 + segLen;
+    } else {
+      // Conserver
+      for (var j = 0; j < 2 + segLen; j++) out.push(src[i+j]);
+      i += 2 + segLen;
+    }
+  }
+
+  return { data: new Uint8Array(out), stripped: stripped };
+}
+
+// ────────────────────────────────────────────────────────────
+// 3. NETTOYAGE BINAIRE PNG
+// Chunks à supprimer : tEXt, iTXt, zTXt, eXIf, gAMA, cHRM,
+//                      sRGB, iCCP, bKGD, hIST, pHYs, sPLT,
+//                      tIME, acTL, fcTL, fdAT (anim), oFFs, pCAL
+// ────────────────────────────────────────────────────────────
+var PNG_STRIP_CHUNKS = ['tEXt','iTXt','zTXt','eXIf','gAMA','cHRM',
+                        'sRGB','iCCP','bKGD','hIST','pHYs','sPLT',
+                        'tIME','oFFs','pCAL','sBIT'];
+
+function readPngChunkType(arr, off) {
+  return String.fromCharCode(arr[off], arr[off+1], arr[off+2], arr[off+3]);
+}
+
+function cleanPngBinary(buffer) {
+  var src = new Uint8Array(buffer);
+  if (src.length < 8) return { data: src, stripped: 0 };
+
+  // Vérifier signature PNG
+  var sig = [137,80,78,71,13,10,26,10];
+  for (var k = 0; k < 8; k++) if (src[k] !== sig[k]) return { data: src, stripped: 0 };
+
+  var out = [];
+  // Copier signature
+  for (var k = 0; k < 8; k++) out.push(src[k]);
+
+  var i = 8;
+  var stripped = 0;
+
+  while (i + 12 <= src.length) {
+    var dataLen = (src[i]<<24)|(src[i+1]<<16)|(src[i+2]<<8)|src[i+3];
+    if (dataLen < 0 || i + 12 + dataLen > src.length) break;
+    var chunkType = readPngChunkType(src, i+4);
+
+    if (PNG_STRIP_CHUNKS.indexOf(chunkType) !== -1) {
+      stripped++;
+    } else {
+      var chunkTotal = 4 + 4 + dataLen + 4; // len + type + data + crc
+      for (var j = i; j < i + chunkTotal; j++) out.push(src[j]);
+    }
+    i += 4 + 4 + dataLen + 4;
+  }
+
+  return { data: new Uint8Array(out), stripped: stripped };
+}
+
+// ────────────────────────────────────────────────────────────
+// 4. RE-ENCODAGE CANVAS (filet de sécurité universel)
+// ────────────────────────────────────────────────────────────
+function canvasReencode(blob, mimeOut, quality) {
+  return new Promise(function(resolve, reject) {
+    var url = URL.createObjectURL(blob);
+    var img = new Image();
+    img.onload = function() {
+      var canvas = document.createElement('canvas');
+      canvas.width  = img.naturalWidth;
+      canvas.height = img.naturalHeight;
+      var ctx = canvas.getContext('2d');
+      // Fond blanc pour JPEG (pas de transparence)
+      if (mimeOut === 'image/jpeg') {
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+      }
+      ctx.drawImage(img, 0, 0);
+      URL.revokeObjectURL(url);
+      canvas.toBlob(function(cleanBlob) {
+        if (!cleanBlob) { reject(new Error('Canvas toBlob failed')); return; }
+        resolve(cleanBlob);
+      }, mimeOut, quality / 100);
+    };
+    img.onerror = function() { URL.revokeObjectURL(url); reject(new Error('Image load failed')); };
+    img.src = url;
+  });
+}
+
+// ────────────────────────────────────────────────────────────
+// 5. PIPELINE COMPLET PAR FICHIER
+// ────────────────────────────────────────────────────────────
+function getOutputMime(file, fmtOverride) {
+  if (fmtOverride === 'jpeg') return 'image/jpeg';
+  if (fmtOverride === 'png')  return 'image/png';
+  if (fmtOverride === 'webp') return 'image/webp';
+  // original
+  var t = file.type.toLowerCase();
+  if (t === 'image/jpeg' || t === 'image/jpg') return 'image/jpeg';
+  if (t === 'image/png')  return 'image/png';
+  if (t === 'image/webp') return 'image/webp';
+  return 'image/jpeg'; // fallback pour HEIC, TIFF, etc.
+}
+
+function getExtension(mime) {
+  if (mime === 'image/jpeg') return '.jpg';
+  if (mime === 'image/png')  return '.png';
+  if (mime === 'image/webp') return '.webp';
+  return '.jpg';
+}
+
+function formatBytes(n) {
+  if (n < 1024) return n + ' o';
+  if (n < 1048576) return (n/1024).toFixed(1) + ' Ko';
+  return (n/1048576).toFixed(2) + ' Mo';
+}
+
+async function processFile(file, quality, fmtOverride, addSuffix) {
+  var result = {
+    name: file.name, originalSize: file.size,
+    cleanedBlob: null, cleanedSize: 0,
+    tags: {}, gps: null, strippedSegments: 0,
+    outputMime: getOutputMime(file, fmtOverride),
+    error: null, warning: null
+  };
+
+  try {
+    var buffer = await file.arrayBuffer();
+    var mime   = file.type.toLowerCase();
+    var binaryStripped = 0;
+
+    // ── Étape 1 : extraire le rapport de métadonnées
+    if (mime === 'image/jpeg' || mime === 'image/jpg') {
+      var parsed = parseExifJpeg(buffer);
+      result.tags = parsed.tags;
+      result.gps  = parsed.gps;
+    }
+
+    // ── Étape 2 : nettoyage binaire selon le format
+    var binaryBlob = null;
+    if (mime === 'image/jpeg' || mime === 'image/jpg') {
+      var r = cleanJpegBinary(buffer);
+      binaryStripped = r.stripped;
+      result.strippedSegments = r.stripped;
+      binaryBlob = new Blob([r.data], { type: 'image/jpeg' });
+    } else if (mime === 'image/png') {
+      var r = cleanPngBinary(buffer);
+      binaryStripped = r.stripped;
+      result.strippedSegments = r.stripped;
+      binaryBlob = new Blob([r.data], { type: 'image/png' });
+    } else {
+      // WebP, HEIC, TIFF → direct canvas
+      binaryBlob = file;
+      if (mime === 'image/heic' || mime === 'image/heif' || mime === 'image/tiff') {
+        result.warning = 'Format ' + file.type + ' : converti en ' + result.outputMime + ' via Canvas.';
+      }
+    }
+
+    // ── Étape 3 : re-encodage Canvas (filet de sécurité)
+    var cleanBlob = await canvasReencode(binaryBlob, result.outputMime, quality);
+
+    // Renommer
+    var baseName = file.name.replace(/\.[^.]+$/, '');
+    if (addSuffix) baseName += '_clean';
+    var ext = getExtension(result.outputMime);
+    result.cleanedBlobName = baseName + ext;
+    result.cleanedBlob = cleanBlob;
+    result.cleanedSize = cleanBlob.size;
+
+  } catch(e) {
+    result.error = e.message || 'Erreur inconnue';
+  }
+
+  return result;
+}
+
+// ────────────────────────────────────────────────────────────
+// 6. ÉTAT GLOBAL
+// ────────────────────────────────────────────────────────────
+var SM = {
+  files:   [],   // { file, result, cardEl, thumbUrl }
+  quality: 92,
+  fmt:     'original',
+  rename:  false,
+};
+
+// ────────────────────────────────────────────────────────────
+// 7. UI — RENDU DES CARTES
+// ────────────────────────────────────────────────────────────
+function renderCard(entry, index) {
+  var card = document.createElement('div');
+  card.className = 'sm-file-card';
+  card.dataset.idx = index;
+
+  // Miniature
+  var thumbUrl = URL.createObjectURL(entry.file);
+  entry.thumbUrl = thumbUrl;
+
+  card.innerHTML =
+    '<div class="sm-card-head" data-idx="' + index + '">'
+  + '  <img src="' + thumbUrl + '" class="sm-thumb" alt="" />'
+  + '  <div class="sm-card-info">'
+  + '    <div class="sm-card-name">' + escHtml(entry.file.name) + '</div>'
+  + '    <div class="sm-card-meta">'
+  +        entry.file.type + ' · ' + formatBytes(entry.file.size)
+  + '    </div>'
+  + '  </div>'
+  + '  <span class="sm-card-status pending">EN ATTENTE</span>'
+  + '  <svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;color:rgba(0,255,159,0.4);transition:transform 0.2s;"><path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+  + '</div>'
+  + '<div class="sm-card-body"></div>';
+
+  // Toggle
+  card.querySelector('.sm-card-head').addEventListener('click', function() {
+    var body = card.querySelector('.sm-card-body');
+    var chev = card.querySelector('.chev');
+    var open = body.classList.toggle('open');
+    chev.style.transform = open ? 'rotate(180deg)' : '';
+  });
+
+  entry.cardEl = card;
+  return card;
+}
+
+function setCardStatus(entry, status, label) {
+  var el = entry.cardEl.querySelector('.sm-card-status');
+  el.className = 'sm-card-status ' + status;
+  el.textContent = label;
+  if (status === 'done') entry.cardEl.className = 'sm-file-card state-done';
+  if (status === 'error') entry.cardEl.className = 'sm-file-card state-error';
+  if (status === 'warn') entry.cardEl.className = 'sm-file-card state-warn';
+}
+
+function renderCardBody(entry) {
+  var r = entry.result;
+  var body = entry.cardEl.querySelector('.sm-card-body');
+
+  var html = '';
+
+  // Alerte GPS
+  if (r.gps) {
+    var mapsUrl = 'https://www.openstreetmap.org/?mlat=' + r.gps.lat + '&mlon=' + r.gps.lon + '&zoom=15';
+    html +=
+      '<div class="sm-gps-alert">'
+    + '  <span class="sm-gps-alert-icon">⚠</span>'
+    + '  <div>'
+    + '    <div class="sm-gps-alert-title">⚠ GPS DÉTECTÉ — Supprimé</div>'
+    + '    <div class="sm-gps-alert-val">Lat ' + r.gps.lat + ' · Lon ' + r.gps.lon + '</div>'
+    + '    <a href="' + mapsUrl + '" target="_blank" rel="noopener" class="sm-gps-maps-link">↗ Voir sur OpenStreetMap</a>'
+    + '  </div>'
+    + '</div>';
+  }
+
+  // Stats nettoyage
+  if (r.cleanedBlob) {
+    var saved = r.originalSize - r.cleanedSize;
+    var pct   = r.originalSize > 0 ? Math.round((saved / r.originalSize) * 100) : 0;
+    html +=
+      '<div class="sm-clean-stats">'
+    + '  <div class="sm-stat-block"><div class="sm-stat-val">' + r.strippedSegments + '</div><div class="sm-stat-label">Segments supprimés</div></div>'
+    + '  <div class="sm-stat-block"><div class="sm-stat-val">' + Object.keys(r.tags).length + '</div><div class="sm-stat-label">Champs EXIF lus</div></div>'
+    + '  <div class="sm-stat-block"><div class="sm-stat-val">' + formatBytes(r.cleanedSize) + '</div><div class="sm-stat-label">Taille finale</div></div>'
+    + '  <div class="sm-stat-block"><div class="sm-stat-val' + (saved > 0 ? ' text-neon-green' : '') + '">' + (saved > 0 ? '-' : '') + formatBytes(Math.abs(saved)) + '</div><div class="sm-stat-label">Écart</div></div>'
+    + '</div>';
+  }
+
+  // Erreur / warning
+  if (r.error) {
+    html += '<div style="font-family:JetBrains Mono,monospace;font-size:11px;color:rgba(255,68,68,0.8);padding:8px 0;">✕ ' + escHtml(r.error) + '</div>';
+  }
+  if (r.warning) {
+    html += '<div style="font-family:JetBrains Mono,monospace;font-size:11px;color:rgba(255,180,0,0.8);padding:4px 0;">⚠ ' + escHtml(r.warning) + '</div>';
+  }
+
+  // Tableau EXIF
+  var tagKeys = Object.keys(r.tags);
+  if (tagKeys.length > 0) {
+    html += '<div style="font-family:JetBrains Mono,monospace;font-size:9px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:rgba(122,122,138,0.6);margin:10px 0 6px;">Métadonnées trouvées et supprimées</div>';
+    html += '<table class="sm-meta-table"><thead><tr><th>Champ</th><th>Valeur originale</th></tr></thead><tbody>';
+    tagKeys.sort().forEach(function(k) {
+      var isGps    = k.startsWith('GPS_') || k.toLowerCase().includes('gps');
+      var isDevice = ['Make','Model','BodySerialNumber','LensSerialNumber','ImageUniqueID','CameraOwnerName'].indexOf(k) !== -1;
+      var isSoft   = ['Software','Artist','Copyright','UserComment'].indexOf(k) !== -1;
+      var tdClass  = isGps ? ' class="sm-meta-tag-gps"' : isDevice ? ' class="sm-meta-tag-device"' : isSoft ? ' class="sm-meta-tag-soft"' : '';
+      var val = String(r.tags[k]);
+      if (val.length > 80) val = val.substring(0,80) + '…';
+      html += '<tr><td' + tdClass + '>' + escHtml(k) + '</td><td>' + escHtml(val) + '</td></tr>';
+    });
+    html += '</tbody></table>';
+  } else {
+    html += '<div class="sm-no-meta">Aucune métadonnée EXIF lisible détectée (format non JPEG ou fichier déjà propre). Re-encodage Canvas appliqué.</div>';
+  }
+
+  // Aperçu avant/après + bouton télécharger
+  if (r.cleanedBlob) {
+    var cleanUrl = URL.createObjectURL(r.cleanedBlob);
+    entry.cleanUrl = cleanUrl;
+    html +=
+      '<div class="sm-preview-pair">'
+    + '  <div><div class="sm-preview-label">Avant</div><img src="' + entry.thumbUrl + '" class="sm-preview-img" alt="avant" /></div>'
+    + '  <div><div class="sm-preview-label">Après (nettoyé)</div><img src="' + cleanUrl + '" class="sm-preview-img" alt="après" /></div>'
+    + '</div>';
+  }
+
+  // Boutons d'action
+  html += '<div class="sm-card-actions">';
+  if (r.cleanedBlob) {
+    html += '<button class="sm-btn-small sm-dl-single" data-idx="' + entry.cardEl.dataset.idx + '">↓ Télécharger</button>';
+  }
+  html += '<button class="sm-btn-small-sec sm-remove-card" data-idx="' + entry.cardEl.dataset.idx + '">× Retirer</button>';
+  html += '</div>';
+
+  body.innerHTML = html;
+  body.classList.add('open');
+  entry.cardEl.querySelector('.chev').style.transform = 'rotate(180deg)';
+
+  // Bind download
+  var dlBtn = body.querySelector('.sm-dl-single');
+  if (dlBtn) {
+    dlBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      downloadBlob(r.cleanedBlob, entry.result.cleanedBlobName);
+    });
+  }
+  // Bind remove
+  body.querySelector('.sm-remove-card').addEventListener('click', function(e) {
+    e.stopPropagation();
+    var idx = parseInt(entry.cardEl.dataset.idx);
+    SM.files.splice(idx, 1);
+    entry.cardEl.remove();
+    updateActionBar();
+    renumberCards();
+  });
+}
+
+function renumberCards() {
+  SM.files.forEach(function(e, i) { e.cardEl.dataset.idx = i; });
+}
+
+function escHtml(s) {
+  return String(s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function downloadBlob(blob, name) {
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = name;
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(function() { document.body.removeChild(a); URL.revokeObjectURL(a.href); }, 500);
+}
+
+// ────────────────────────────────────────────────────────────
+// 8. ZIP BATCH (JSZip depuis cdnjs)
+// ────────────────────────────────────────────────────────────
+function loadJSZip() {
+  return new Promise(function(resolve, reject) {
+    if (window.JSZip) { resolve(window.JSZip); return; }
+    var s = document.createElement('script');
+    s.src = 'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js';
+    s.onload  = function() { resolve(window.JSZip); };
+    s.onerror = reject;
+    document.head.appendChild(s);
+  });
+}
+
+async function downloadAllZip() {
+  var done = SM.files.filter(function(e) { return e.result && e.result.cleanedBlob; });
+  if (!done.length) return;
+  var dlBtn = document.getElementById('sm-download-all');
+  dlBtn.textContent = '… Compression en cours';
+  dlBtn.disabled = true;
+
+  try {
+    var JSZip = await loadJSZip();
+    var zip = new JSZip();
+    var folder = zip.folder('stripmeta_clean');
+    for (var i = 0; i < done.length; i++) {
+      var e = done[i];
+      var ab = await e.result.cleanedBlob.arrayBuffer();
+      folder.file(e.result.cleanedBlobName, ab);
+    }
+    var blob = await zip.generateAsync({ type: 'blob', compression: 'DEFLATE', compressionOptions: { level: 6 } });
+    downloadBlob(blob, 'stripmeta_clean_' + Date.now() + '.zip');
+  } catch(err) {
+    alert('Erreur ZIP : ' + err.message);
+  }
+  dlBtn.innerHTML = '<span>↓</span> Télécharger tout (ZIP)';
+  dlBtn.disabled = false;
+}
+
+// ────────────────────────────────────────────────────────────
+// 9. ACTIONS GLOBALES
+// ────────────────────────────────────────────────────────────
+function updateActionBar() {
+  var list    = document.getElementById('sm-file-list');
+  var actions = document.getElementById('sm-actions');
+  var opts    = document.getElementById('sm-options');
+  var hasDl   = SM.files.some(function(e) { return e.result && e.result.cleanedBlob; });
+
+  if (SM.files.length === 0) {
+    list.classList.add('hidden');
+    actions.classList.add('hidden');
+    opts.classList.add('hidden');
+    document.getElementById('sm-download-all').classList.add('hidden');
+  } else {
+    list.classList.remove('hidden');
+    actions.classList.remove('hidden');
+    opts.classList.remove('hidden');
+    if (hasDl) document.getElementById('sm-download-all').classList.remove('hidden');
+  }
+}
+
+async function processAll() {
+  var btn = document.getElementById('sm-process-all');
+  btn.disabled = true;
+  var status = document.getElementById('sm-global-status');
+
+  for (var i = 0; i < SM.files.length; i++) {
+    var entry = SM.files[i];
+    if (entry.result) continue; // déjà traité
+    setCardStatus(entry, 'working', 'TRAITEMENT…');
+    status.textContent = (i+1) + ' / ' + SM.files.length + ' en cours…';
+
+    entry.result = await processFile(entry.file, SM.quality, SM.fmt, SM.rename);
+
+    if (entry.result.error) {
+      setCardStatus(entry, 'error', 'ERREUR');
+    } else if (entry.result.warning) {
+      setCardStatus(entry, 'warn', 'CONVERTI');
+    } else {
+      var gpsLabel = entry.result.gps ? '⚠ GPS TROUVÉ' : 'NETTOYÉ';
+      setCardStatus(entry, 'done', gpsLabel);
+    }
+    renderCardBody(entry);
+    updateActionBar();
+  }
+
+  status.textContent = SM.files.length + ' fichier(s) traité(s)';
+  btn.disabled = false;
+}
+
+// ────────────────────────────────────────────────────────────
+// 10. INIT — BINDING DES ÉVÉNEMENTS
+// ────────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', function() {
+  var dropzone  = document.getElementById('sm-dropzone');
+  var fileInput = document.getElementById('sm-file-input');
+  var fileList  = document.getElementById('sm-file-list');
+
+  // ── Dropzone ──
+  dropzone.addEventListener('click', function() { fileInput.click(); });
+  dropzone.addEventListener('keydown', function(e) { if (e.key === 'Enter' || e.key === ' ') fileInput.click(); });
+
+  dropzone.addEventListener('dragover', function(e) {
+    e.preventDefault(); dropzone.classList.add('drag-over');
+  });
+  dropzone.addEventListener('dragleave', function() {
+    dropzone.classList.remove('drag-over');
+  });
+  dropzone.addEventListener('drop', function(e) {
+    e.preventDefault(); dropzone.classList.remove('drag-over');
+    addFiles(e.dataTransfer.files);
+  });
+
+  fileInput.addEventListener('change', function() {
+    addFiles(fileInput.files);
+    fileInput.value = '';
+  });
+
+  // ── Ajouter fichiers ──
+  function addFiles(fileList_) {
+    var added = 0;
+    Array.prototype.forEach.call(fileList_, function(f) {
+      if (!f.type.startsWith('image/') && !f.name.match(/\.(jpg|jpeg|png|webp|heic|heif|tiff|tif)$/i)) return;
+      SM.files.push({ file: f, result: null, cardEl: null, thumbUrl: null, cleanUrl: null });
+      var idx = SM.files.length - 1;
+      var card = renderCard(SM.files[idx], idx);
+      fileList.appendChild(card);
+      added++;
+    });
+    if (added) updateActionBar();
+  }
+
+  // ── Options qualité ──
+  var qualSlider = document.getElementById('sm-quality');
+  var qualVal    = document.getElementById('sm-quality-val');
+  qualSlider.addEventListener('input', function() {
+    SM.quality = parseInt(qualSlider.value);
+    qualVal.textContent = qualSlider.value;
+  });
+
+  // ── Format de sortie ──
+  document.querySelectorAll('.sm-fmt-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.sm-fmt-btn').forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      SM.fmt = btn.dataset.fmt;
+    });
+  });
+
+  // ── Toggle renommer ──
+  var renameToggle = document.getElementById('sm-rename-toggle');
+  renameToggle.addEventListener('click', function() {
+    SM.rename = !SM.rename;
+    renameToggle.setAttribute('aria-checked', SM.rename ? 'true' : 'false');
+  });
+  renameToggle.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' || e.key === ' ') renameToggle.click();
+  });
+
+  // ── Nettoyer tout ──
+  document.getElementById('sm-process-all').addEventListener('click', processAll);
+
+  // ── Télécharger ZIP ──
+  document.getElementById('sm-download-all').addEventListener('click', downloadAllZip);
+
+  // ── Vider ──
+  document.getElementById('sm-clear-all').addEventListener('click', function() {
+    SM.files.forEach(function(e) {
+      if (e.thumbUrl) URL.revokeObjectURL(e.thumbUrl);
+      if (e.cleanUrl) URL.revokeObjectURL(e.cleanUrl);
+    });
+    SM.files = [];
+    fileList.innerHTML = '';
+    updateActionBar();
+    document.getElementById('sm-global-status').textContent = '';
+  });
+
+  // ── Guide modal ──
+  document.getElementById('smGuideBtn').addEventListener('click', function() {
+    document.getElementById('sm-guide-overlay').classList.remove('hidden');
+  });
+  document.getElementById('smGuideClose').addEventListener('click', function() {
+    document.getElementById('sm-guide-overlay').classList.add('hidden');
+  });
+  document.getElementById('sm-guide-overlay').addEventListener('click', function(e) {
+    if (e.target === this) this.classList.add('hidden');
+  });
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') document.getElementById('sm-guide-overlay').classList.add('hidden');
+  });
+
+  updateActionBar();
+});
+</script>

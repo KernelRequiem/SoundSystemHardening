@@ -11,13 +11,13 @@ import Layout from '../layouts/Layout.astro';
   <p class="text-dedsec-muted text-sm mb-2 font-mono leading-relaxed">
     Arbre de décision interactif · Contrôle d'identité · Fouille · Interpellation · Garde à vue
   </p>
-  <p class="text-dedsec-muted/50 text-xs mb-10 font-mono">
+  <p class="text-dedsec-muted/75 text-xs mb-10 font-mono">
     Réponds aux questions pour obtenir des conseils adaptés à ta situation, avant, pendant et après.
   </p>
 
   <!-- Indicateur de phase -->
   <div id="phase-bar" class="hidden mb-10">
-    <div class="font-mono text-[9px] uppercase tracking-[0.2em] text-dedsec-muted/35 mb-2">Phase active</div>
+    <div class="font-mono text-[10px] uppercase tracking-[0.18em] text-dedsec-muted/65 mb-2">Phase active</div>
     <div class="flex items-stretch gap-0 border border-dedsec-border overflow-hidden">
       <button id="pb-avant"   data-phase="avant"   class="phase-bar-btn">◷ Avant</button>
       <div class="w-px bg-dedsec-border shrink-0"></div>
@@ -28,10 +28,10 @@ import Layout from '../layouts/Layout.astro';
   </div>
 
   <!-- Moteur de rendu -->
-  <div id="decision-root" class="max-w-2xl"></div>
+  <div id="decision-root"></div>
 </Layout>
 
-<style>
+<style is:global>
   /* ── Phase bar ── */
   .phase-bar-btn {
     flex: 1;
@@ -42,7 +42,7 @@ import Layout from '../layouts/Layout.astro';
     letter-spacing: 0.16em;
     text-transform: uppercase;
     text-align: center;
-    color: rgba(122, 122, 138, 0.4);
+    color: rgba(122, 122, 138, 0.72);
     background: transparent;
     cursor: pointer;
     transition: all 0.15s ease;
@@ -56,90 +56,333 @@ import Layout from '../layouts/Layout.astro';
     background: rgba(0, 255, 159, 0.07);
   }
 
-  /* ── Phase selector cards ── */
-  .phase-card {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    padding: 22px 28px;
-    background: rgba(10, 10, 15, 0.5);
-    border: 1px solid rgba(42, 42, 58, 0.9);
-    font-family: 'JetBrains Mono', monospace;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    text-align: left;
-    width: 100%;
+  /* ── Phase grid ── */
+  .phase-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
   }
-  .phase-card:hover {
-    border-color: rgba(0, 255, 159, 0.45);
-    background: rgba(0, 255, 159, 0.04);
-    transform: translateX(3px);
-    box-shadow: -3px 0 0 rgba(0, 255, 159, 0.4), 0 0 24px rgba(0, 255, 159, 0.06);
-  }
-  .phase-card-icon {
-    font-size: 26px;
-    width: 44px;
-    text-align: center;
-    flex-shrink: 0;
-    opacity: 0.85;
-  }
-  .phase-card-label {
-    font-size: 14px;
-    font-weight: 700;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: #e8e8f0;
-    margin-bottom: 5px;
-  }
-  .phase-card-sub {
-    font-size: 11px;
-    letter-spacing: 0.03em;
-    color: rgba(122, 122, 138, 0.55);
-    line-height: 1.5;
-  }
-  .phase-card-tag {
-    margin-left: auto;
-    font-size: 9px;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: rgba(0, 255, 159, 0.4);
-    border: 1px solid rgba(0, 255, 159, 0.13);
-    padding: 4px 10px;
-    flex-shrink: 0;
+  @media (min-width: 600px) {
+    .phase-grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
   }
 
-  /* ── Situation selector cards ── */
-  .situation-card {
+  /* ── Phase selector cards — layout vertical dans la grille ── */
+  .phase-card {
+    --ph-color: #00ff9f;
+    --ph-rgb: 0, 255, 159;
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 10px;
-    padding: 22px 20px;
-    background: rgba(10, 10, 15, 0.5);
-    border: 1px solid rgba(42, 42, 58, 0.9);
+    padding: 24px 22px 20px;
+    background: rgba(8, 8, 12, 0.68);
+    border: 1px solid rgba(42, 42, 58, 0.80);
+    border-top: 3px solid var(--ph-color);
     font-family: 'JetBrains Mono', monospace;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: border-color 0.18s ease, background 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
     text-align: left;
     width: 100%;
-    min-height: 100px;
+    min-height: 180px;
   }
-  .situation-card:hover {
-    border-color: rgba(0, 255, 159, 0.4);
-    background: rgba(0, 255, 159, 0.04);
-    box-shadow: 0 0 20px rgba(0, 255, 159, 0.06);
+  .phase-card:hover {
+    background: rgba(var(--ph-rgb), 0.05);
+    border-color: rgba(var(--ph-rgb), 0.45);
+    border-top-color: var(--ph-color);
+    transform: translateY(-4px);
+    box-shadow: 0 -3px 0 rgba(var(--ph-rgb), 0.5), 0 12px 40px rgba(var(--ph-rgb), 0.09);
   }
-  .situation-card-icon {
-    font-size: 24px;
+  .phase-card:active {
+    transform: translateY(-1px);
+    background: rgba(var(--ph-rgb), 0.08);
+  }
+  .phase-card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 18px;
+  }
+  .phase-card-icon {
+    font-size: 30px;
+    line-height: 1;
+    opacity: 0.68;
+    transition: opacity 0.18s, transform 0.18s;
+  }
+  .phase-card:hover .phase-card-icon {
+    opacity: 1;
+    transform: scale(1.12);
+  }
+  .phase-card-step {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: rgba(var(--ph-rgb), 0.40);
+    transition: color 0.18s;
+  }
+  .phase-card:hover .phase-card-step {
+    color: rgba(var(--ph-rgb), 0.85);
+  }
+  .phase-card-label {
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+    color: rgba(232, 232, 240, 0.92);
+    margin-bottom: 8px;
+    transition: color 0.18s;
+  }
+  .phase-card:hover .phase-card-label {
+    color: #e8e8f0;
+  }
+  .phase-card-sub {
+    font-size: 10px;
+    letter-spacing: 0.02em;
+    color: rgba(122, 122, 138, 0.68);
+    line-height: 1.65;
+    flex: 1;
+    transition: color 0.18s;
+  }
+  .phase-card:hover .phase-card-sub {
+    color: rgba(122, 122, 138, 0.90);
+  }
+  .phase-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 20px;
+  }
+  .phase-card-tag {
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(var(--ph-rgb), 0.52);
+    border: 1px solid rgba(var(--ph-rgb), 0.15);
+    padding: 3px 9px;
+    white-space: nowrap;
+    transition: border-color 0.18s, color 0.18s;
+  }
+  .phase-card:hover .phase-card-tag {
+    color: rgba(var(--ph-rgb), 1);
+    border-color: rgba(var(--ph-rgb), 0.55);
+  }
+  .phase-card-arrow {
+    font-size: 16px;
+    color: rgba(var(--ph-rgb), 0);
+    transition: color 0.22s ease, transform 0.22s ease;
+    transform: translateY(6px);
     line-height: 1;
   }
+  .phase-card:hover .phase-card-arrow {
+    color: rgba(var(--ph-rgb), 0.72);
+    transform: translateY(0);
+  }
+
+  /* ── Situation grid ── */
+  .situation-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  @media (min-width: 700px) {
+    .situation-grid {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+  }
+
+  /* ── Situation selector cards — vertical dans la grille ── */
+  .situation-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 0;
+    background: rgba(8, 8, 12, 0.65);
+    border: 1px solid rgba(42, 42, 58, 0.80);
+    border-top: 2px solid rgba(0, 255, 159, 0.20);
+    font-family: 'JetBrains Mono', monospace;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s, transform 0.15s, box-shadow 0.15s;
+    text-align: center;
+    width: 100%;
+    overflow: hidden;
+    min-height: 120px;
+  }
+  .situation-card:hover {
+    border-color: rgba(0, 255, 159, 0.48);
+    border-top-color: rgba(0, 255, 159, 0.85);
+    background: rgba(0, 255, 159, 0.04);
+    transform: translateY(-3px);
+    box-shadow: 0 -3px 0 rgba(0, 255, 159, 0.45), 0 10px 30px rgba(0, 255, 159, 0.07);
+  }
+  .situation-card:active {
+    transform: translateY(-1px);
+    background: rgba(0, 255, 159, 0.08);
+  }
+  .situation-card-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    width: 100%;
+    padding: 22px 0 14px;
+    opacity: 0.68;
+    transition: opacity 0.15s, transform 0.15s;
+    line-height: 1;
+  }
+  .situation-card:hover .situation-card-icon {
+    opacity: 1;
+    transform: scale(1.12);
+  }
   .situation-card-label {
+    flex: 1;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(232, 232, 240, 0.78);
+    line-height: 1.5;
+    padding: 0 12px 16px;
+    transition: color 0.15s;
+  }
+  .situation-card:hover .situation-card-label {
+    color: rgba(232, 232, 240, 0.97);
+  }
+  .situation-card-arrow {
+    width: 100%;
+    text-align: center;
+    font-size: 10px;
+    color: rgba(0, 255, 159, 0);
+    padding: 0 0 14px;
+    transition: color 0.2s ease, transform 0.2s ease;
+    transform: translateY(4px);
+    line-height: 1;
+  }
+  .situation-card:hover .situation-card-arrow {
+    color: rgba(0, 255, 159, 0.60);
+    transform: translateY(0);
+  }
+
+  /* ── Question box ── */
+  .question-box {
+    position: relative;
+    border: 1px solid rgba(0, 255, 159, 0.2);
+    background: rgba(0, 255, 159, 0.03);
+    padding: 22px 24px 22px 28px;
+    margin-bottom: 20px;
+    overflow: hidden;
+  }
+  .question-box::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: linear-gradient(180deg, rgba(0,255,159,0.65) 0%, rgba(0,255,159,0.12) 100%);
+  }
+  .question-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(0, 255, 159, 0.55);
+    margin-bottom: 10px;
+  }
+  .question-text {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: rgba(232, 232, 240, 0.96);
+    line-height: 1.5;
+    margin: 0;
+    letter-spacing: -0.01em;
+  }
+
+  /* ── Choice buttons ── */
+  .choices-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .choice-btn {
+    position: relative;
+    width: 100%;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 20px;
+    background: rgba(8, 8, 12, 0.55);
+    border: 1px solid rgba(42, 42, 58, 0.75);
+    font-family: 'JetBrains Mono', monospace;
+    cursor: pointer;
+    transition: border-color 0.15s ease, background 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+    overflow: hidden;
+  }
+  .choice-btn:hover {
+    border-color: rgba(0, 255, 159, 0.52);
+    background: rgba(0, 255, 159, 0.05);
+    transform: translateX(3px);
+    box-shadow: -3px 0 0 rgba(0, 255, 159, 0.52), 0 0 24px rgba(0, 255, 159, 0.08);
+  }
+  .choice-btn:active {
+    transform: translateX(1px);
+    background: rgba(0, 255, 159, 0.09);
+    box-shadow: -3px 0 0 rgba(0, 255, 159, 0.7);
+  }
+  .choice-num {
     font-size: 11px;
     font-weight: 700;
+    color: rgba(0, 255, 159, 0.35);
+    flex-shrink: 0;
+    width: 26px;
+    transition: color 0.15s;
+    line-height: 1;
+  }
+  .choice-btn:hover .choice-num {
+    color: rgba(0, 255, 159, 0.88);
+  }
+  .choice-text {
+    font-size: 13px;
+    color: rgba(232, 232, 240, 0.8);
+    line-height: 1.55;
+    flex: 1;
+    transition: color 0.15s;
+  }
+  .choice-btn:hover .choice-text {
+    color: rgba(232, 232, 240, 0.97);
+  }
+  .choice-arrow {
+    flex-shrink: 0;
+    font-size: 12px;
+    color: rgba(0, 255, 159, 0);
+    transition: color 0.2s ease, transform 0.2s ease;
+    transform: translateX(-8px);
+    line-height: 1;
+  }
+  .choice-btn:hover .choice-arrow {
+    color: rgba(0, 255, 159, 0.65);
+    transform: translateX(0);
+  }
+  .choice-tag {
+    flex-shrink: 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: rgba(232, 232, 240, 0.85);
-    line-height: 1.45;
+    border: 1px solid rgba(255, 68, 68, 0.4);
+    color: rgba(255, 68, 68, 0.85);
+    padding: 3px 8px;
+    transition: border-color 0.15s, color 0.15s;
+  }
+  .choice-btn:hover .choice-tag {
+    border-color: rgba(255, 68, 68, 0.7);
+    color: rgba(255, 68, 68, 1);
   }
 
   /* ── Resource badges ── */
@@ -175,13 +418,24 @@ import Layout from '../layouts/Layout.astro';
     border-color: rgba(232, 232, 240, 0.25);
   }
   .resource-badge-contact {
-    color: rgba(0, 217, 255, 0.65);
-    border: 1px solid rgba(0, 217, 255, 0.16);
-    background: rgba(0, 217, 255, 0.03);
+    color: rgba(232, 232, 240, 0.75);
+    border: 1px solid rgba(42, 42, 58, 0.9);
+    background: transparent;
   }
   .resource-badge-contact:hover {
-    color: rgba(0, 217, 255, 0.95);
-    border-color: rgba(0, 217, 255, 0.35);
+    color: rgba(232, 232, 240, 0.95);
+    border-color: rgba(232, 232, 240, 0.25);
+    background: rgba(232, 232, 240, 0.03);
+  }
+  .resource-badge-external {
+    color: rgba(138, 158, 232, 0.78);
+    border: 1px solid rgba(138, 158, 232, 0.22);
+    background: rgba(138, 158, 232, 0.03);
+  }
+  .resource-badge-external:hover {
+    color: #8a9ee8;
+    border-color: rgba(138, 158, 232, 0.5);
+    background: rgba(138, 158, 232, 0.08);
   }
 </style>
 
@@ -227,14 +481,15 @@ function resourceTypePrefix(type: string): string {
   if (type === 'wiki')     return '◇';
   if (type === 'template') return '▸';
   if (type === 'contact')  return '✆';
+  if (type === 'external') return '⤤';
   return '→';
 }
 
-function sectionHead(icon: string, label: string, color = 'text-dedsec-muted/50'): string {
+function sectionHead(icon: string, label: string, color = 'text-dedsec-muted/65'): string {
   return `
     <div class="flex items-center gap-3 mb-4">
-      <span class="font-mono text-[10px] uppercase tracking-[0.18em] ${color}">${icon} ${label}</span>
-      <div class="flex-1 h-px bg-dedsec-border/30"></div>
+      <span class="font-mono text-[11px] uppercase tracking-[0.16em] ${color}">${icon} ${label}</span>
+      <div class="flex-1 h-px bg-dedsec-border/40"></div>
     </div>
   `;
 }
@@ -249,16 +504,16 @@ function renderBreadcrumb(): string {
     const label = raw.length > 32 ? raw.slice(0, 32) + '…' : raw;
     const isLast = i === history.length - 1;
     return `
-      ${i > 0 ? '<span class="text-dedsec-border/50 mx-1">›</span>' : ''}
+      ${i > 0 ? '<span class="text-dedsec-border/70 mx-1">›</span>' : ''}
       ${isLast
-        ? `<span class="text-neon-green/70">${label}</span>`
-        : `<button class="hover:text-neon-green/80 text-dedsec-muted/40 transition-colors underline underline-offset-2" data-goto="${i}">${label}</button>`
+        ? `<span class="text-neon-green/80">${label}</span>`
+        : `<button class="hover:text-neon-green/80 text-dedsec-muted/65 transition-colors underline underline-offset-2" data-goto="${i}">${label}</button>`
       }
     `;
   }).join('');
 
   return `
-    <nav class="flex items-center flex-wrap gap-0.5 mb-8 font-mono text-[10px] leading-relaxed">
+    <nav class="flex items-center flex-wrap gap-0.5 mb-8 font-mono text-[11px] leading-relaxed">
       ${crumbs}
     </nav>
   `;
@@ -267,25 +522,50 @@ function renderBreadcrumb(): string {
 // ─── RENDER : SÉLECTEUR DE PHASE ──────────────────────────────────────────────
 
 function renderPhaseSelector(node: DecisionNode): string {
-  const cards = (node.choices ?? []).map(ch => {
+  const PHASE_RGB: Record<string, string> = {
+    avant:   '0, 255, 159',
+    pendant: '255, 136, 66',
+    apres:   '138, 158, 232',
+  };
+  const PHASE_TAGS: Record<string, string> = {
+    avant:   'Préparation',
+    pendant: 'En cours',
+    apres:   'Recours',
+  };
+
+  const PHASE_COLORS: Record<string, string> = {
+    avant:   '#00ff9f',
+    pendant: '#ff8842',
+    apres:   '#8a9ee8',
+  };
+
+  const cards = (node.choices ?? []).map((ch, idx) => {
     const phase = ch.next.replace('sit_', '') as Phase;
+    const rgb   = PHASE_RGB[phase] ?? '0, 255, 159';
+    const color = PHASE_COLORS[phase] ?? '#00ff9f';
+    const tag   = PHASE_TAGS[phase] ?? ch.tag ?? '';
+    const step  = String(idx + 1).padStart(2, '0');
     return `
-      <button data-next="${ch.next}" class="phase-card animate-fade-in">
-        <span class="phase-card-icon">${PHASE_ICONS[phase] ?? '◈'}</span>
-        <div class="flex-1 min-w-0">
-          <div class="phase-card-label">${ch.label}</div>
-          <div class="phase-card-sub">${PHASE_SUBTITLES[phase] ?? ''}</div>
+      <button data-next="${ch.next}" class="phase-card animate-fade-in" style="--ph-rgb:${rgb};--ph-color:${color}">
+        <div class="phase-card-header">
+          <span class="phase-card-icon">${PHASE_ICONS[phase] ?? '◈'}</span>
+          <span class="phase-card-step">${step}</span>
         </div>
-        ${ch.tag ? `<span class="phase-card-tag">${ch.tag}</span>` : ''}
+        <div class="phase-card-label">${ch.label}</div>
+        <div class="phase-card-sub">${PHASE_SUBTITLES[phase] ?? ''}</div>
+        <div class="phase-card-footer">
+          ${tag ? `<span class="phase-card-tag">${tag}</span>` : '<span></span>'}
+          <span class="phase-card-arrow">↓</span>
+        </div>
       </button>
     `;
   }).join('');
 
   return `
-    <div class="mb-8 animate-fade-in">
-      <p class="font-mono text-dedsec-muted/50 text-sm leading-relaxed">${node.subtitle ?? ''}</p>
+    <div style="margin-bottom:28px;" class="animate-fade-in">
+      <p style="font-family:'JetBrains Mono',monospace;font-size:12px;color:rgba(122,122,138,0.65);line-height:1.7;">${node.subtitle ?? ''}</p>
     </div>
-    <div class="flex flex-col gap-4">
+    <div class="phase-grid">
       ${cards}
     </div>
   `;
@@ -299,22 +579,24 @@ function renderSituationSelector(node: DecisionNode): string {
 
   const cards = (node.choices ?? []).map(ch => {
     const sitKey = ch.next.split('_').slice(1).join('_') as keyof typeof SITUATION_ICONS;
+    const icon   = SITUATION_ICONS[sitKey] ?? '◈';
     return `
       <button data-next="${ch.next}" class="situation-card animate-fade-in">
-        <span class="situation-card-icon">${SITUATION_ICONS[sitKey] ?? '◈'}</span>
+        <span class="situation-card-icon">${icon}</span>
         <span class="situation-card-label">${ch.label}</span>
+        <span class="situation-card-arrow">▸</span>
       </button>
     `;
   }).join('');
 
   return `
-    <div class="mb-8 animate-fade-in">
-      <div class="font-mono text-[9px] text-neon-green/35 uppercase tracking-[0.22em] mb-2">
+    <div style="margin-bottom:28px;" class="animate-fade-in">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:rgba(0,255,159,0.62);text-transform:uppercase;letter-spacing:0.22em;margin-bottom:10px;">
         Phase · ${phaseLabel}
       </div>
-      <p class="font-mono text-dedsec-muted/55 text-sm leading-relaxed">${node.subtitle ?? ''}</p>
+      <p style="font-family:'JetBrains Mono',monospace;font-size:12px;color:rgba(122,122,138,0.78);line-height:1.70;">${node.subtitle ?? ''}</p>
     </div>
-    <div class="grid grid-cols-2 gap-3">
+    <div class="situation-grid">
       ${cards}
     </div>
   `;
@@ -323,32 +605,24 @@ function renderSituationSelector(node: DecisionNode): string {
 // ─── RENDER : NŒUD QUESTION ───────────────────────────────────────────────────
 
 function renderQuestion(node: DecisionNode): string {
-  const choices = (node.choices ?? []).map(ch => `
+  const choices = (node.choices ?? []).map((ch, i) => `
     <button
       data-next="${ch.next}"
-      class="w-full text-left flex items-center gap-4
-             bg-dedsec-darker border border-dedsec-border/70
-             hover:border-neon-green/50 hover:bg-neon-green/3
-             font-mono text-sm px-6 py-5 transition-all duration-200
-             hover:shadow-[0_0_16px_#00ff9f12] hover:translate-x-1 animate-fade-in"
+      class="choice-btn animate-fade-in"
     >
-      <span class="text-neon-green/30 text-xs shrink-0">▸</span>
-      <span class="flex-1 text-dedsec-text/90 leading-relaxed">${ch.label}</span>
-      ${ch.tag ? `
-        <span class="shrink-0 font-mono text-[9px] uppercase tracking-wider
-                     border border-red-400/35 text-red-400/75 px-2 py-1">${ch.tag}</span>
-      ` : ''}
+      <span class="choice-num">${String(i + 1).padStart(2, '0')}.</span>
+      <span class="choice-text">${ch.label}</span>
+      ${ch.tag ? `<span class="choice-tag">${ch.tag}</span>` : ''}
+      <span class="choice-arrow">▸</span>
     </button>
   `).join('');
 
   return `
-    <div class="border border-neon-green/15 bg-neon-green/3 px-6 py-5 mb-8 animate-fade-in">
-      <div class="flex items-start gap-4">
-        <span class="text-neon-green/40 font-mono text-xl mt-0.5 shrink-0 leading-none">?</span>
-        <p class="font-mono text-white/90 text-base font-bold leading-snug m-0">${node.text}</p>
-      </div>
+    <div class="question-box animate-fade-in">
+      <div class="question-label">▸ Question</div>
+      <p class="question-text">${node.text}</p>
     </div>
-    <div class="flex flex-col gap-2.5">
+    <div class="choices-list">
       ${choices}
     </div>
   `;
@@ -366,7 +640,7 @@ function renderResult(node: DecisionNode): string {
       <div class="flex items-center gap-4">
         <span class="text-3xl leading-none shrink-0">${node.icon ?? '▸'}</span>
         <div>
-          <div class="font-mono text-[9px] uppercase tracking-[0.2em] mb-1.5" style="color:${c.accent};opacity:0.6;">
+          <div class="font-mono text-[10px] uppercase tracking-[0.18em] mb-1.5" style="color:${c.accent};opacity:0.82;">
             ${node.situation ? node.situation.toUpperCase() : ''} · ${node.phase ? node.phase.toUpperCase() : ''}
           </div>
           <h2 class="${c.text} font-mono text-lg font-bold m-0 leading-tight">${node.text}</h2>
@@ -378,7 +652,7 @@ function renderResult(node: DecisionNode): string {
   // ── Contexte juridique ──
   const contextBlock = node.context && node.context !== 'TODO' ? `
     <div class="mb-7 animate-fade-in">
-      ${sectionHead('◈', 'Contexte juridique', 'text-dedsec-muted/45')}
+      ${sectionHead('◈', 'Contexte juridique', 'text-dedsec-muted/68')}
       <p class="text-dedsec-text/75 text-sm leading-[1.85] m-0 pl-1" style="font-family:'Space Grotesk',sans-serif">${node.context}</p>
     </div>
   ` : '';
@@ -405,7 +679,7 @@ function renderResult(node: DecisionNode): string {
       <ul class="space-y-3 m-0 p-0 list-none">
         ${node.rights.map(r => `
           <li class="flex gap-4 py-0.5" style="font-family:'Space Grotesk',sans-serif">
-            <span class="text-neon-green/25 shrink-0 mt-[3px] leading-none">◇</span>
+            <span class="text-neon-green/55 shrink-0 mt-[3px] leading-none">◇</span>
             <span class="text-dedsec-muted/80 text-sm leading-relaxed">${r}</span>
           </li>
         `).join('')}
@@ -431,15 +705,20 @@ function renderResult(node: DecisionNode): string {
   // ── Ressources ──
   const resourcesBlock = node.resources?.length ? `
     <div class="mb-6 animate-fade-in">
-      ${sectionHead('▸', 'Ressources', 'text-dedsec-muted/35')}
+      ${sectionHead('▸', 'Ressources', 'text-dedsec-muted/65')}
       <div class="flex flex-wrap gap-2">
-        ${node.resources.map(r => `
-          <a href="${r.href}" class="resource-badge resource-badge-${r.type}">
+        ${node.resources.map(r => {
+          const isExternal = r.type === 'external' || /^https?:\/\//.test(r.href);
+          const attrs = isExternal ? ' target="_blank" rel="noopener noreferrer"' : '';
+          const tail  = isExternal ? '↗' : '→';
+          return `
+          <a href="${r.href}"${attrs} class="resource-badge resource-badge-${r.type}">
             <span class="opacity-60">${resourceTypePrefix(r.type)}</span>
             <span>${r.label}</span>
-            <span class="opacity-40">→</span>
+            <span class="opacity-40">${tail}</span>
           </a>
-        `).join('')}
+        `;
+        }).join('')}
       </div>
     </div>
   ` : '';
@@ -447,7 +726,7 @@ function renderResult(node: DecisionNode): string {
   // ── Phase suivante ──
   const nextPhaseBlock = node.next_phase ? `
     <div class="mt-8 pt-6 border-t border-dedsec-border/25 animate-fade-in">
-      <div class="font-mono text-[9px] uppercase tracking-[0.2em] text-dedsec-muted/30 mb-3">
+      <div class="font-mono text-[10px] uppercase tracking-[0.18em] text-dedsec-muted/60 mb-3">
         Continuer vers la phase suivante
       </div>
       <button
@@ -475,14 +754,14 @@ function renderNavButtons(node: DecisionNode): string {
   return `
     <div class="flex gap-3 mt-10 pt-6 border-t border-dedsec-border/20 animate-fade-in">
       <button id="btn-back"
-        class="flex items-center gap-2 border border-dedsec-border/60
-               hover:border-dedsec-text/30 text-dedsec-muted/50 hover:text-dedsec-text/70
+        class="flex items-center gap-2 border border-dedsec-border/70
+               hover:border-dedsec-text/40 text-dedsec-muted/75 hover:text-dedsec-text/85
                font-mono text-xs px-5 py-2.5 transition-all">
         ← Retour
       </button>
       <button id="btn-restart"
-        class="flex items-center gap-2 border border-dedsec-border/40
-               hover:border-neon-green/30 text-dedsec-muted/30 hover:text-neon-green/60
+        class="flex items-center gap-2 border border-dedsec-border/55
+               hover:border-neon-green/40 text-dedsec-muted/58 hover:text-neon-green/75
                font-mono text-xs px-5 py-2.5 transition-all">
         ↺ Recommencer
       </button>

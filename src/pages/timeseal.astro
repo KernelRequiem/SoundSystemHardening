@@ -1,0 +1,1157 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="TimeSeal" category="OUTILS">
+
+  <!-- ═══════════════════════════════════════════════════════
+       EN-TÊTE
+  ═══════════════════════════════════════════════════════ -->
+  <div class="rl-header">
+    <div class="rl-badge">⊡ OUTIL OPÉRATIONNEL</div>
+    <h1 class="rl-title">TimeSeal</h1>
+    <p class="rl-subtitle">Générateur de manifeste de saisie horodaté et vérifiable</p>
+    <div class="rl-local-notice">
+      <span class="notice-icon">⚿</span>
+      <span>Tout est généré <strong>localement dans votre navigateur</strong>. Aucune donnée n'est envoyée à un serveur.</span>
+    </div>
+
+    <!-- Bouton guide -->
+    <button id="guideToggle" class="rl-guide-btn" aria-expanded="false" aria-controls="guidePanel">
+      <span id="guideArrow">▸</span> GUIDE D'UTILISATION
+    </button>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       DROPDOWN GUIDE
+  ═══════════════════════════════════════════════════════ -->
+  <div id="guidePanel" class="rl-guide-panel" aria-hidden="true">
+    <div class="rl-guide-inner">
+
+      <div class="rl-guide-col">
+        <div class="rl-guide-section-title">⊡ CE QUE C'EST</div>
+        <p class="rl-guide-text">TimeSeal génère un <strong>manifeste de saisie horodaté</strong> au format PDF, utilisable comme pièce dans un recours juridique. Il documente chaque bien confisqué avec ses caractéristiques, l'identité des agents et les circonstances de la saisie.</p>
+
+        <div class="rl-guide-section-title" style="margin-top:18px">◎ UTILITÉ</div>
+        <ul class="rl-guide-list">
+          <li><span class="rl-guide-bullet">▸</span>Constituer une <strong>preuve opposable</strong> en cas de litige sur la restitution</li>
+          <li><span class="rl-guide-bullet">▸</span>Alimenter un <strong>dépôt de plainte</strong> ou un recours devant le tribunal administratif</li>
+          <li><span class="rl-guide-bullet">▸</span>Archiver les <strong>numéros de série</strong> pour prouver la propriété</li>
+          <li><span class="rl-guide-bullet">▸</span>Calculer automatiquement une <strong>estimation de valeur</strong> pour le préjudice</li>
+        </ul>
+      </div>
+
+      <div class="rl-guide-col">
+        <div class="rl-guide-section-title">▸ COMMENT L'UTILISER</div>
+        <ol class="rl-guide-steps">
+          <li><span class="rl-guide-num">01</span><span>Renseigne la <strong>date, heure et lieu</strong> de la saisie immédiatement après les faits</span></li>
+          <li><span class="rl-guide-num">02</span><span>Coche les <strong>types de biens</strong> saisis et décris chaque élément avec marque/modèle/série</span></li>
+          <li><span class="rl-guide-num">03</span><span>Note les <strong>agents intervenants</strong> (matricule, grade) si tu as pu les relever</span></li>
+          <li><span class="rl-guide-num">04</span><span>Ajoute <strong>témoins et photos</strong> si disponibles</span></li>
+          <li><span class="rl-guide-num">05</span><span>Clique <strong>GÉNÉRER LE MANIFESTE PDF</strong> : le fichier reste sur ta machine</span></li>
+        </ol>
+
+        <div class="rl-guide-opsec">
+          <span class="rl-guide-opsec-icon">⚿</span>
+          <div>
+            <div class="rl-guide-opsec-title">OPSEC</div>
+            <p>Zéro donnée transmise. Génération 100% côté client via <strong>jsPDF</strong>. Le PDF n'est jamais uploadé. Stocke-le chiffré ou hors ligne.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       FORMULAIRE
+  ═══════════════════════════════════════════════════════ -->
+  <form id="rigForm" autocomplete="off" novalidate>
+
+    <!-- Section 1 : Informations sur la saisie -->
+    <fieldset class="rl-section">
+      <legend class="rl-legend"><span class="rl-num">01</span> Informations sur la saisie</legend>
+      <div class="rl-grid-2">
+        <div class="rl-field">
+          <label for="f-date" class="rl-label">Date de la saisie <span class="req">*</span></label>
+          <input id="f-date" name="date" type="date" class="rl-input" required />
+        </div>
+        <div class="rl-field">
+          <label for="f-heure" class="rl-label">Heure approximative <span class="req">*</span></label>
+          <input id="f-heure" name="heure" type="time" class="rl-input" required />
+        </div>
+        <div class="rl-field">
+          <label for="f-lieu" class="rl-label">Lieu (Commune) <span class="req">*</span></label>
+          <input id="f-lieu" name="lieu" type="text" placeholder="ex: Saint-Malo" class="rl-input" required />
+        </div>
+        <div class="rl-field">
+          <label for="f-dept" class="rl-label">Département <span class="req">*</span></label>
+          <input id="f-dept" name="dept" type="text" placeholder="ex: 35 - Ille-et-Vilaine" class="rl-input" required />
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- Section 2 : Description de la saisie -->
+    <fieldset class="rl-section">
+      <legend class="rl-legend"><span class="rl-num">02</span> Description de la saisie</legend>
+
+      <div class="rl-field">
+        <label class="rl-label">Type de biens saisis <span class="req">*</span></label>
+        <div id="typeGrid" class="rl-type-grid">
+          {[
+            { id:'son',     label:'Système son / enceintes' },
+            { id:'ampli',   label:'Amplificateurs' },
+            { id:'table',   label:'Tables de mixage' },
+            { id:'cables',  label:'Câbles / connectiques' },
+            { id:'gen',     label:'Groupe électrogène' },
+            { id:'lumieres',label:'Éclairages / lasers' },
+            { id:'vehicule',label:'Véhicule(s)' },
+            { id:'autre',   label:'Autre' },
+          ].map(t => (
+            <label class="rl-check">
+              <input type="checkbox" name="types" value={t.label} />
+              <span>{t.label}</span>
+            </label>
+          ))}
+        </div>
+        <input id="f-types-autre" name="types_autre" type="text" placeholder="Précisez si Autre..." class="rl-input" style="margin-top:8px" />
+      </div>
+
+      <div class="rl-field" style="margin-top:14px">
+        <label for="f-desc" class="rl-label">Description détaillée des biens <span class="req">*</span></label>
+        <textarea id="f-desc" name="desc" rows="4" placeholder="Marques, modèles, numéros de série si connus, état au moment de la saisie..." class="rl-textarea" required></textarea>
+      </div>
+
+      <div class="rl-grid-2" style="margin-top:14px">
+        <div class="rl-field">
+          <label for="f-agents" class="rl-label">Nombre d'agents présents</label>
+          <input id="f-agents" name="agents" type="number" min="0" placeholder="ex: 12" class="rl-input" />
+        </div>
+        <div class="rl-field">
+          <label for="f-matricules" class="rl-label">Identités / matricules connus</label>
+          <input id="f-matricules" name="matricules" type="text" placeholder="ex: 1734-5, brigade X..." class="rl-input" />
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- Section 3 : Contexte -->
+    <fieldset class="rl-section">
+      <legend class="rl-legend"><span class="rl-num">03</span> Contexte <span class="rl-opt">(optionnel)</span></legend>
+
+      <div class="rl-field">
+        <label for="f-motif" class="rl-label">Motif / contexte invoqué par les forces de l'ordre</label>
+        <textarea id="f-motif" name="motif" rows="3" placeholder="ex: Arrêté préfectoral du X, trouble à l'ordre public, absence de déclaration..." class="rl-textarea"></textarea>
+      </div>
+
+      <div class="rl-field" style="margin-top:14px">
+        <label class="rl-label">Y a-t-il eu des violences ou dégradations ?</label>
+        <div class="rl-radio-group">
+          <label class="rl-radio"><input type="radio" name="violence" value="Non" checked /><span>Non</span></label>
+          <label class="rl-radio"><input type="radio" name="violence" value="Oui" /><span>Oui</span></label>
+          <label class="rl-radio"><input type="radio" name="violence" value="Non déterminé" /><span>Non déterminé</span></label>
+        </div>
+      </div>
+
+      <div class="rl-field" style="margin-top:10px" id="violenceDetailWrap">
+        <label for="f-violence-detail" class="rl-label">Précisions sur les violences / dégradations</label>
+        <textarea id="f-violence-detail" name="violence_detail" rows="3" placeholder="Description des faits, blessures éventuelles, biens dégradés..." class="rl-textarea"></textarea>
+      </div>
+    </fieldset>
+
+    <!-- Section 4 : Preuves et informations complémentaires -->
+    <fieldset class="rl-section">
+      <legend class="rl-legend"><span class="rl-num">04</span> Preuves et compléments <span class="rl-opt">(optionnel)</span></legend>
+
+      <div class="rl-field">
+        <label for="f-notes" class="rl-label">Notes et observations</label>
+        <textarea id="f-notes" name="notes" rows="4" placeholder="Témoins présents, comportements notables, récit chronologique..." class="rl-textarea"></textarea>
+      </div>
+
+      <div class="rl-field" style="margin-top:14px">
+        <label class="rl-label">Photos / pièces jointes</label>
+        <div class="rl-upload-zone" id="uploadZone">
+          <input type="file" id="f-photos" name="photos" accept="image/*" multiple class="rl-file-input" />
+          <div class="rl-upload-label">
+            <span class="upload-icon">⊕</span>
+            <span>Sélectionner des photos</span>
+            <span class="upload-sub">JPG, PNG, WEBP - stockées localement, non envoyées</span>
+          </div>
+        </div>
+        <div id="photoPreview" class="photo-preview-grid" style="display:none"></div>
+      </div>
+    </fieldset>
+
+    <!-- Erreur et bouton -->
+    <p id="rlError" class="rl-error" style="display:none"></p>
+
+    <div class="rl-actions">
+      <button type="button" id="btnReset" class="rl-btn-secondary">↺ Réinitialiser</button>
+      <button type="submit" id="btnGenerate" class="rl-btn-primary">
+        <span id="btnLabel">⊡ GÉNÉRER LE MANIFESTE PDF</span>
+      </button>
+    </div>
+
+  </form>
+
+  <!-- ═══════════════════════════════════════════════════════
+       AVERTISSEMENT LÉGAL
+  ═══════════════════════════════════════════════════════ -->
+  <div class="rl-legal">
+    <p><strong>Usage :</strong> Ce document est un outil de documentation personnelle. Il ne remplace pas un constat d'huissier ou un dépôt de plainte officiel. Conservez-le avec vos preuves en vue d'un recours juridique.</p>
+  </div>
+
+  <!-- jsPDF via CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" is:inline></script>
+
+  <script is:inline>
+  (function () {
+
+    // ── Helpers ──────────────────────────────────────────────────────────────
+    function genId() {
+      var now = new Date();
+      var pad = function(n){ return String(n).padStart(2,'0'); };
+      var date = String(now.getFullYear()) + pad(now.getMonth()+1) + pad(now.getDate());
+      var time = pad(now.getHours()) + pad(now.getMinutes()) + pad(now.getSeconds());
+      var hex  = Math.floor(Math.random() * 0xFFFF).toString(16).toUpperCase().padStart(4,'0');
+      return 'RL-' + date + '-' + time + '-' + hex;
+    }
+
+    function fmtDate(iso) {
+      if (!iso) return '-';
+      var d = new Date(iso);
+      return d.toLocaleDateString('fr-FR', { day:'numeric', month:'long', year:'numeric' });
+    }
+
+    function val(id) {
+      var el = document.getElementById(id);
+      return el ? el.value.trim() : '';
+    }
+
+    // ── Gestion upload photos ─────────────────────────────────────────────────
+    var photoFiles = [];
+
+    document.getElementById('f-photos').addEventListener('change', function(e) {
+      photoFiles = Array.from(e.target.files || []);
+      var preview = document.getElementById('photoPreview');
+      preview.innerHTML = '';
+      if (photoFiles.length === 0) { preview.style.display = 'none'; return; }
+      preview.style.display = 'grid';
+      photoFiles.forEach(function(f, i) {
+        var reader = new FileReader();
+        reader.onload = function(ev) {
+          var wrap = document.createElement('div');
+          wrap.className = 'photo-thumb';
+          wrap.innerHTML = '<img src="' + ev.target.result + '" alt="Photo ' + (i+1) + '" />' +
+            '<span>' + f.name + '</span>';
+          preview.appendChild(wrap);
+        };
+        reader.readAsDataURL(f);
+      });
+    });
+
+    // ── Upload zone click ────────────────────────────────────────────────────
+    document.getElementById('uploadZone').addEventListener('click', function(e) {
+      if (e.target !== document.getElementById('f-photos')) {
+        document.getElementById('f-photos').click();
+      }
+    });
+
+    // ── Afficher/masquer détail violence ─────────────────────────────────────
+    document.querySelectorAll('input[name="violence"]').forEach(function(r) {
+      r.addEventListener('change', function() {
+        document.getElementById('violenceDetailWrap').style.opacity = r.value === 'Oui' ? '1' : '0.4';
+      });
+    });
+
+    // ── Reset ─────────────────────────────────────────────────────────────────
+    document.getElementById('btnReset').addEventListener('click', function() {
+      if (!confirm('Réinitialiser le formulaire ?')) return;
+      document.getElementById('rigForm').reset();
+      document.getElementById('photoPreview').style.display = 'none';
+      document.getElementById('photoPreview').innerHTML = '';
+      photoFiles = [];
+      document.getElementById('rlError').style.display = 'none';
+    });
+
+    // ── Génération PDF ────────────────────────────────────────────────────────
+    document.getElementById('rigForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      // Validation champs requis
+      var err = [];
+      if (!val('f-date'))  err.push('Date de la saisie');
+      if (!val('f-heure')) err.push('Heure de la saisie');
+      if (!val('f-lieu'))  err.push('Lieu');
+      if (!val('f-dept'))  err.push('Département');
+      if (!val('f-desc'))  err.push('Description des biens');
+
+      var typesChecked = Array.from(document.querySelectorAll('input[name="types"]:checked')).map(function(c){ return c.value; });
+      if (typesChecked.length === 0) err.push('Type de biens saisis');
+
+      if (err.length > 0) {
+        var errEl = document.getElementById('rlError');
+        errEl.textContent = 'Champs requis manquants : ' + err.join(', ') + '.';
+        errEl.style.display = 'block';
+        errEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+      }
+      document.getElementById('rlError').style.display = 'none';
+
+      var btn = document.getElementById('btnGenerate');
+      var lbl = document.getElementById('btnLabel');
+      btn.disabled = true;
+      lbl.textContent = 'Génération en cours...';
+
+      // Collecte des données
+      var typesAutre = val('f-types-autre');
+      var typesAll = typesChecked.concat(typesAutre ? [typesAutre] : []);
+      var violence = document.querySelector('input[name="violence"]:checked');
+      var violenceVal = violence ? violence.value : 'Non';
+      var violenceDetail = val('f-violence-detail');
+
+      var data = {
+        id:             genId(),
+        generatedAt:    new Date().toLocaleString('fr-FR'),
+        date:           fmtDate(val('f-date')),
+        heure:          val('f-heure') || '-',
+        lieu:           val('f-lieu'),
+        dept:           val('f-dept'),
+        types:          typesAll.join(', '),
+        desc:           val('f-desc'),
+        agents:         val('f-agents')     || 'Non renseigné',
+        matricules:     val('f-matricules') || 'Non renseigné',
+        motif:          val('f-motif')      || 'Non renseigné',
+        violence:       violenceVal,
+        violenceDetail: violenceVal === 'Oui' ? (violenceDetail || 'Non précisé') : null,
+        notes:          val('f-notes') || null,
+        photosCount:    photoFiles.length,
+      };
+
+      // Lecture async des photos en base64
+      var photoB64 = [];
+      if (photoFiles.length > 0) {
+        var readings = photoFiles.slice(0, 4).map(function(f) {
+          return new Promise(function(res, rej) {
+            var r = new FileReader();
+            r.onload = function(ev) { res(ev.target.result); };
+            r.onerror = rej;
+            r.readAsDataURL(f);
+          });
+        });
+        try { photoB64 = await Promise.all(readings); } catch(_) { photoB64 = []; }
+      }
+
+      buildPDF(data, photoB64);
+
+      btn.disabled = false;
+      lbl.textContent = '⊡ GÉNÉRER LE MANIFESTE PDF';
+    });
+
+    // ── Construction du PDF ───────────────────────────────────────────────────
+    function buildPDF(d, photos) {
+      var jsPDF = window.jspdf.jsPDF;
+      var doc = new jsPDF({ orientation:'p', unit:'mm', format:'a4' });
+
+      var PAGE_W  = 210;
+      var PAGE_H  = 297;
+      var MARGIN  = 18;
+      var CONTENT = PAGE_W - MARGIN * 2;
+      var y = MARGIN;
+
+      // Couleurs
+      var C_BLACK   = [10, 10, 15];
+      var C_WHITE   = [255, 255, 255];
+      var C_MUTED   = [120, 120, 140];
+      var C_BORDER  = [210, 210, 220];
+      var C_SECTION = [240, 240, 248];
+
+      function checkPage(needed) {
+        if (y + needed > PAGE_H - MARGIN) {
+          doc.addPage();
+          y = MARGIN;
+          drawHeader(true);
+          y += 8;
+        }
+      }
+
+      function drawHeader(continuation) {
+        // Bandeau noir en-tête
+        doc.setFillColor(10, 10, 15);
+        doc.rect(0, 0, PAGE_W, 22, 'F');
+        doc.setFont('Courier', 'bold');
+        doc.setFontSize(9);
+        doc.setTextColor(...C_WHITE);
+        doc.text('SOUNDSYSTEMHARDENING.FR', MARGIN, 10);
+        doc.setFont('Courier', 'normal');
+        doc.setFontSize(7);
+        doc.setTextColor(180, 180, 200);
+        doc.text(continuation ? 'MANIFESTE DE SAISIE - SUITE' : 'MANIFESTE DE SAISIE - TimeSeal', PAGE_W/2, 10, { align:'center' });
+        doc.text('ID : ' + d.id, PAGE_W - MARGIN, 10, { align:'right' });
+        doc.text('CC BY-SA 4.0', MARGIN, 17);
+        doc.text('DOCUMENT GÉNÉRÉ LOCALEMENT', PAGE_W/2, 17, { align:'center' });
+        doc.text('Page ' + doc.getCurrentPageInfo().pageNumber, PAGE_W - MARGIN, 17, { align:'right' });
+      }
+
+      function drawSectionTitle(title) {
+        checkPage(14);
+        doc.setFillColor(...C_SECTION);
+        doc.rect(MARGIN, y, CONTENT, 8, 'F');
+        doc.setDrawColor(...C_BORDER);
+        doc.rect(MARGIN, y, CONTENT, 8, 'S');
+        doc.setFont('Courier', 'bold');
+        doc.setFontSize(8.5);
+        doc.setTextColor(...C_BLACK);
+        doc.text(title.toUpperCase(), MARGIN + 4, y + 5.5);
+        y += 12;
+      }
+
+      function drawField(label, value, multiline) {
+        if (!value) return;
+        var lines = multiline
+          ? doc.splitTextToSize(value, CONTENT - 6)
+          : [value];
+        var height = Math.max(10, lines.length * 5 + 4);
+        checkPage(height + 4);
+
+        // Label
+        doc.setFont('Courier', 'bold');
+        doc.setFontSize(7.5);
+        doc.setTextColor(...C_MUTED);
+        doc.text(label.toUpperCase(), MARGIN, y + 4);
+        y += 5;
+
+        // Valeur
+        doc.setFillColor(252, 252, 255);
+        doc.setDrawColor(...C_BORDER);
+        doc.rect(MARGIN, y, CONTENT, height, 'FD');
+        doc.setFont('Courier', 'normal');
+        doc.setFontSize(9);
+        doc.setTextColor(...C_BLACK);
+        lines.forEach(function(line, i) {
+          doc.text(line, MARGIN + 3, y + 5 + i * 5);
+        });
+        y += height + 3;
+      }
+
+      function drawRow(label, value) {
+        checkPage(8);
+        doc.setFont('Courier', 'bold');
+        doc.setFontSize(7.5);
+        doc.setTextColor(...C_MUTED);
+        doc.text(label.toUpperCase(), MARGIN, y + 4);
+        doc.setFont('Courier', 'normal');
+        doc.setFontSize(9);
+        doc.setTextColor(...C_BLACK);
+        doc.text(value || '-', MARGIN + 55, y + 4);
+        y += 7;
+      }
+
+      // ── En-tête ──────────────────────────────────────────────────────────
+      drawHeader(false);
+      y = 30;
+
+      // Titre principal
+      doc.setFont('Courier', 'bold');
+      doc.setFontSize(18);
+      doc.setTextColor(...C_BLACK);
+      doc.text('MANIFESTE DE SAISIE', PAGE_W/2, y, { align:'center' });
+      y += 7;
+
+      doc.setFont('Courier', 'normal');
+      doc.setFontSize(8);
+      doc.setTextColor(...C_MUTED);
+      doc.text('Généré le ' + d.generatedAt + ' - Outil TimeSeal (SoundSystemHardening.fr)', PAGE_W/2, y, { align:'center' });
+      y += 5;
+      doc.text('Ce document est généré localement par le navigateur. Aucune donnée transmise.', PAGE_W/2, y, { align:'center' });
+      y += 10;
+
+      // Ligne séparatrice
+      doc.setDrawColor(...C_BORDER);
+      doc.line(MARGIN, y, PAGE_W - MARGIN, y);
+      y += 8;
+
+      // Bloc ID / hash
+      doc.setFillColor(10, 10, 15);
+      doc.rect(MARGIN, y, CONTENT, 12, 'F');
+      doc.setFont('Courier', 'bold');
+      doc.setFontSize(8);
+      doc.setTextColor(...C_WHITE);
+      doc.text('IDENTIFIANT DOCUMENT', MARGIN + 4, y + 5);
+      doc.setFont('Courier', 'normal');
+      doc.setFontSize(11);
+      doc.text(d.id, MARGIN + 4, y + 10.5);
+      y += 18;
+
+      // ── Section 01 ───────────────────────────────────────────────────────
+      drawSectionTitle('01 - Informations sur la saisie');
+      drawRow('Date', d.date);
+      drawRow('Heure', d.heure);
+      drawRow('Lieu', d.lieu);
+      drawRow('Département', d.dept);
+      y += 4;
+
+      // ── Section 02 ───────────────────────────────────────────────────────
+      drawSectionTitle('02 - Description de la saisie');
+      drawField('Types de biens saisis', d.types, false);
+      drawField('Description détaillée', d.desc, true);
+      drawRow("Nombre d'agents présents", d.agents);
+      drawRow('Identités / matricules', d.matricules);
+      y += 4;
+
+      // ── Section 03 ───────────────────────────────────────────────────────
+      drawSectionTitle('03 - Contexte de la saisie');
+      drawField('Motif invoqué', d.motif, true);
+      drawRow('Violences / dégradations', d.violence);
+      if (d.violenceDetail) {
+        drawField('Précisions', d.violenceDetail, true);
+      }
+      y += 4;
+
+      // ── Section 04 ───────────────────────────────────────────────────────
+      drawSectionTitle('04 - Preuves et observations');
+      if (d.notes) {
+        drawField('Notes et observations', d.notes, true);
+      } else {
+        drawRow('Notes', 'Aucune');
+      }
+      drawRow('Photos attachées', d.photosCount > 0 ? d.photosCount + ' photo(s) (voir pages suivantes)' : 'Aucune');
+      y += 4;
+
+      // ── Photos ───────────────────────────────────────────────────────────
+      if (photos.length > 0) {
+        photos.forEach(function(b64, i) {
+          doc.addPage();
+          y = MARGIN;
+          drawHeader(true);
+          y = 32;
+
+          doc.setFont('Courier', 'bold');
+          doc.setFontSize(9);
+          doc.setTextColor(...C_MUTED);
+          doc.text('PIÈCE JOINTE ' + (i+1) + ' / ' + photos.length, PAGE_W/2, y, { align:'center' });
+          y += 6;
+
+          var imgW = CONTENT;
+          var imgH = 150;
+          try {
+            var format = b64.indexOf('image/png') !== -1 ? 'PNG' : 'JPEG';
+            doc.addImage(b64, format, MARGIN, y, imgW, imgH, '', 'MEDIUM');
+          } catch(_) {
+            doc.setFontSize(8);
+            doc.setTextColor(200, 50, 50);
+            doc.text('Erreur : impossible d\'ajouter cette image.', MARGIN, y + 10);
+          }
+          y += imgH + 10;
+
+          drawRow('Document ID', d.id);
+        });
+      }
+
+      // ── Pied de page sur chaque page ─────────────────────────────────────
+      var totalPages = doc.getNumberOfPages();
+      for (var p = 1; p <= totalPages; p++) {
+        doc.setPage(p);
+        doc.setDrawColor(...C_BORDER);
+        doc.line(MARGIN, PAGE_H - 14, PAGE_W - MARGIN, PAGE_H - 14);
+        doc.setFont('Courier', 'normal');
+        doc.setFontSize(6.5);
+        doc.setTextColor(...C_MUTED);
+        doc.text('SoundSystemHardening.fr - TimeSeal // CC BY-SA 4.0 // Document informatif, non contractuel.', PAGE_W/2, PAGE_H - 10, { align:'center' });
+        doc.text('ID : ' + d.id + ' // Page ' + p + ' / ' + totalPages, PAGE_W/2, PAGE_H - 6, { align:'center' });
+      }
+
+      // ── Export ────────────────────────────────────────────────────────────
+      var filename = 'TimeSeal_' + d.id + '.pdf';
+      doc.save(filename);
+    }
+
+  })();
+  </script>
+
+  <script is:inline>
+  (function() {
+    var btn   = document.getElementById('guideToggle');
+    var panel = document.getElementById('guidePanel');
+    var arrow = document.getElementById('guideArrow');
+    if (!btn || !panel) return;
+
+    btn.addEventListener('click', function() {
+      var isOpen = panel.classList.contains('open');
+      if (isOpen) {
+        panel.classList.remove('open');
+        btn.classList.remove('open');
+        btn.setAttribute('aria-expanded', 'false');
+        panel.setAttribute('aria-hidden', 'true');
+      } else {
+        panel.classList.add('open');
+        btn.classList.add('open');
+        btn.setAttribute('aria-expanded', 'true');
+        panel.setAttribute('aria-hidden', 'false');
+      }
+    });
+
+    // Ferme si clic en dehors
+    document.addEventListener('click', function(e) {
+      if (!btn.contains(e.target) && !panel.contains(e.target)) {
+        panel.classList.remove('open');
+        btn.classList.remove('open');
+        btn.setAttribute('aria-expanded', 'false');
+        panel.setAttribute('aria-hidden', 'true');
+      }
+    });
+
+    // Ferme avec Echap
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        panel.classList.remove('open');
+        btn.classList.remove('open');
+        btn.setAttribute('aria-expanded', 'false');
+        btn.focus();
+      }
+    });
+  })();
+  </script>
+
+</Layout>
+
+<style is:global>
+
+  /* ══════════════════════════════════════════════════════════
+     TimeSeal — DESIGN SYSTEM
+     Typo : Bebas Neue (titres) · Space Grotesk (corps) · JetBrains Mono (codes)
+  ══════════════════════════════════════════════════════════ */
+
+  /* ── En-tête ─────────────────────────────────────────────── */
+  .rl-header {
+    margin-bottom: 36px;
+    padding-bottom: 28px;
+    border-bottom: 1px solid rgba(42, 42, 58, 0.60);
+    position: relative;
+  }
+  .rl-header::before {
+    content: '';
+    position: absolute;
+    left: -28px; top: 0; bottom: 0;
+    width: 2px;
+    background: linear-gradient(180deg, #00ff9f 0%, rgba(0,255,159,0.03) 100%);
+  }
+
+  .rl-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: #00ff9f;
+    border: 1px solid rgba(0,255,159,0.28);
+    background: rgba(0,255,159,0.04);
+    padding: 4px 12px;
+    margin-bottom: 14px;
+  }
+
+  .rl-title {
+    font-family: 'Bebas Neue', 'JetBrains Mono', sans-serif !important;
+    font-size: 52px !important;
+    color: #e8e8f0 !important;
+    letter-spacing: 0.08em !important;
+    line-height: 1 !important;
+    margin: 0 0 10px !important;
+    padding: 0 !important;
+    border: none !important;
+    text-shadow: 0 0 40px rgba(0,255,159,0.12);
+  }
+
+  .rl-subtitle {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    color: rgba(122, 122, 138, 0.88);
+    letter-spacing: 0.01em;
+    line-height: 1.55;
+    margin-bottom: 20px;
+  }
+
+  .rl-local-notice {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    background: rgba(0,255,159,0.035);
+    border: 1px solid rgba(0,255,159,0.16);
+    border-left: 3px solid rgba(0,255,159,0.55);
+    padding: 12px 16px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 12px;
+    color: rgba(200, 200, 216, 0.82);
+    line-height: 1.65;
+  }
+  .notice-icon {
+    color: #00ff9f;
+    font-size: 15px;
+    flex-shrink: 0;
+    line-height: 1.6;
+  }
+  .rl-local-notice strong { color: #00ff9f; }
+
+  /* ── Sections formulaire ─────────────────────────────────── */
+  .rl-section {
+    border: 1px solid rgba(42, 42, 58, 0.65);
+    border-left: 3px solid rgba(0,255,159,0.22);
+    padding: 26px 24px 22px;
+    margin-bottom: 20px;
+    background: rgba(8, 8, 12, 0.55);
+    transition: border-left-color 0.2s;
+  }
+  .rl-section:focus-within {
+    border-left-color: rgba(0,255,159,0.55);
+  }
+
+  .rl-legend {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: rgba(232, 232, 240, 0.92);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 0;
+    margin-bottom: 22px;
+    border: none;
+  }
+
+  .rl-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    flex-shrink: 0;
+    border: 1px solid rgba(0,255,159,0.32);
+    color: #00ff9f;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    background: rgba(0,255,159,0.04);
+  }
+
+  .rl-opt {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: rgba(90, 100, 114, 0.82);
+    font-weight: 400;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-left: 2px;
+  }
+
+  /* ── Champs ──────────────────────────────────────────────── */
+  .rl-grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .rl-field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .rl-label {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    color: rgba(122, 122, 138, 0.88);
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+  }
+  .req { color: #ff4444; }
+
+  .rl-input, .rl-textarea {
+    background: rgba(5, 6, 10, 0.92);
+    border: 1px solid rgba(42, 42, 58, 0.80);
+    border-bottom: 1px solid rgba(42, 42, 58, 1);
+    color: #e8e8f0;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    padding: 11px 14px;
+    outline: none;
+    resize: vertical;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    width: 100%;
+    box-sizing: border-box;
+    line-height: 1.5;
+  }
+  .rl-input:focus, .rl-textarea:focus {
+    border-color: rgba(0,255,159,0.42);
+    box-shadow: 0 0 0 2px rgba(0,255,159,0.06);
+  }
+  .rl-input::placeholder, .rl-textarea::placeholder {
+    color: rgba(58, 64, 80, 0.85);
+    font-size: 12px;
+    font-style: italic;
+  }
+
+  /* ── Checkboxes types ────────────────────────────────────── */
+  .rl-type-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(195px, 1fr));
+    gap: 8px;
+  }
+  .rl-check {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 13px;
+    border: 1px solid rgba(42, 42, 58, 0.75);
+    background: rgba(5, 6, 10, 0.50);
+    cursor: pointer;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    color: rgba(122, 122, 138, 0.82);
+    transition: all 0.15s;
+    user-select: none;
+  }
+  .rl-check:hover {
+    border-color: rgba(0,255,159,0.28);
+    color: rgba(200, 200, 216, 0.92);
+    background: rgba(0,255,159,0.03);
+  }
+  .rl-check input[type=checkbox] {
+    accent-color: #00ff9f;
+    width: 14px; height: 14px;
+    flex-shrink: 0;
+  }
+  .rl-check:has(input:checked) {
+    border-color: rgba(0,255,159,0.40);
+    background: rgba(0,255,159,0.05);
+    color: rgba(232, 232, 240, 0.92);
+  }
+  .rl-check:has(input:checked) span { color: rgba(232, 232, 240, 0.95); }
+
+  /* ── Radios ──────────────────────────────────────────────── */
+  .rl-radio-group {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .rl-radio {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 9px 18px;
+    border: 1px solid rgba(42, 42, 58, 0.75);
+    cursor: pointer;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    color: rgba(122, 122, 138, 0.82);
+    transition: all 0.15s;
+    user-select: none;
+  }
+  .rl-radio:hover {
+    border-color: rgba(0,255,159,0.28);
+    color: rgba(200, 200, 216, 0.92);
+  }
+  .rl-radio input { accent-color: #00ff9f; }
+  .rl-radio:has(input:checked) {
+    border-color: rgba(0,255,159,0.42);
+    color: #00ff9f;
+    background: rgba(0,255,159,0.05);
+  }
+
+  /* ── Upload ──────────────────────────────────────────────── */
+  .rl-upload-zone {
+    border: 1px dashed rgba(42, 42, 58, 0.80);
+    padding: 28px 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+    position: relative;
+    background: rgba(5, 6, 10, 0.55);
+  }
+  .rl-upload-zone:hover {
+    border-color: rgba(0,255,159,0.32);
+    background: rgba(0,255,159,0.02);
+  }
+  .rl-file-input {
+    position: absolute; inset: 0;
+    opacity: 0; cursor: pointer; width: 100%;
+  }
+  .rl-upload-label {
+    display: flex; flex-direction: column;
+    gap: 5px; align-items: center; pointer-events: none;
+  }
+  .upload-icon {
+    font-size: 26px;
+    color: rgba(0,255,159,0.35);
+    margin-bottom: 4px;
+  }
+  .rl-upload-label span:nth-child(2) {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 12px;
+    color: rgba(200, 200, 216, 0.80);
+    font-weight: 500;
+  }
+  .upload-sub {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: rgba(90, 100, 114, 0.82);
+    letter-spacing: 0.10em;
+  }
+  .photo-preview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+    gap: 8px; margin-top: 12px;
+  }
+  .photo-thumb {
+    display: flex; flex-direction: column; gap: 4px;
+  }
+  .photo-thumb img {
+    width: 100%; height: 80px;
+    object-fit: cover;
+    border: 1px solid rgba(42, 42, 58, 0.80);
+  }
+  .photo-thumb span {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px; color: rgba(90, 100, 114, 0.82);
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+
+  /* ── Actions ─────────────────────────────────────────────── */
+  .rl-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    justify-content: flex-end;
+    margin-top: 28px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(42, 42, 58, 0.35);
+  }
+  .rl-btn-secondary {
+    background: transparent;
+    border: 1px solid rgba(42, 42, 58, 0.75);
+    color: rgba(122, 122, 138, 0.72);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .rl-btn-secondary:hover {
+    border-color: rgba(0,255,159,0.22);
+    color: rgba(200, 200, 216, 0.88);
+  }
+  .rl-btn-primary {
+    background: rgba(0,255,159,0.10);
+    border: 1px solid rgba(0,255,159,0.52);
+    color: #00ff9f;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 13px 30px;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 0 18px rgba(0,255,159,0.12), inset 0 0 12px rgba(0,255,159,0.04);
+  }
+  .rl-btn-primary:hover {
+    background: rgba(0,255,159,0.16);
+    border-color: rgba(0,255,159,0.78);
+    box-shadow: 0 0 30px rgba(0,255,159,0.28), inset 0 0 16px rgba(0,255,159,0.06);
+    transform: translateY(-1px);
+  }
+  .rl-btn-primary:active { transform: translateY(0); }
+  .rl-btn-primary:disabled { opacity: 0.32; cursor: not-allowed; transform: none; }
+
+  /* ── Erreur ──────────────────────────────────────────────── */
+  .rl-error {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 12px;
+    color: #ff4444;
+    border: 1px solid rgba(255, 68, 68, 0.20);
+    border-left: 3px solid rgba(255, 68, 68, 0.62);
+    padding: 12px 16px;
+    margin-top: 14px;
+    background: rgba(255, 68, 68, 0.04);
+    line-height: 1.55;
+  }
+
+  /* ── Légal ───────────────────────────────────────────────── */
+  .rl-legal {
+    margin-top: 32px;
+    border-top: 1px solid rgba(42, 42, 58, 0.45);
+    padding-top: 18px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 11px;
+    color: rgba(90, 100, 114, 0.82);
+    line-height: 1.80;
+  }
+  .rl-legal strong { color: rgba(122, 122, 138, 0.90); }
+
+  /* ── Responsive ──────────────────────────────────────────── */
+  @media (max-width: 600px) {
+    .rl-grid-2 { grid-template-columns: 1fr; }
+    .rl-actions { flex-direction: column; align-items: stretch; }
+    .rl-btn-primary, .rl-btn-secondary { text-align: center; }
+    .rl-title { font-size: 40px !important; }
+  }
+
+  /* ── Guide dropdown ──────────────────────────────────────── */
+  .rl-guide-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 20px;
+    background: none;
+    border: 1px solid rgba(0,255,159,0.18);
+    color: rgba(0,255,159,0.62);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.20em;
+    text-transform: uppercase;
+    padding: 9px 18px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .rl-guide-btn:hover {
+    border-color: rgba(0,255,159,0.45);
+    color: #00ff9f;
+    background: rgba(0,255,159,0.04);
+  }
+  .rl-guide-btn.open {
+    border-color: rgba(0,255,159,0.42);
+    color: #00ff9f;
+    background: rgba(0,255,159,0.04);
+  }
+  #guideArrow {
+    display: inline-block;
+    transition: transform 0.2s;
+  }
+  .rl-guide-btn.open #guideArrow { transform: rotate(90deg); }
+
+  .rl-guide-panel {
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.35s ease, opacity 0.25s ease;
+    opacity: 0;
+    margin: 0 0 28px 0;
+  }
+  .rl-guide-panel.open {
+    max-height: 700px;
+    opacity: 1;
+  }
+  .rl-guide-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border: 1px solid rgba(42, 42, 58, 0.65);
+    border-left: 3px solid rgba(0,255,159,0.18);
+    background: rgba(5, 6, 10, 0.62);
+  }
+  .rl-guide-col {
+    padding: 22px 24px;
+  }
+  .rl-guide-col:first-child {
+    border-right: 1px solid rgba(42, 42, 58, 0.45);
+  }
+
+  .rl-guide-section-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.22em;
+    color: #00ff9f;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid rgba(0,255,159,0.10);
+  }
+  .rl-guide-text {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 12px;
+    color: rgba(154, 162, 180, 0.88);
+    line-height: 1.75;
+    margin: 0;
+  }
+  .rl-guide-text strong { color: rgba(192, 200, 216, 0.95); }
+
+  .rl-guide-list {
+    list-style: none; margin: 0; padding: 0;
+  }
+  .rl-guide-list li {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 12px;
+    color: rgba(154, 162, 180, 0.88);
+    line-height: 1.65;
+    padding: 4px 0;
+  }
+  .rl-guide-list strong { color: rgba(192, 200, 216, 0.95); }
+  .rl-guide-bullet { color: #00ff9f; flex-shrink: 0; margin-top: 3px; }
+
+  .rl-guide-steps {
+    list-style: none; margin: 0; padding: 0;
+    display: flex; flex-direction: column; gap: 12px;
+  }
+  .rl-guide-steps li {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 12px;
+    color: rgba(154, 162, 180, 0.88);
+    line-height: 1.65;
+  }
+  .rl-guide-steps strong { color: rgba(192, 200, 216, 0.95); }
+  .rl-guide-num {
+    flex-shrink: 0;
+    width: 22px; height: 22px;
+    display: flex; align-items: center; justify-content: center;
+    border: 1px solid rgba(0,255,159,0.28);
+    background: rgba(0,255,159,0.04);
+    color: #00ff9f;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px; font-weight: 700;
+    margin-top: 2px;
+  }
+
+  .rl-guide-opsec {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    margin-top: 20px;
+    background: rgba(0,255,159,0.03);
+    border: 1px solid rgba(0,255,159,0.10);
+    border-left: 2px solid rgba(0,255,159,0.38);
+    padding: 13px 16px;
+  }
+  .rl-guide-opsec-icon {
+    color: #00ff9f; font-size: 14px;
+    flex-shrink: 0; margin-top: 1px;
+  }
+  .rl-guide-opsec-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px; letter-spacing: 0.22em;
+    color: #00ff9f; text-transform: uppercase;
+    margin-bottom: 5px;
+  }
+  .rl-guide-opsec p {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 11px; color: rgba(122, 122, 138, 0.85);
+    line-height: 1.65; margin: 0;
+  }
+  .rl-guide-opsec strong { color: rgba(136, 146, 164, 0.90); }
+
+  @media (max-width: 600px) {
+    .rl-guide-inner { grid-template-columns: 1fr; }
+    .rl-guide-col:first-child { border-right: none; border-bottom: 1px solid rgba(42,42,58,0.45); }
+    .rl-guide-panel.open { max-height: 1100px; }
+  }
+</style>

@@ -9,19 +9,23 @@ import Layout from '../layouts/Layout.astro';
   description="Chiffrement de fiches sensibles 100% client-side. AES-GCM 256-bit, PBKDF2 250k itérations. Zéro serveur, aucune donnée transmise."
 >
 
-<div class="flex items-start justify-between gap-4 mb-2">
-  <h1 class="mb-0">InfoCrypt</h1>
-  <button onclick="icGuideOpen()" aria-label="Ouvrir le guide"
-    class="shrink-0 flex items-center gap-2 mt-1 px-4 py-2 font-mono text-[11px] tracking-widest uppercase border border-dedsec-border text-dedsec-muted hover:border-neon-green/50 hover:text-neon-green transition-all">
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true">
-      <circle cx="12" cy="12" r="10"/><path d="M12 16v-4m0-4h.01" stroke-linecap="round"/>
-    </svg>
-    Guide
-  </button>
+<div class="ic-header">
+  <div class="ic-badge">⊡ OUTIL CYBER-OPSEC</div>
+  <div class="flex items-start justify-between gap-4">
+    <h1 class="ic-title">InfoCrypt</h1>
+    <button onclick="icGuideOpen()" aria-label="Ouvrir le guide" class="ic-guide-open-btn">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true">
+        <circle cx="12" cy="12" r="10"/><path d="M12 16v-4m0-4h.01" stroke-linecap="round"/>
+      </svg>
+      Guide
+    </button>
+  </div>
+  <p class="ic-subtitle">Chiffrer une fiche sensible · La transmettre sur n'importe quel canal · Déchiffrer avec le mot de passe</p>
+  <div class="ic-local-notice">
+    <span class="ic-notice-icon">⚿</span>
+    <span>Tout le chiffrement se fait <strong>dans ton navigateur</strong>. Aucune donnée ne quitte ta machine. Le mot de passe doit être transmis séparément (Signal, en présentiel) — InfoCrypt chiffre l'information, pas le canal.</span>
+  </div>
 </div>
-<p class="text-dedsec-muted text-sm font-mono tracking-wider mb-8">
-  ▸ Chiffrer une fiche sensible · La transmettre sur n'importe quel canal · Déchiffrer avec le mot de passe
-</p>
 
 <!-- ═══════════════════════════════════════════════════════════════
      GUIDE MODAL
@@ -168,25 +172,22 @@ import Layout from '../layouts/Layout.astro';
   </div><!-- /panel -->
 </div><!-- /overlay -->
 
-<!-- Badges -->
-<div class="grid grid-cols-3 gap-3 mb-8">
-  <div class="card-neon text-center py-4">
-    <div class="text-neon-green font-mono font-bold text-xs tracking-widest">AES-GCM 256</div>
-    <div class="text-dedsec-muted/60 text-[10px] font-mono mt-1.5 uppercase tracking-wider">Chiffrement authentifié</div>
+<!-- Stat bar crypto -->
+<div class="ic-stat-bar mb-8">
+  <div class="ic-stat">
+    <div class="ic-stat-val">AES-GCM 256</div>
+    <div class="ic-stat-lbl">Chiffrement authentifié</div>
   </div>
-  <div class="card-neon text-center py-4">
-    <div class="text-neon-green font-mono font-bold text-xs tracking-widest">PBKDF2 250k</div>
-    <div class="text-dedsec-muted/60 text-[10px] font-mono mt-1.5 uppercase tracking-wider">Résistant brute-force</div>
+  <div class="ic-stat-sep"></div>
+  <div class="ic-stat">
+    <div class="ic-stat-val">PBKDF2 250k</div>
+    <div class="ic-stat-lbl">Résistant brute-force</div>
   </div>
-  <div class="card-neon text-center py-4">
-    <div class="text-neon-green font-mono font-bold text-xs tracking-widest">ZÉRO SERVEUR</div>
-    <div class="text-dedsec-muted/60 text-[10px] font-mono mt-1.5 uppercase tracking-wider">100% client-side</div>
+  <div class="ic-stat-sep"></div>
+  <div class="ic-stat">
+    <div class="ic-stat-val">ZÉRO SERVEUR</div>
+    <div class="ic-stat-lbl">100% client-side</div>
   </div>
-</div>
-
-<div class="info-box mb-8">
-  Tout le chiffrement se fait <strong>dans ton navigateur</strong>. Aucune donnée ne quitte ta machine.
-  Le mot de passe doit être transmis séparément (Signal, en présentiel) — InfoCrypt chiffre l'information, pas le canal.
 </div>
 
 <!-- ══════════════════════════════════════════════════════════════
@@ -352,119 +353,297 @@ import Layout from '../layouts/Layout.astro';
      STYLES
 ══════════════════════════════════════════════════════════════ -->
 <style is:global>
+
+  /* ══════════════════════════════════════════════════════════
+     INFOCRYPT — DESIGN SYSTEM
+     Typo : Bebas Neue (titre) · Space Grotesk (corps) · JetBrains Mono (codes)
+  ══════════════════════════════════════════════════════════ */
+
+  /* ── En-tête ─────────────────────────────────────────────── */
+  .ic-header {
+    margin-bottom: 32px;
+    padding-bottom: 26px;
+    border-bottom: 1px solid rgba(42, 42, 58, 0.60);
+    position: relative;
+  }
+  .ic-header::before {
+    content: '';
+    position: absolute;
+    left: -28px; top: 0; bottom: 0;
+    width: 2px;
+    background: linear-gradient(180deg, #00ff9f 0%, rgba(0,255,159,0.03) 100%);
+  }
+  .ic-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: #00ff9f;
+    border: 1px solid rgba(0,255,159,0.28);
+    background: rgba(0,255,159,0.04);
+    padding: 4px 12px;
+    margin-bottom: 14px;
+  }
+  .ic-title {
+    font-family: 'Bebas Neue', 'JetBrains Mono', sans-serif !important;
+    font-size: 52px !important;
+    color: #e8e8f0 !important;
+    letter-spacing: 0.08em !important;
+    line-height: 1 !important;
+    margin: 0 0 10px !important;
+    padding: 0 !important;
+    border: none !important;
+    text-shadow: 0 0 40px rgba(0,255,159,0.12);
+  }
+  .ic-subtitle {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 13px;
+    color: rgba(122, 122, 138, 0.85);
+    line-height: 1.6;
+    margin-bottom: 18px;
+  }
+  .ic-local-notice {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    background: rgba(0,255,159,0.035);
+    border: 1px solid rgba(0,255,159,0.16);
+    border-left: 3px solid rgba(0,255,159,0.55);
+    padding: 12px 16px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 12px;
+    color: rgba(200, 200, 216, 0.82);
+    line-height: 1.65;
+  }
+  .ic-notice-icon {
+    color: #00ff9f;
+    font-size: 15px;
+    flex-shrink: 0;
+    line-height: 1.6;
+  }
+  .ic-local-notice strong { color: #00ff9f; }
+
+  .ic-guide-open-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    flex-shrink: 0;
+    margin-top: 8px;
+    background: none;
+    border: 1px solid rgba(42, 42, 58, 0.80);
+    color: rgba(122, 122, 138, 0.75);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 9px 16px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .ic-guide-open-btn:hover {
+    border-color: rgba(0,255,159,0.40);
+    color: #00ff9f;
+    background: rgba(0,255,159,0.04);
+  }
+
+  /* ── Stat bar ────────────────────────────────────────────── */
+  .ic-stat-bar {
+    display: flex;
+    align-items: stretch;
+    border: 1px solid rgba(42, 42, 58, 0.70);
+    border-left: 3px solid rgba(0,255,159,0.30);
+    background: rgba(8, 8, 12, 0.55);
+    overflow: hidden;
+  }
+  .ic-stat {
+    flex: 1;
+    padding: 16px 20px;
+    text-align: center;
+  }
+  .ic-stat-sep {
+    width: 1px;
+    background: rgba(42, 42, 58, 0.70);
+    flex-shrink: 0;
+  }
+  .ic-stat-val {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    color: #00ff9f;
+    margin-bottom: 5px;
+  }
+  .ic-stat-lbl {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 10px;
+    color: rgba(122, 122, 138, 0.72);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  @media (max-width: 500px) {
+    .ic-stat-bar { flex-direction: column; }
+    .ic-stat-sep { width: 100%; height: 1px; }
+  }
+
+  /* ── Tabs ────────────────────────────────────────────────── */
   .ic-tab-btn {
-    color: #7a7a8a;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(122, 122, 138, 0.72);
     background: transparent;
     border: none;
     cursor: pointer;
+    transition: all 0.15s;
+    padding: 14px 0;
   }
   .ic-tab-btn.ic-active {
-    background: rgba(0,255,159,0.1);
+    background: rgba(0,255,159,0.07);
     color: #00ff9f;
     box-shadow: inset 0 -2px 0 #00ff9f;
   }
   .ic-tab-btn:not(.ic-active):hover {
-    color: #e8e8f0;
-    background: rgba(255,255,255,0.03);
+    color: rgba(232, 232, 240, 0.85);
+    background: rgba(255,255,255,0.02);
   }
 
+  /* ── Section titles ──────────────────────────────────────── */
   .ic-section-title {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 0.25em;
+    font-size: 9px;
+    letter-spacing: 0.24em;
     text-transform: uppercase;
-    color: rgba(0,255,159,0.7);
-    margin-bottom: 14px;
+    color: rgba(0,255,159,0.65);
+    margin-bottom: 18px;
     padding-bottom: 8px;
-    border-bottom: 1px solid #2a2a3a;
+    border-bottom: 1px solid rgba(42, 42, 58, 0.65);
   }
 
-  .ic-field { margin-bottom: 14px; }
+  /* ── Champs ──────────────────────────────────────────────── */
+  .ic-field { margin-bottom: 16px; }
 
   .ic-label {
     display: block;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 0.12em;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.07em;
     text-transform: uppercase;
-    color: #7a7a8a;
-    margin-bottom: 6px;
+    color: rgba(122, 122, 138, 0.88);
+    margin-bottom: 7px;
   }
 
   .ic-input {
     width: 100%;
-    background: #08080c;
-    border: 1px solid #2a2a3a;
+    background: rgba(5, 6, 10, 0.92);
+    border: 1px solid rgba(42, 42, 58, 0.80);
     color: #e8e8f0;
-    font-family: 'JetBrains Mono', monospace;
+    font-family: 'Space Grotesk', sans-serif;
     font-size: 13px;
-    padding: 10px 12px;
+    font-weight: 400;
+    padding: 11px 14px;
     outline: none;
-    transition: border-color 0.15s;
+    transition: border-color 0.15s, box-shadow 0.15s;
     resize: none;
+    line-height: 1.5;
+    box-sizing: border-box;
   }
-  .ic-input:focus { border-color: rgba(0,255,159,0.5); }
-  .ic-input::placeholder { color: #3a3a4a; }
-
+  .ic-input:focus {
+    border-color: rgba(0,255,159,0.42);
+    box-shadow: 0 0 0 2px rgba(0,255,159,0.06);
+  }
+  .ic-input::placeholder {
+    color: rgba(58, 64, 80, 0.85);
+    font-size: 12px;
+    font-style: italic;
+  }
   .ic-textarea { min-height: 80px; resize: vertical; }
 
+  /* ── Password ────────────────────────────────────────────── */
   .ic-pw-wrap { position: relative; }
-  .ic-pw-wrap .ic-input { padding-right: 38px; }
-
+  .ic-pw-wrap .ic-input { padding-right: 40px; }
   .ic-pw-eye {
     position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
-    background: none; border: none; cursor: pointer; font-size: 15px; padding: 0;
-    color: #3a3a4a;
+    background: none; border: none; cursor: pointer;
+    font-size: 14px; padding: 0;
+    color: rgba(58, 64, 80, 0.80);
+    transition: color 0.15s;
   }
-  .ic-pw-eye:hover { color: #7a7a8a; }
+  .ic-pw-eye:hover { color: rgba(122, 122, 138, 0.90); }
+  .ic-pw-bar-track {
+    height: 3px;
+    background: rgba(42, 42, 58, 0.80);
+    overflow: hidden;
+    margin-top: 6px;
+  }
+  .ic-pw-bar-fill { height: 100%; width: 0%; transition: width 0.2s, background 0.2s; }
 
-  .ic-pw-bar-track { height: 3px; background: #2a2a3a; overflow: hidden; }
-  .ic-pw-bar-fill  { height: 100%; width: 0%; transition: width 0.2s, background 0.2s; }
-
+  /* ── Output bloc chiffré ─────────────────────────────────── */
   .ic-output-block {
-    background: #05050a;
-    border: 1px solid #2a2a3a;
-    padding: 12px;
+    background: rgba(3, 4, 8, 0.95);
+    border: 1px solid rgba(42, 42, 58, 0.80);
+    padding: 14px;
     font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
+    font-size: 10px;
     word-break: break-all;
     max-height: 180px;
     overflow-y: auto;
-    color: #7a7a8a;
-    line-height: 1.6;
+    color: rgba(122, 122, 138, 0.80);
+    line-height: 1.65;
   }
 
+  /* ── Boutons copy/dl ─────────────────────────────────────── */
   .ic-copy-btn {
-    background: #08080c;
-    border: 1px solid #2a2a3a;
-    color: #7a7a8a;
+    background: rgba(8, 8, 12, 0.80);
+    border: 1px solid rgba(42, 42, 58, 0.75);
+    color: rgba(122, 122, 138, 0.80);
     cursor: pointer;
-    padding: 5px 12px;
+    padding: 6px 13px;
     font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 0.05em;
+    font-size: 10px;
+    letter-spacing: 0.08em;
     transition: all 0.15s;
   }
-  .ic-copy-btn:hover  { border-color: rgba(0,255,159,0.5); color: #00ff9f; }
+  .ic-copy-btn:hover  { border-color: rgba(0,255,159,0.45); color: #00ff9f; }
   .ic-copy-btn.copied { border-color: #00ff9f; color: #00ff9f; }
 
+  /* ── Alertes ─────────────────────────────────────────────── */
   .ic-alert {
-    border: 1px solid rgba(255,68,68,0.5);
-    background: rgba(255,68,68,0.06);
-    color: rgba(255,68,68,0.9);
-    border-radius: 0;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 12px;
+    border: 1px solid rgba(255, 68, 68, 0.22);
+    border-left: 3px solid rgba(255, 68, 68, 0.62);
+    background: rgba(255, 68, 68, 0.04);
+    color: rgba(255, 68, 68, 0.92);
+    line-height: 1.55;
   }
   .ic-alert-ok {
-    border: 1px solid rgba(0,255,159,0.4);
-    background: rgba(0,255,159,0.06);
-    color: rgba(0,255,159,0.9);
-    font-family: 'JetBrains Mono', monospace;
+    font-family: 'Space Grotesk', sans-serif;
     font-size: 12px;
-    letter-spacing: 0.05em;
+    border: 1px solid rgba(0, 255, 159, 0.20);
+    border-left: 3px solid rgba(0, 255, 159, 0.55);
+    background: rgba(0, 255, 159, 0.04);
+    color: rgba(0, 255, 159, 0.92);
+    line-height: 1.55;
   }
 
-  .ic-drop-zone { background: #05050a; }
+  /* ── Drop zone ───────────────────────────────────────────── */
+  .ic-drop-zone {
+    background: rgba(5, 5, 10, 0.70);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .ic-drop-zone:hover {
+    background: rgba(0,255,159,0.02);
+  }
 
+  /* ── Spinner ─────────────────────────────────────────────── */
   .ic-spin {
     width: 14px; height: 14px;
     border: 2px solid rgba(0,0,0,0.5);
@@ -476,57 +655,68 @@ import Layout from '../layouts/Layout.astro';
   }
   @keyframes icspin { to { transform: rotate(360deg); } }
 
+  /* ── Fiche déchiffrée ────────────────────────────────────── */
   .ic-card-row {
     display: flex;
     align-items: flex-start;
-    gap: 12px;
-    padding: 10px 0;
-    border-bottom: 1px solid #2a2a3a;
+    gap: 14px;
+    padding: 11px 0;
+    border-bottom: 1px solid rgba(42, 42, 58, 0.55);
   }
   .ic-card-row:last-child { border-bottom: none; }
   .ic-card-row-lbl {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 0.12em;
+    font-size: 9px;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: #7a7a8a;
+    color: rgba(122, 122, 138, 0.80);
     width: 110px;
     flex-shrink: 0;
-    padding-top: 2px;
+    padding-top: 3px;
   }
   .ic-card-row-val {
     flex: 1;
     font-family: 'Space Grotesk', sans-serif;
     font-size: 14px;
+    font-weight: 400;
     color: #e8e8f0;
     word-break: break-word;
     white-space: pre-wrap;
+    line-height: 1.55;
   }
 
-  /* ── Guide modal ── */
+  /* ── Guide modal ─────────────────────────────────────────── */
   .ic-guide-section-title {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 0.25em;
+    font-size: 9px;
+    letter-spacing: 0.24em;
     text-transform: uppercase;
-    color: rgba(0,255,159,0.65);
-    margin-bottom: 12px;
-    padding-bottom: 6px;
-    border-bottom: 1px solid #2a2a3a;
+    color: rgba(0,255,159,0.62);
+    margin-bottom: 14px;
+    padding-bottom: 7px;
+    border-bottom: 1px solid rgba(42, 42, 58, 0.60);
   }
-
   .ic-guide-tech-block {
-    background: #05050a;
-    border: 1px solid #2a2a3a;
-    padding: 16px;
+    background: rgba(3, 4, 8, 0.90);
+    border: 1px solid rgba(42, 42, 58, 0.70);
+    border-left: 3px solid rgba(0,255,159,0.18);
+    padding: 18px;
+  }
+  .ic-guide-tech-block > div > div:first-child {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: rgba(0,255,159,0.80);
+    margin-bottom: 4px;
+  }
+  .ic-guide-tech-block > div > div:last-child {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 12px;
+    color: rgba(122, 122, 138, 0.85);
+    line-height: 1.65;
   }
 
-  #ic-guide-overlay {
-    transition: opacity 0.2s;
-  }
-  #ic-guide-overlay.ic-guide-visible {
-    display: block !important;
-  }
+  #ic-guide-overlay { transition: opacity 0.2s; }
+  #ic-guide-overlay.ic-guide-visible { display: block !important; }
 </style>
 
 <!-- ══════════════════════════════════════════════════════════════

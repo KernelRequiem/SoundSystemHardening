@@ -1,70 +1,94 @@
-# SoundSystemHardening - Site Web
+# SoundSystemHardening
 
-Site Astro statique pour le wiki SoundSystemHardening.
+Wiki d'autodéfense juridique et numérique pour le mouvement free party : droits face aux forces de l'ordre, sécurité numérique (OpSec), stratégie de résistance, et outils de terrain.
+
+Site en production : [soundsystemhardening.fr](https://soundsystemhardening.fr)
+
+## Ce que c'est
+
+Une application web qui rassemble une soixantaine de pages de wiki juridique et opérationnel, une carte interactive des incidents répressifs, un arbre de décision pour les situations de terrain, et plusieurs outils côté client (chiffrement de messages, nettoyage de métadonnées d'images, horodatage, génération de manifeste de saisie).
+
+Le principe directeur est simple : un site qui enseigne à se protéger de la surveillance ne doit lui-même exposer aucune donnée de ses visiteurs. Chaque choix technique découle de cette règle. Le détail de la posture de sécurité est dans [`SECURITY.md`](./SECURITY.md).
 
 ## Stack
 
-- **Astro 4.16** (Static Site Generator)
-- **Tailwind CSS** (Styling)
-- **Markdown** (Contenu wiki)
-- **Zero backend** (Statique, zéro SQL)
+J'utilise Astro 4 en mode `hybrid` : la quasi-totalité du site est pré-générée en HTML statique (rapide, sans serveur), et seules quelques routes précises (les formulaires) s'exécutent côté serveur quand c'est indispensable.
 
-## Démarrage
+| Couche | Technologie |
+|---|---|
+| Framework | Astro 4 (mode hybrid, adapter Node) |
+| Styles | Tailwind CSS 3 |
+| Recherche | Fuse.js (fulltext, côté navigateur) |
+| Carte | Leaflet + tuiles OpenStreetMap |
+| Contenu wiki | Markdown rendu via marked |
+| Polices | Auto-hébergées (Bebas Neue, Space Grotesk, JetBrains Mono) |
+| Email | SMTP via nodemailer (formulaire de contact) |
+| Signalements | Airtable (jeton write-only côté serveur) |
+| Hébergement | VPS auto-hébergé, Coolify (Docker + Traefik) |
+
+## Structure du projet
+
+```
+.
+├── docs/             Documentation technique (non publiée sur le site)
+├── public/           Fichiers servis tels quels (polices, favicons, manifest, service worker)
+│   └── tools/        Versions HTML autonomes de certains outils
+├── scripts/          Scripts utilitaires (build, favicons, synchronisation)
+├── src/
+│   ├── components/   Composants réutilisables
+│   ├── content/wiki/ Pages du wiki en Markdown
+│   ├── data/         incidents.json (carte), decision.ts (arbre de décision)
+│   ├── layouts/      Layout universel
+│   ├── pages/        Une page = une URL
+│   │   └── api/      Routes serveur : contact, signalement, report, health
+│   ├── scripts/      Logique TypeScript des outils
+│   └── styles/       CSS global
+├── astro.config.mjs
+├── Dockerfile        Recette de construction du conteneur
+├── package.json
+├── README.md
+└── SECURITY.md       Posture de sécurité (app + infra)
+```
+
+## Démarrage local
 
 ```bash
-# Cloner le wiki
-git clone https://github.com/KernelRequiem/SoundSystemHardening.wiki.git wiki-content
-cp wiki-content/*.md src/content/wiki/
-rm -rf wiki-content
-
-# Installer les dépendances
+# Installer les dépendances (une seule fois)
 npm install
 
-# Dev local
+# Serveur de développement
 npm run dev
 # → http://localhost:4321
 
-# Build production
+# Construire la version de production
 npm run build
+
+# Prévisualiser le build localement
+npm run preview
 ```
 
-## Structure
+Les variables d'environnement nécessaires aux formulaires sont décrites dans [`.env.example`](./.env.example). Le fichier `.env` réel n'est jamais versionné.
 
-```
-src/
-├── pages/
-│   ├── index.astro          # Homepage
-│   └── wiki/
-│       ├── index.astro      # Index du wiki
-│       └── [slug].astro     # Pages dynamiques wiki
-├── content/wiki/            # Fichiers .md du wiki
-├── layouts/
-│   └── Layout.astro         # Layout principal + sidebar
-└── styles/
-    └── global.css           # Styles DedSec
-```
+## Déploiement
 
-## Mise à jour du wiki
+Le site est conteneurisé (voir [`Dockerfile`](./Dockerfile)) et déployé sur un VPS via Coolify. Un push sur la branche `main` déclenche automatiquement la construction de l'image et le redéploiement, avec HTTPS géré par le reverse proxy.
 
-```bash
-cd wiki-content
-git pull
-cp *.md ../src/content/wiki/
-cd ..
-git add .
-git commit -m "update: wiki content"
-git push
-```
+Détails et choix d'architecture : [`docs/deploiement.md`](./docs/deploiement.md).
 
-## Déploiement Netlify
+## Contribuer au wiki
 
-1. Connecter le repo GitHub
-2. Build command : `npm run build`
-3. Publish directory : `dist`
-4. Deploy
+Ajouter ou corriger une page ne demande aucune compétence en développement :
 
-Auto-deploy à chaque `git push`.
+1. Ouvrir le dossier `src/content/wiki/` sur GitHub
+2. Éditer un fichier `.md` ou en créer un via l'interface GitHub
+3. Valider le changement sur `main`
+4. Le site se reconstruit et se redéploie automatiquement
+
+## Documentation
+
+- [`docs/`](./docs/) : stack, architecture, fonctionnalités, design system, déploiement
+- [`SECURITY.md`](./SECURITY.md) : modèle de menace, durcissement application et infrastructure
 
 ## Licence
 
-CC BY-SA 4.0
+Contenu sous licence CC BY-SA 4.0.

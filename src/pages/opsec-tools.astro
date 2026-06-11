@@ -1,0 +1,427 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+  title="OpSec Tools"
+  description="Deux outils interactifs : Threat Model Builder (fiche de modèle de menace personnalisée) et Rig Splitting (répartition optimale du sound system contre la saisie). 100% client-side, sans serveur."
+  category="OUTILS"
+>
+  <h1 class="mb-2">⊠ OPSEC TOOLS</h1>
+  <p class="text-dedsec-muted text-sm mb-2 font-mono leading-relaxed">
+    Modélisation de menace · Répartition anti-saisie · 100% client-side · Sans trace
+  </p>
+  <p class="text-dedsec-muted/75 text-xs mb-8 font-mono">
+    Deux outils de conception : l'un construit ton modèle de menace, l'autre conçoit la logistique de ton rig pour survivre à une saisie. Tout s'exécute dans ton navigateur, rien n'est transmis.
+  </p>
+
+  <!-- ── Onglets ── -->
+  <div class="ot-tabs" role="tablist" aria-label="Outils OpSec">
+    <button id="tab-threat" class="ot-tab active" role="tab" aria-selected="true" data-tab="threat">
+      <span class="ot-tab-icon">◈</span>
+      <span class="ot-tab-label">Threat Model Builder</span>
+      <span class="ot-tab-sub">Modèle de menace</span>
+    </button>
+    <button id="tab-rig" class="ot-tab" role="tab" aria-selected="false" data-tab="rig">
+      <span class="ot-tab-icon">⊟</span>
+      <span class="ot-tab-label">Rig Splitting</span>
+      <span class="ot-tab-sub">Répartition anti-saisie</span>
+    </button>
+  </div>
+
+  <!-- ── Panneau : Threat Model ── -->
+  <section id="panel-threat" class="ot-panel" role="tabpanel" aria-labelledby="tab-threat">
+    <div id="threat-root"></div>
+  </section>
+
+  <!-- ── Panneau : Rig Splitting ── -->
+  <section id="panel-rig" class="ot-panel hidden" role="tabpanel" aria-labelledby="tab-rig">
+    <div id="rig-root"></div>
+  </section>
+</Layout>
+
+<style is:global>
+  /* ════════════════════════════════════════════════════════════════
+     OPSEC TOOLS — Operational Terminal design
+     ════════════════════════════════════════════════════════════════ */
+
+  /* ── Onglets ── */
+  .ot-tabs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 28px;
+  }
+  .ot-tab {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    padding: 16px 20px;
+    background: rgba(8, 8, 12, 0.6);
+    border: 1px solid rgba(42, 42, 58, 0.8);
+    border-top: 2px solid rgba(42, 42, 58, 0.8);
+    font-family: 'JetBrains Mono', monospace;
+    cursor: pointer;
+    transition: all 0.18s ease;
+    text-align: left;
+  }
+  .ot-tab:hover {
+    border-color: rgba(0, 255, 159, 0.4);
+    background: rgba(0, 255, 159, 0.03);
+  }
+  .ot-tab.active {
+    border-color: rgba(0, 255, 159, 0.5);
+    border-top-color: #00ff9f;
+    background: rgba(0, 255, 159, 0.06);
+  }
+  .ot-tab-icon {
+    font-size: 18px;
+    color: rgba(0, 255, 159, 0.55);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .ot-tab.active .ot-tab-icon { color: #00ff9f; }
+  .ot-tab-label {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: rgba(232, 232, 240, 0.92);
+  }
+  .ot-tab-sub {
+    font-size: 10px;
+    letter-spacing: 0.04em;
+    color: rgba(122, 122, 138, 0.7);
+  }
+
+  .ot-panel { animation: ot-fade 0.3s ease; }
+  @keyframes ot-fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* ── Barre de progression ── */
+  .ot-progress {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 24px;
+  }
+  .ot-progress-step {
+    flex: 1;
+    height: 3px;
+    background: rgba(42, 42, 58, 0.8);
+    transition: background 0.3s ease;
+  }
+  .ot-progress-step.done { background: rgba(0, 255, 159, 0.45); }
+  .ot-progress-step.current { background: #00ff9f; }
+  .ot-progress-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(122, 122, 138, 0.7);
+    white-space: nowrap;
+    margin-left: 8px;
+  }
+
+  /* ── Question / step ── */
+  .ot-step-q {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 19px;
+    font-weight: 600;
+    color: rgba(232, 232, 240, 0.97);
+    line-height: 1.4;
+    margin: 0 0 6px;
+    letter-spacing: -0.01em;
+  }
+  .ot-step-hint {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: rgba(122, 122, 138, 0.78);
+    line-height: 1.65;
+    margin: 0 0 20px;
+  }
+
+  /* ── Cartes de choix ── */
+  .ot-choices { display: flex; flex-direction: column; gap: 8px; }
+  .ot-choices.grid2 { display: grid; grid-template-columns: 1fr; gap: 8px; }
+  @media (min-width: 640px) { .ot-choices.grid2 { grid-template-columns: 1fr 1fr; } }
+
+  .ot-choice {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    width: 100%;
+    padding: 15px 18px;
+    background: rgba(8, 8, 12, 0.55);
+    border: 1px solid rgba(42, 42, 58, 0.75);
+    font-family: 'JetBrains Mono', monospace;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    text-align: left;
+  }
+  .ot-choice:hover {
+    border-color: rgba(0, 255, 159, 0.5);
+    background: rgba(0, 255, 159, 0.04);
+    transform: translateX(2px);
+  }
+  .ot-choice.selected {
+    border-color: rgba(0, 255, 159, 0.6);
+    background: rgba(0, 255, 159, 0.07);
+    box-shadow: -3px 0 0 rgba(0, 255, 159, 0.6);
+  }
+  .ot-choice-check {
+    flex-shrink: 0;
+    width: 18px; height: 18px;
+    border: 1px solid rgba(0, 255, 159, 0.35);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; color: transparent;
+    margin-top: 1px;
+    transition: all 0.15s;
+  }
+  .ot-choice.selected .ot-choice-check {
+    background: rgba(0, 255, 159, 0.15);
+    border-color: #00ff9f;
+    color: #00ff9f;
+  }
+  .ot-choice-body { flex: 1; }
+  .ot-choice-label {
+    font-size: 13px;
+    font-weight: 700;
+    color: rgba(232, 232, 240, 0.9);
+    letter-spacing: 0.02em;
+    margin-bottom: 3px;
+  }
+  .ot-choice-desc {
+    font-size: 11px;
+    color: rgba(122, 122, 138, 0.78);
+    line-height: 1.55;
+  }
+
+  /* ── Boutons nav ── */
+  .ot-nav { display: flex; gap: 10px; margin-top: 26px; flex-wrap: wrap; }
+  .ot-btn {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    padding: 11px 22px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    border: 1px solid rgba(42, 42, 58, 0.8);
+    background: transparent;
+    color: rgba(122, 122, 138, 0.85);
+  }
+  .ot-btn:hover { border-color: rgba(232, 232, 240, 0.35); color: rgba(232, 232, 240, 0.9); }
+  .ot-btn-primary {
+    border-color: rgba(0, 255, 159, 0.4);
+    color: rgba(0, 255, 159, 0.85);
+    background: rgba(0, 255, 159, 0.05);
+  }
+  .ot-btn-primary:hover {
+    border-color: #00ff9f;
+    color: #00ff9f;
+    background: rgba(0, 255, 159, 0.1);
+    box-shadow: 0 0 20px rgba(0, 255, 159, 0.12);
+  }
+  .ot-btn-primary:disabled { opacity: 0.3; cursor: not-allowed; box-shadow: none; }
+  .ot-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+  /* ── Inputs ── */
+  .ot-input, .ot-select {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    background: rgba(8, 8, 12, 0.7);
+    border: 1px solid rgba(42, 42, 58, 0.8);
+    color: rgba(232, 232, 240, 0.92);
+    padding: 10px 12px;
+    width: 100%;
+    transition: border-color 0.15s;
+  }
+  .ot-input:focus, .ot-select:focus { outline: none; border-color: rgba(0, 255, 159, 0.5); }
+  .ot-input::placeholder { color: rgba(122, 122, 138, 0.5); }
+
+  /* ── Fiche résultat / report ── */
+  .ot-report {
+    border: 1px solid rgba(0, 255, 159, 0.25);
+    background: rgba(0, 255, 159, 0.02);
+    padding: 0;
+    margin-top: 8px;
+    overflow: hidden;
+    animation: ot-fade 0.4s ease;
+  }
+  .ot-report-head {
+    padding: 20px 24px;
+    border-bottom: 1px solid rgba(42, 42, 58, 0.6);
+    background: rgba(0, 255, 159, 0.04);
+  }
+  .ot-report-kicker {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(0, 255, 159, 0.7);
+    margin-bottom: 6px;
+  }
+  .ot-report-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: #e8e8f0;
+    margin: 0;
+    line-height: 1.2;
+  }
+  .ot-report-body { padding: 20px 24px; }
+
+  .ot-section { margin-bottom: 26px; }
+  .ot-section:last-child { margin-bottom: 0; }
+  .ot-section-head {
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 14px;
+  }
+  .ot-section-head .lbl {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: rgba(0, 255, 159, 0.7);
+  }
+  .ot-section-head .line { flex: 1; height: 1px; background: rgba(42, 42, 58, 0.5); }
+
+  .ot-row {
+    display: flex; gap: 14px; align-items: flex-start;
+    padding: 9px 0;
+    border-bottom: 1px solid rgba(42, 42, 58, 0.3);
+    font-family: 'Space Grotesk', sans-serif;
+  }
+  .ot-row:last-child { border-bottom: none; }
+  .ot-row .bullet { color: rgba(0, 255, 159, 0.55); flex-shrink: 0; margin-top: 2px; }
+  .ot-row .txt { font-size: 13.5px; color: rgba(232, 232, 240, 0.85); line-height: 1.6; }
+
+  /* ── Badges de sévérité ── */
+  .ot-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 4px 10px; border: 1px solid;
+  }
+  .ot-badge--green  { color: #00ff9f; border-color: rgba(0,255,159,0.4); background: rgba(0,255,159,0.05); }
+  .ot-badge--orange { color: #facc15; border-color: rgba(250,204,21,0.4); background: rgba(250,204,21,0.05); }
+  .ot-badge--red    { color: #f87171; border-color: rgba(248,113,113,0.4); background: rgba(248,113,113,0.05); }
+
+  /* ── Liens ressources ── */
+  .ot-reslink {
+    display: inline-flex; align-items: center; gap: 7px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.06em;
+    padding: 6px 12px; text-decoration: none;
+    color: rgba(0, 255, 159, 0.75);
+    border: 1px solid rgba(0, 255, 159, 0.18);
+    background: rgba(0, 255, 159, 0.03);
+    transition: all 0.15s;
+  }
+  .ot-reslink:hover { color: #00ff9f; border-color: rgba(0,255,159,0.45); background: rgba(0,255,159,0.07); }
+
+  /* ── Méthodologie / explainer box ── */
+  .ot-explain {
+    border-left: 2px solid rgba(0, 255, 159, 0.4);
+    background: rgba(0, 255, 159, 0.025);
+    padding: 14px 18px;
+    margin-bottom: 22px;
+  }
+  .ot-explain-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase;
+    color: rgba(0, 255, 159, 0.7); margin-bottom: 6px;
+  }
+  .ot-explain-txt {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 12.5px; color: rgba(122, 122, 138, 0.9); line-height: 1.65;
+  }
+
+  /* ── Tableaux (rig) ── */
+  .ot-table { width: 100%; border-collapse: collapse; font-family: 'JetBrains Mono', monospace; font-size: 12px; }
+  .ot-table th {
+    text-align: left; padding: 8px 10px;
+    color: rgba(0, 255, 159, 0.7); font-weight: 700;
+    border-bottom: 1px solid rgba(42, 42, 58, 0.7);
+    letter-spacing: 0.04em;
+  }
+  .ot-table td {
+    padding: 8px 10px; color: rgba(232, 232, 240, 0.82);
+    border-bottom: 1px solid rgba(42, 42, 58, 0.3);
+  }
+  .ot-table tr:last-child td { border-bottom: none; }
+
+  /* ── Jauge de risque ── */
+  .ot-gauge { margin: 16px 0; }
+  .ot-gauge-track {
+    height: 10px; background: rgba(42, 42, 58, 0.6);
+    overflow: hidden; position: relative;
+  }
+  .ot-gauge-fill {
+    height: 100%; transition: width 0.6s cubic-bezier(.2,.8,.2,1);
+  }
+  .ot-gauge-scale {
+    display: flex; justify-content: space-between;
+    font-family: 'JetBrains Mono', monospace; font-size: 9px;
+    color: rgba(122,122,138,0.6); margin-top: 4px; letter-spacing: 0.05em;
+  }
+
+  /* ── matériel rows (rig input) ── */
+  .ot-matrow { display: grid; grid-template-columns: 1fr 90px 70px 36px; gap: 8px; align-items: center; margin-bottom: 8px; }
+  @media (max-width: 560px) { .ot-matrow { grid-template-columns: 1fr 70px 56px 32px; gap: 6px; } }
+  .ot-matrow .ot-del {
+    border: 1px solid rgba(248,113,113,0.3); color: rgba(248,113,113,0.7);
+    background: transparent; cursor: pointer; height: 38px; font-size: 14px; transition: all 0.15s;
+  }
+  .ot-matrow .ot-del:hover { border-color: rgba(248,113,113,0.7); color: #f87171; background: rgba(248,113,113,0.06); }
+
+  .ot-veh-card {
+    border: 1px solid rgba(42,42,58,0.8);
+    border-top: 2px solid rgba(0,255,159,0.4);
+    background: rgba(8,8,12,0.5);
+    padding: 16px 18px; margin-bottom: 12px;
+  }
+  .ot-veh-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 12px; gap: 10px; }
+  .ot-veh-name { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700; color: #00ff9f; letter-spacing: 0.04em; }
+  .ot-veh-stat { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: rgba(122,122,138,0.8); }
+  .ot-veh-item { font-family: 'Space Grotesk', sans-serif; font-size: 12.5px; color: rgba(232,232,240,0.82); padding: 4px 0; display: flex; justify-content: space-between; gap: 10px; }
+
+  .ot-chip {
+    display: inline-block; font-family: 'JetBrains Mono', monospace;
+    font-size: 9px; letter-spacing: 0.08em; padding: 2px 7px;
+    border: 1px solid rgba(42,42,58,0.9); color: rgba(122,122,138,0.85);
+  }
+  .ot-chip--crit { border-color: rgba(248,113,113,0.4); color: rgba(248,113,113,0.85); }
+
+  .ot-empty {
+    font-family: 'JetBrains Mono', monospace; font-size: 12px;
+    color: rgba(122,122,138,0.6); text-align: center; padding: 30px 0;
+    border: 1px dashed rgba(42,42,58,0.7);
+  }
+</style>
+
+<script src="../scripts/threat-model.ts"></script>
+<script src="../scripts/rig-split.ts"></script>
+<script>
+  // ── Gestion des onglets ──
+  const tabs = document.querySelectorAll<HTMLButtonElement>('.ot-tab');
+  const panels: Record<string, HTMLElement | null> = {
+    threat: document.getElementById('panel-threat'),
+    rig:    document.getElementById('panel-rig'),
+  };
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      const key = tab.dataset.tab!;
+      tabs.forEach(t => {
+        const active = t === tab;
+        t.classList.toggle('active', active);
+        t.setAttribute('aria-selected', String(active));
+      });
+      Object.entries(panels).forEach(([k, el]) => el?.classList.toggle('hidden', k !== key));
+      if (location.hash !== '#' + key) history.replaceState(null, '', '#' + key);
+    });
+  });
+  // Activer l'onglet depuis le hash
+  if (location.hash === '#rig') {
+    (document.getElementById('tab-rig') as HTMLButtonElement)?.click();
+  }
+</script>

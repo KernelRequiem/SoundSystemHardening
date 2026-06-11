@@ -1,107 +1,98 @@
 # Déploiement
 
-## Hébergement : Vercel
+J'explique ici comment le site passe de mon code à une page accessible sur internet. Cette doc reste volontairement au niveau des principes : les détails opérationnels sensibles (configuration serveur précise, secrets) ne figurent pas dans ce dossier public.
 
-Le site est hébergé sur **Vercel**, une plateforme spécialisée dans le déploiement de sites statiques et d'applications JavaScript. Vercel est l'éditeur d'Astro, ce qui garantit une compatibilité parfaite.
+## Hébergement : serveur auto-hébergé
 
-**Pourquoi Vercel :**
-- Déploiement automatique à chaque push sur la branche `main` de GitHub
-- CDN mondial (Content Delivery Network) : le site est servi depuis le datacenter le plus proche du visiteur
-- HTTPS automatique avec certificat Let's Encrypt renouvelé sans intervention
-- Offre gratuite suffisante pour un projet de cette taille
-- Vercel Speed Insights intégré nativement
+Le site n'est plus hébergé sur une plateforme clé en main. Je l'héberge sur mon propre serveur (un VPS), ce qui me donne le contrôle total sur les données qui transitent et sur la sécurité de la machine.
+
+Concrètement, l'application tourne dans un conteneur Docker, orchestré par un outil de déploiement qui gère aussi le reverse proxy et les certificats HTTPS. Le reverse proxy est la porte d'entrée : il reçoit les requêtes des visiteurs sur le web, applique le HTTPS, et les transmet à l'application qui tourne à l'intérieur.
+
+Pourquoi ce choix plutôt qu'un hébergeur gratuit :
+
+J'ai quitté l'hébergement sur plateforme tierce pour une raison de cohérence avec la mission du projet. Sur une plateforme clé en main, c'est le prestataire qui voit passer le trafic et qui détient une partie des leviers de sécurité. En auto-hébergeant, je décide moi-même de chaque flux réseau, je supprime les outils de mesure tiers qui voyaient l'IP des visiteurs, et je durcis le serveur selon mes propres règles. Le passage en application serveur (et non plus en site purement statique) me permet aussi d'avoir des formulaires qui envoient des emails ou enregistrent des signalements sans dépendre d'un service externe qui lirait ces données.
 
 ---
 
 ## Pipeline de déploiement
 
 ```
-Modification d'un fichier
+Je modifie un fichier
         ↓
-git commit + git push → GitHub (branche main)
+git commit + git push → GitHub
         ↓
-Vercel détecte le push automatiquement (webhook GitHub)
+Le serveur détecte le changement (webhook protégé par secret)
         ↓
-Vercel lance : npm run build → astro build
+Construction de l'image Docker :
+  étape 1 : installation des dépendances + npm run build
+  étape 2 : image finale légère avec seulement le nécessaire
         ↓
-Astro génère le dossier /dist/ avec tout le HTML/CSS/JS statique
+Le reverse proxy route le domaine vers le conteneur à jour
         ↓
-Vercel déploie /dist/ sur son CDN mondial
-        ↓
-Site mis à jour en ~60 secondes après le push
+HTTPS automatique, redirection de http vers https
 ```
+
+Le site est mis à jour quelques dizaines de secondes après le push.
 
 ---
 
 ## Commandes locales
 
-Pour travailler sur le projet en local :
+Pour travailler sur le projet sur ma machine :
 
 ```bash
-# Installer les dépendances (à faire une seule fois)
+# Installer les dépendances (une seule fois)
 npm install
 
 # Lancer le serveur de développement
 npm run dev
 # → Site disponible sur http://localhost:4321
 
-# Générer le build de production
+# Construire la version de production
 npm run build
-# → Génère le dossier /dist/
 
-# Prévisualiser le build de production en local
+# Prévisualiser la production en local
 npm run preview
 ```
 
 ---
 
-## Ce que fait `astro build`
+## Ce que fait la construction (`npm run build`)
 
-1. Astro lit `astro.config.mjs` pour connaître les intégrations actives (Tailwind, MDX, Sitemap)
-2. Il exécute `getStaticPaths()` dans `[slug].astro` pour lister toutes les pages wiki à générer
-3. Il exécute `search-index.json.ts` pour générer l'index de recherche
-4. Il compile tous les fichiers `.astro` en HTML statique
-5. Tailwind génère le CSS minimal correspondant aux classes utilisées
-6. Les fichiers du dossier `public/` sont copiés tels quels dans `/dist/`
-7. `@astrojs/sitemap` génère `/sitemap-index.xml`
+1. Astro lit sa configuration pour connaître les intégrations actives (Tailwind, MDX, Sitemap)
+2. Il liste toutes les pages wiki à générer à partir des fichiers Markdown
+3. Il génère l'index de recherche
+4. Il compile les pages statiques en HTML, et prépare les routes serveur (formulaires)
+5. Tailwind génère le CSS minimal
+6. Les fichiers du dossier `public/` (polices, favicons, manifest) sont copiés tels quels
+7. Le plan du site est généré
 
-Le résultat dans `/dist/` est un dossier de fichiers statiques qui peut être servi par n'importe quel hébergeur web (Apache, Nginx, Vercel, Netlify, GitHub Pages...).
+Le résultat est un dossier `dist/` contenant l'application prête à être lancée dans le conteneur.
 
 ---
 
 ## Nom de domaine
 
-Le site est accessible via `soundsystemhardening.fr`. Le nom de domaine est configuré dans Vercel (DNS pointant vers les serveurs Vercel), et dans `astro.config.mjs` :
-
-```javascript
-export default defineConfig({
-  site: 'https://soundsystemhardening.fr',
-  // ...
-});
-```
-
-Cette URL est utilisée par `@astrojs/sitemap` pour générer les URLs absolues du sitemap, et par le layout pour les balises `canonical` et Open Graph.
+Le site est accessible via `soundsystemhardening.fr`. Le domaine pointe vers mon serveur, et l'URL est déclarée dans la configuration Astro pour générer les liens absolus du plan de site et les balises de prévisualisation sociale.
 
 ---
 
 ## Sécurité du déploiement
 
-- **Pas de secrets dans le code** : aucune clé API, aucun token, aucun mot de passe dans le repository. Tout est statique.
-- **Pas de backend** : aucun serveur applicatif, aucune base de données exposée. La surface d'attaque est réduite au minimum.
-- **HTTPS forcé** : Vercel redirige automatiquement toute requête HTTP vers HTTPS.
-- **Headers de sécurité** : Vercel applique des headers de sécurité par défaut (X-Frame-Options, X-Content-Type-Options).
+Le détail de la sécurité figure dans le fichier `SECURITY.md` à la racine du projet. En résumé pour cette doc :
+
+Aucun secret n'est dans le code. Les identifiants (email, jeton de base de données) vivent uniquement dans la configuration du serveur, en variables d'environnement, et le fichier `.env` local est exclu de git. Le HTTPS est forcé. Le serveur est durci (accès administrateur restreint, pare-feu, protection contre le brute-force, mises à jour de sécurité automatiques). Les détails opérationnels précis ne sont pas dans ce dossier public, par principe.
 
 ---
 
 ## Contribuer au wiki
 
-Ajouter ou modifier une page wiki ne nécessite aucune compétence en développement :
+Ajouter ou modifier une page wiki ne demande aucune compétence en développement :
 
-1. Aller sur le repository GitHub
+1. Aller sur le dépôt GitHub
 2. Naviguer dans `src/content/wiki/`
-3. Cliquer sur un fichier `.md` ou créer un nouveau fichier via l'interface GitHub
-4. Éditer en Markdown directement dans le navigateur
-5. Cliquer "Commit changes" sur la branche `main`
-6. Vercel détecte le changement et redéploie automatiquement
+3. Éditer un fichier `.md` existant ou en créer un nouveau via l'interface GitHub
+4. Valider le changement (« Commit changes »)
+5. Le serveur reconstruit et redéploie automatiquement
 
-Le wiki entier est donc éditable sans jamais toucher à une ligne de code ou ouvrir un terminal.
+Le wiki entier est donc modifiable sans jamais ouvrir un terminal.

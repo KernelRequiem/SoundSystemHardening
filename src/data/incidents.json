@@ -54,7 +54,7 @@
     "desc": "Adoption du projet de loi RIPOST (Laurent Nuñez, ministre de l'Intérieur) par le Sénat à 243 voix contre 33.",
     "bilan": "2 ans de prison et 30 000 € d'amende pour organisation. 6 mois de prison pour participation. Arsenal le plus répressif depuis la loi Mariani (2001).",
     "source": "https://www.tsugi.fr/projet-de-loi-ripost-le-senat-enfonce-le-clou-sur-la-repression-des-free-parties/",
-    "wiki": "/wiki/Strategie-contre-ripost",
+    "wiki": "/wiki/ripost",
     "departement": "75",
     "prefecture": "Paris",
     "type_operation": "Arrêté préventif",
@@ -64,7 +64,7 @@
     "helicopteres": 0,
     "drones": 0,
     "cout_eur": null,
-    "jurisprudence": "Voir wiki /Strategie-contre-ripost pour analyse complète. Points clés : art. 11 CESDH, Préambule DDHC, jurisprudence Conseil constitutionnel sur proportionnalité des peines.",
+    "jurisprudence": "Voir wiki /ripost pour analyse complète. Points clés : art. 11 CESDH, Préambule DDHC, jurisprudence Conseil constitutionnel sur proportionnalité des peines.",
     "failles": "Vote à 243 contre 33 = pas de majorité qualifiée pour résistance parlementaire. Voie principale : QPC au premier procès + recours CEDH après épuisement des voies internes.",
     "contre_mesures": "Documentation systématique de chaque procès. Réseau d'avocats spécialisés. Coordination avec SAF et LDH pour les recours collectifs.",
     "arguments": "Disproportion manifeste (2 ans prison pour organisation d'un rassemblement festif). Atteinte à la liberté de rassemblement non justifiée par un objectif sécuritaire proportionné."

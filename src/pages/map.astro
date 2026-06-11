@@ -847,7 +847,7 @@ const totalIncidents = incidents.length;
       if(!lieu||!date||!type||!desc){document.getElementById('formError').textContent='Champs requis manquants.';document.getElementById('formError').style.display='block';return;}
       document.getElementById('formError').style.display='none';this.disabled=true;this.textContent='ENVOI...';
       try {
-        var res=await fetch('/.netlify/functions/report',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({lieu,date,type,description:desc,bilan:document.getElementById('f-bilan').value,source:document.getElementById('f-source').value})});
+        var res=await fetch('/api/report',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({lieu,date,type,description:desc,bilan:document.getElementById('f-bilan').value,source:document.getElementById('f-source').value})});
         var data=await res.json();
         if(res.ok&&data.ok){document.getElementById('modalForm').style.display='none';document.getElementById('modalSuccess').style.display='block';}
         else throw new Error(data.error||'Erreur inconnue');

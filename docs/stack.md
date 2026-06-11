@@ -1,107 +1,92 @@
 # Stack technique
 
+J'explique ici chaque technologie que j'utilise et pourquoi je l'ai choisie. L'objectif est qu'un contributeur, même peu technique, comprenne comment l'ensemble tient debout.
+
 ## Le cadre : Astro 4
 
-Astro est le framework qui orchestre tout le site. Son rôle est de prendre des fichiers sources (`.astro`, `.md`, `.ts`, `.json`) et de les transformer en un site HTML/CSS/JS statique prêt à être déployé.
+Astro est le framework qui orchestre tout le site. Son rôle est de prendre mes fichiers sources (`.astro`, `.md`, `.ts`, `.json`) et de les transformer en site web livrable.
 
-**Pourquoi Astro et pas autre chose ?**
+J'ai choisi Astro pour son modèle « zéro JavaScript par défaut ». Contrairement à Next.js qui envoie un gros paquet de JavaScript au navigateur pour chaque page, Astro n'envoie du JavaScript que là où c'est explicitement nécessaire. Le résultat : des pages qui s'affichent très vite, même sur une connexion mobile faible en zone rurale, ce qui est exactement le contexte d'usage d'un rave.
 
-La concurrence directe serait Next.js, Nuxt, ou Hugo. Astro a été choisi pour une raison principale : son modèle "zéro JavaScript par défaut". Contrairement à Next.js qui envoie un gros fichier JavaScript au navigateur pour chaque page, Astro n'envoie du JavaScript que là où c'est explicitement nécessaire. Le résultat : des pages qui s'affichent très vite, même sur une connexion mobile 3G lors d'un rave en zone rurale.
-
-Astro utilise un système de fichiers `.astro` qui ressemble à du HTML avec une section de code (appelée "frontmatter") délimitée par `---`. Exemple minimal :
+Un fichier `.astro` ressemble à du HTML avec une section de code (le « frontmatter ») délimitée par `---`. Ce code s'exécute au moment de la construction du site, pas dans le navigateur du visiteur.
 
 ```astro
 ---
-// Ce code s'exécute au moment du build, pas dans le navigateur
+// Ce code s'exécute à la construction, pas chez le visiteur
 const titre = "Bonjour"
 ---
-<!-- Ce HTML est envoyé au navigateur -->
 <h1>{titre}</h1>
 ```
 
-**Version utilisée :** Astro 4.16.19
+Point important sur le mode de rendu : j'utilise Astro en mode `hybrid`. Cela signifie que la grande majorité des pages sont pré-générées en HTML statique (rapides, sans serveur), mais que quelques routes précises (les formulaires) tournent côté serveur quand c'est indispensable. C'est le meilleur des deux mondes : la vitesse du statique partout, la puissance du serveur seulement là où un formulaire doit envoyer un email ou enregistrer un signalement.
+
+**Version utilisée :** Astro 4.16
 
 ---
 
 ## CSS : Tailwind CSS 3
 
-Tailwind est une bibliothèque de classes CSS utilitaires. Au lieu d'écrire du CSS dans un fichier séparé, on applique des classes directement sur les éléments HTML :
+Tailwind est une bibliothèque de classes CSS utilitaires. Au lieu d'écrire du CSS dans un fichier à part, j'applique des classes directement sur les éléments HTML.
 
 ```html
-<!-- Sans Tailwind -->
-<div class="ma-carte">...</div>
-
-<!-- Avec Tailwind -->
 <div class="bg-black border border-green-400 p-4 rounded">...</div>
 ```
 
-Tailwind génère uniquement le CSS correspondant aux classes réellement utilisées dans le projet. Un projet complet peut peser moins de 20 Ko de CSS, contre plusieurs centaines de Ko pour un framework comme Bootstrap.
+Tailwind ne génère que le CSS correspondant aux classes réellement utilisées dans le projet, ce qui donne une feuille de style très légère. J'étends Tailwind avec ma propre palette de couleurs (voir le design system), avec des noms parlants comme `neon-green` ou `dedsec-black`.
 
-Le projet étend Tailwind avec un système de couleurs personnalisé (voir [Design system](./design-system.md)) qui définit des tokens comme `neon-green` (`#00ff9f`) ou `dedsec-black` (`#0a0a0f`).
-
-**Version utilisée :** Tailwind CSS 3.4.13
+**Version utilisée :** Tailwind CSS 3.4
 
 ---
 
 ## Recherche : Fuse.js
 
-Fuse.js est une bibliothèque de recherche "fuzzy" (floue) qui fonctionne entièrement dans le navigateur, sans serveur. "Fuzzy" signifie qu'elle tolère les fautes de frappe et les approximations : chercher "gav" trouvera "Garde à vue", chercher "ripost" trouvera "RIPOST 2026".
+Fuse.js est une bibliothèque de recherche floue qui fonctionne entièrement dans le navigateur, sans serveur. « Floue » signifie qu'elle tolère les fautes de frappe : chercher « gav » trouve « garde à vue », chercher « ripost » trouve « RIPOST 2026 ».
 
-**Comment ça fonctionne dans ce projet :**
+Au moment de la construction, je génère un fichier `/search-index.json` qui contient le titre, les sous-titres et un extrait de chaque page wiki. Le navigateur télécharge cet index une seule fois, puis toutes les recherches se font localement. Aucune requête de recherche n'est jamais envoyée ni enregistrée nulle part, ce qui est un choix de confidentialité délibéré.
 
-Au moment du build, Astro génère un fichier `/search-index.json` contenant le titre, les sous-titres et un extrait du contenu de chaque page wiki. Ce fichier est téléchargé par le navigateur au premier accès à la page de recherche. Fuse.js charge cet index en mémoire et effectue toutes les recherches localement, sans aucun appel réseau.
-
-```
-Build → search-index.json (toutes les pages indexées)
-                ↓
-Navigateur → télécharge l'index une fois
-                ↓
-Utilisateur tape → Fuse.js cherche en mémoire → résultats instantanés
-```
-
-**Version utilisée :** Fuse.js 7.4.1
+**Version utilisée :** Fuse.js 7.4
 
 ---
 
 ## Carte : Leaflet
 
-Leaflet est la bibliothèque open source de cartographie la plus répandue. Elle affiche des cartes interactives (zoom, clic, marqueurs) en utilisant des tuiles de carte fournies par OpenStreetMap — une alternative libre à Google Maps.
+Leaflet est la bibliothèque open source de cartographie la plus répandue. Elle affiche une carte interactive en utilisant des tuiles d'OpenStreetMap, l'alternative libre à Google Maps, sans clé API et sans tracking publicitaire.
 
-Dans ce projet, Leaflet affiche les incidents répressifs stockés dans `src/data/incidents.json`. Chaque incident est un marqueur coloré selon son type (saisie, GAV, charge, blessure...). La bibliothèque est chargée via CDN uniquement sur la page `/map`, pas sur tout le site.
+J'affiche avec Leaflet les incidents répressifs stockés dans `incidents.json`, chaque incident devenant un marqueur coloré selon son type. La bibliothèque n'est chargée que sur la page carte, pas sur tout le site.
 
-**Version utilisée :** Leaflet 1.9.4
+**Version utilisée :** Leaflet 1.9
 
 ---
 
 ## Rendu Markdown : marked
 
-Le wiki contient ~60 fichiers `.md` (Markdown). Markdown est un format texte simple où `# Titre` devient un `<h1>`, `**gras**` devient du gras, etc. 
-
-Le projet utilise deux mécanismes complémentaires :
-- **marked** (v18) : bibliothèque Node.js qui convertit du Markdown en HTML. Elle est utilisée dans le template `[slug].astro` pour rendre les pages wiki.
-- **@astrojs/mdx** : intégration officielle pour les fichiers `.mdx` (Markdown avec composants Astro embarqués).
+Le wiki est écrit en Markdown, un format texte simple où `# Titre` devient un grand titre et `**gras**` devient du gras. J'utilise `marked` pour convertir ce Markdown en HTML au moment de la construction, et `@astrojs/mdx` pour les pages qui mélangent Markdown et composants Astro.
 
 ---
 
-## Typo et polices : Google Fonts
+## Polices : auto-hébergées
 
-Deux polices sont chargées depuis Google Fonts :
-- **JetBrains Mono** : police monospace (chaque caractère fait la même largeur). Utilisée pour tout le texte d'interface, les labels, les codes. Elle évoque un terminal, renforce l'identité "outil opérationnel".
-- **Space Grotesk** : police sans-serif géométrique. Utilisée pour les titres et les éléments qui doivent être mis en valeur sans paraître froid.
+J'utilise trois polices : Bebas Neue pour les grands titres, Space Grotesk pour le corps de texte, et JetBrains Mono (monospace, façon terminal) pour les labels et le code.
+
+Point de sécurité essentiel : ces polices sont servies depuis mon propre domaine, pas depuis Google Fonts. Charger une police depuis Google enregistre l'adresse IP de chaque visiteur chez Google à chaque page. Pour un projet qui enseigne à éviter la surveillance, c'était inacceptable. Les fichiers de police sont donc stockés dans mon dossier `public/fonts/` et déclarés en `@font-face` local. Le visiteur ne contacte que mon site.
 
 ---
 
-## Analytics : Vercel Speed Insights
+## Email transactionnel : SMTP
 
-Vercel Speed Insights est un outil qui mesure les performances réelles du site pour les visiteurs (temps de chargement, score Core Web Vitals). Il n'enregistre pas d'identifiants, pas de cookies, pas d'IP. C'est du monitoring de performance, pas du tracking utilisateur.
+Le formulaire de contact envoie un email via un serveur SMTP. Les identifiants de connexion vivent uniquement côté serveur, dans des variables d'environnement, jamais dans le code. Le traitement se fait dans une route serveur Astro (rendue possible par le mode hybrid), avec un piège anti-robot (« honeypot ») pour filtrer les spams automatisés.
 
-Le composant `<SpeedInsights />` est injecté dans le layout principal.
+---
+
+## Signalements : Airtable
+
+Les signalements d'incidents envoyés via la carte sont enregistrés dans Airtable, avec un statut « En attente » jusqu'à validation manuelle. Le jeton d'accès utilisé par le serveur est limité à l'écriture seule : même en cas de fuite, il ne permet pas de lire la base.
 
 ---
 
 ## Sitemap : @astrojs/sitemap
 
-L'intégration `@astrojs/sitemap` génère automatiquement un fichier `/sitemap-index.xml` au build, listant toutes les pages du site. Ce fichier est utilisé par les moteurs de recherche pour indexer le site. Aucune configuration manuelle nécessaire.
+Cette intégration génère automatiquement un plan du site (`sitemap-index.xml`) listant toutes les pages, ce qui aide les moteurs de recherche à indexer le contenu. Aucune configuration manuelle nécessaire.
 
 ---
 
@@ -109,12 +94,13 @@ L'intégration `@astrojs/sitemap` génère automatiquement un fichier `/sitemap-
 
 | Composant | Outil | Version | Rôle |
 |---|---|---|---|
-| Framework | Astro | 4.16 | Génération du site statique |
+| Framework | Astro (mode hybrid) | 4.16 | Génération du site, routes serveur |
 | CSS | Tailwind CSS | 3.4 | Styles utilitaires |
 | Recherche | Fuse.js | 7.4 | Recherche fulltext côté navigateur |
 | Carte | Leaflet | 1.9 | Carte interactive des incidents |
 | Markdown | marked | 18 | Rendu des pages wiki |
-| Polices | Google Fonts | — | JetBrains Mono + Space Grotesk |
-| Analytics | Vercel Speed Insights | 2.0 | Mesure de performance |
-| Sitemap | @astrojs/sitemap | 3.7 | Indexation SEO |
-| Hébergement | Vercel | — | Déploiement et CDN |
+| Polices | Auto-hébergées | n/a | Bebas Neue, Space Grotesk, JetBrains Mono |
+| Email | SMTP via nodemailer | n/a | Formulaire de contact |
+| Signalements | Airtable | n/a | Base des incidents (write-only côté serveur) |
+| Sitemap | @astrojs/sitemap | 3.7 | Indexation moteurs de recherche |
+| Hébergement | VPS auto-hébergé (Docker) | n/a | Voir doc Déploiement |

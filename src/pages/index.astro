@@ -92,83 +92,62 @@ const totalIncidents = incidents.length;
   </section>
 
   <!-- ═══════════════════════════════════════════════════════════
-       MODULES ACTIFS
+       PRÉSENTATION
   ═══════════════════════════════════════════════════════════ -->
-  <section class="modules-section">
+  <section class="si-section">
 
-    <span class="section-label">MODULES ACTIFS</span>
-    <h2 class="modules-h2">Outils et ressources</h2>
-
-    <div class="modules-grid">
-
-      <!-- Ligne 1 : RIPOST + TACTIQUE -->
-      <div class="modules-row">
-        <a href="/wiki/Strategie-contre-ripost" class="card-neon-tool no-underline group">
-          <span class="badge-opsec">RIPOST 2026</span>
-          <h3 class="module-title mt-3 group-hover:text-neon-green transition-colors">Contre RIPOST</h3>
-          <p class="module-desc">2 ans ferme pour les organisateurs. Décryptage article par article + contre-mesures.</p>
-        </a>
-
-        <a href="/wiki/Modus-Operandi" class="card-neon-tool no-underline group">
-          <span class="badge-opsec">TACTIQUE</span>
-          <h3 class="module-title mt-3 group-hover:text-neon-green transition-colors">Modus Operandi</h3>
-          <p class="module-desc">Failles légales et opérationnelles. Là où l'État ne peut structurellement pas intervenir.</p>
-        </a>
-      </div>
-
-      <!-- Ligne 2 : MAP + RIG-LOCK -->
-      <div class="modules-row">
-        <a href="/map" class="card-neon-tool no-underline group module-live">
-          <div class="module-live-badge">
-            <span class="live-dot"></span>
-            <span class="live-label">LIVE</span>
-          </div>
-          <span class="badge-tool">OUTIL INTERACTIF</span>
-          <h3 class="module-title mt-3 group-hover:text-neon-green transition-colors">Carte & Terrain</h3>
-          <p class="module-desc">
-            {totalIncidents} incidents documentés + évaluateur de zone en temps réel.
-            Coordonnées dégradées, zéro log.
-          </p>
-          <div class="card-meta">
-            <span>{totalIncidents} INCIDENTS</span>
-            <span>·</span>
-            <span>1996-2026</span>
-            <span>·</span>
-            <span>OPEN DATA</span>
-          </div>
-        </a>
-
-        <a href="/rig-lock" class="card-neon-tool no-underline group">
-          <span class="badge-tool">OUTIL LOCAL</span>
-          <h3 class="module-title mt-3 group-hover:text-neon-green transition-colors">RIG-LOCK</h3>
-          <p class="module-desc">
-            Générateur de manifeste de saisie horodaté. PDF vérifiable produit localement, aucune donnée transmise.
-          </p>
-          <div class="card-meta">
-            <span>PDF LOCAL</span>
-            <span>·</span>
-            <span>ZÉRO SERVEUR</span>
-            <span>·</span>
-            <span>HORODATÉ</span>
-          </div>
-        </a>
-      </div>
-
-      <!-- OPSEC : pleine largeur -->
-      <a href="/wiki/Sécurite-Numerique" class="card-neon-tool no-underline group">
-        <div class="module-inner">
-          <div class="module-body">
-            <div class="module-header">
-              <h3 class="module-title group-hover:text-neon-green transition-colors">Sécurité numérique & OPSEC</h3>
-              <span class="badge-opsec">OPSEC</span>
-            </div>
-            <p class="module-desc">Signal, Tor, chiffrement, messagerie sécurisée. Les règles non-négociables avant chaque événement.</p>
-          </div>
-          <span class="module-arrow group-hover:text-neon-green group-hover:translate-x-1">▸</span>
-        </div>
-      </a>
-
+    <!-- Ligne d'identité -->
+    <div class="si-eyebrow">
+      <span class="si-badge">Wiki collectif · Open source · CC BY-SA 4.0</span>
     </div>
+
+    <!-- Statement principal -->
+    <p class="si-statement">
+      Une infrastructure d'autodéfense pour le mouvement free party. Wiki juridique, outils numériques, carte de répression — construit par le mouvement, pour le mouvement.
+    </p>
+
+    <!-- Trois axes visuels -->
+    <div class="si-pillars">
+      <div class="si-pillar">
+        <div class="si-pillar-icon">◈</div>
+        <div class="si-pillar-name">Comprendre</div>
+        <div class="si-pillar-body">Loi RIPOST, droits GAV, jurisprudences, cadre légal décrypté sans jargon.</div>
+        <a href="/wiki" class="si-pillar-link">Parcourir le wiki →</a>
+      </div>
+      <div class="si-pillar-sep"></div>
+      <div class="si-pillar">
+        <div class="si-pillar-icon">◉</div>
+        <div class="si-pillar-name">Résister</div>
+        <div class="si-pillar-body">Arbre de décision en temps réel. Failles légales, zones où l'État ne peut structurellement pas intervenir.</div>
+        <a href="/decision" class="si-pillar-link">Accéder à l'arbre →</a>
+      </div>
+      <div class="si-pillar-sep"></div>
+      <div class="si-pillar">
+        <div class="si-pillar-icon">◎</div>
+        <div class="si-pillar-name">Documenter</div>
+        <div class="si-pillar-body">TimeSeal génère un manifeste de saisie horodaté localement. Chaque preuve compte dans un recours.</div>
+        <a href="/timeseal" class="si-pillar-link">Ouvrir TimeSeal →</a>
+      </div>
+    </div>
+
+    <!-- Appel à contribution -->
+    <div class="si-contrib">
+      <div class="si-contrib-body">
+        <div class="si-contrib-label">Porter le mouvement</div>
+        <p class="si-contrib-text">
+          Ce wiki est une ressource vivante. Il grandit avec chaque jurisprudence ajoutée, chaque incident documenté, chaque retour de terrain partagé. Si tu connais des éléments manquants, contribue.
+        </p>
+      </div>
+      <div class="si-contrib-cta">
+        <a href="mailto:contact@soundsystemhardening.fr" class="si-btn-primary">
+          <span>✦</span> Contribuer
+        </a>
+        <a href="/wiki/Contacts-Allies" class="si-btn-secondary">
+          Alliances &amp; contacts
+        </a>
+      </div>
+    </div>
+
   </section>
 
   <!-- ═══════════════════════════════════════════════════════════
@@ -176,8 +155,8 @@ const totalIncidents = incidents.length;
   ═══════════════════════════════════════════════════════════ -->
   <section class="manifeste-section">
 
-    <span class="section-label">MODULE 02</span>
-    <h2 class="manifeste-h2">Manifeste</h2>
+    <span class="section-label">MANIFESTE</span>
+    <h2 class="manifeste-h2">Ce que nous sommes</h2>
     <p class="manifeste-intro">
       Ce que nous sommes, ce que nous défendons, pourquoi nous ne nous arrêterons pas.
     </p>
@@ -303,13 +282,73 @@ const totalIncidents = incidents.length;
       <p class="closing-body">
         La loi RIPOST ajoute un chapitre au même livre. Ce wiki est notre réponse. <strong>Rendre l'information aussi difficile à saisir que la musique.</strong>
       </p>
-      <div class="closing-quote">
-        <span class="quote-text">Free music for free people</span>
-        <span class="quote-source">SPIRAL TRIBE · 1994</span>
-      </div>
     </div>
 
   </section>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       SPIRAL TRIBE QUOTE
+  ═══════════════════════════════════════════════════════════ -->
+  <section class="st-section" aria-label="Citation Spiral Tribe">
+    <div class="st-line-top"></div>
+    <div class="st-inner">
+      <div class="st-quote-row">
+        <p class="st-quote" id="stQuote" aria-label="Free music for free people"></p>
+        <span class="st-cursor" id="stCursor">█</span>
+      </div>
+      <div class="st-source" id="stSource">SPIRAL TRIBE · 1994</div>
+    </div>
+    <div class="st-line-bottom"></div>
+  </section>
+
+  <script>
+    (function() {
+      const el      = document.getElementById('stQuote');
+      const cursor  = document.getElementById('stCursor');
+      const source  = document.getElementById('stSource');
+      const text    = 'FREE MUSIC FOR FREE PEOPLE';
+      let started   = false;
+
+      function typeWriter() {
+        let i = 0;
+        cursor.style.opacity = '1';
+
+        const interval = setInterval(() => {
+          if (i < text.length) {
+            el.textContent = text.slice(0, i + 1);
+            i++;
+          } else {
+            clearInterval(interval);
+            // curseur clignote 3×, puis disparaît
+            let blinks = 0;
+            const blink = setInterval(() => {
+              cursor.style.opacity = cursor.style.opacity === '0' ? '1' : '0';
+              blinks++;
+              if (blinks >= 6) {
+                clearInterval(blink);
+                cursor.style.opacity = '0';
+                // source apparaît
+                source.style.opacity = '1';
+                source.style.transform = 'translateY(0)';
+              }
+            }, 380);
+          }
+        }, 55);
+      }
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting && !started) {
+            started = true;
+            setTimeout(typeWriter, 320);
+            observer.disconnect();
+          }
+        });
+      }, { threshold: 0.4 });
+
+      observer.observe(document.getElementById('stQuote'));
+    })();
+  </script>
 
 </Layout>
 
@@ -370,9 +409,9 @@ const totalIncidents = incidents.length;
   .ticker-track:hover { animation-play-state: paused; }
   .ticker-item {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    color: rgba(200, 200, 216, 0.65);
-    letter-spacing: 0.06em;
+    font-size: 11px;
+    color: rgba(200, 200, 216, 0.82);
+    letter-spacing: 0.05em;
     padding: 0 32px;
     border-right: 1px solid rgba(0, 255, 159, 0.08);
     flex-shrink: 0;
@@ -401,9 +440,9 @@ const totalIncidents = incidents.length;
   }
   .hero-pretitle {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 0.28em;
-    color: rgba(0, 255, 159, 0.5);
+    font-size: 11px;
+    letter-spacing: 0.24em;
+    color: rgba(0, 255, 159, 0.72);
     text-transform: uppercase;
     margin-bottom: 18px;
     animation: hero-fade-up 0.6s ease both;
@@ -513,9 +552,9 @@ const totalIncidents = incidents.length;
   }
   .stat-label {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 8px;
-    color: rgba(122, 122, 138, 0.4);
-    letter-spacing: 0.16em;
+    font-size: 10px;
+    color: rgba(122, 122, 138, 0.7);
+    letter-spacing: 0.14em;
     text-transform: uppercase;
   }
 
@@ -549,14 +588,14 @@ const totalIncidents = incidents.length;
   }
   .contrast-tag {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 8px;
+    font-size: 10px;
     font-weight: 700;
-    letter-spacing: 0.22em;
-    color: rgba(122, 122, 138, 0.3);
+    letter-spacing: 0.2em;
+    color: rgba(122, 122, 138, 0.65);
     text-transform: uppercase;
   }
   .contrast-tag-us {
-    color: rgba(0, 255, 159, 0.4);
+    color: rgba(0, 255, 159, 0.72);
   }
   .contrast-text {
     font-family: 'JetBrains Mono', monospace;
@@ -590,98 +629,341 @@ const totalIncidents = incidents.length;
   }
 
   /* ═══════════════════════════════════════════════════════
-     MODULES
+     PRÉSENTATION DU SITE
   ═══════════════════════════════════════════════════════ */
-  .modules-section { margin-bottom: 80px; }
-
-  .modules-h2 {
-    font-size: 20px !important;
-    margin-top: 6px !important;
-    margin-bottom: 20px !important;
-    border-color: rgba(0, 255, 159, 0.08) !important;
+  .si-section {
+    margin-bottom: 80px;
   }
 
-  .modules-grid {
+  /* Ligne d'identité */
+  .si-eyebrow {
+    margin-bottom: 20px;
+  }
+  .si-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(0, 255, 159, 0.55);
+    border: 1px solid rgba(0, 255, 159, 0.16);
+    background: rgba(0, 255, 159, 0.03);
+    padding: 4px 12px;
+  }
+
+  /* Statement principal */
+  .si-statement {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(16px, 2.2vw, 20px);
+    font-weight: 500;
+    color: rgba(210, 210, 230, 0.88);
+    line-height: 1.70;
+    margin: 0 0 40px;
+    max-width: 740px;
+    border-left: 2px solid rgba(0, 255, 159, 0.30);
+    padding-left: 20px;
+  }
+
+  /* Trois piliers */
+  .si-pillars {
+    display: grid;
+    grid-template-columns: 1fr 1px 1fr 1px 1fr;
+    gap: 0;
+    border: 1px solid rgba(42, 42, 58, 0.55);
+    background: rgba(8, 8, 12, 0.65);
+    margin-bottom: 0;
+  }
+
+  .si-pillar-sep {
+    background: rgba(42, 42, 58, 0.55);
+  }
+
+  .si-pillar {
+    padding: 28px 28px 24px;
     display: flex;
     flex-direction: column;
     gap: 8px;
+    transition: background 0.18s;
+  }
+  .si-pillar:hover { background: rgba(0, 255, 159, 0.022); }
+
+  .si-pillar-icon {
+    font-size: 18px;
+    color: rgba(0, 255, 159, 0.45);
+    line-height: 1;
+    margin-bottom: 4px;
   }
 
-  .modules-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
+  .si-pillar-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 0.06em;
+    color: #e8e8f0;
+    line-height: 1;
   }
 
-  .module-inner {
-    display: flex;
-    align-items: flex-start;
-    gap: 16px;
-  }
-
-  .module-body { flex: 1; min-width: 0; }
-
-  .module-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 6px;
-    flex-wrap: wrap;
-  }
-
-  .module-title {
-    font-family: 'Space Grotesk', sans-serif !important;
-    font-size: 15px !important;
-    font-weight: 600 !important;
-    color: #e8e8f0 !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    border: none !important;
-    letter-spacing: -0.01em !important;
-  }
-
-  .module-desc {
+  .si-pillar-body {
     font-family: 'Space Grotesk', sans-serif;
     font-size: 13px;
-    color: rgba(190, 190, 210, 0.82);
+    color: rgba(155, 155, 180, 0.80);
     line-height: 1.65;
-    margin: 0;
+    flex: 1;
   }
 
-  .module-arrow {
-    flex-shrink: 0;
+  .si-pillar-link {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 12px;
-    color: rgba(122, 122, 138, 0.3);
-    align-self: center;
-    transition: all 0.15s;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(0, 255, 159, 0.55);
+    text-decoration: none;
+    margin-top: 6px;
+    transition: color 0.15s;
   }
+  .si-pillar-link:hover { color: #00ff9f; }
 
-  .module-live { position: relative; }
-  .module-live-badge {
-    position: absolute;
-    top: 14px; right: 14px;
+  /* Bloc contribution */
+  .si-contrib {
     display: flex;
     align-items: center;
-    gap: 5px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 8px;
-    color: rgba(0, 255, 159, 0.5);
-    letter-spacing: 0.14em;
+    justify-content: space-between;
+    gap: 36px;
+    padding: 26px 28px;
+    border: 1px solid rgba(42, 42, 58, 0.55);
+    border-top: none;
+    border-left: 2px solid rgba(0, 255, 159, 0.32);
+    background: rgba(0, 255, 159, 0.015);
   }
-  .live-label { text-transform: uppercase; }
 
-  /* ═══════════════════════════════════════════════════════
-     MANIFESTE
-  ═══════════════════════════════════════════════════════ */
-  .manifeste-section { margin-bottom: 48px; }
+  .si-contrib-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(0, 255, 159, 0.55);
+    margin-bottom: 8px;
+  }
 
+  .si-contrib-text {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 13px;
+    color: rgba(165, 165, 190, 0.80);
+    line-height: 1.65;
+    margin: 0;
+    max-width: 520px;
+  }
+
+  .si-contrib-cta {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  .si-btn-primary,
+  .si-btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 11px 22px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+
+  .si-btn-primary {
+    background: rgba(0, 255, 159, 0.09);
+    border: 1px solid rgba(0, 255, 159, 0.32);
+    color: #00ff9f;
+    box-shadow: 0 0 18px rgba(0, 255, 159, 0.07), inset 0 0 12px rgba(0, 255, 159, 0.03);
+  }
+  .si-btn-primary:hover {
+    background: rgba(0, 255, 159, 0.15);
+    border-color: rgba(0, 255, 159, 0.55);
+    transform: translateY(-1px);
+    box-shadow: 0 0 28px rgba(0, 255, 159, 0.12);
+  }
+
+  .si-btn-secondary {
+    background: transparent;
+    border: 1px solid rgba(42, 42, 58, 0.70);
+    color: rgba(150, 150, 175, 0.75);
+  }
+  .si-btn-secondary:hover {
+    border-color: rgba(0, 255, 159, 0.28);
+    color: rgba(0, 255, 159, 0.78);
+  }
+
+  @media (max-width: 680px) {
+    .si-pillars {
+      grid-template-columns: 1fr;
+    }
+    .si-pillar-sep { height: 1px; width: auto; }
+    .si-contrib {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 20px;
+    }
+    .si-contrib-cta {
+      flex-direction: row;
+      width: 100%;
+    }
+    .si-btn-primary,
+    .si-btn-secondary { flex: 1; }
+  }
+
+  /* Titre Manifeste */
   .manifeste-h2 {
     font-size: 20px !important;
     margin-top: 6px !important;
     margin-bottom: 6px !important;
     border-color: rgba(0, 255, 159, 0.08) !important;
   }
+
+  .situations-list {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid rgba(42, 42, 58, 0.55);
+    overflow: hidden;
+  }
+
+  .sit {
+    display: grid;
+    grid-template-columns: 68px 1fr auto 28px;
+    align-items: center;
+    gap: 24px;
+    padding: 24px 28px;
+    border-bottom: 1px solid rgba(42, 42, 58, 0.45);
+    background: rgba(8, 8, 12, 0.60);
+    transition: background 0.18s, border-left-color 0.18s;
+    border-left: 2px solid transparent;
+    cursor: pointer;
+    text-decoration: none;
+  }
+  .sit:last-child { border-bottom: none; }
+  .sit:hover {
+    background: rgba(0, 255, 159, 0.025);
+    border-left-color: rgba(0, 255, 159, 0.45);
+  }
+  .sit:hover .sit-arrow { color: #00ff9f; transform: translateX(4px); }
+  .sit:hover .sit-title { color: #00ff9f; }
+
+  .sit-live:hover {
+    background: rgba(0, 255, 159, 0.03);
+    border-left-color: rgba(0, 255, 159, 0.65);
+  }
+
+  .sit-when {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(122, 122, 138, 0.55);
+    white-space: nowrap;
+  }
+  .sit-when-live { color: rgba(0, 255, 159, 0.65); }
+
+  .sit-body {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    min-width: 0;
+  }
+
+  .sit-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: #e8e8f0;
+    line-height: 1.3;
+    transition: color 0.18s;
+  }
+
+  .sit-desc {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 12px;
+    color: rgba(155, 155, 180, 0.80);
+    line-height: 1.65;
+  }
+
+  .sit-tools {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.10em;
+    color: rgba(100, 100, 120, 0.65);
+    text-align: right;
+    max-width: 180px;
+  }
+  .sit-dot {
+    color: rgba(42, 42, 58, 0.90);
+    font-size: 8px;
+  }
+
+  .sit-arrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    color: rgba(80, 80, 100, 0.45);
+    flex-shrink: 0;
+    transition: color 0.18s, transform 0.18s;
+  }
+
+  /* Bande de confiance */
+  .trust-band {
+    display: flex;
+    align-items: stretch;
+    border: 1px solid rgba(42, 42, 58, 0.50);
+    border-top: none;
+    overflow: hidden;
+    background: rgba(5, 5, 10, 0.70);
+  }
+  .trust-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 22px;
+    flex: 1;
+  }
+  .trust-icon {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: rgba(0, 255, 159, 0.40);
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .trust-text {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 11px;
+    color: rgba(120, 120, 140, 0.72);
+    line-height: 1.60;
+  }
+  .trust-sep {
+    width: 1px;
+    background: rgba(42, 42, 58, 0.55);
+    flex-shrink: 0;
+    align-self: stretch;
+  }
+
+  @media (max-width: 640px) {
+    .sit { grid-template-columns: 52px 1fr 20px; gap: 12px; padding: 18px 16px; }
+    .sit-tools { display: none; }
+    .trust-band { flex-direction: column; }
+    .trust-sep { width: 100%; height: 1px; }
+  }
+
+  /* ═══════════════════════════════════════════════════════
+     MANIFESTE
+  ═══════════════════════════════════════════════════════ */
+  .manifeste-section { margin-bottom: 80px; }
 
   .manifeste-intro {
     font-family: 'Space Grotesk', sans-serif;
@@ -713,14 +995,14 @@ const totalIncidents = incidents.length;
   .manifeste-summary:hover          { background: rgba(0, 255, 159, 0.025); }
   .manifeste-summary-critical:hover { background: rgba(255, 68, 68, 0.025); }
 
-  .manifeste-num          { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: rgba(0, 255, 159, 0.45); width: 24px; flex-shrink: 0; }
-  .manifeste-num-critical { color: rgba(255, 68, 68, 0.5); }
+  .manifeste-num          { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: rgba(0, 255, 159, 0.68); width: 24px; flex-shrink: 0; }
+  .manifeste-num-critical { color: rgba(255, 68, 68, 0.72); }
 
   .manifeste-sum-label    { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #e8e8f0; flex: 1; letter-spacing: 0.04em; }
   .manifeste-sum-critical { color: rgba(232, 232, 240, 0.8); }
 
-  .manifeste-arrow          { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: rgba(0, 255, 159, 0.3); transition: transform 0.2s; flex-shrink: 0; }
-  .manifeste-arrow-critical { color: rgba(255, 68, 68, 0.3); }
+  .manifeste-arrow          { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: rgba(0, 255, 159, 0.55); transition: transform 0.2s; flex-shrink: 0; }
+  .manifeste-arrow-critical { color: rgba(255, 68, 68, 0.55); }
   details[open] .manifeste-arrow { transform: rotate(90deg); }
 
   .manifeste-body {
@@ -746,8 +1028,8 @@ const totalIncidents = incidents.length;
   .value-item    { display: flex; flex-direction: column; gap: 3px; padding-left: 10px; border-left: 2px solid; }
   .value-accent  { border-color: rgba(0, 255, 159, 0.35); }
   .value-muted   { border-color: rgba(42, 42, 58, 0.7); }
-  .value-label   { font-family: 'JetBrains Mono', monospace; font-size: 9px; font-weight: 700; color: rgba(0, 255, 159, 0.55); letter-spacing: 0.14em; text-transform: uppercase; }
-  .value-txt     { font-family: 'Space Grotesk', sans-serif; font-size: 12px; color: rgba(190, 190, 210, 0.78); line-height: 1.5; }
+  .value-label   { font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; color: rgba(0, 255, 159, 0.75); letter-spacing: 0.12em; text-transform: uppercase; }
+  .value-txt     { font-family: 'Space Grotesk', sans-serif; font-size: 13px; color: rgba(190, 190, 210, 0.85); line-height: 1.55; }
 
   .defend-item   { display: flex; gap: 12px; margin-top: 14px; font-family: 'Space Grotesk', sans-serif; font-size: 13px; color: rgba(190, 190, 210, 0.85); line-height: 1.7; }
   .defend-bullet { color: rgba(0, 255, 159, 0.6); flex-shrink: 0; margin-top: 2px; font-size: 9px; }
@@ -762,34 +1044,151 @@ const totalIncidents = incidents.length;
   .refuse-bullet { color: rgba(255, 68, 68, 0.5); flex-shrink: 0; font-weight: 700; margin-top: 1px; }
 
   .demand-item { display: flex; gap: 16px; margin-top: 14px; font-family: 'Space Grotesk', sans-serif; font-size: 13px; color: rgba(190, 190, 210, 0.85); line-height: 1.7; }
-  .demand-num  { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: rgba(0, 255, 159, 0.45); width: 20px; flex-shrink: 0; margin-top: 2px; }
+  .demand-num  { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: rgba(0, 255, 159, 0.68); width: 20px; flex-shrink: 0; margin-top: 2px; }
 
   .manifeste-closing {
     margin-top: 24px;
     padding: 28px 32px;
-    border: 1px solid rgba(0, 255, 159, 0.12);
-    background: rgba(0, 255, 159, 0.018);
+    border: 1px solid rgba(42, 42, 58, 0.55);
+    border-left: 2px solid rgba(0, 255, 159, 0.30);
+    background: rgba(8, 8, 12, 0.55);
     position: relative;
-    overflow: hidden;
-  }
-  .manifeste-closing::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; width: 2px; height: 100%;
-    background: linear-gradient(180deg, rgba(0,255,159,0.4) 0%, rgba(0,255,159,0.05) 100%);
   }
 
   .closing-body {
     font-family: 'Space Grotesk', sans-serif;
     font-size: 14px; color: rgba(190, 190, 210, 0.85); line-height: 1.85; margin-bottom: 16px;
   }
+  .closing-body:last-child { margin-bottom: 0; }
 
-  .closing-quote {
-    display: flex; flex-direction: column; align-items: center; gap: 6px;
-    padding-top: 20px; border-top: 1px solid rgba(0, 255, 159, 0.1); text-align: center;
+  /* ═══════════════════════════════════════════════════════
+     SPIRAL TRIBE QUOTE
+  ═══════════════════════════════════════════════════════ */
+  .st-section {
+    margin-top: 20px;
+    padding: 64px 0 80px;
+    position: relative;
+    text-align: center;
+    overflow: hidden;
   }
-  .quote-text   { font-family: 'JetBrains Mono', monospace; font-size: 14px; color: #00ff9f; letter-spacing: 0.08em; }
-  .quote-source { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: rgba(122, 122, 138, 0.35); letter-spacing: 0.22em; text-transform: uppercase; }
+  /* Grain de fond subtil */
+  .st-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      radial-gradient(ellipse 80% 60% at 50% 50%, rgba(0, 255, 159, 0.04) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .st-line-top,
+  .st-line-bottom {
+    height: 1px;
+    background: linear-gradient(90deg,
+      transparent 0%,
+      rgba(0, 255, 159, 0.18) 20%,
+      rgba(0, 255, 159, 0.35) 50%,
+      rgba(0, 255, 159, 0.18) 80%,
+      transparent 100%
+    );
+    margin: 0;
+  }
+
+  .st-inner {
+    padding: 60px 24px 52px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+
+  /* Quote + curseur sur une seule ligne */
+  .st-quote-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 6px;
+    white-space: nowrap;
+  }
+
+  .st-quote {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(28px, 5.2vw, 72px);
+    font-weight: 400;
+    letter-spacing: 0.10em;
+    color: #e8e8f0;
+    line-height: 1;
+    margin: 0;
+    white-space: nowrap;
+    animation: neon-flicker 6s ease-in-out infinite;
+    animation-delay: 2s;
+    text-shadow:
+      0 0 20px rgba(0, 255, 159, 0.35),
+      0 0 60px rgba(0, 255, 159, 0.15),
+      0 0 120px rgba(0, 255, 159, 0.06);
+  }
+
+  @keyframes neon-flicker {
+    0%, 90%, 100% {
+      text-shadow:
+        0 0 20px rgba(0, 255, 159, 0.35),
+        0 0 60px rgba(0, 255, 159, 0.15),
+        0 0 120px rgba(0, 255, 159, 0.06);
+      color: #e8e8f0;
+    }
+    91% {
+      text-shadow: none;
+      color: rgba(232, 232, 240, 0.55);
+    }
+    92% {
+      text-shadow:
+        0 0 20px rgba(0, 255, 159, 0.35),
+        0 0 60px rgba(0, 255, 159, 0.15);
+      color: #e8e8f0;
+    }
+    93% {
+      text-shadow: none;
+      color: rgba(232, 232, 240, 0.40);
+    }
+    94% {
+      text-shadow:
+        0 0 30px rgba(0, 255, 159, 0.50),
+        0 0 80px rgba(0, 255, 159, 0.20),
+        0 0 160px rgba(0, 255, 159, 0.08);
+      color: #f0f8f4;
+    }
+    95%, 89% {
+      text-shadow:
+        0 0 20px rgba(0, 255, 159, 0.35),
+        0 0 60px rgba(0, 255, 159, 0.15),
+        0 0 120px rgba(0, 255, 159, 0.06);
+      color: #e8e8f0;
+    }
+  }
+
+  .st-cursor {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(32px, 6vw, 80px);
+    color: #00ff9f;
+    line-height: 1;
+    opacity: 0;
+    transition: opacity 0.1s;
+    filter: drop-shadow(0 0 8px rgba(0, 255, 159, 0.8));
+  }
+
+  .st-source {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(16px, 2.2vw, 26px);
+    letter-spacing: 0.28em;
+    color: rgba(0, 255, 159, 0.45);
+    text-transform: uppercase;
+    margin-top: 16px;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.7s ease 0.2s, transform 0.7s ease 0.2s;
+  }
 
   /* ═══════════════════════════════════════════════════════
      ANIMATIONS
@@ -900,7 +1299,8 @@ const totalIncidents = incidents.length;
     .hero-contrast       { display: none; }
     .manifeste-values    { grid-template-columns: 1fr; }
     .manifeste-body      { padding-left: 18px; }
-    .modules-row         { grid-template-columns: 1fr; }
     .manifeste-closing   { padding: 20px; }
+    .st-section          { padding: 44px 0 60px; }
+    .st-inner            { padding: 36px 16px 32px; }
   }
 </style>
