@@ -27,3 +27,4 @@ src/pages/hide/
 
 # Documentation infra sensible (jamais publiée sur GitHub)
 private/
+scripts/smtp-test.mjs
