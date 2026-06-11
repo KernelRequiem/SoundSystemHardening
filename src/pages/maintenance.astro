@@ -1,0 +1,263 @@
+---
+export const prerender = false;
+---
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Maintenance — Sound System Hardening</title>
+  <link rel="icon" href="/favicon.ico" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:      #0a0a0a;
+      --surface: #111111;
+      --border:  #2a2a2a;
+      --glow:    #ffffff;
+      --dim:     #888888;
+      --accent:  #cccccc;
+      --pixel: 2px;
+    }
+
+    html, body {
+      height: 100%;
+      background-color: var(--bg);
+      color: var(--accent);
+      font-family: 'Press Start 2P', monospace;
+      overflow: hidden;
+    }
+
+    /* Scanlines */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(
+        to bottom,
+        transparent 0px,
+        transparent 3px,
+        rgba(0,0,0,.18) 3px,
+        rgba(0,0,0,.18) 4px
+      );
+      pointer-events: none;
+      z-index: 100;
+    }
+
+    .wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      gap: 2.5rem;
+      padding: 2rem;
+    }
+
+    /* Logo */
+    .logo-container {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo-container img {
+      width: 180px;
+      height: 180px;
+      object-fit: contain;
+      image-rendering: pixelated;
+      filter: drop-shadow(0 0 18px rgba(255,255,255,.35));
+      animation: float 3s ease-in-out infinite;
+    }
+
+    .spark {
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      background: #fff;
+      animation: spark 1.4s ease-in-out infinite;
+    }
+    .spark:nth-child(2) { top: 10%;  left: 72%;  animation-delay: 0s; }
+    .spark:nth-child(3) { top: 20%;  left: 85%;  animation-delay: .3s; width:4px; height:4px; }
+    .spark:nth-child(4) { top: 55%;  left: 88%;  animation-delay: .7s; width:3px; height:3px; }
+    .spark:nth-child(5) { top: 70%;  left: 75%;  animation-delay: 1s; }
+
+    /* Card */
+    .card {
+      background: var(--surface);
+      border: var(--pixel) solid var(--border);
+      box-shadow:
+        0 0 0 var(--pixel) #000,
+        0 0 30px rgba(255,255,255,.04),
+        inset 0 1px 0 rgba(255,255,255,.04);
+      padding: 2.5rem 3rem;
+      max-width: 640px;
+      width: 100%;
+      text-align: center;
+      position: relative;
+    }
+
+    .card::before, .card::after {
+      content: '';
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      background: var(--glow);
+    }
+    .card::before { top: -2px; left: -2px; }
+    .card::after  { bottom: -2px; right: -2px; }
+
+    .card-corner-tr, .card-corner-bl {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      background: var(--glow);
+    }
+    .card-corner-tr { top: -2px; right: -2px; }
+    .card-corner-bl { bottom: -2px; left: -2px; }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: .6rem;
+      background: #1a1a1a;
+      border: var(--pixel) solid #333;
+      padding: .4rem .9rem;
+      font-size: .45rem;
+      letter-spacing: .08em;
+      color: var(--dim);
+      margin-bottom: 1.6rem;
+      text-transform: uppercase;
+    }
+
+    .badge-dot {
+      width: 6px;
+      height: 6px;
+      background: #fff;
+      animation: blink 1s step-start infinite;
+    }
+
+    h1 {
+      font-size: clamp(.7rem, 2.5vw, 1rem);
+      color: var(--glow);
+      line-height: 1.8;
+      letter-spacing: .04em;
+      margin-bottom: 1.2rem;
+      text-shadow: 0 0 12px rgba(255,255,255,.4);
+    }
+
+    .divider {
+      height: var(--pixel);
+      background: linear-gradient(to right, transparent, var(--border), transparent);
+      margin: 1.4rem 0;
+    }
+
+    p {
+      font-size: .5rem;
+      color: var(--dim);
+      line-height: 2;
+      letter-spacing: .04em;
+    }
+
+    p strong { color: var(--accent); }
+
+    .progress-wrap { margin-top: 1.8rem; }
+
+    .progress-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: .4rem;
+      color: var(--dim);
+      margin-bottom: .5rem;
+    }
+
+    .progress-bar {
+      height: 10px;
+      background: #1a1a1a;
+      border: var(--pixel) solid #2a2a2a;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: var(--glow);
+      width: 0%;
+      animation: load 4s steps(20, end) infinite;
+      box-shadow: 0 0 8px rgba(255,255,255,.5);
+    }
+
+    .footer {
+      font-size: .38rem;
+      color: #444;
+      letter-spacing: .06em;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50%       { transform: translateY(-10px); }
+    }
+    @keyframes spark {
+      0%, 100% { opacity: 0; transform: scale(0); }
+      50%       { opacity: 1; transform: scale(1); }
+    }
+    @keyframes blink {
+      0%, 49% { opacity: 1; }
+      50%, 100% { opacity: 0; }
+    }
+    @keyframes load {
+      0%   { width: 0%; }
+      100% { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+
+    <div class="logo-container">
+      <span class="spark"></span>
+      <span class="spark"></span>
+      <span class="spark"></span>
+      <span class="spark"></span>
+      <img src="/SoundSystemHardeninglogo.png" alt="Sound System Hardening" />
+    </div>
+
+    <div class="card">
+      <div class="card-corner-tr"></div>
+      <div class="card-corner-bl"></div>
+
+      <div class="badge">
+        <span class="badge-dot"></span>
+        SYSTÈME HORS LIGNE
+      </div>
+
+      <h1>MAINTENANCE<br/>EN COURS</h1>
+
+      <div class="divider"></div>
+
+      <p>
+        Le site est temporairement indisponible.<br/>
+        Nos techniciens travaillent activement<br/>
+        à la mise à jour du système.<br/><br/>
+        <strong>Retour prévu très prochainement.</strong>
+      </p>
+
+      <div class="progress-wrap">
+        <div class="progress-label">
+          <span>PROGRESSION</span>
+          <span>EN COURS...</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill"></div>
+        </div>
+      </div>
+    </div>
+
+    <p class="footer">© 2026 &mdash; SOUND SYSTEM HARDENING</p>
+  </div>
+</body>
+</html>
