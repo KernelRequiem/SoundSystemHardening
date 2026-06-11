@@ -684,11 +684,11 @@ const navigation = [
             </div>
           </div>
 
-          <!-- Ligne 2 : outils (gauche, scrollable) + confiance (droite, fixe) -->
+          <!-- Ligne 2 : outils (moitié gauche, scrollable) ; centre dégagé pour le logo -->
           <div class="flex items-end -mb-px" style="border-top:1px solid rgba(42,42,58,0.5);">
 
-            <!-- Zone outils -->
-            <div class="flex items-end overflow-x-auto scrollbar-none flex-1 min-w-0 pl-2 md:pl-[52px]">
+            <!-- Zone outils principale : gauche, scrollable ; bornée avant le centre pour dégager le logo et accueillir de futures sections -->
+            <div class="flex items-end overflow-x-auto scrollbar-none flex-1 min-w-0 pl-2 md:pl-[52px] md:max-w-[calc(50%-90px)] md:pr-4">
               {[
                 { href: '/urgence',     label: 'URGENCE',  icon: '▲', critical: true  },
                 { href: '/wiki/ripost', label: 'RIPOST',   icon: '↺', critical: false },
@@ -711,7 +711,13 @@ const navigation = [
                   {tool.label}
                 </a>
               ))}
+            </div>
 
+            <!-- Espace central réservé au logo centré (desktop) ; pousse OUTILS à droite -->
+            <div class="hidden md:block md:flex-1"></div>
+
+            <!-- Zone OUTILS : toujours visible, ancrée à droite, dégagée du logo -->
+            <div class="shrink-0 flex items-end pr-2 md:pr-3">
               <!-- Lien OUTILS → /tools  (dropdown au hover, géré par JS ci-dessous) -->
               {(() => {
                 const toolItems = [
@@ -743,29 +749,6 @@ const navigation = [
                   </a>
                 );
               })()}
-            </div>
-
-            <!-- Séparateur vertical -->
-            <div class="shrink-0 self-stretch w-px mx-1" style="background:linear-gradient(180deg,transparent,rgba(42,42,58,0.9) 30%,rgba(42,42,58,0.9) 70%,transparent);"></div>
-
-            <!-- Zone confiance : accès rapide aux pages clés de sécurité/transparence - masqué sur mobile -->
-            <div class="hidden md:flex items-end shrink-0">
-              {[
-                { href: '/securite', label: 'SÉCURITÉ', icon: '⊟' },
-                { href: '/a-propos', label: 'INFOS',    icon: '◎' },
-              ].map(trust => (
-                <a
-                  href={trust.href}
-                  class={`shrink-0 flex items-center gap-1.5 px-3 py-2 font-mono text-[11px] tracking-widest transition-all no-underline border-b-2 ${
-                    currentPath === trust.href
-                      ? 'text-white/90 border-white/40 bg-white/5'
-                      : 'text-dedsec-muted/45 border-transparent hover:text-white/70 hover:border-white/25 hover:bg-white/3'
-                  }`}
-                >
-                  <span class="text-[12px] leading-none opacity-70" aria-hidden="true">{trust.icon}</span>
-                  {trust.label}
-                </a>
-              ))}
             </div>
 
           </div>
@@ -877,6 +860,7 @@ const navigation = [
                 <div class="ssh-footer-legal-item"><span class="chk">✓</span> Aucun cookie</div>
                 <div class="ssh-footer-legal-item"><span class="chk">✓</span> Aucun log serveur</div>
                 <a href="/securite" class="ssh-footer-link" style="margin-top:6px;">Politique de sécurité</a>
+                <a href="/a-propos" class="ssh-footer-link">Infos & À propos</a>
                 <a href="/legal" class="ssh-footer-link">Mentions légales</a>
               </div>
             </div>
@@ -987,8 +971,13 @@ const navigation = [
 
           function tbPosition() {
             const rect = tbBtn.getBoundingClientRect();
-            (tbMenu as HTMLElement).style.top  = rect.bottom + 'px';
-            (tbMenu as HTMLElement).style.left = rect.left + 'px';
+            const el = tbMenu as HTMLElement;
+            const menuW = Math.max(el.offsetWidth, 240);
+            let left = rect.left;
+            const maxLeft = window.innerWidth - menuW - 8;
+            if (left > maxLeft) left = Math.max(8, maxLeft);
+            el.style.top  = rect.bottom + 'px';
+            el.style.left = left + 'px';
           }
           function tbOpen() {
             if (tbCloseTimer) { clearTimeout(tbCloseTimer); tbCloseTimer = null; }
