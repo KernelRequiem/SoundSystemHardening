@@ -320,6 +320,191 @@ const navigation = [
       }
       .sidebar-tool-group-links { display: none; }
       .sidebar-tool-group-links.open { display: block; }
+
+      /* ════════ FOOTER PRINCIPAL ════════ */
+      .ssh-footer {
+        position: relative;
+        margin-top: 4rem;
+        border-top: 1px solid rgba(42,42,58,0.7);
+        background:
+          radial-gradient(120% 140% at 50% 0%, rgba(0,255,159,0.05) 0%, transparent 55%),
+          linear-gradient(180deg, rgba(10,10,15,0.4) 0%, rgba(8,8,12,0.85) 100%);
+        overflow: hidden;
+      }
+      /* Liseré néon haut */
+      .ssh-footer::before {
+        content: '';
+        position: absolute;
+        top: -1px; left: 0; right: 0;
+        height: 1px;
+        background: linear-gradient(90deg, transparent 0%, rgba(0,255,159,0.7) 25%, rgba(0,217,255,0.7) 50%, rgba(0,255,159,0.7) 75%, transparent 100%);
+      }
+      /* Grille discrète en filigrane */
+      .ssh-footer::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background-image:
+          linear-gradient(rgba(0,255,159,0.025) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(0,255,159,0.025) 1px, transparent 1px);
+        background-size: 32px 32px;
+        mask-image: linear-gradient(180deg, rgba(0,0,0,0.6), transparent 70%);
+        -webkit-mask-image: linear-gradient(180deg, rgba(0,0,0,0.6), transparent 70%);
+        pointer-events: none;
+      }
+      .ssh-footer-inner { position: relative; z-index: 1; }
+
+      /* Bandeau identité */
+      .ssh-footer-brand {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding-bottom: 24px;
+        margin-bottom: 28px;
+        border-bottom: 1px solid rgba(42,42,58,0.5);
+      }
+      .ssh-footer-logo img {
+        height: 52px;
+        width: auto;
+        display: block;
+        filter: drop-shadow(0 0 8px rgba(0,255,159,0.3));
+        transition: filter 0.2s;
+      }
+      .ssh-footer-logo:hover img {
+        filter: drop-shadow(0 0 12px rgba(0,255,159,0.7));
+      }
+      .ssh-footer-brand-text { flex: 1; min-width: 0; }
+      .ssh-footer-name {
+        font-family: 'Space Grotesk', 'Inter', sans-serif;
+        font-weight: 700;
+        font-size: 16px;
+        letter-spacing: 0.04em;
+        color: #e8e8f0;
+        line-height: 1.1;
+      }
+      .ssh-footer-tag {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 10px;
+        letter-spacing: 0.08em;
+        color: rgba(122,122,138,0.85);
+        margin-top: 5px;
+      }
+      .ssh-footer-status {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        flex-shrink: 0;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: rgba(0,255,159,0.7);
+        border: 1px solid rgba(0,255,159,0.25);
+        border-radius: 2px;
+        padding: 5px 10px;
+        background: rgba(0,255,159,0.04);
+      }
+      .ssh-footer-dot {
+        width: 6px; height: 6px;
+        border-radius: 50%;
+        background: #00ff9f;
+        box-shadow: 0 0 6px #00ff9f;
+        animation: ssh-footer-pulse 2s ease-in-out infinite;
+      }
+      @keyframes ssh-footer-pulse {
+        0%, 100% { opacity: 1; box-shadow: 0 0 6px #00ff9f; }
+        50%      { opacity: 0.4; box-shadow: 0 0 2px #00ff9f; }
+      }
+
+      /* Colonnes */
+      .ssh-footer-col-title {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: #00ff9f;
+        margin-bottom: 14px;
+        padding-bottom: 8px;
+        border-bottom: 1px solid rgba(0,255,159,0.12);
+      }
+      .ssh-footer-col-title.muted { color: rgba(122,122,138,0.9); border-bottom-color: rgba(42,42,58,0.6); }
+      .ssh-footer-col-title svg { width: 13px; height: 13px; flex-shrink: 0; }
+
+      .ssh-footer-link {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 11.5px;
+        color: rgba(232,232,240,0.78);
+        text-decoration: none;
+        padding: 3px 0;
+        transition: color 0.15s, transform 0.15s;
+      }
+      .ssh-footer-link::before {
+        content: '›';
+        color: rgba(0,255,159,0.35);
+        font-size: 12px;
+        transition: color 0.15s, transform 0.15s;
+      }
+      .ssh-footer-link:hover {
+        color: #00ff9f;
+        transform: translateX(3px);
+      }
+      .ssh-footer-link:hover::before { color: #00ff9f; transform: translateX(1px); }
+      .ssh-footer-link .ext {
+        font-size: 9px;
+        color: rgba(122,122,138,0.5);
+        margin-left: auto;
+      }
+
+      .ssh-footer-legal-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 11px;
+        color: rgba(122,122,138,0.9);
+        padding: 3px 0;
+      }
+      .ssh-footer-legal-item .chk { color: rgba(0,255,159,0.6); }
+
+      /* Barre basse */
+      .ssh-footer-bottom {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-top: 32px;
+        padding-top: 18px;
+        border-top: 1px solid rgba(42,42,58,0.5);
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 10px;
+        letter-spacing: 0.08em;
+        color: rgba(122,122,138,0.75);
+      }
+      .ssh-footer-slogan { color: rgba(0,255,159,0.65); letter-spacing: 0.15em; }
+      .ssh-footer-slogan b { color: #00ff9f; font-weight: 700; }
+      .ssh-footer-meta { display: inline-flex; align-items: center; gap: 10px; }
+      .ssh-footer-gh {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        color: rgba(122,122,138,0.8);
+        text-decoration: none;
+        border: 1px solid rgba(42,42,58,0.7);
+        border-radius: 2px;
+        padding: 3px 8px;
+        transition: all 0.15s;
+      }
+      .ssh-footer-gh:hover { color: #00ff9f; border-color: rgba(0,255,159,0.4); background: rgba(0,255,159,0.04); }
+      .ssh-footer-gh svg { width: 13px; height: 13px; }
     </style>
   </head>
   <body>
@@ -620,43 +805,93 @@ const navigation = [
           <slot />
         </article>
         <TableOfContents />
-        <footer class="border-t border-dedsec-border mt-16 px-6 lg:px-12 py-8">
-          <div class="max-w-6xl mx-auto">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs font-mono">
-              <div>
-                <div class="text-neon-green font-bold mb-2">▸ PROJECT</div>
-                <div class="space-y-1 text-dedsec-muted">
-                  <div><a href="https://github.com/KernelRequiem/SoundSystemHardening" class="text-dedsec-text hover:text-neon-green transition-colors" target="_blank" rel="noopener">GitHub Repo</a></div>
-                  <div><a href="https://github.com/KernelRequiem/SoundSystemHardening/wiki" class="text-dedsec-text hover:text-neon-green transition-colors" target="_blank" rel="noopener">Wiki source</a></div>
-                  <div><a href="/wiki/Changelog" class="text-dedsec-text hover:text-neon-green transition-colors">Changelog</a></div>
-                  <div><a href="/contact" class="text-dedsec-text hover:text-neon-green transition-colors">Contact & Signalement</a></div>
-                  <div><a href="/contribuer" class="text-dedsec-text hover:text-neon-green transition-colors">Contribuer</a></div>
-                  <div><a href="/presse" class="text-dedsec-text hover:text-neon-green transition-colors">Dossier de presse</a></div>
-                  <div><a href="/partenaires" class="text-dedsec-text hover:text-neon-green transition-colors">Partenaires & alliés</a></div>
-                  <div><a href="/flyer" class="text-dedsec-text hover:text-neon-green transition-colors">Flyer imprimable</a></div>
-                </div>
+        <footer class="ssh-footer">
+          <div class="ssh-footer-inner max-w-6xl mx-auto px-6 lg:px-12 py-10">
+
+            <!-- Bandeau identité -->
+            <div class="ssh-footer-brand">
+              <a href="/" class="ssh-footer-logo no-underline" aria-label="Accueil SoundSystemHardening">
+                <img src="/SoundSystemHardeninglogo.png" alt="SoundSystemHardening" />
+              </a>
+              <div class="ssh-footer-brand-text">
+                <div class="ssh-footer-name"><span class="text-neon-green">SoundSystem</span>Hardening</div>
+                <div class="ssh-footer-tag">Wiki collectif · droits, opsec et résistance pour le mouvement free party</div>
               </div>
+              <span class="ssh-footer-status"><span class="ssh-footer-dot"></span> SECURE · NO-LOG</span>
+            </div>
+
+            <!-- Colonnes -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-8">
+
+              <!-- Projet -->
               <div>
-                <div class="text-neon-green font-bold mb-2">▸ ALLIÉS</div>
-                <div class="space-y-1 text-dedsec-muted">
-                  <div><a href="https://technoplus.org" class="text-dedsec-text hover:text-neon-green transition-colors" target="_blank" rel="noopener">Techno+</a></div>
-                  <div><a href="https://www.laquadrature.net" class="text-dedsec-text hover:text-neon-green transition-colors" target="_blank" rel="noopener">La Quadrature du Net</a></div>
-                  <div><a href="https://disclose.ngo" class="text-dedsec-text hover:text-neon-green transition-colors" target="_blank" rel="noopener">Disclose</a></div>
-                  <div><a href="https://ssd.eff.org/fr" class="text-dedsec-text hover:text-neon-green transition-colors" target="_blank" rel="noopener">EFF Surveillance</a></div>
-                  <div><a href="https://tails.net/doc/index.fr.html" class="text-dedsec-text hover:text-neon-green transition-colors" target="_blank" rel="noopener">Tails OS</a></div>
+                <div class="ssh-footer-col-title">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><Fragment set:html={sidebarIcons.terminal} /></svg>
+                  PROJET
                 </div>
+                <a href="https://github.com/KernelRequiem/SoundSystemHardening" class="ssh-footer-link" target="_blank" rel="noopener">GitHub Repo<span class="ext">↗</span></a>
+                <a href="https://github.com/KernelRequiem/SoundSystemHardening/wiki" class="ssh-footer-link" target="_blank" rel="noopener">Wiki source<span class="ext">↗</span></a>
+                <a href="/wiki/Changelog" class="ssh-footer-link">Changelog</a>
+                <a href="/contact" class="ssh-footer-link">Contact & Signalement</a>
+                <a href="/contribuer" class="ssh-footer-link">Contribuer</a>
+                <a href="/presse" class="ssh-footer-link">Dossier de presse</a>
+                <a href="/partenaires" class="ssh-footer-link">Partenaires & alliés</a>
+                <a href="/flyer" class="ssh-footer-link">Flyer imprimable</a>
               </div>
+
+              <!-- Outils -->
               <div>
-                <div class="text-dedsec-muted font-bold mb-2">▸ LEGAL</div>
-                <div class="space-y-1 text-dedsec-muted">
-                  <div>CC BY-SA 4.0</div>
-                  <div>Pas de tracking</div>
-                  <div>Pas de cookies</div>
+                <div class="ssh-footer-col-title">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><Fragment set:html={sidebarIcons.lock} /></svg>
+                  OUTILS
                 </div>
+                <a href="/tools" class="ssh-footer-link">Index outils</a>
+                <a href="/opsec-tools" class="ssh-footer-link">OpSec Tools</a>
+                <a href="/timeseal" class="ssh-footer-link">TimeSeal</a>
+                <a href="/infocrypt" class="ssh-footer-link">InfoCrypt</a>
+                <a href="/stripmeta" class="ssh-footer-link">StripMeta</a>
+                <a href="/hide/rasso" class="ssh-footer-link">RASSO</a>
+              </div>
+
+              <!-- Alliés -->
+              <div>
+                <div class="ssh-footer-col-title">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><Fragment set:html={sidebarIcons.megaphone} /></svg>
+                  ALLIÉS
+                </div>
+                <a href="https://technoplus.org" class="ssh-footer-link" target="_blank" rel="noopener">Techno+<span class="ext">↗</span></a>
+                <a href="https://www.laquadrature.net" class="ssh-footer-link" target="_blank" rel="noopener">La Quadrature du Net<span class="ext">↗</span></a>
+                <a href="https://disclose.ngo" class="ssh-footer-link" target="_blank" rel="noopener">Disclose<span class="ext">↗</span></a>
+                <a href="https://ssd.eff.org/fr" class="ssh-footer-link" target="_blank" rel="noopener">EFF Surveillance<span class="ext">↗</span></a>
+                <a href="https://tails.net/doc/index.fr.html" class="ssh-footer-link" target="_blank" rel="noopener">Tails OS<span class="ext">↗</span></a>
+              </div>
+
+              <!-- Légal -->
+              <div>
+                <div class="ssh-footer-col-title muted">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><Fragment set:html={sidebarIcons.scale} /></svg>
+                  LÉGAL
+                </div>
+                <div class="ssh-footer-legal-item"><span class="chk">▸</span> Licence CC BY-SA 4.0</div>
+                <div class="ssh-footer-legal-item"><span class="chk">✓</span> Aucun tracking</div>
+                <div class="ssh-footer-legal-item"><span class="chk">✓</span> Aucun cookie</div>
+                <div class="ssh-footer-legal-item"><span class="chk">✓</span> Aucun log serveur</div>
+                <a href="/securite" class="ssh-footer-link" style="margin-top:6px;">Politique de sécurité</a>
               </div>
             </div>
-            <div class="mt-8 pt-4 border-t border-dedsec-border text-[10px] text-dedsec-muted text-center font-mono">
-              FREE PARTY · FREE INFO · FREE PEOPLE ▸ MAJ : JUIN 2026
+
+            <!-- Barre basse -->
+            <div class="ssh-footer-bottom">
+              <span class="ssh-footer-slogan"><b>FREE PARTY</b> · <b>FREE INFO</b> · <b>FREE PEOPLE</b></span>
+              <span class="ssh-footer-meta">
+                <span>v1.0.0</span>
+                <span style="color:rgba(42,42,58,0.9);">|</span>
+                <span>MAJ JUIN 2026</span>
+                <a href="https://github.com/KernelRequiem/SoundSystemHardening" class="ssh-footer-gh" target="_blank" rel="noopener" aria-label="GitHub">
+                  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.73.5.5 5.73.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56v-2c-3.2.7-3.88-1.54-3.88-1.54-.53-1.34-1.29-1.7-1.29-1.7-1.05-.72.08-.71.08-.71 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.56-.29-5.25-1.28-5.25-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11.1 11.1 0 0 1 5.8 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.43-2.69 5.41-5.26 5.69.41.36.78 1.06.78 2.14v3.17c0 .31.21.68.8.56A11.51 11.51 0 0 0 23.5 12C23.5 5.73 18.27.5 12 .5z"/></svg>
+                  GitHub
+                </a>
+              </span>
             </div>
           </div>
         </footer>
