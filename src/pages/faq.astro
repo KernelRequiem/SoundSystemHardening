@@ -1,0 +1,239 @@
+---
+// src/pages/faq.astro
+// FAQ complète, organisée par thèmes. Accordéons natifs (details/summary), zéro JS.
+import Layout from '../layouts/Layout.astro';
+
+type QA = { q: string; a: string };
+type Cat = { key: string; label: string; accent: string; items: QA[] };
+
+const faq: Cat[] = [
+  {
+    key: 'projet',
+    label: 'Le projet',
+    accent: '#00ff9f',
+    items: [
+      {
+        q: "Qu'est-ce que SoundSystemHardening ?",
+        a: "Un wiki collectif et un ensemble d'outils techniques pour renforcer la sécurité numérique et juridique des sound systems et du mouvement free party. Le tout est libre, gratuit et ouvert. Ce n'est ni une association, ni un parti, ni un service commercial.",
+      },
+      {
+        q: "Êtes-vous une association ou une structure officielle ?",
+        a: "Non. Nous sommes un collectif informel de personnes issues de la cybersécurité et du milieu free party. Pas de structure déclarée, pas de hiérarchie, pas d'intermédiaire.",
+      },
+      {
+        q: "Faites-vous du militantisme ?",
+        a: "Pas au sens traditionnel. Nous ne produisons ni mobilisation ni discours, nous construisons des outils concrets. La page À propos détaille ce positionnement et ce qui nous distingue des autres acteurs.",
+      },
+      {
+        q: "Êtes-vous une structure de réduction des risques ?",
+        a: "Non. La réduction des risques en milieu festif est portée par Techno+ et d'autres associations, dont le travail est essentiel. Nous sommes complémentaires : nous apportons la couche technique et numérique.",
+      },
+      {
+        q: "C'est vraiment gratuit ? Comment est-ce financé ?",
+        a: "Oui, tout est gratuit et publié sous licence CC BY-SA 4.0. Aucune publicité, aucune revente de données. Le projet est porté bénévolement et l'infrastructure est réduite au strict minimum pour limiter les coûts et la surface d'exposition.",
+      },
+    ],
+  },
+  {
+    key: 'privacy',
+    label: 'Sécurité et vie privée',
+    accent: '#00d9ff',
+    items: [
+      {
+        q: "Quelles données collectez-vous sur moi ?",
+        a: "Rien qui vous concerne. Le site est entièrement statique : aucun cookie, aucun outil d'analyse, aucune empreinte de navigateur, aucun script tiers sur les pages wiki. Il n'y a ni compte, ni session, ni base de données exposée.",
+      },
+      {
+        q: "Y a-t-il des cookies ou des traqueurs ?",
+        a: "Aucun. Ni cookie de session, ni traqueur publicitaire, ni Google Analytics ou équivalent. Vous pouvez le vérifier vous-même dans les outils de développement de votre navigateur.",
+      },
+      {
+        q: "Où le site est-il hébergé ?",
+        a: "Sur un serveur en Suisse, soumis à la loi suisse sur la protection des données, parmi les plus protectrices d'Europe. Aucune dépendance à un cloud commercial américain.",
+      },
+      {
+        q: "Est-ce sûr de naviguer ici ?",
+        a: "Le site lui-même ne vous piste pas. En revanche, votre fournisseur d'accès voit que vous vous connectez à ce domaine, comme pour n'importe quel site. Pour les sujets sensibles, passez par Tor ou un VPN.",
+      },
+      {
+        q: "Dois-je utiliser un VPN ou Tor ?",
+        a: "C'est recommandé dès que le sujet est sensible. À noter : la carte de la répression charge ses fonds de carte depuis un service externe, qui voit donc votre adresse IP sur la page carte. Un VPN ou Tor couvre ce cas.",
+      },
+      {
+        q: "Le code est-il vérifiable ?",
+        a: "Oui. L'intégralité du code est publique sur GitHub. Vous pouvez le lire, l'inspecter et le forker. Aucune affirmation de cette FAQ ne demande de nous croire sur parole.",
+      },
+    ],
+  },
+  {
+    key: 'juridique',
+    label: 'Juridique',
+    accent: '#ffb000',
+    items: [
+      {
+        q: "Le contenu est-il un conseil juridique ?",
+        a: "Non. Nous fournissons de l'information générale, sourcée et structurée, mais nous ne sommes pas avocats. Pour un cas précis, consultez un professionnel, par exemple via la Ligue des droits de l'homme ou le Syndicat des avocats de France.",
+      },
+      {
+        q: "Est-ce légal de consulter ce site et d'utiliser ces informations ?",
+        a: "Oui. Documenter ses droits, comprendre l'OPSEC et s'informer sur le cadre légal sont parfaitement licites. Le site ne diffuse aucun contenu illégal.",
+      },
+      {
+        q: "Où en est la loi RIPOST ?",
+        a: "Le statut évolue. Suivez la page Actualités et la section Veille du wiki, qui sont tenues à jour. Tant qu'un texte n'est pas promulgué, c'est le droit en vigueur qui s'applique.",
+      },
+      {
+        q: "Puis-je avoir des ennuis simplement en consultant ?",
+        a: "Consulter de l'information publique n'est pas répréhensible. Nous concevons par ailleurs le site pour qu'il ne conserve aucune trace de votre passage.",
+      },
+    ],
+  },
+  {
+    key: 'outils',
+    label: 'Outils et wiki',
+    accent: '#00ff9f',
+    items: [
+      {
+        q: "Comment fonctionnent les outils ?",
+        a: "Tous les outils tournent dans votre navigateur, côté client, sans compte ni envoi de données vers un serveur. Retrouvez-les depuis l'index des outils.",
+      },
+      {
+        q: "Puis-je contribuer ou corriger une page ?",
+        a: "Oui, et c'est encouragé. Vous pouvez proposer une page, corriger une information ou signaler un incident, via GitHub ou par contact direct. Tout est modéré avant publication, et ce qui est publié doit être sourcé et vérifiable.",
+      },
+      {
+        q: "J'ai trouvé une erreur. Que faire ?",
+        a: "Signalez-la nous par Signal, par mail ou sur GitHub. Le projet est expérimental : tout ce qui s'y trouve reste corrigible et optimisable, et vos retours sont la première source de fiabilité.",
+      },
+      {
+        q: "Puis-je réutiliser le contenu ?",
+        a: "Oui, sous licence CC BY-SA 4.0. Vous pouvez le reprendre, le redistribuer et le modifier, à condition de citer la source et de conserver la même licence.",
+      },
+    ],
+  },
+  {
+    key: 'contact',
+    label: 'Contact et communauté',
+    accent: '#ff3bd4',
+    items: [
+      {
+        q: "Comment vous contacter ?",
+        a: "Par Signal (KernelRequiem.27) ou par mail. Le formulaire de contact du site est en cours de sécurisation jusqu'au 25 juin. La page réseaux sociaux récapitule tous les canaux.",
+      },
+      {
+        q: "Êtes-vous sur Telegram et Signal ?",
+        a: "Oui, uniquement ces deux. Telegram (@SOUNDSYSTEMHARD) sert de canal public d'information. Signal sert aux échanges sensibles et aux témoignages, chiffrés de bout en bout.",
+      },
+      {
+        q: "Pourquoi pas Facebook, Instagram, X ou TikTok ?",
+        a: "Par cohérence et par sécurité. Ces plateformes vivent de la collecte et de la revente du comportement de leurs utilisateurs. Confier notre audience et nos contacts à ces acteurs contredirait ce que défend ce projet. La page réseaux sociaux explique ce choix en détail.",
+      },
+      {
+        q: "Comment signaler une faille de sécurité du site ?",
+        a: "Contactez-nous en privé par Signal ou par mail, en décrivant le problème. Nous traitons ces signalements en priorité.",
+      },
+    ],
+  },
+];
+
+const totalQ = faq.reduce((n, c) => n + c.items.length, 0);
+---
+
+<Layout
+  title="FAQ"
+  category="AIDE"
+  description="Questions fréquentes sur SoundSystemHardening : le projet, la vie privée, le cadre juridique, les outils, le wiki et les moyens de contact."
+>
+
+  <h1>Foire aux questions</h1>
+  <p class="text-dedsec-muted text-sm font-mono tracking-widest uppercase mb-8">
+    ▸ {totalQ} réponses · {faq.length} thèmes
+  </p>
+
+  <p>
+    Les réponses ci-dessous couvrent les questions les plus fréquentes sur le projet, sa sécurité, son cadre juridique et ses outils. Si la vôtre n'y figure pas, écrivez-nous via la page <a href="/reseaux">réseaux sociaux</a>.
+  </p>
+
+  <!-- Sommaire des thèmes -->
+  <div class="not-prose flex flex-wrap gap-2 my-7">
+    {faq.map(cat => (
+      <a href={`#${cat.key}`} class="font-mono text-[11px] font-bold tracking-widest uppercase no-underline px-3 py-2 transition-all" style={`border:1px solid ${cat.accent}55;color:${cat.accent};background:${cat.accent}10;`}>
+        {cat.label}
+      </a>
+    ))}
+  </div>
+
+  {faq.map(cat => (
+    <div class="not-prose mb-10" id={cat.key}>
+      <div class="flex items-center gap-3 mb-4">
+        <span class="w-[3px] self-stretch" style={`background:${cat.accent};min-height:1.6rem;box-shadow:0 0 8px ${cat.accent}55;`}></span>
+        <h2 class="font-display font-bold text-lg text-dedsec-text m-0 tracking-wide" style="border:0;padding:0;">{cat.label}</h2>
+      </div>
+
+      <div class="flex flex-col gap-px bg-dedsec-border">
+        {cat.items.map(item => (
+          <details class="faq-item bg-dedsec-darker" style={`--accent:${cat.accent};`}>
+            <summary class="faq-q">
+              <span class="faq-q-text">{item.q}</span>
+              <span class="faq-chevron" aria-hidden="true">+</span>
+            </summary>
+            <div class="faq-a">{item.a}</div>
+          </details>
+        ))}
+      </div>
+    </div>
+  ))}
+
+  <div class="not-prose border border-dedsec-border bg-dedsec-darker p-6 mt-12" style="border-left:3px solid rgba(0,255,159,0.6);">
+    <div class="font-mono text-xs font-bold tracking-widest text-neon-green uppercase mb-2">◆ Une question sans réponse ?</div>
+    <p class="text-dedsec-text/85 m-0" style="font-family:'Space Grotesk',sans-serif;">
+      Posez-la nous sur Signal (KernelRequiem.27) ou par mail. Les questions récurrentes viendront enrichir cette page. Voir la page <a href="/reseaux" class="text-neon-green/80 hover:text-neon-green">réseaux sociaux</a>.
+    </p>
+  </div>
+
+</Layout>
+
+<style>
+  .faq-item { border-left: 3px solid transparent; transition: border-color 0.15s; }
+  .faq-item[open] { border-left-color: var(--accent); }
+
+  .faq-q {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    cursor: pointer;
+    list-style: none;
+    padding: 16px 20px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 600;
+    color: #e8e8f0;
+    transition: color 0.15s, background 0.15s;
+  }
+  .faq-q::-webkit-details-marker { display: none; }
+  .faq-q:hover { color: var(--accent); background: rgba(255, 255, 255, 0.015); }
+  .faq-item[open] .faq-q { color: var(--accent); }
+
+  .faq-q-text { flex: 1; }
+  .faq-chevron {
+    flex-shrink: 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--accent);
+    transition: transform 0.2s;
+    line-height: 1;
+  }
+  .faq-item[open] .faq-chevron { transform: rotate(45deg); }
+
+  .faq-a {
+    padding: 0 20px 18px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 14px;
+    line-height: 1.7;
+    color: rgba(200, 200, 216, 0.82);
+  }
+  .faq-a :global(a) { color: rgba(0, 255, 159, 0.8); }
+  .faq-a :global(a:hover) { color: #00ff9f; }
+</style>
