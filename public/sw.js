@@ -1,62 +1,64 @@
+// sw.js — Service Worker SoundSystemHardening
+// Précache les pages critiques terrain (URGENCE + DÉCISION) pour usage offline.
+// Stratégie : cache-first sur les routes précachées, network-first sur le reste.
+
 const CACHE_NAME = 'ssh-v1';
 
-// Ressources à mettre en cache immédiatement à l'installation
-const PRECACHE = [
-  '/',
-  '/manifest.json',
-  '/favicon.ico',
-  '/favicon-192.png',
-  '/favicon-512.png',
-  '/SoundSystemHardening-logo.png',
-  '/wiki/Urgence-imm%C3%A9diate',
-  '/wiki/Strategie-contre-ripost',
-  '/wiki/S%C3%A9curite-Numerique',
-  '/wiki/Modus-Operandi',
+// Pages précachées au install → disponibles sans réseau
+const PRECACHE_ROUTES = [
+  '/urgence',
+  '/decision',
 ];
 
-// Installation : précache les ressources critiques
+// ── Install : précache des routes critiques ──────────────────────────────────
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(PRECACHE))
+    caches.open(CACHE_NAME).then((cache) => {
+      return Promise.allSettled(
+        PRECACHE_ROUTES.map((url) =>
+          cache.add(new Request(url, { credentials: 'same-origin' }))
+            .catch((err) => console.warn('[SW] Précache échoué pour', url, err))
+        )
+      );
+    }).then(() => self.skipWaiting())
   );
-  self.skipWaiting();
 });
 
-// Activation : supprime les anciens caches
+// ── Activate : nettoyage des anciens caches ──────────────────────────────────
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((keys) =>
       Promise.all(
-        keys.filter((key) => key !== CACHE_NAME).map((key) => caches.delete(key))
+        keys.filter((k) => k !== CACHE_NAME).map((k) => caches.delete(k))
       )
-    )
+    ).then(() => self.clients.claim())
   );
-  self.clients.claim();
 });
 
-// Fetch : Network First avec fallback cache
+// ── Fetch : cache-first pour routes précachées, réseau sinon ─────────────────
 self.addEventListener('fetch', (event) => {
-  // Ignore les requêtes non-GET et les ressources externes
-  if (event.request.method !== 'GET') return;
-  if (!event.request.url.startsWith(self.location.origin)) return;
+  const url = new URL(event.request.url);
 
-  event.respondWith(
-    fetch(event.request)
-      .then((response) => {
-        // Mise en cache de la réponse fraîche
-        const clone = response.clone();
-        caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
-        return response;
-      })
-      .catch(() => {
-        // Fallback : sert depuis le cache si hors-ligne
-        return caches.match(event.request).then((cached) => {
-          if (cached) return cached;
-          // Page offline de secours si rien en cache
-          if (event.request.mode === 'navigate') {
-            return caches.match('/');
-          }
+  // Ignorer les requêtes non-GET et les requêtes API
+  if (event.request.method !== 'GET') return;
+  if (url.pathname.startsWith('/api/')) return;
+
+  const isPrecached = PRECACHE_ROUTES.some(
+    (route) => url.pathname === route || url.pathname === route + '/'
+  );
+
+  if (isPrecached) {
+    // Cache-first : renvoie le cache si disponible, sinon réseau + mise en cache
+    event.respondWith(
+      caches.match(event.request).then((cached) => {
+        if (cached) return cached;
+        return fetch(event.request).then((response) => {
+          const clone = response.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
+          return response;
         });
       })
-  );
+    );
+  }
+  // Toutes les autres requêtes : réseau normal (pas d'interférence SW)
 });

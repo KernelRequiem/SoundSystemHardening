@@ -1,13 +1,14 @@
 // src/pages/api/report.ts
-// Endpoint SSR - reçoit un signalement d'incident depuis le formulaire de la carte
-// et l'écrit dans Airtable avec Statut = "En attente" (validation manuelle par un modérateur).
-// Remplace l'ancienne fonction Netlify /.netlify/functions/report.
+// Endpoint SSR - reçoit un signalement d'incident depuis le formulaire de la carte.
+// Écrit le signalement dans private/reports-pending.json (validation manuelle avant
+// ajout dans src/data/incidents.json).
 //
-// Variables d'environnement (injectées par Coolify sur le container) :
-//   AIRTABLE_WRITE_TOKEN  -> Personal Access Token, scope data.records:write uniquement
-//   AIRTABLE_BASE_ID      -> identifiant de la base Airtable
+// Zéro dépendance externe : aucun appel à Airtable, aucun SaaS tiers.
+// Le fichier private/reports-pending.json est gitignored et persisté sur le VPS.
 
 import type { APIRoute } from 'astro';
+import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs';
+import { join } from 'path';
 
 export const prerender = false;
 
@@ -24,6 +25,25 @@ const json = (status: number, payload: unknown) =>
 
 export const OPTIONS: APIRoute = () =>
   new Response(null, { status: 204, headers: corsHeaders });
+
+// Chemin du fichier de file d'attente (gitignored via private/)
+const PENDING_FILE = join(process.cwd(), 'private', 'reports-pending.json');
+
+function appendReport(report: Record<string, string>): void {
+  const dir = join(process.cwd(), 'private');
+  if (!existsSync(dir)) mkdirSync(dir, { recursive: true });
+
+  let existing: Record<string, string>[] = [];
+  if (existsSync(PENDING_FILE)) {
+    try {
+      existing = JSON.parse(readFileSync(PENDING_FILE, 'utf-8'));
+    } catch {
+      existing = [];
+    }
+  }
+  existing.push(report);
+  writeFileSync(PENDING_FILE, JSON.stringify(existing, null, 2), 'utf-8');
+}
 
 export const POST: APIRoute = async ({ request }) => {
   // ── Parse body ────────────────────────────────────────────────────────────
@@ -52,7 +72,7 @@ export const POST: APIRoute = async ({ request }) => {
     return json(400, { ok: false, error: 'Champs requis manquants : lieu, date, type, description' });
   }
 
-  // ── Limites de taille (anti-DoS, anti-pollution de la base Airtable) ─────────
+  // ── Limites de taille (anti-DoS) ─────────────────────────────────────────────
   if (
     lieu.length > 200 ||
     date.length > 50 ||
@@ -64,45 +84,26 @@ export const POST: APIRoute = async ({ request }) => {
     return json(400, { ok: false, error: 'Champs trop longs.' });
   }
 
-  const TOKEN = process.env.AIRTABLE_WRITE_TOKEN || import.meta.env.AIRTABLE_WRITE_TOKEN;
-  const BASE  = process.env.AIRTABLE_BASE_ID || import.meta.env.AIRTABLE_BASE_ID;
-
-  if (!TOKEN || !BASE) {
-    console.error('[API /report] AIRTABLE_WRITE_TOKEN ou AIRTABLE_BASE_ID manquant.');
-    return json(500, { ok: false, error: 'Configuration serveur manquante' });
-  }
-
-  // ── Champs Airtable ──────────────────────────────────────────────────────────
-  // Latitude / Longitude laissées vides : le modérateur les renseigne avant de
-  // passer le cas en "Valide" pour qu'il apparaisse sur la carte.
-  const fields: Record<string, string> = {
-    Titre:       `[Signalement] ${lieu.trim()}`,
-    Lieu:        lieu.trim(),
-    Date:        date.trim(),
-    Type:        type.trim(),
-    Description: description.trim(),
-    Statut:      'En attente',
+  // ── Enregistrement local ──────────────────────────────────────────────────────
+  // Latitude / Longitude laissées vides : le modérateur les renseigne avant
+  // d'ajouter l'entrée dans src/data/incidents.json (workflow manuel).
+  const report: Record<string, string> = {
+    titre:       `[Signalement] ${lieu.trim()}`,
+    lieu:        lieu.trim(),
+    date:        date.trim(),
+    type:        type.trim(),
+    description: description.trim(),
+    statut:      'en_attente',
+    recu_le:     new Date().toISOString(),
   };
-  if (source?.trim()) fields.Source = source.trim();
-  if (bilan?.trim())  fields.Bilan  = bilan.trim();
+  if (source?.trim()) report.source = source.trim();
+  if (bilan?.trim())  report.bilan  = bilan.trim();
 
-  // ── Envoi vers Airtable ───────────────────────────────────────────────────────
   try {
-    const res = await fetch(`https://api.airtable.com/v0/${BASE}/Incidents`, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${TOKEN}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ fields }),
-    });
-
-    if (!res.ok) {
-      console.error('[API /report] Erreur Airtable :', await res.text());
-      return json(502, { ok: false, error: 'Erreur lors de l\'envoi à Airtable' });
-    }
-  } catch {
-    return json(502, { ok: false, error: 'Airtable injoignable' });
+    appendReport(report);
+  } catch (err) {
+    console.error('[API /report] Erreur écriture fichier :', err);
+    return json(500, { ok: false, error: 'Erreur serveur lors de l\'enregistrement' });
   }
 
   return json(200, { ok: true, message: 'Signalement reçu. En attente de validation par les modérateurs.' });

@@ -134,7 +134,6 @@ const navigation = [
     { href: '/timeseal',    label: 'TimeSeal',       icon: '⊡' },
     { href: '/infocrypt',   label: 'InfoCrypt',      icon: '⊕' },
     { href: '/stripmeta',   label: 'StripMeta',      icon: '⊘' },
-    { href: '/hide/rasso',  label: 'RASSO',          icon: '⊚' },
   ]},
 ];
 ---
@@ -744,7 +743,6 @@ const navigation = [
                   { href: '/timeseal',   label: 'TimeSeal',  icon: '⊡', desc: 'Manifeste de saisie horodaté' },
                   { href: '/infocrypt',  label: 'InfoCrypt', icon: '⊕', desc: 'Chiffrement AES-GCM de fiches' },
                   { href: '/stripmeta',  label: 'StripMeta', icon: '⊘', desc: 'Épuration EXIF/XMP/GPS' },
-                  { href: '/hide/rasso', label: 'RASSO',     icon: '⊚', desc: 'Coordination décentralisée' },
                 ];
                 const isActive = currentPath === '/tools' || toolItems.some(t => currentPath === t.href);
                 return (
@@ -786,7 +784,6 @@ const navigation = [
             { href: '/timeseal',   label: 'TimeSeal',  icon: '⊡', desc: 'Manifeste de saisie horodaté' },
             { href: '/infocrypt',  label: 'InfoCrypt', icon: '⊕', desc: 'Chiffrement AES-GCM de fiches' },
             { href: '/stripmeta',  label: 'StripMeta', icon: '⊘', desc: 'Épuration EXIF/XMP/GPS' },
-            { href: '/hide/rasso', label: 'RASSO',     icon: '⊚', desc: 'Coordination décentralisée' },
           ].map(t => (
             <a
               href={t.href}
@@ -850,7 +847,6 @@ const navigation = [
                 <a href="/timeseal" class="ssh-footer-link">TimeSeal</a>
                 <a href="/infocrypt" class="ssh-footer-link">InfoCrypt</a>
                 <a href="/stripmeta" class="ssh-footer-link">StripMeta</a>
-                <a href="/hide/rasso" class="ssh-footer-link">RASSO</a>
               </div>
 
               <!-- Alliés -->
@@ -1052,6 +1048,17 @@ const navigation = [
           });
         }
       });
+    </script>
+
+    <!-- Service Worker — précache URGENCE + DÉCISION pour usage offline terrain -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js').catch((err) => {
+            console.warn('[SW] Enregistrement échoué :', err);
+          });
+        });
+      }
     </script>
   </body>
 </html>

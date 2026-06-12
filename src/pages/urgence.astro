@@ -366,6 +366,69 @@ const scenarios = [
     transition: color 0.12s, border-color 0.12s;
   }
   .sec-link:hover { color: #00ff9f; border-color: rgba(0,255,159,0.25); }
+
+  /* ─── Bouton impression ─── */
+  .print-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    margin-top: 16px; margin-bottom: 8px;
+    padding: 8px 16px;
+    background: transparent;
+    border: 1px solid rgba(255,44,44,0.35);
+    color: rgba(255,44,44,0.7);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase;
+    cursor: pointer;
+    transition: color 0.12s, border-color 0.12s;
+  }
+  .print-btn:hover { color: #ff4444; border-color: rgba(255,44,44,0.6); }
+
+  /* ─── @media print ─── */
+  @media print {
+    /* Masquer tout ce qui n'est pas le contenu URGENCE */
+    header, nav, aside, footer,
+    .alert-banner, .alert-dot,
+    .print-btn, .section-line,
+    .card-wiki-link, .secondary-links { display: none !important; }
+
+    body, .urgence-root {
+      background: #fff !important;
+      color: #000 !important;
+      font-size: 11pt;
+    }
+
+    .page-eyebrow { color: #cc0000 !important; font-size: 9pt; }
+    .page-title   { color: #cc0000 !important; font-size: 20pt; margin-bottom: 4pt; }
+    .page-title span { color: #cc0000 !important; }
+    .page-subtitle { color: #333 !important; font-size: 9pt; }
+
+    /* Ouvrir toutes les cards (pas de JS à l'impression) */
+    .scenario-card { break-inside: avoid; border: 1pt solid #ccc !important; margin-bottom: 12pt; }
+    .card-panel { display: block !important; max-height: none !important; overflow: visible !important; padding: 8pt 12pt !important; }
+    .card-trigger { border-bottom: 1pt solid #eee; padding: 8pt 12pt !important; }
+    .card-chevron { display: none; }
+
+    .step-item { display: flex; gap: 8pt; margin-bottom: 6pt; }
+    .step-bullet { color: #cc0000 !important; font-weight: bold; flex-shrink: 0; }
+    .step-label  { font-weight: bold; display: block; }
+    .step-detail { display: block; font-size: 9pt; color: #333 !important; }
+    .step-phrase { display: block; font-size: 9pt; border-left: 2pt solid #cc0000; padding-left: 6pt; margin-top: 4pt; font-style: italic; }
+
+    .card-contacts { margin-top: 6pt; }
+    .card-contact  { display: block; font-size: 9pt; margin-bottom: 3pt; }
+    .card-contact-label { font-weight: bold; }
+
+    .section-tag { color: #cc0000 !important; border-color: #cc0000 !important; font-size: 8pt; }
+
+    .contacts-strip { display: grid; grid-template-columns: 1fr 1fr; gap: 8pt; }
+    .contact-block { break-inside: avoid; }
+    .contact-label { display: block; font-weight: bold; font-size: 9pt; }
+    .contact-value { display: block; font-size: 10pt; color: #cc0000 !important; }
+    .contact-sub   { font-size: 8pt; color: #555 !important; }
+
+    .protocol-steps { display: grid; grid-template-columns: 1fr 1fr; gap: 8pt; }
+    .protocol-step { break-inside: avoid; border: 1pt solid #eee; padding: 6pt; }
+    .step-number { color: #cc0000 !important; font-weight: bold; }
+  }
 </style>
 
 <div class="urgence-root">
@@ -374,6 +437,10 @@ const scenarios = [
   <span class="page-eyebrow">▲ PROTOCOLE CRITIQUE</span>
   <h1 class="page-title">URGENCE <span>IMMÉDIATE</span></h1>
   <span class="page-subtitle">Fiches réflexes terrain · Clique sur ta situation</span>
+
+  <button class="print-btn" onclick="window.print()" aria-label="Imprimer les fiches réflexes">
+    ⎙ IMPRIMER LA FICHE
+  </button>
 
   <div class="alert-banner">
     <span class="alert-dot"></span>

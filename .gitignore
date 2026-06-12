@@ -22,9 +22,6 @@ npm-debug.log*
 *.bak
 *.new.ts
 
-# Fichiers de travail / brouillons non publiés
-src/pages/hide/
-
 # Documentation infra sensible (jamais publiée sur GitHub)
 private/
 scripts/smtp-test.mjs
