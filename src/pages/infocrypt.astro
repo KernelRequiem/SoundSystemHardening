@@ -1,5 +1,10 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import dicewareWords from '../data/diceware-fr.json';
+
+const dicewareJson = JSON.stringify(dicewareWords);
+const dicewareCount = dicewareWords.length;
+const bitsPerWord = Math.log2(dicewareCount);
 ---
 
 <Layout
@@ -131,6 +136,30 @@ import Layout from '../layouts/Layout.astro';
         </div>
       </section>
 
+      <!-- Diceware -->
+      <section>
+        <div class="ic-guide-section-title">Le générateur de phrase de passe (Diceware)</div>
+        <p class="text-dedsec-text/90 text-sm leading-relaxed mb-3">
+          Plutôt que d'inventer un mot de passe (un cerveau humain produit des suites prévisibles), le générateur tire des mots au hasard dans une liste de { dicewareCount.toLocaleString('fr-FR') } mots français. Chaque mot ajoute { bitsPerWord.toFixed(1) } bits d'entropie : six mots donnent { Math.round(6 * bitsPerWord) } bits, soit l'équivalent d'un mot de passe aléatoire de douze caractères, mais bien plus facile à mémoriser.
+        </p>
+        <div class="ic-guide-tech-block space-y-3">
+          {[
+            { label:'crypto.getRandomValues()', detail:'Le tirage utilise le générateur cryptographique du navigateur (CSPRNG), pas Math.random() qui est prévisible. Chaque mot est imprévisible.' },
+            { label:'Tirage uniforme (rejection sampling)', detail:'Un simple modulo introduirait un biais : certains mots sortiraient plus souvent. On rejette la frange haute des valeurs aléatoires pour garantir une probabilité strictement égale pour chaque mot.' },
+            { label:'Entropie = mots × ' + bitsPerWord.toFixed(2) + ' bits', detail:'L\'entropie affichée est calculée sur la taille réelle de la liste. Plus il y a de mots, plus le nombre de combinaisons possibles explose : c\'est ce que mesure la barre.' },
+            { label:'100% local', detail:'La liste est embarquée dans la page, le tirage se fait dans le navigateur. Aucune phrase générée ne transite par le réseau, rien n\'est stocké.' },
+          ].map(item => (
+            <div>
+              <div class="font-mono text-[11px] text-neon-green/80 mb-0.5">{item.label}</div>
+              <div class="text-xs text-dedsec-muted leading-relaxed">{item.detail}</div>
+            </div>
+          ))}
+        </div>
+        <p class="text-dedsec-muted text-xs leading-relaxed mt-3">
+          Le temps de cassage affiché est volontairement pessimiste (100 milliards d'essais par seconde, sans compter le frein PBKDF2). La réalité est bien plus favorable. Une fois la phrase générée, clique sur « Utiliser pour cette fiche » pour la placer dans les champs mot de passe.
+        </p>
+      </section>
+
       <!-- Sécurité technique résumée -->
       <section>
         <div class="ic-guide-section-title">Ce qui se passe sous le capot</div>
@@ -244,6 +273,57 @@ import Layout from '../layouts/Layout.astro';
     </div>
   </div>
 
+  <!-- ── Générateur Diceware ──────────────────────────────────── -->
+  <div class="card-neon mb-4 ic-dw-card">
+    <div class="flex items-start justify-between gap-3 flex-wrap">
+      <div class="ic-section-title" style="border:none;margin-bottom:0;padding-bottom:0;">Générateur de phrase de passe</div>
+      <span class="ic-dw-tag">Diceware · {dicewareCount.toLocaleString('fr-FR')} mots</span>
+    </div>
+    <p class="ic-dw-intro">
+      Une phrase de passe faite de mots aléatoires tirés au sort par le navigateur. Plus facile à retenir qu'un mot complexe, et plus résistante. Le seul secret d'InfoCrypt, c'est ce mot de passe : autant le générer correctement.
+    </p>
+
+    <!-- Sortie -->
+    <div class="ic-dw-output-wrap">
+      <div id="ic-dw-output" class="ic-dw-output" aria-live="polite">cliquez sur Générer</div>
+      <button type="button" onclick="icDwCopy(this)" class="ic-dw-copy" aria-label="Copier la phrase de passe">⧉</button>
+    </div>
+
+    <!-- Mètre d'entropie -->
+    <div class="ic-dw-meter-row">
+      <div class="ic-dw-meter-track"><div id="ic-dw-meter" class="ic-dw-meter-fill"></div></div>
+      <div id="ic-dw-entropy" class="ic-dw-entropy">—</div>
+    </div>
+    <div id="ic-dw-crack" class="ic-dw-crack">Réglez le nombre de mots puis générez.</div>
+
+    <!-- Contrôles -->
+    <div class="ic-dw-controls">
+      <div class="ic-dw-control">
+        <label class="ic-label" for="ic-dw-count">Nombre de mots</label>
+        <div class="ic-dw-stepper">
+          <button type="button" onclick="icDwStep(-1)" aria-label="Moins un mot">–</button>
+          <input id="ic-dw-count" type="number" min="4" max="12" value="6" inputmode="numeric" oninput="icDwUpdateMeter()" aria-label="Nombre de mots">
+          <button type="button" onclick="icDwStep(1)" aria-label="Plus un mot">+</button>
+        </div>
+      </div>
+      <div class="ic-dw-control">
+        <label class="ic-label">Séparateur</label>
+        <div id="ic-dw-seps" class="ic-dw-seps">
+          <button type="button" class="ic-dw-sep ic-dw-sep-active" data-sep="-" onclick="icDwSep(this)">tiret</button>
+          <button type="button" class="ic-dw-sep" data-sep="." onclick="icDwSep(this)">point</button>
+          <button type="button" class="ic-dw-sep" data-sep=" " onclick="icDwSep(this)">espace</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="ic-dw-actions">
+      <button type="button" id="ic-dw-gen" onclick="icDwGenerate()" class="btn-neon no-underline after:hidden">
+        ⟳ Générer
+      </button>
+      <button type="button" onclick="icDwUse()" class="ic-dw-use">↳ Utiliser pour cette fiche</button>
+    </div>
+  </div>
+
   <div class="card-neon mb-6">
     <div class="ic-section-title">Mot de passe</div>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -348,6 +428,9 @@ import Layout from '../layouts/Layout.astro';
     <div id="dec-meta" class="font-mono text-[10px] text-dedsec-muted/40 mt-4 pt-3 border-t border-dedsec-border"></div>
   </div>
 </div>
+
+<!-- Wordlist Diceware (embarquée, aucun appel réseau) -->
+<script id="ic-dw-words" type="application/json" set:html={dicewareJson}></script>
 
 <!-- ══════════════════════════════════════════════════════════════
      STYLES
@@ -717,6 +800,143 @@ import Layout from '../layouts/Layout.astro';
 
   #ic-guide-overlay { transition: opacity 0.2s; }
   #ic-guide-overlay.ic-guide-visible { display: block !important; }
+
+  /* ── Générateur Diceware ─────────────────────────────────── */
+  .ic-dw-card { border-left: 3px solid rgba(0,255,159,0.22); }
+  .ic-dw-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(0,255,159,0.70);
+    border: 1px solid rgba(0,255,159,0.22);
+    background: rgba(0,255,159,0.04);
+    padding: 3px 9px;
+    white-space: nowrap;
+  }
+  .ic-dw-intro {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 12px;
+    color: rgba(122,122,138,0.85);
+    line-height: 1.6;
+    margin: 14px 0 18px;
+  }
+  .ic-dw-output-wrap { position: relative; margin-bottom: 14px; }
+  .ic-dw-output {
+    background: rgba(3,4,8,0.95);
+    border: 1px solid rgba(42,42,58,0.80);
+    border-left: 3px solid rgba(0,255,159,0.45);
+    padding: 18px 48px 18px 16px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 17px;
+    line-height: 1.5;
+    color: #e8e8f0;
+    word-break: break-word;
+    min-height: 58px;
+    display: flex;
+    align-items: center;
+    user-select: all;
+  }
+  .ic-dw-output.ic-dw-empty { color: rgba(58,64,80,0.85); font-style: italic; font-size: 13px; }
+  .ic-dw-copy {
+    position: absolute; right: 8px; top: 8px;
+    background: rgba(8,8,12,0.85);
+    border: 1px solid rgba(42,42,58,0.75);
+    color: rgba(122,122,138,0.85);
+    cursor: pointer;
+    padding: 5px 9px;
+    font-size: 13px;
+    transition: all 0.15s;
+  }
+  .ic-dw-copy:hover { border-color: rgba(0,255,159,0.45); color: #00ff9f; }
+  .ic-dw-copy.copied { border-color: #00ff9f; color: #00ff9f; }
+
+  .ic-dw-meter-row { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
+  .ic-dw-meter-track { flex: 1; height: 4px; background: rgba(42,42,58,0.80); overflow: hidden; }
+  .ic-dw-meter-fill { height: 100%; width: 0%; transition: width 0.25s, background 0.25s; }
+  .ic-dw-entropy {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: rgba(0,255,159,0.85);
+    white-space: nowrap;
+    min-width: 64px;
+    text-align: right;
+  }
+  .ic-dw-crack {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 11px;
+    color: rgba(122,122,138,0.78);
+    line-height: 1.5;
+    margin-bottom: 18px;
+  }
+  .ic-dw-crack b { color: rgba(200,200,216,0.92); font-weight: 600; }
+
+  .ic-dw-controls {
+    display: flex;
+    gap: 22px;
+    flex-wrap: wrap;
+    margin-bottom: 18px;
+  }
+  .ic-dw-control { flex: 1; min-width: 150px; }
+  .ic-dw-stepper {
+    display: inline-flex;
+    align-items: stretch;
+    border: 1px solid rgba(42,42,58,0.80);
+    background: rgba(5,6,10,0.92);
+  }
+  .ic-dw-stepper button {
+    background: none; border: none; cursor: pointer;
+    color: rgba(122,122,138,0.85);
+    font-size: 18px; width: 38px;
+    font-family: 'JetBrains Mono', monospace;
+    transition: all 0.15s;
+  }
+  .ic-dw-stepper button:hover { color: #00ff9f; background: rgba(0,255,159,0.06); }
+  .ic-dw-stepper input {
+    width: 54px;
+    background: none; border: none; outline: none;
+    color: #e8e8f0;
+    text-align: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 15px;
+    border-left: 1px solid rgba(42,42,58,0.80);
+    border-right: 1px solid rgba(42,42,58,0.80);
+    -moz-appearance: textfield;
+  }
+  .ic-dw-stepper input::-webkit-outer-spin-button,
+  .ic-dw-stepper input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
+  .ic-dw-seps { display: inline-flex; flex-wrap: wrap; gap: 0; border: 1px solid rgba(42,42,58,0.80); }
+  .ic-dw-sep {
+    background: none; border: none; cursor: pointer;
+    color: rgba(122,122,138,0.80);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+    padding: 9px 14px;
+    border-right: 1px solid rgba(42,42,58,0.80);
+    transition: all 0.15s;
+  }
+  .ic-dw-sep:last-child { border-right: none; }
+  .ic-dw-sep:hover { color: rgba(232,232,240,0.90); background: rgba(255,255,255,0.02); }
+  .ic-dw-sep-active { color: #00ff9f; background: rgba(0,255,159,0.08); }
+
+  .ic-dw-actions { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+  .ic-dw-use {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+    background: none;
+    border: 1px solid rgba(0,255,159,0.30);
+    color: rgba(0,255,159,0.85);
+    padding: 12px 18px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .ic-dw-use:hover { border-color: #00ff9f; background: rgba(0,255,159,0.07); color: #00ff9f; }
+  .ic-dw-use:disabled { opacity: 0.35; cursor: not-allowed; }
 </style>
 
 <!-- ══════════════════════════════════════════════════════════════
@@ -1019,6 +1239,135 @@ import Layout from '../layouts/Layout.astro';
     });
     document.getElementById('ic-file-import').value='';
   };
+
+  // ── GÉNÉRATEUR DICEWARE ───────────────────────────────────────
+  // Liste embarquée dans la page : aucune requête réseau.
+  let DW_WORDS = [];
+  try { DW_WORDS = JSON.parse(document.getElementById('ic-dw-words').textContent); } catch(_) {}
+  const DW_BITS_PER_WORD = DW_WORDS.length ? Math.log2(DW_WORDS.length) : 0;
+  let dwSep = '-';
+  let dwCurrent = '';
+
+  // Tirage uniforme non biaisé via CSPRNG (rejection sampling).
+  // Un simple `% n` introduirait un biais modulo ; on rejette la frange haute.
+  function dwRandInt(n) {
+    const max = Math.floor(0xFFFFFFFF / n) * n;
+    const buf = new Uint32Array(1);
+    let x;
+    do { crypto.getRandomValues(buf); x = buf[0]; } while (x >= max);
+    return x % n;
+  }
+
+  function dwClampCount() {
+    const el = document.getElementById('ic-dw-count');
+    let n = parseInt(el.value, 10);
+    if (isNaN(n)) n = 6;
+    n = Math.max(4, Math.min(12, n));
+    el.value = n;
+    return n;
+  }
+
+  function dwFormatTime(seconds) {
+    if (!isFinite(seconds)) return 'pratiquement infini';
+    const units = [
+      ['milliard d\'années', 31557600e9],
+      ['million d\'années',  31557600e6],
+      ['millénaire',         31557600000],
+      ['siècle',             3155760000],
+      ['an',                 31557600],
+      ['jour',               86400],
+      ['heure',              3600],
+      ['seconde',            1],
+    ];
+    for (const [name, secs] of units) {
+      if (seconds >= secs) {
+        const v = seconds / secs;
+        const r = v >= 100 ? Math.round(v) : Math.round(v * 10) / 10;
+        const plural = (r > 1 && !name.includes('\'')) ? (name.endsWith('s') ? name : name + 's') : name;
+        return r.toLocaleString('fr-FR') + ' ' + plural;
+      }
+    }
+    return 'moins d\'une seconde';
+  }
+
+  function icDwUpdateMeter() {
+    const n = dwClampCount();
+    const bits = n * DW_BITS_PER_WORD;
+    const meter = document.getElementById('ic-dw-meter');
+    const ent   = document.getElementById('ic-dw-entropy');
+    const crack = document.getElementById('ic-dw-crack');
+
+    // Échelle : 128 bits = barre pleine.
+    const pct = Math.min(bits / 128 * 100, 100);
+    let color, label;
+    if (bits < 50)      { color = '#ff4444'; label = 'Faible'; }
+    else if (bits < 70) { color = '#ffaa00'; label = 'Correct'; }
+    else if (bits < 90) { color = '#7bed9f'; label = 'Fort'; }
+    else                { color = '#00ff9f'; label = 'Excellent'; }
+    meter.style.width = pct + '%';
+    meter.style.background = color;
+    ent.textContent = Math.round(bits) + ' bits';
+    ent.style.color = color;
+
+    // Hypothèse pessimiste : 100 milliards d'essais/seconde, sans tenir
+    // compte du frein PBKDF2 (250k itérations) qui rallonge encore le calcul.
+    const avgGuesses = Math.pow(2, bits - 1);
+    const seconds = avgGuesses / 1e11;
+    crack.innerHTML = '<b>' + label + '</b> · ' + Math.round(bits) +
+      ' bits d\'entropie · cassage hors-ligne estimé à <b>' + dwFormatTime(seconds) + '</b>.';
+  }
+
+  window.icDwStep = function (d) {
+    const el = document.getElementById('ic-dw-count');
+    el.value = (parseInt(el.value, 10) || 6) + d;
+    dwClampCount();
+    if (dwCurrent) icDwGenerate(); else icDwUpdateMeter();
+  };
+
+  window.icDwSep = function (btn) {
+    document.querySelectorAll('#ic-dw-seps .ic-dw-sep').forEach(b => b.classList.remove('ic-dw-sep-active'));
+    btn.classList.add('ic-dw-sep-active');
+    dwSep = btn.getAttribute('data-sep');
+    if (dwCurrent) icDwGenerate();
+  };
+
+  window.icDwGenerate = function () {
+    if (!DW_WORDS.length) return;
+    const n = dwClampCount();
+    const words = [];
+    for (let i = 0; i < n; i++) words.push(DW_WORDS[dwRandInt(DW_WORDS.length)]);
+    dwCurrent = words.join(dwSep);
+    const out = document.getElementById('ic-dw-output');
+    out.textContent = dwCurrent;
+    out.classList.remove('ic-dw-empty');
+    document.getElementById('ic-dw-use').disabled = false;
+    icDwUpdateMeter();
+  };
+
+  window.icDwCopy = function (btn) {
+    if (!dwCurrent) return;
+    navigator.clipboard.writeText(dwCurrent).then(() => {
+      btn.textContent = '✓'; btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = '⧉'; btn.classList.remove('copied'); }, 1800);
+    });
+  };
+
+  window.icDwUse = function () {
+    if (!dwCurrent) return;
+    const p1 = document.getElementById('enc-pw1');
+    const p2 = document.getElementById('enc-pw2');
+    p1.value = dwCurrent; p2.value = dwCurrent;
+    icPwStrength(dwCurrent);
+    p1.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    const btn = document.querySelector('.ic-dw-use');
+    const orig = btn.textContent;
+    btn.textContent = '✓ Mot de passe rempli';
+    setTimeout(() => { btn.textContent = orig; }, 2000);
+  };
+
+  // Init : une phrase prête dès l'ouverture.
+  document.getElementById('ic-dw-use').disabled = true;
+  icDwGenerate();
 })();
 </script>
 

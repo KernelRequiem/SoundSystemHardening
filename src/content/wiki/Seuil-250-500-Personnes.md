@@ -1,5 +1,9 @@
 # Seuil 250-500 personnes : Le déclencheur du régime répressif
 
+> Résumé : le seuil de participants qui déclenche le régime de déclaration et la répression.
+> Statut : stable
+> Mise à jour : juin 2026
+
 **Le nombre de participants prévus est le premier critère qui détermine si un rassemblement entre dans le champ d'application du régime de déclaration obligatoire. Ce seuil n'est pas une limite arbitraire : il a une histoire, une logique et des failles exploitables.**
 
 ---

@@ -1,6 +1,6 @@
 # Patrimoine culturel
 
-> Page rattachée à : [[Histoire-Culture](https://github.com/menardrop-cpu/digital-rights/wiki/Histoire-&-Culture)
+> Page rattachée à : [[Histoire-&-Culture](https://github.com/KernelRequiem/digital-rights/wiki/Histoire-&-Culture)
 > Statut : stable
 > Dernière mise à jour : mai 2026
 
@@ -26,7 +26,7 @@ Cette page documente l'argument patrimonial du mouvement freetekno français : s
 
 Tout débat public sur les free parties se tient, depuis 2001, dans un cadrage imposé par l'État : ces rassemblements sont un problème d'ordre public. Ce cadrage détermine les outils disponibles : arrêtés, saisies, poursuites.
 
-L'argument patrimonial est le seul capable de renverser ce cadrage à la source. Il ne répond pas "votre répression est disproportionnée" - il dit "ce que vous réprimer est un patrimoine que vous avez vous-même reconnu". La force de cet argument tient à ceci : il retourne contre l'État ses propres actes institutionnels, avec ses propres mots.
+L'argument patrimonial est le seul capable de renverser ce cadrage à la source. Il ne répond pas "votre répression est disproportionnée", il dit "ce que vous réprimer est un patrimoine que vous avez vous-même reconnu". La force de cet argument tient à ceci : il retourne contre l'État ses propres actes institutionnels, avec ses propres mots.
 
 Depuis le 17 décembre 2025, cet argument est factuel. Il n'est plus rhétorique.
 
@@ -101,7 +101,7 @@ L'inscription à l'inventaire national du 17 décembre 2025 est formellement la 
 
 ### Le label Club Culture (novembre 2024)
 
-En novembre 2024, le ministère de la Culture lance le label "Club Culture - lieu d'expression artistique et de fête", reconnaissant les clubs comme infrastructures culturelles. C'est un élément du même processus d'institutionnalisation progressive [4].
+En novembre 2024, le ministère de la Culture lance le label "Club Culture, lieu d'expression artistique et de fête", reconnaissant les clubs comme infrastructures culturelles. C'est un élément du même processus d'institutionnalisation progressive [4].
 
 ### Le calendrier prévisible
 
@@ -129,12 +129,12 @@ Horizon 2030 ⏳ : Décision du Comité intergouvernemental
 
 C'est la pièce centrale de l'argument patrimonial en 2026.
 
-**Côté reconnaissance (décembre 2025 - janvier 2026) :**
+**Côté reconnaissance (décembre 2025, janvier 2026) :**
 * 17 décembre 2025 : musiques électroniques inscrites au patrimoine immatériel national
 * Ministre de la Culture : "toute leur place dans notre patrimoine"
 * Président de la République (juin 2025) : "nous sommes les inventeurs de l'électro"
 
-**Côté répression (janvier - mai 2026) :**
+**Côté répression (janvier, mai 2026) :**
 * 3 janvier 2026 : arrêté du préfet de l'Hérault interdisant les free parties pour toute l'année
 * 18 mars 2026 : dépôt de la PPL 1133 criminalisant les organisateurs
 * 9 avril 2026 : adoption de la PPL 1133 (6 mois de prison, 30 000 € d'amende)
@@ -144,7 +144,7 @@ C'est la pièce centrale de l'argument patrimonial en 2026.
 
 > La même semaine où la ministre de la Culture félicite Technopol pour l'inscription des musiques électroniques au patrimoine national, le Parlement adopte des textes criminalisant les organisateurs des fêtes qui ont transmis et fait vivre ce patrimoine pendant trente ans.
 
-Cette contradiction n'est pas rhétorique - elle est documentée par des actes officiels publiés avec des dates précises. Elle constitue un argument juridique potentiel (incohérence de l'action publique), politique (coût médiatique), et culturel (absurdité documentable).
+Cette contradiction n'est pas rhétorique, elle est documentée par des actes officiels publiés avec des dates précises. Elle constitue un argument juridique potentiel (incohérence de l'action publique), politique (coût médiatique), et culturel (absurdité documentable).
 
 ---
 
@@ -211,19 +211,19 @@ Pour la musique électronique, Technopol a l'expérience institutionnelle. Il ma
 
 ## Ce que le mouvement freetekno doit revendiquer
 
-### Court terme - dans les débats de 2026
+### Court terme : dans les débats de 2026
 
 * Utiliser systématiquement la date du 17 décembre 2025 et la déclaration de Rachida Dati dans toutes les prises de position contre les textes répressifs
 * Demander publiquement à Technopol de préciser si les free parties et teknivals sont inclus dans le périmètre de la candidature UNESCO
 * Faire de la contradiction patrimoine/répression un argument parlementaire via les élus alliés (questions écrites, commissions)
 
-### Moyen terme - dans la construction de la candidature
+### Moyen terme : dans la construction de la candidature
 
 * Exiger l'inclusion explicite des pratiques underground (teknivals, free parties, sound systems) dans le dossier UNESCO, pas seulement la French Touch commerciale
 * Contribuer à la documentation académique des pratiques de transmission (rôle des teknivals dans la formation des DJs et techniciens, culture orale du mouvement)
 * Approcher les institutions culturelles (INA, Philharmonie, Cité de la Musique) pour des partenariats d'archivage
 
-### Long terme - vers une reconnaissance complète
+### Long terme : vers une reconnaissance complète
 
 * Obtenir une inscription UNESCO qui reconnaisse explicitement la culture freetekno comme dimension constitutive de la musique électronique française
 * Utiliser cette inscription comme protection juridique contre les futures législations répressives (une pratique patrimonialisée est plus difficile à criminaliser)
@@ -232,31 +232,31 @@ Pour la musique électronique, Technopol a l'expérience institutionnelle. Il ma
 
 ## Liens connexes dans ce wiki
 
-* L'argument patrimonial dans la stratégie → [[Axe-Culturel]]
-* L'argument politique (UNESCO vs répression) → [[Axe-Politique]]
-* Histoire du mouvement → [[Histoire-Culture]]
+* L'argument patrimonial dans la stratégie → [[Culturel]]
+* L'argument politique (UNESCO vs répression) → [[Politique]]
+* Histoire du mouvement → [[Histoire-&-Culture]]
 * Chronologie des reconnaissances → [[Chronologie]]
 
 ---
 
 ## Sources
 
-[1] UNESCO - Convention pour la sauvegarde du patrimoine culturel immatériel (2003) - https://ich.unesco.org/fr/convention
+[1] UNESCO, Convention pour la sauvegarde du patrimoine culturel immatériel (2003). https://ich.unesco.org/fr/convention
 
-[2] Ministère de la Culture - Outre-mer, musiques électroniques : un patrimoine culturel immatériel vivant, décembre 2025 - https://www.culture.gouv.fr/actualites/outre-mer-musiques-electroniques-un-patrimoine-culturel-immateriel-vivant
+[2] Ministère de la Culture, Outre-mer, musiques électroniques : un patrimoine culturel immatériel vivant, décembre 2025. https://www.culture.gouv.fr/actualites/outre-mer-musiques-electroniques-un-patrimoine-culturel-immateriel-vivant
 
-[3] CNews / AFP - Les musiques électroniques sont entrées au patrimoine culturel immatériel français, 18 décembre 2025 - https://www.cnews.fr/culture/2025-12-18/les-musiques-electroniques-sont-entrees-au-patrimoine-culturel-immateriel
+[3] CNews / AFP, Les musiques électroniques sont entrées au patrimoine culturel immatériel français, 18 décembre 2025. https://www.cnews.fr/culture/2025-12-18/les-musiques-electroniques-sont-entrees-au-patrimoine-culturel-immateriel
 
-[4] Tsugi - Les musiques électroniques intronisées au patrimoine culturel immatériel français, décembre 2025 - https://www.tsugi.fr/les-musiques-electroniques-intronisees-au-patrimoine-culturel-immateriel-francais/
+[4] Tsugi, Les musiques électroniques intronisées au patrimoine culturel immatériel français, décembre 2025. https://www.tsugi.fr/les-musiques-electroniques-intronisees-au-patrimoine-culturel-immateriel-francais/
 
-[5] Euronews - La musique électronique inscrite au patrimoine culturel immatériel français, 18 décembre 2025 - https://fr.euronews.com/culture/2025/12/18/la-musique-electronique-inscrite-au-patrimoine-culturel-immateriel-francais
+[5] Euronews, La musique électronique inscrite au patrimoine culturel immatériel français, 18 décembre 2025. https://fr.euronews.com/culture/2025/12/18/la-musique-electronique-inscrite-au-patrimoine-culturel-immateriel-francais
 
-[6] DureVie - Les musiques électroniques françaises entrent officiellement au patrimoine immatériel culturel, décembre 2025 - https://www.durevie.paris/article/les-musiques-electroniques-francaises-entrent-officiellement-au-patrimoine-immateriel-culturel
+[6] DureVie, Les musiques électroniques françaises entrent officiellement au patrimoine immatériel culturel, décembre 2025. https://www.durevie.paris/article/les-musiques-electroniques-francaises-entrent-officiellement-au-patrimoine-immateriel-culturel
 
-[7] CNews / AFP - Macron aimerait inscrire la French Touch à l'UNESCO, juin 2025 - https://www.cnews.fr/france/2025-06-21/musique-electro-emmanuel-macron-aimerait-inscrire-la-french-touch-lunesco-1700010
+[7] CNews / AFP, Macron aimerait inscrire la French Touch à l'UNESCO, juin 2025. https://www.cnews.fr/france/2025-06-21/musique-electro-emmanuel-macron-aimerait-inscrire-la-french-touch-lunesco-1700010
 
-[8] Tsugi - La techno berlinoise au Patrimoine Culturel de l'UNESCO - https://www.tsugi.fr/la-techno-berlinoise-au-patrimoine-culturel-unesco/
+[8] Tsugi, La techno berlinoise au Patrimoine Culturel de l'UNESCO. https://www.tsugi.fr/la-techno-berlinoise-au-patrimoine-culturel-unesco/
 
-[9] France24 - La baguette française bientôt classée au patrimoine mondial de l'UNESCO ?, mars 2021 - https://www.france24.com/fr/france/20210326-la-baguette-fran%C3%A7aise-bient%C3%B4t-class%C3%A9e-au-patrimoine-mondial-de-l-unesco
+[9] France24, La baguette française bientôt classée au patrimoine mondial de l'UNESCO ?, mars 2021. https://www.france24.com/fr/france/20210326-la-baguette-fran%C3%A7aise-bient%C3%B4t-class%C3%A9e-au-patrimoine-mondial-de-l-unesco
 
-[10] Confédération nationale de la boulangerie - Historique de la candidature de la baguette à l'UNESCO - https://boulangerie.org/communiquer/les-savoir-faire-artisanaux-et-la-culture-de-la-baguette-de-pain-a-lunesco/
+[10] Confédération nationale de la boulangerie, Historique de la candidature de la baguette à l'UNESCO. https://boulangerie.org/communiquer/les-savoir-faire-artisanaux-et-la-culture-de-la-baguette-de-pain-a-lunesco/

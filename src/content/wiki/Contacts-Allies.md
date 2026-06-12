@@ -1,5 +1,9 @@
 # Contacts Alliés
 
+> Résumé : annuaire des structures, collectifs et personnes ressources à contacter selon la situation.
+> Statut : stable
+> Mise à jour : juin 2026
+
 **Les structures, collectifs, associations et personnes ressources à contacter selon la situation.**
 
 Ce wiki est un annuaire opérationnel. Chaque entrée indique ce que la structure fait concrètement, quand la contacter, et comment l'atteindre. Il est classé par type de besoin, pas par ordre alphabétique.

@@ -1,5 +1,9 @@
 # Argumentaire Stratégique : Déconstruire la rhétorique répressive
 
+> Résumé : éléments de langage et faits sourcés pour répondre point par point à la rhétorique répressive.
+> Statut : stable
+> Mise à jour : juin 2026
+
 Ce document centralise les éléments de langage et les faits sourcés pour répondre aux accusations systématiquement portées contre la culture free party.
 
 Face à un préfet, un maire, un journaliste ou un tribunal, l'objectif n'est jamais de se justifier. Se justifier, c'est accepter le cadre de l'accusation. L'objectif est de recadrer le débat sur des faits tangibles : le droit, la sociologie, la santé publique et la logistique.

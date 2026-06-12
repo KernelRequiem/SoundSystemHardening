@@ -3,7 +3,7 @@
 > Statut : stable
 > Dernière mise à jour : mai 2026
 > Dossier : `cyber-opsec/`
-> Prérequis : lire [`threat-model.md`](threat-model.md) avant ce fichier
+> Prérequis : lire [`threat-model.md`](threat-model) avant ce fichier
 
 Ce fichier documente les outils de messagerie adaptés à un collectif soumis à un niveau de menace 2 en France. Pour chaque outil : ce qu'il fait techniquement, ce qu'il protège réellement, ce qu'il ne protège pas, et la configuration à appliquer.
 
@@ -12,10 +12,10 @@ Ce fichier documente les outils de messagerie adaptés à un collectif soumis à
 ## Sommaire
 
 1. [Comprendre le chiffrement de bout en bout](#1-comprendre-le-chiffrement-de-bout-en-bout)
-2. [Signal - le standard de référence](#2-signal--le-standard-de-référence)
-3. [Briar - P2P sans infrastructure](#3-briar--p2p-sans-infrastructure)
-4. [Telegram - usages et pièges](#4-telegram--usages-et-pièges)
-5. [Email - ProtonMail et alternatives](#5-email--protonmail-et-alternatives)
+2. [Signal : le standard de référence](#2-signal--le-standard-de-référence)
+3. [Briar : P2P sans infrastructure](#3-briar--p2p-sans-infrastructure)
+4. [Telegram : usages et pièges](#4-telegram--usages-et-pièges)
+5. [Email : ProtonMail et alternatives](#5-email--protonmail-et-alternatives)
 6. [Tableau de décision](#6-tableau-de-décision)
 7. [Ce que la messagerie ne protège jamais](#7-ce-que-la-messagerie-ne-protège-jamais)
 8. [Sources et références](#8-sources-et-références)
@@ -60,7 +60,7 @@ Messagerie avec chiffrement E2E :
 
 **La condition :** le chiffrement E2E ne fonctionne que si les deux parties utilisent le même outil configuré correctement. Un message Signal vers un numéro qui n'a pas Signal passe en SMS classique, non chiffré.
 
-### La clé cryptographique - mécanisme simplifié
+### La clé cryptographique : mécanisme simplifié
 
 Le chiffrement repose sur des paires de clés asymétriques :
 
@@ -69,11 +69,11 @@ Le chiffrement repose sur des paires de clés asymétriques :
 
 Analogie : votre clé publique est une boîte aux lettres ouverte dans laquelle n'importe qui peut déposer un message. Votre clé privée est la seule clé qui permet d'ouvrir cette boîte. Le serveur peut voir la boîte, mais pas son contenu.
 
-**Forward secrecy (confidentialité persistante) :** Signal va plus loin. Chaque message utilise une clé de session temporaire différente, détruite après usage. Même si votre clé principale est compromise dans le futur, les messages passés restent illisibles - les clés qui les ont chiffrés n'existent plus.
+**Forward secrecy (confidentialité persistante) :** Signal va plus loin. Chaque message utilise une clé de session temporaire différente, détruite après usage. Même si votre clé principale est compromise dans le futur, les messages passés restent illisibles, les clés qui les ont chiffrés n'existent plus.
 
 ---
 
-## 2. Signal - le standard de référence
+## 2. Signal : le standard de référence
 
 ### Ce qu'est Signal Protocol
 
@@ -84,14 +84,14 @@ Le protocole combine :
 * **Double Ratchet** : régénération des clés à chaque message pour assurer la forward secrecy
 * **Curve25519, AES-256, HMAC-SHA256** : algorithmes cryptographiques de référence
 
-**Ce que tout ça signifie pratiquement :** même si Signal était contraint légalement de livrer des données, il ne pourrait livrer que la date de création du compte, la date de dernière connexion, et le numéro de téléphone. Pas les messages - ils ne sont stockés nulle part sur les serveurs Signal.
+**Ce que tout ça signifie pratiquement :** même si Signal était contraint légalement de livrer des données, il ne pourrait livrer que la date de création du compte, la date de dernière connexion, et le numéro de téléphone. Pas les messages, ils ne sont stockés nulle part sur les serveurs Signal.
 
 ### Installation et configuration essentielle
 
-**Étape 1 - Téléchargement**
+**Étape 1, Téléchargement**
 Signal est disponible sur iOS (App Store) et Android (Play Store ou APK direct sur signal.org). Toujours télécharger depuis la source officielle. Ne jamais utiliser un APK trouvé ailleurs.
 
-**Étape 2 - Configuration de sécurité obligatoire**
+**Étape 2, Configuration de sécurité obligatoire**
 
 ```
 Paramètre 1 : Disparition automatique des messages
@@ -131,7 +131,7 @@ Paramètre 5 : Écran de confidentialité
              regardant votre écran par-dessus votre épaule.
 ```
 
-**Étape 3 - Vérifier les numéros de sécurité**
+**Étape 3, Vérifier les numéros de sécurité**
 
 Signal permet de vérifier que vous communiquez bien avec la bonne personne (pas un intermédiaire qui se fait passer pour elle) via les "numéros de sécurité" :
 
@@ -190,7 +190,7 @@ Groupes Signal - bonnes pratiques :
 
 ---
 
-## 3. Briar - P2P sans infrastructure
+## 3. Briar : P2P sans infrastructure
 
 ### Architecture fondamentalement différente
 
@@ -215,7 +215,7 @@ Briar peut fonctionner via trois canaux selon la situation :
 
 **Mode Wi-Fi local** : sur le même réseau Wi-Fi, sans Internet. Utile quand un réseau local est disponible mais pas Internet.
 
-**Mode Internet via Tor** : pour les communications à distance, le trafic transite par le réseau Tor (voir [`reseau-anonymisation.md`](reseau-anonymisation.md)), ce qui masque à la fois l'origine et la destination.
+**Mode Internet via Tor** : pour les communications à distance, le trafic transite par le réseau Tor (voir [`reseau-anonymisation.md`](reseau-anonymisation)), ce qui masque à la fois l'origine et la destination.
 
 ### Ce que Briar apporte que Signal n'apporte pas
 
@@ -265,7 +265,7 @@ Pourquoi l'échange en personne est recommandé :
 
 ---
 
-## 4. Telegram - usages et pièges
+## 4. Telegram : usages et pièges
 
 ### L'architecture de Telegram expliquée
 
@@ -361,7 +361,7 @@ Briar / Signal 1:1 (2-5 personnes clés) :
 
 ---
 
-## 5. Email - ProtonMail et alternatives
+## 5. Email : ProtonMail et alternatives
 
 ### Le problème structurel de l'email
 
@@ -374,7 +374,7 @@ L'email est un protocole des années 1970 conçu sans sécurité. Un email stand
 
 **Règle générale :** pour les communications sensibles, préférer Signal. L'email, même ProtonMail, est un pis-aller.
 
-### ProtonMail - ce qu'il apporte et ses limites
+### ProtonMail : ce qu'il apporte et ses limites
 
 **Ce que ProtonMail chiffre :**
 Entre deux comptes ProtonMail, les messages sont chiffrés de bout en bout. ProtonMail ne peut pas lire le contenu. C'est sa proposition de valeur principale.
@@ -391,7 +391,7 @@ ProtonMail → Gmail / Orange / autre :
   ✗ Le serveur du destinataire stocke le message en clair
 ```
 
-**Juridiction suisse :** ProtonMail est basé en Suisse, hors de l'UE. Les demandes judiciaires françaises doivent passer par l'entraide judiciaire internationale, ce qui est plus lent et plus difficile. Ce n'est pas une protection absolue - en 2021, Proton a livré l'adresse IP d'un utilisateur suite à une décision de justice suisse.
+**Juridiction suisse :** ProtonMail est basé en Suisse, hors de l'UE. Les demandes judiciaires françaises doivent passer par l'entraide judiciaire internationale, ce qui est plus lent et plus difficile. Ce n'est pas une protection absolue, en 2021, Proton a livré l'adresse IP d'un utilisateur suite à une décision de justice suisse.
 
 **Règle pratique :** ProtonMail est adapté pour la correspondance administrative et les inscriptions à des services sensibles. Il n'est pas adapté pour remplacer Signal dans les communications de coordination.
 
@@ -432,7 +432,7 @@ Même sans lire un seul message, un adversaire qui observe le trafic réseau peu
 * Quand vous envoyez des messages (heures d'activité)
 * Avec qui vous communiquez si votre IP est connue
 
-Tor atténue ce problème (voir [`reseau-anonymisation.md`](reseau-anonymisation.md)). Signal ne le résout pas seul.
+Tor atténue ce problème (voir [`reseau-anonymisation.md`](reseau-anonymisation)). Signal ne le résout pas seul.
 
 **Le terminal physique saisi**
 
@@ -465,33 +465,33 @@ Recommandation pratique :
 
 **Le maillon humain**
 
-La sécurité d'une communication chiffrée est celle de l'extrémité la moins protégée. Si votre contact a son téléphone saisi déverrouillé, vos messages chez lui sont lisibles - même s'ils ont disparu de votre côté.
+La sécurité d'une communication chiffrée est celle de l'extrémité la moins protégée. Si votre contact a son téléphone saisi déverrouillé, vos messages chez lui sont lisibles, même s'ils ont disparu de votre côté.
 
 ---
 
 ## 8. Sources et références
 
 **Sur Signal Protocol :**
-* Signal Foundation - documentation technique - https://signal.org/docs/
-* Audit public du Signal Protocol - https://eprint.iacr.org/2016/1013.pdf
+* Signal Foundation, documentation technique. https://signal.org/docs/
+* Audit public du Signal Protocol. https://eprint.iacr.org/2016/1013.pdf
 
 **Sur Briar :**
-* Briar Project - documentation officielle - https://briarproject.org/
-* Briar - code source - https://code.briarproject.org/briar/briar
+* Briar Project, documentation officielle. https://briarproject.org/
+* Briar, code source. https://code.briarproject.org/briar/briar
 
 **Guides pratiques :**
-* EFF - Surveillance Self-Defense : Choosing Your Tools - https://ssd.eff.org/module/choosing-your-tools
-* EFF - How to Use Signal on Android - https://ssd.eff.org/module/how-use-signal-android
-* Security in a Box - Secure Communications - https://securityinabox.org/fr/
+* EFF, Surveillance Self-Defense : Choosing Your Tools. https://ssd.eff.org/module/choosing-your-tools
+* EFF, How to Use Signal on Android. https://ssd.eff.org/module/how-use-signal-android
+* Security in a Box, Secure Communications. https://securityinabox.org/fr/
 
 **Contexte légal français :**
-* Article 434-15-2 du code pénal (refus de remettre une clé de déchiffrement) - https://www.legifrance.gouv.fr
+* Article 434-15-2 du code pénal (refus de remettre une clé de déchiffrement). https://www.legifrance.gouv.fr
 
 ---
 
 *Fichiers suivants dans ce dossier :*
-* [`metadonnees-exif.md`](metadonnees-exif.md) - le vecteur de fuite le plus sous-estimé
-* [`surveillance-mobile.md`](surveillance-mobile.md) - IMSI-catcher et réseau GSM
-* [`reseau-anonymisation.md`](reseau-anonymisation.md) - VPN, Tor, Tails OS
-* [`identites-numeriques.md`](identites-numeriques.md) - séparation des identités
-* [`compartimentation.md`](compartimentation.md) - architecture d'information
+* [`metadonnees-exif.md`](metadonnees-exif), le vecteur de fuite le plus sous-estimé
+* [`surveillance-mobile.md`](surveillance-mobile), IMSI-catcher et réseau GSM
+* [`reseau-anonymisation.md`](reseau-anonymisation), VPN, Tor, Tails OS
+* [`identites-numeriques.md`](identites-numeriques), séparation des identités
+* [`compartimentation.md`](compartimentation), architecture d'information

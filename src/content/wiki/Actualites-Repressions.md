@@ -1,5 +1,9 @@
 # Veille Législative et Tactique : Actualités de la Répression
 
+> Résumé : suivi chronologique et sourcé des faits de répression visant les free parties.
+> Statut : actif
+> Mise à jour : mai 2026
+
 **Dernière mise à jour : 31 Mai 2026**
 
 Ce document recense et analyse de manière clinique les événements récents, les interventions et les évolutions des pratiques policières sur le terrain. L'objectif est d'identifier les nouvelles doctrines d'interventions et les techniques de harcèlement administratif ou physique pour adapter les contre-mesures opérationnelles.

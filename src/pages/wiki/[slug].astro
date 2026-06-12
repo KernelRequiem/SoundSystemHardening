@@ -110,6 +110,17 @@ function renderMarkdown(md: string): string {
   
   // Blockquotes
   html = html.replace(/^>\s+(.+)$/gm, '<blockquote>$1</blockquote>');
+  // Fusionne les lignes de citation consecutives en un seul bloc (en-tete meta,
+  // encarts multi-lignes) au lieu d'empiler des boites separees.
+  html = html.replace(/(?:<blockquote>.*?<\/blockquote>\n?){2,}/g, (match) => {
+    const lines = (match.match(/<blockquote>(.*?)<\/blockquote>/g) || [])
+      .map((s) => s.replace(/<\/?blockquote>/g, ''));
+    // Le 1er bloc qui commence par un label (Resume, Statut, Mise a jour, Dossier,
+    // Page rattachee, Prerequis) recoit la classe meta pour un rendu en fiche.
+    const isMeta = /^(Résumé|Resume|Statut|Mise à jour|Derni|Dossier|Page rattach|Prérequis|Prerequis)/i.test(lines[0]);
+    const cls = isMeta ? ' class="page-meta"' : '';
+    return `<blockquote${cls}>${lines.join('<br />')}</blockquote>`;
+  });
   
   // Lists
   html = html.replace(/^(\s*)[-*+]\s+(.+)$/gm, (match, indent, content) => {
@@ -172,39 +183,105 @@ function renderMarkdown(md: string): string {
 const htmlContent = renderMarkdown(rawContent);
 
 // Get category from slug
+// Correspondance exacte slug -> categorie, alignee sur les sections de /wiki.
+// Chaque page du wiki est ainsi rattachee a une categorie, sans page orpheline.
+const CATEGORY_MAP: Record<string, string> = {
+  // Terrain critique
+  'Urgence-immédiate': 'URGENCE',
+  'Repression': 'RÉPRESSION',
+  'Contestation': 'JURIDIQUE',
+  // Arsenal juridique
+  'arsenal-legislatif': 'JURIDIQUE',
+  'jurisprudence': 'JURIDIQUE',
+  'recours-juridiques': 'JURIDIQUE',
+  'ripost': 'CONTRE RIPOST',
+  'Strategie-contre-ripost': 'CONTRE RIPOST',
+  // Modus operandi
+  'Modus-Operandi': 'MODUS OPERANDI',
+  'Zones-Grises-Failles': 'MODUS OPERANDI',
+  'ZAD-Pourquoi-État-Evite': 'MODUS OPERANDI',
+  'Propriete-Privee-Fermee': 'MODUS OPERANDI',
+  'Terrains-Abandonnes': 'MODUS OPERANDI',
+  'Espaces-Semi-Publics': 'MODUS OPERANDI',
+  'Zones-Limitrophes': 'MODUS OPERANDI',
+  'Definition-Ambigue-Organisateur': 'MODUS OPERANDI',
+  'Seuil-250-500-Personnes': 'MODUS OPERANDI',
+  'Rassemblement-vs-Manifestation': 'MODUS OPERANDI',
+  'Declaration-Preuve-Legitimite': 'MODUS OPERANDI',
+  'Prescription-et-Delais': 'MODUS OPERANDI',
+  'Manque-de-Ressources': 'MODUS OPERANDI',
+  'Coordination-Defaillante': 'MODUS OPERANDI',
+  'Autorisation-Locale-Tacite': 'MODUS OPERANDI',
+  'Couverture-Mediatique-Dissuasive': 'MODUS OPERANDI',
+  'Presence-Temoins-Neutralisante': 'MODUS OPERANDI',
+  'Techniques-Contournement': 'MODUS OPERANDI',
+  'Camouflage-Evenement': 'MODUS OPERANDI',
+  'Fragmentation-Geographique': 'MODUS OPERANDI',
+  'Coordination-Decentralisee': 'MODUS OPERANDI',
+  'Documentation-Preemptive': 'MODUS OPERANDI',
+  'Declaration-Strategique': 'MODUS OPERANDI',
+  // Etudes de cas
+  'Carhaix-Pourquoi-Intervention': 'ÉTUDES DE CAS',
+  'Redon-Messe-Techno': 'ÉTUDES DE CAS',
+  'Phalsbourg-Succes-Absence-Intervention': 'ÉTUDES DE CAS',
+  'Teknival-Marigny-Avant-Apres': 'ÉTUDES DE CAS',
+  // Securite numerique
+  'Sécurite-Numerique': 'OPSEC',
+  'wiki-opsec': 'OPSEC',
+  'threat-model': 'OPSEC',
+  'Sécurité-des-communications': 'OPSEC',
+  'messagerie-chiffree': 'OPSEC',
+  'reseau-anonymisation': 'OPSEC',
+  'darknet-pgp-anonymat': 'OPSEC',
+  'surveillance-mobile': 'OPSEC',
+  'metadonnees-exif': 'OPSEC',
+  'identites-numeriques': 'OPSEC',
+  'compartimentation': 'OPSEC',
+  'wiki-ports-reseau': 'OPSEC',
+  // Strategie de resistance
+  'Stratégie-résistance': 'STRATÉGIE',
+  'Juridique': 'STRATÉGIE',
+  'Politique': 'STRATÉGIE',
+  'Sanitaire': 'STRATÉGIE',
+  'Axe-sanitaire': 'STRATÉGIE',
+  'Organisationnel': 'STRATÉGIE',
+  'Culturel': 'STRATÉGIE',
+  'Coalitions': 'STRATÉGIE',
+  // Mobilisation
+  'Mobilisation': 'MOBILISATION',
+  'Templates-Recours': 'MOBILISATION',
+  'Contacts-Allies': 'MOBILISATION',
+  'Argumentaires': 'MOBILISATION',
+  'Manifesto': 'MOBILISATION',
+  // Histoire & culture
+  'Histoire-&-Culture': 'HISTOIRE & CULTURE',
+  "L'esprit-des-teufeurs": 'HISTOIRE & CULTURE',
+  'Chronologie': 'HISTOIRE & CULTURE',
+  'Sound-System': 'HISTOIRE & CULTURE',
+  'Incidents-répressifs': 'HISTOIRE & CULTURE',
+  'Patrimoine-culturel': 'HISTOIRE & CULTURE',
+  'Medias-Propriete': 'MÉDIAS',
+  // Veille
+  "Vue-d'ensemble-veille": 'VEILLE',
+  'Lois-En-Cours': 'VEILLE',
+  'Actualites-Repressions': 'VEILLE',
+  'Sources-Fiables': 'VEILLE',
+  'Changelog': 'VEILLE',
+};
+
 function getCategory(slug: string): string {
-  const categories: Record<string, string> = {
-    'Strategie': 'STRATÉGIE',
-    'Juridique': 'JURIDIQUE',
-    'Politique': 'POLITIQUE',
-    'Sanitaire': 'SANITAIRE',
-    'Histoire': 'HISTOIRE',
-    'Modus': 'MODUS OPERANDI',
-    'Camouflage': 'MODUS OPERANDI',
-    'Fragmentation': 'MODUS OPERANDI',
-    'Coordination': 'MODUS OPERANDI',
-    'Mobilisation': 'MOBILISATION',
-    'Contacts': 'MOBILISATION',
-    'Templates': 'MOBILISATION',
-    'Manifesto': 'MOBILISATION',
-    'Lois': 'VEILLE',
-    'Actualites': 'VEILLE',
-    'Changelog': 'VEILLE',
-    'Sécurit': 'OPSEC',
-    'Repression': 'OPSEC',
-    'Urgence': 'URGENCE',
-  };
-  
-  for (const [key, value] of Object.entries(categories)) {
-    if (slug.startsWith(key)) return value;
-  }
-  return 'WIKI';
+  return CATEGORY_MAP[slug] ?? 'WIKI';
 }
 
 const category = getCategory(slug);
 ---
 
 <Layout title={title} description={`${title} - SoundSystemHardening Wiki`} category={category}>
+  <div class="wiki-kicker">
+    <span class="wiki-kicker-badge">{category}</span>
+    <span class="wiki-kicker-line"></span>
+    <a href="/wiki" class="wiki-kicker-index">Index du wiki</a>
+  </div>
   <article class="prose-dedsec" set:html={htmlContent} />
 
   <!-- Article footer -->
@@ -228,12 +305,86 @@ const category = getCategory(slug);
   article :global(h1) {
     @apply text-3xl mb-6 mt-0;
   }
-  
+
   article :global(table) {
     @apply text-sm;
   }
-  
+
   article :global(img) {
     @apply max-w-full h-auto rounded-lg my-4 border border-dedsec-border;
   }
+
+  /* ── Bandeau categorie au-dessus du titre ── */
+  .wiki-kicker {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 22px;
+  }
+  .wiki-kicker-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: #00ff9f;
+    border: 1px solid rgba(0, 255, 159, 0.3);
+    background: rgba(0, 255, 159, 0.05);
+    padding: 4px 10px;
+    white-space: nowrap;
+  }
+  .wiki-kicker-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(0, 255, 159, 0.25), transparent);
+  }
+  .wiki-kicker-index {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(122, 122, 138, 0.7);
+    text-decoration: none;
+    white-space: nowrap;
+    transition: color 0.15s;
+  }
+  .wiki-kicker-index:hover { color: #00ff9f; }
+
+  /* ── Fiche meta en tete de page (Resume / Statut / Mise a jour) ── */
+  article :global(blockquote.page-meta) {
+    border-left: none;
+    border: 1px solid rgba(42, 42, 58, 0.8);
+    border-top: 2px solid rgba(0, 255, 159, 0.45);
+    background:
+      linear-gradient(180deg, rgba(0, 255, 159, 0.04) 0%, rgba(8, 8, 12, 0.4) 100%);
+    padding: 16px 20px;
+    margin: 0 0 28px;
+    font-family: 'JetBrains Mono', monospace;
+    font-style: normal;
+    font-size: 12px;
+    line-height: 2;
+    color: rgba(190, 190, 205, 0.92);
+    letter-spacing: 0.01em;
+  }
+  /* Met en relief les libelles avant le premier deux-points de chaque ligne */
+  article :global(blockquote.page-meta br) { content: ""; }
+
+  /* ── Ancres de titres : pastille au survol ── */
+  article :global(h2),
+  article :global(h3) { scroll-margin-top: 90px; position: relative; }
+  article :global(h2)::before {
+    content: "";
+    position: absolute;
+    left: -14px;
+    top: 0.15em;
+    height: 0.85em;
+    width: 3px;
+    background: rgba(0, 255, 159, 0.55);
+  }
+
+  /* ── Liste premium : puces neon ── */
+  article :global(.prose-dedsec ul > li::marker) { color: rgba(0, 255, 159, 0.6); }
+
+  /* ── Dernier paragraphe Voir aussi / Sources : respiration ── */
+  article :global(hr) { opacity: 0.5; }
 </style>

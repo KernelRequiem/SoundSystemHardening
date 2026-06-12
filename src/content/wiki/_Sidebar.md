@@ -1,7 +1,7 @@
 # Navigation
 
 ## 🏠 Accueil
-* [Urgence Immédiate](Urgence_Immediata)
+* [Urgence Immédiate](Urgence-immédiate)
 * [L'esprit des Teufeurs](L'esprit-des-teufeurs)
 * [Sécurité Numérique](Sécurite-Numerique)
 ---
@@ -13,14 +13,14 @@
 
 ## ⚖️ Stratégie de résistance
 
-* [Vue d'ensemble](Strategie-Resistance)
+* [Vue d'ensemble](Stratégie-résistance)
 
 **Axes stratégiques**
-* [Axe juridique](Axe-Juridique)
-* [Axe politique](Axe-Politique)
-* [Axe sanitaire / RdR](Axe-Sanitaire-RdR)
-* [Axe organisationnel](Axe-Organisationnel)
-* [Axe culturel](Axe-Culturel)
+* [Axe juridique](Juridique)
+* [Axe politique](Politique)
+* [Axe sanitaire / RdR](Axe-sanitaire)
+* [Axe organisationnel](Organisationnel)
+* [Axe culturel](Culturel)
 
 **Ressources**
 * [Coalitions](Coalitions)
@@ -29,11 +29,11 @@
 
 ## 🕰️ Histoire et culture
 
-* [Vue d'ensemble](Histoire-Culture)
+* [Vue d'ensemble](Histoire-&-Culture)
 * [Chronologie (1988-2026)](Chronologie)
-* [Sound Systems](Sound-Systems)
-* [Incidents répressifs](Incidents-Repressifs)
-* [Patrimoine culturel](Patrimoine-Culturel)
+* [Sound Systems](Sound-System)
+* [Incidents répressifs](Incidents-répressifs)
+* [Patrimoine culturel](Patrimoine-culturel)
 
 ---
 

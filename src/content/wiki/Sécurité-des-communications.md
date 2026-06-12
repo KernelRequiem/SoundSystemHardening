@@ -1,10 +1,8 @@
 # Sécurité des communications
 
-> **Statut :** actif - mis à jour mai 2026  
-> **Public :** techniciens et personnes avec des bases réseau souhaitant comprendre les mécanismes, pas seulement les outils  
-> **Scope :** messagerie chiffrée, gestion des identités numériques, métadonnées, réseau, sécurité physique mobile
-
----
+> Résumé : sécuriser les communications d'un collectif sans moyens techniques dédiés.
+> Statut : actif
+> Mise à jour : mai 2026
 
 ## Pourquoi ce document
 
@@ -844,21 +842,21 @@ Vérification d'efficacité : appeler le terminal dans le bag
 
 **Documentation technique de référence**
 
-* [Signal Protocol documentation](https://signal.org/docs/) - spécifications cryptographiques du protocole Signal
-* [Tor Project](https://www.torproject.org/fr/) - documentation officielle, guide OPSEC
-* [Tails documentation](https://tails.boum.org/doc/index.fr.html) - guide d'installation et d'usage
-* [ExifTool documentation](https://exiftool.org/) - référence complète des commandes
+* [Signal Protocol documentation](https://signal.org/docs/), spécifications cryptographiques du protocole Signal
+* [Tor Project](https://www.torproject.org/fr/), documentation officielle, guide OPSEC
+* [Tails documentation](https://tails.boum.org/doc/index.fr.html), guide d'installation et d'usage
+* [ExifTool documentation](https://exiftool.org/), référence complète des commandes
 
 **Guides de sécurité numérique pour militants**
 
-* [Surveillance Self-Defense (EFF)](https://ssd.eff.org/fr) - guide progressif selon le niveau de risque, disponible en français
-* [Security in a Box](https://securityinabox.org/fr/) - guides pratiques par outil et par contexte
-* [La Quadrature du Net](https://www.laquadrature.net/) - veille juridique et technique sur la surveillance en France
+* [Surveillance Self-Defense (EFF)](https://ssd.eff.org/fr), guide progressif selon le niveau de risque, disponible en français
+* [Security in a Box](https://securityinabox.org/fr/), guides pratiques par outil et par contexte
+* [La Quadrature du Net](https://www.laquadrature.net/), veille juridique et technique sur la surveillance en France
 
 **Sur l'IMSI-catcher**
 
-* [SnoopSnitch](https://f-droid.org/packages/de.srlabs.snoopsnitch/) - application de détection, disponible sur F-Droid
-* [EFF - IMSI Catcher Guide](https://www.eff.org/wp/gotta-catch-em-all-understanding-how-imsi-catchers-interact-our-phones) - documentation technique anglophone
+* [SnoopSnitch](https://f-droid.org/packages/de.srlabs.snoopsnitch/), application de détection, disponible sur F-Droid
+* [EFF, IMSI Catcher Guide](https://www.eff.org/wp/gotta-catch-em-all-understanding-how-imsi-catchers-interact-our-phones), documentation technique anglophone
 
 ---
 

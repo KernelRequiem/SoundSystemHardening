@@ -31,6 +31,18 @@ ENV HOST=0.0.0.0
 ENV PORT=4321
 ENV NODE_ENV=production
 
+# ── Execution en utilisateur non privilegie ──────────────────────────────────
+# Par defaut le conteneur tournerait en root : une RCE applicative donnerait
+# alors un shell root dans le conteneur. L'image node:alpine fournit deja un
+# utilisateur 'node' (uid 1000). On lui transfere la propriete de /app et on
+# bascule dessus. Le port 4321 (>1024) ne necessite aucun privilege.
+RUN chown -R node:node /app
+USER node
+
 EXPOSE 4321
+
+# Sonde de vie interne : l'endpoint /api/health ne divulgue plus aucune config.
+HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \
+  CMD wget --no-verbose --tries=1 --spider http://127.0.0.1:4321/api/health || exit 1
 
 CMD ["node", "dist/server/entry.mjs"]

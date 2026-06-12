@@ -3,7 +3,7 @@
 > Statut : stable
 > Dernière mise à jour : mai 2026
 > Dossier : `cyber-opsec/`
-> Prérequis : lire [`threat-model.md`](threat-model.md) avant ce fichier
+> Prérequis : lire [`threat-model.md`](threat-model) avant ce fichier
 
 Ce fichier documente la surveillance des réseaux mobiles : fonctionnement technique du réseau GSM/4G/5G, mécanisme des IMSI-catchers, cadre légal français, et contre-mesures concrètes. C'est la menace physique la plus redoutable sur site lors d'un événement surveillé.
 
@@ -11,9 +11,9 @@ Ce fichier documente la surveillance des réseaux mobiles : fonctionnement techn
 
 ## Sommaire
 
-1. [Architecture du réseau mobile - les bases](#1-architecture-du-réseau-mobile--les-bases)
+1. [Architecture du réseau mobile : les bases](#1-architecture-du-réseau-mobile--les-bases)
 2. [L'identifiant qui vous trahit : IMSI et IMEI](#2-lidentifiant-qui-vous-trahit--imsi-et-imei)
-3. [L'IMSI-catcher - mécanisme d'attaque détaillé](#3-limsi-catcher--mécanisme-dattaque-détaillé)
+3. [L'IMSI-catcher : mécanisme d'attaque détaillé](#3-limsi-catcher--mécanisme-dattaque-détaillé)
 4. [Ce que l'IMSI-catcher collecte réellement](#4-ce-que-limsi-catcher-collecte-réellement)
 5. [Cadre légal en France](#5-cadre-légal-en-france)
 6. [Cas documentés d'utilisation en France](#6-cas-documentés-dutilisation-en-france)
@@ -25,7 +25,7 @@ Ce fichier documente la surveillance des réseaux mobiles : fonctionnement techn
 
 ---
 
-## 1. Architecture du réseau mobile - les bases
+## 1. Architecture du réseau mobile : les bases
 
 Pour comprendre comment l'IMSI-catcher fonctionne, il faut d'abord comprendre comment votre téléphone se connecte au réseau mobile en conditions normales.
 
@@ -58,13 +58,13 @@ Votre téléphone scanne en permanence les signaux des antennes environnantes et
 
 **L'absence d'authentification mutuelle en GSM 2G :** en GSM (2G), le téléphone s'authentifie auprès du réseau, mais le réseau ne s'authentifie pas auprès du téléphone. Le téléphone fait confiance à n'importe quelle antenne qui émet le bon signal. C'est la faille fondamentale que l'IMSI-catcher exploite.
 
-**Amélioration en 4G/5G :** les protocoles LTE (4G) et NR (5G) ont introduit une authentification mutuelle - le téléphone peut en théorie vérifier l'identité de l'antenne. Cependant, les IMSI-catchers modernes contournent cette protection via des techniques de *downgrade* (forçage vers 2G).
+**Amélioration en 4G/5G :** les protocoles LTE (4G) et NR (5G) ont introduit une authentification mutuelle, le téléphone peut en théorie vérifier l'identité de l'antenne. Cependant, les IMSI-catchers modernes contournent cette protection via des techniques de *downgrade* (forçage vers 2G).
 
 ---
 
 ## 2. L'identifiant qui vous trahit : IMSI et IMEI
 
-### IMSI - International Mobile Subscriber Identity
+### IMSI : International Mobile Subscriber Identity
 
 L'IMSI est un numéro unique à 15 chiffres gravé dans votre carte SIM. Il identifie votre abonnement chez l'opérateur, indépendamment du téléphone.
 
@@ -78,7 +78,7 @@ Format IMSI : 208 01 1234567890
 
 **Ce que l'IMSI permet :** une réquisition judiciaire à votre opérateur avec un IMSI permet d'obtenir immédiatement votre identité civile complète (nom, prénom, adresse, numéro de téléphone), l'historique de votre présence réseau, et les antennes auxquelles vous vous êtes connecté (donc vos déplacements).
 
-### IMEI - International Mobile Equipment Identity
+### IMEI : International Mobile Equipment Identity
 
 L'IMEI est un numéro unique à 15 chiffres gravé dans le téléphone lui-même (pas dans la SIM). Il identifie le terminal physique.
 
@@ -108,7 +108,7 @@ IMSI + IMEI : confirme que la même personne utilisait ce téléphone
 
 ---
 
-## 3. L'IMSI-catcher - mécanisme d'attaque détaillé
+## 3. L'IMSI-catcher : mécanisme d'attaque détaillé
 
 ### Définition
 
@@ -146,7 +146,7 @@ Un IMSI-catcher (aussi appelé *Stingray* aux États-Unis, *IMSI grabber*, ou *f
   accessibles (identifiants, présence) pas le contenu.
 ```
 
-### Le *downgrade attack* - contourner la 4G/5G
+### Le *downgrade attack* : contourner la 4G/5G
 
 La protection d'authentification mutuelle de la 4G/5G est contournable via une technique de *downgrade forcé* :
 
@@ -300,7 +300,7 @@ Police judiciaire :
 
 ## 6. Cas documentés d'utilisation en France
 
-### Affaire de Bure - militants antinucléaires
+### Affaire de Bure : militants antinucléaires
 
 Des IMSI-catchers ont été utilisés contre des militants antinucléaires opposés au projet de stockage de déchets nucléaires CIGÉO à Bure (Meuse). Les dossiers judiciaires ont révélé l'interception de dizaines de milliers de communications. Cette affaire est la plus documentée publiquement en France concernant la surveillance de militants.
 
@@ -387,7 +387,7 @@ Limite : vous perdez le signal si vous êtes dans une zone
          peut simplement couper toute connectivité.
 ```
 
-### Faraday bag - isolation physique
+### Faraday bag : isolation physique
 
 Un *Faraday bag* est une housse en tissu conducteur qui bloque les ondes électromagnétiques dans les deux sens : ni entrée ni sortie.
 
@@ -520,7 +520,7 @@ Sous-tons CTCSS (optionnel) :
 
 La détection d'IMSI-catchers n'est pas fiable mais peut constituer un signal d'alerte.
 
-### SnoopSnitch - Android
+### SnoopSnitch : Android
 
 SnoopSnitch est une application Android qui analyse les paramètres du réseau GSM et détecte les anomalies caractéristiques d'un faux relais.
 
@@ -618,29 +618,29 @@ le mode avion si vous êtes en situation à risque.
 
 ## 11. Sources et références
 
-**Sur les IMSI-catchers - technique :**
-* Electronic Frontier Foundation - Gotta Catch 'Em All: Understanding How IMSI Catchers Interact With Our Phones - https://www.eff.org/wp/gotta-catch-em-all-understanding-how-imsi-catchers-interact-our-phones
-* ACLU - Stingrays: The Most Common Surveillance Tool the Government Won't Tell You About - https://www.aclu.org/issues/privacy-technology/surveillance-technologies/stingray-tracking-devices
+**Sur les IMSI-catchers, technique :**
+* Electronic Frontier Foundation, Gotta Catch 'Em All: Understanding How IMSI Catchers Interact With Our Phones. https://www.eff.org/wp/gotta-catch-em-all-understanding-how-imsi-catchers-interact-our-phones
+* ACLU, Stingrays: The Most Common Surveillance Tool the Government Won't Tell You About. https://www.aclu.org/issues/privacy-technology/surveillance-technologies/stingray-tracking-devices
 
 **Sur le cadre légal français :**
-* Légifrance - Loi n° 2015-912 du 24 juillet 2015 relative au renseignement - https://www.legifrance.gouv.fr/lods/id/JORFTEXT000030931343
-* La Quadrature du Net - Documentation IMSI-catchers en France - https://www.laquadrature.net/
+* Légifrance, Loi n° 2015-912 du 24 juillet 2015 relative au renseignement. https://www.legifrance.gouv.fr/lods/id/JORFTEXT000030931343
+* La Quadrature du Net, Documentation IMSI-catchers en France. https://www.laquadrature.net/
 
 **Sur SnoopSnitch :**
-* SnoopSnitch - F-Droid - https://f-droid.org/packages/de.srlabs.snoopsnitch/
-* Security Research Labs - IMSI Catcher Detection - https://srlabs.de/imsi-catcher-detection/
+* SnoopSnitch, F-Droid. https://f-droid.org/packages/de.srlabs.snoopsnitch/
+* Security Research Labs, IMSI Catcher Detection. https://srlabs.de/imsi-catcher-detection/
 
 **Sur la radio PMR :**
-* ANFR - Réglementation PMR 446 en France - https://www.anfr.fr/
-* Wikipedia FR - PMR 446 - https://fr.wikipedia.org/wiki/PMR_446
+* ANFR, Réglementation PMR 446 en France. https://www.anfr.fr/
+* Wikipedia FR, PMR 446. https://fr.wikipedia.org/wiki/PMR_446
 
 **Guides pratiques :**
-* EFF - Surveillance Self-Defense : Mobile Devices - https://ssd.eff.org/module/mobile-phones
-* Security in a Box - Protect Your Device - https://securityinabox.org/fr/
+* EFF, Surveillance Self-Defense : Mobile Devices. https://ssd.eff.org/module/mobile-phones
+* Security in a Box, Protect Your Device. https://securityinabox.org/fr/
 
 ---
 
 *Fichiers suivants dans ce dossier :*
-* [`reseau-anonymisation.md`](reseau-anonymisation.md) - VPN, Tor, Tails OS
-* [`identites-numeriques.md`](identites-numeriques.md) - séparation des identités
-* [`compartimentation.md`](compartimentation.md) - architecture d'information
+* [`reseau-anonymisation.md`](reseau-anonymisation), VPN, Tor, Tails OS
+* [`identites-numeriques.md`](identites-numeriques), séparation des identités
+* [`compartimentation.md`](compartimentation), architecture d'information

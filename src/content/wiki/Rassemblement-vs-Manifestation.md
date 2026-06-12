@@ -1,5 +1,9 @@
 # Rassemblement festif vs manifestation revendicative : Deux régimes, deux logiques
 
+> Résumé : deux régimes juridiques distincts et l'intérêt de basculer vers celui de la manifestation.
+> Statut : stable
+> Mise à jour : juin 2026
+
 **Le droit français distingue deux catégories d'événements collectifs soumises à des régimes légaux différents. Cette distinction n'est pas neutre : elle détermine les obligations, les protections et les risques applicables à chaque situation. Comprendre cette distinction permet de choisir le cadre juridique le plus favorable selon le contexte.**
 
 ---

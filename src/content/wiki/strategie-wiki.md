@@ -1,6 +1,6 @@
-# Stratégie du wiki  -  objectifs à 12 mois
+# Stratégie du wiki : objectifs à 12 mois
 
-> Statut : vivant  -  mis à jour trimestriellement
+> Statut : vivant, mis à jour trimestriellement
 > Dernière mise à jour : juin 2026
 
 Ce document est public. Il pose ce que SoundSystemHardening cherche à devenir sur les 12 prochains mois, quelles compétences manquent, et pourquoi ça vaut la peine d'y contribuer maintenant.
@@ -11,9 +11,9 @@ Ce document est public. Il pose ce que SoundSystemHardening cherche à devenir s
 
 Le calendrier est brutal. La PPL 1133 est passée à l'Assemblée en avril 2026. Le Sénat a adopté la loi RIPOST en mai 2026. Le texte repart à l'Assemblée. On a une fenêtre de quelques mois avant que la loi soit promulguée et entre en vigueur.
 
-Le mouvement a besoin d'outils concrets  -  pas de manifestes, pas de pétitions : des ressources opérationnelles que quelqu'un peut ouvrir depuis son téléphone à 3h du matin face à une saisie.
+Le mouvement a besoin d'outils concrets, pas de manifestes, pas de pétitions : des ressources opérationnelles que quelqu'un peut ouvrir depuis son téléphone à 3h du matin face à une saisie.
 
-Ce wiki existe depuis quelques mois. Il a 48 pages, une carte interactive des incidents, un pipeline de signalement communautaire. La base technique est en place. Ce qui manque, c'est du contenu  -  du vrai contenu terrain, vérifié, sourcé, rédigé par des gens qui connaissent le sujet.
+Ce wiki existe depuis quelques mois. Il a 48 pages, une carte interactive des incidents, un pipeline de signalement communautaire. La base technique est en place. Ce qui manque, c'est du contenu, du vrai contenu terrain, vérifié, sourcé, rédigé par des gens qui connaissent le sujet.
 
 ---
 
@@ -21,15 +21,15 @@ Ce wiki existe depuis quelques mois. Il a 48 pages, une carte interactive des in
 
 ### La référence opérationnelle du mouvement
 
-Pas la plus grande, pas la plus visible  -  la plus utile. Quand quelqu'un se retrouve en GAV, qu'un sound system est saisi, qu'un préfet émet un arrêté couvrant trois départements, la réponse pratique doit être ici. Consultable hors connexion, sourcée, à jour.
+Pas la plus grande, pas la plus visible, la plus utile. Quand quelqu'un se retrouve en GAV, qu'un sound system est saisi, qu'un préfet émet un arrêté couvrant trois départements, la réponse pratique doit être ici. Consultable hors connexion, sourcée, à jour.
 
 ### Un outil de coordination pour les collectifs
 
-Les collectifs qui font le travail de fond (FSJS, Techno+, LDH locale, collectifs régionaux) ne devraient pas reconstruire la même documentation chacun de leur côté. Ce wiki peut être la base commune  -  chaque collectif y contribue, tout le monde en profite.
+Les collectifs qui font le travail de fond (FSJS, Techno+, LDH locale, collectifs régionaux) ne devraient pas reconstruire la même documentation chacun de leur côté. Ce wiki peut être la base commune, chaque collectif y contribue, tout le monde en profite.
 
 ### Un terrain de documentation historique
 
-Les incidents répressifs s'accumulent et se perdent. La carte de la répression a vocation à devenir la mémoire collective du mouvement  -  chaque cas documenté est une preuve que la répression existe, systématique, géographiquement étendue.
+Les incidents répressifs s'accumulent et se perdent. La carte de la répression a vocation à devenir la mémoire collective du mouvement, chaque cas documenté est une preuve que la répression existe, systématique, géographiquement étendue.
 
 ---
 
@@ -45,7 +45,7 @@ Les incidents répressifs s'accumulent et se perdent. La carte de la répression
 | Critique | Que faire dans les 72h après une intervention | Terrain + juridique |
 | Critique | Autogestion collective et responsabilité légale | Droit pénal |
 | Haute | Jurisprudence exploitable (TA, Cass., CEDH) | Juridique |
-| Haute | Chaîne de preuves  -  documenter une violence policière | Terrain + procédure |
+| Haute | Chaîne de preuves, documenter une violence policière | Terrain + procédure |
 | Haute | Contre-narration face aux médias | Communication |
 | Moyenne | Ressources par région (avocats, collectifs) | Réseau terrain |
 | Moyenne | Pages en anglais et allemand | Traduction |
@@ -54,13 +54,13 @@ Les incidents répressifs s'accumulent et se perdent. La carte de la répression
 
 ### Carte de la répression
 
-La carte a 10 incidents documentés au lancement. L'objectif est d'atteindre 100 incidents indexés et géolocalisés d'ici juin 2027. Cela demande du travail de sourcing  -  chaque incident nécessite une source vérifiable et une modération avant publication.
+La carte a 10 incidents documentés au lancement. L'objectif est d'atteindre 100 incidents indexés et géolocalisés d'ici juin 2027. Cela demande du travail de sourcing, chaque incident nécessite une source vérifiable et une modération avant publication.
 
 **Objectif : 100 incidents sur la carte d'ici juin 2027.**
 
 ### Communauté
 
-Le wiki tourne actuellement avec une équipe très réduite. Pour être fiable et à jour, il faut des contributeurs réguliers avec des compétences différentes  -  pas besoin de savoir coder, pas besoin de savoir écrire parfaitement.
+Le wiki tourne actuellement avec une équipe très réduite. Pour être fiable et à jour, il faut des contributeurs réguliers avec des compétences différentes, pas besoin de savoir coder, pas besoin de savoir écrire parfaitement.
 
 **Objectif : 8 à 10 contributeurs actifs d'ici juin 2027.**
 
@@ -68,9 +68,9 @@ Le wiki tourne actuellement avec une équipe très réduite. Pour être fiable e
 
 Deux fonctionnalités manquantes critiques pour l'usage terrain :
 
-**Mode hors-ligne (PWA)**  -  les pages critiques (urgence, droits GAV, opsec) doivent être accessibles sans connexion. Indispensable lors d'un événement en zone sans réseau.
+**Mode hors-ligne (PWA)**, les pages critiques (urgence, droits GAV, opsec) doivent être accessibles sans connexion. Indispensable lors d'un événement en zone sans réseau.
 
-**Calculateur d'exposition RIPOST**  -  outil interactif : vous indiquez votre rôle, la taille de l'événement, le type de lieu, et le calculateur indique votre exposition exacte et les contre-mesures disponibles.
+**Calculateur d'exposition RIPOST**, outil interactif : vous indiquez votre rôle, la taille de l'événement, le type de lieu, et le calculateur indique votre exposition exacte et les contre-mesures disponibles.
 
 ---
 
@@ -88,7 +88,7 @@ On ne cherche pas des gens parfaits. On cherche des gens compétents sur un suje
 
 ### Profils cybersécurité
 
-**Pourquoi :** la section OPSEC existe mais elle est incomplète. Surveillance mobile, métadonnées, compartimentage des identités numériques  -  des sujets qui demandent une vraie expertise technique.
+**Pourquoi :** la section OPSEC existe mais elle est incomplète. Surveillance mobile, métadonnées, compartimentage des identités numériques, des sujets qui demandent une vraie expertise technique.
 
 **Ce qu'on demande :** rédiger ou auditer des pages techniques, valider les recommandations existantes, contribuer à des guides pratiques.
 
@@ -104,7 +104,7 @@ On ne cherche pas des gens parfaits. On cherche des gens compétents sur un suje
 
 ### Traducteurs
 
-**Pourquoi :** le mouvement free party est européen. Des collectifs en Allemagne, en Angleterre, aux Pays-Bas font face à des problématiques similaires et pourraient bénéficier de ces ressources  -  ou contribuer les leurs.
+**Pourquoi :** le mouvement free party est européen. Des collectifs en Allemagne, en Angleterre, aux Pays-Bas font face à des problématiques similaires et pourraient bénéficier de ces ressources, ou contribuer les leurs.
 
 **Ce qu'on demande :** traduction de pages prioritaires (urgence, droits fondamentaux, opsec) vers l'anglais ou l'allemand.
 
@@ -126,11 +126,11 @@ On ne cherche pas des gens parfaits. On cherche des gens compétents sur un suje
 
 Si vous avez des compétences dans un des domaines listés et que vous voulez contribuer :
 
-**Via le formulaire de contact** sur [soundsystemhardening.fr/contact](/contact)  -  indiquez votre domaine de compétence et le type de contribution envisagée.
+**Via le formulaire de contact** sur [soundsystemhardening.fr/contact](/contact), indiquez votre domaine de compétence et le type de contribution envisagée.
 
-**Via GitHub** directement  -  ouvrez une issue ou une discussion sur [github.com/KernelRequiem/SoundSystemHardening](https://github.com/KernelRequiem/SoundSystemHardening).
+**Via GitHub** directement, ouvrez une issue ou une discussion sur [github.com/KernelRequiem/SoundSystemHardening](https://github.com/KernelRequiem/SoundSystemHardening).
 
-**Via Signal**  -  pour les échanges sensibles ou si vous préférez ne pas passer par GitHub. Laissez un moyen de contact dans le formulaire de contact, on vous rejoint.
+**Via Signal**, pour les échanges sensibles ou si vous préférez ne pas passer par GitHub. Laissez un moyen de contact dans le formulaire de contact, on vous rejoint.
 
 ---
 

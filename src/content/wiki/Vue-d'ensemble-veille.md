@@ -1,5 +1,9 @@
 # Veille Législative et Tactique : Vue d'ensemble
 
+> Résumé : centralise le suivi en temps réel de l'évolution du cadre répressif.
+> Statut : actif
+> Mise à jour : juin 2026
+
 Ce module centralise le suivi en temps réel de l'évolution du cadre répressif. L'objectif n'est pas de faire de l'actualité, mais de l'anticipation opérationnelle.
 
 Face à une adaptation constante des autorités (nouvelles lois, contournements juridiques, nouvelles technologies de maintien de l'ordre), l'inertie est le plus grand danger pour les collectifs. Cette section permet de cartographier la menace avant qu'elle ne se déploie sur le terrain.

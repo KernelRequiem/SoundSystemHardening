@@ -1,7 +1,7 @@
 # Coalitions
 
-> Page rattachée à : [[Strategie-Resistance]]
-> Statut : actif - mis à jour en continu
+> Page rattachée à : [[Stratégie-résistance]]
+> Statut : actif, mis à jour en continu
 > Dernière mise à jour : mai 2026
 
 Cette page est l'annuaire vivant des acteurs alliés du mouvement : structures de coordination interne, associations de santé, élus, juristes, médias et acteurs culturels. Elle documente qui fait quoi, avec quel positionnement, et comment les contacter ou les mobiliser.
@@ -58,7 +58,7 @@ Un allié n'est pas un sympathisant. C'est un acteur qui a des intérêts conver
 * Boîte à outils : réduction des risques, inclusion, éco-responsabilité
 * Formations en ligne gratuites (VSS, RdR)
 
-**Contact :** contact.freeform@gmail.com - freeform.fr
+**Contact :** contact.freeform@gmail.com, freeform.fr
 
 ---
 
@@ -142,7 +142,7 @@ Les associations de RdR sont les alliées les plus solides politiquement car leu
 
 **Positionnement documenté :** production d'un guide pratique sur les violences policières (avril 2024) [8], présence d'observateurs en manifestations, co-signataire de prises de position publiques sur la disproportion répressive.
 
-**Ressource clé :** guide "Que faire face aux violences policières ?" - ldh-france.org/wp-content/uploads/2024/04/Que-faire_ViolencesPO_DEF.pdf
+**Ressource clé :** guide "Que faire face aux violences policières ?", ldh-france.org/wp-content/uploads/2024/04/Que-faire_ViolencesPO_DEF.pdf
 
 **Contact :** ldh-france.org
 
@@ -162,7 +162,7 @@ Les associations de RdR sont les alliées les plus solides politiquement car leu
 
 **Usage pertinent :** en complément d'une plainte pénale après un incident de violences policières.
 
-**Contact :** defenseurdesdroits.fr - formulaire en ligne
+**Contact :** defenseurdesdroits.fr, formulaire en ligne
 
 ---
 
@@ -178,7 +178,7 @@ Les associations de RdR sont les alliées les plus solides politiquement car leu
 
 ## Alliés institutionnels et élus
 
-### Andy Kerbrat - LFI
+### Andy Kerbrat : LFI
 
 **Rôle documenté :** député LFI, a déposé l'amendement n°29 à la loi 1133 (sanctuarisation des espaces RdR), adopté le 9 avril 2026 [6].
 
@@ -186,7 +186,7 @@ Les associations de RdR sont les alliées les plus solides politiquement car leu
 
 ---
 
-### Frédéric Hocquard - Mairie de Paris
+### Frédéric Hocquard : Mairie de Paris
 
 **Rôle documenté :** adjoint au maire de Paris chargé du tourisme et de la vie nocturne. Co-signataire de la tribune Télérama de mars 2026 avec Laurent Garnier, Rebeka Warrior, Maud Geffray et des directeurs de clubs parisiens [6].
 
@@ -201,7 +201,7 @@ Les votes sur la loi 1133 (78 pour, 67 contre à l'Assemblée le 9 avril 2026) e
 * Cosignatures de tribunes
 * Interventions en commission lors de la navette parlementaire
 
-**Comment trouver ces élus :** dossiers législatifs sur assemblee-nationale.fr et senat.fr - votes nominatifs publiés.
+**Comment trouver ces élus :** dossiers législatifs sur assemblee-nationale.fr et senat.fr, votes nominatifs publiés.
 
 ---
 
@@ -348,34 +348,34 @@ Pour signaler un contact périmé, une nouvelle structure à ajouter, ou une pri
 
 ## Liens connexes dans ce wiki
 
-* Vue d'ensemble → [[Strategie-Resistance]]
-* Axe juridique (recours, avocats) → [[Axe-Juridique]]
-* Axe politique (tribunes, manifestives) → [[Axe-Politique]]
+* Vue d'ensemble → [[Stratégie-résistance]]
+* Axe juridique (recours, avocats) → [[Juridique]]
+* Axe politique (tribunes, manifestives) → [[Politique]]
 * Templates de contact et de recours → [[Mobilisation]]
-* Suivi de l'actualité → [[Veille]]
+* Suivi de l'actualité → [[Vue-d'ensemble-veille]]
 
 ---
 
 ## Sources
 
-[1] InfoLibertaire - Manifestive Tekno Anti Rep 2025, avril 2025 - https://www.infolibertaire.net/manifestive-tekno-anti-rep-2025/
+[1] InfoLibertaire, Manifestive Tekno Anti Rep 2025, avril 2025. https://www.infolibertaire.net/manifestive-tekno-anti-rep-2025/
 
-[2] Tsugi - Libérez la free party : une Tekno Parade organisée à Paris, octobre 2025 - https://www.tsugi.fr/liberez-la-free-party-tekno-parade-organisee-a-paris/
+[2] Tsugi, Libérez la free party : une Tekno Parade organisée à Paris, octobre 2025. https://www.tsugi.fr/liberez-la-free-party-tekno-parade-organisee-a-paris/
 
-[3] Dijon Actualités - Dijon au cœur des Manifestives 2026, mai 2026 - https://dijon-actualites.fr/2026/05/26/dijon-au-coeur-des-manifestives-2026-le-collectif-tekno-anti-rep-appelle-a-la-mobilisation-le-30-mai/
+[3] Dijon Actualités, Dijon au cœur des Manifestives 2026, mai 2026. https://dijon-actualites.fr/2026/05/26/dijon-au-coeur-des-manifestives-2026-le-collectif-tekno-anti-rep-appelle-a-la-mobilisation-le-30-mai/
 
-[4] Techno+ - FREEFORM, une asso pour défendre et promouvoir la culture free - https://technoplus.org/actualites/874-freeform-une-asso-pour-defendre-et-promouvoir-la-culture-free/
+[4] Techno+, FREEFORM, une asso pour défendre et promouvoir la culture free. https://technoplus.org/actualites/874-freeform-une-asso-pour-defendre-et-promouvoir-la-culture-free/
 
-[5] jeunes.gouv.fr - Freeform : nouveau site et appel à projets - https://www.jeunes.gouv.fr/pour-accompagner-la-dynamique-jeunes-et-fete-l-association-freeform-lance-son-nouveau-site-et-un
+[5] jeunes.gouv.fr, Freeform : nouveau site et appel à projets. https://www.jeunes.gouv.fr/pour-accompagner-la-dynamique-jeunes-et-fete-l-association-freeform-lance-son-nouveau-site-et-un
 
-[6] Techno+ - Chronologie de la résistance festive des free parties - https://technoplus.org/chronologie-de-la-resistance-festive-des-free-parties/
+[6] Techno+, Chronologie de la résistance festive des free parties. https://technoplus.org/chronologie-de-la-resistance-festive-des-free-parties/
 
-[7] Franceinfo - Free party : les députés vont-ils siffler la fin de la fête ?, avril 2026 - https://www.franceinfo.fr/culture/musique/free-party-les-deputes-vont-ils-siffler-la-fin-de-la-fete_7926770.html
+[7] Franceinfo, Free party : les députés vont-ils siffler la fin de la fête ?, avril 2026. https://www.franceinfo.fr/culture/musique/free-party-les-deputes-vont-ils-siffler-la-fin-de-la-fete_7926770.html
 
-[8] LDH - Que faire face aux violences policières ? Guide pratique, avril 2024 - https://www.ldh-france.org/wp-content/uploads/2024/04/Que-faire_ViolencesPO_DEF.pdf
+[8] LDH, Que faire face aux violences policières ? Guide pratique, avril 2024. https://www.ldh-france.org/wp-content/uploads/2024/04/Que-faire_ViolencesPO_DEF.pdf
 
-[9] Flagrant Déni - Polices des polices en France : pourquoi il faut tout changer, novembre 2025 - https://www.flagrant-deni.fr/wp-content/uploads/2025/11/FD-RAPPORT-numerique-vf.pdf
+[9] Flagrant Déni, Polices des polices en France : pourquoi il faut tout changer, novembre 2025. https://www.flagrant-deni.fr/wp-content/uploads/2025/11/FD-RAPPORT-numerique-vf.pdf
 
-[10] Franceinfo - Loi RIPOST : le gouvernement veut frapper plus fort contre les free parties, mai 2026 - https://www.franceinfo.fr/politique/parlement-francais/senat/loi-ripost-le-gouvernement-veut-frapper-plus-fort-contre-les-free-party_8011544.html
+[10] Franceinfo, Loi RIPOST : le gouvernement veut frapper plus fort contre les free parties, mai 2026. https://www.franceinfo.fr/politique/parlement-francais/senat/loi-ripost-le-gouvernement-veut-frapper-plus-fort-contre-les-free-party_8011544.html
 
-[11] Politis - Entretien Pierre Levent : "La répression ne va pas éteindre les free parties", avril 2026 - https://www.politis.fr/articles/2026/04/entretien-pierre-levent-la-repression-ne-va-pas-eteindre-les-free-parties/
+[11] Politis, Entretien Pierre Levent : "La répression ne va pas éteindre les free parties", avril 2026. https://www.politis.fr/articles/2026/04/entretien-pierre-levent-la-repression-ne-va-pas-eteindre-les-free-parties/

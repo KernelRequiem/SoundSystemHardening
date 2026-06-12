@@ -1,5 +1,9 @@
 # URGENCE IMMÉDIATE : Fiches Réflexes
 
+> Résumé : fiches réflexes pour les situations terrain critiques, avec renvoi vers les pages dédiées.
+> Statut : stable
+> Mise à jour : juin 2026
+
 Cette page liste les situations terrain critiques. Pour chaque situation, utilise la page dédiée qui contient les réflexes complets, les phrases à dire et les contacts d'urgence.
 
 **Pour une utilisation optimale en situation de crise, va directement sur [/urgence](/urgence).**
@@ -8,23 +12,23 @@ Cette page liste les situations terrain critiques. Pour chaque situation, utilis
 
 ### 1. Contrôle Routier / Barrage
 Vous êtes arrêté sur la route.
-Fiche complète : [URGENCE - Contrôle routier](/urgence)
+Fiche complète : [URGENCE, Contrôle routier](/urgence)
 *Points clés : Inspection visuelle vs Fouille, refus de consentement, droit au silence.*
 
 ### 2. Fouille de véhicule
 Les autorités veulent ouvrir le coffre ou inspecter l'intérieur.
-Fiche complète : [URGENCE - Fouille de véhicule](/urgence)
+Fiche complète : [URGENCE, Fouille de véhicule](/urgence)
 *Points clés : Ne pas consentir à la fouille, exiger la présence d'un OPJ, rester calme.*
 
 ### 3. Saisie de matériel
 Le matériel (son, groupe, camions) est en cours de confiscation.
-Fiche complète : [URGENCE - Saisie de matériel](/urgence)
+Fiche complète : [URGENCE, Saisie de matériel](/urgence)
 *Points clés : Documentation vidéo, ne pas s'opposer physiquement, exiger l'inventaire précis.*
 Contact immédiat : **contact@fsjs.fr**
 
 ### 4. Garde à vue
 Un membre du collectif est interpellé et emmené.
-Fiche complète : [URGENCE - Garde à vue](/urgence)
+Fiche complète : [URGENCE, Garde à vue](/urgence)
 *Points clés : Silence, identité uniquement, refus de donner le code PIN, exigence d'un avocat.*
 Permanence pénale 24h/24 : **01 44 32 48 00** (Barreau de Paris)
 

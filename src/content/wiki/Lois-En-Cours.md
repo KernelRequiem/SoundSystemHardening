@@ -1,5 +1,9 @@
 # Veille Législative : Projets et Propositions de Loi
 
+> Résumé : suivi des projets et propositions de loi visant les rassemblements festifs.
+> Statut : actif
+> Mise à jour : juin 2026
+
 **Dernière mise à jour : 8 juin 2026**
 
 Ce document assure le suivi des textes de loi ciblant spécifiquement ou indirectement l'organisation et la participation aux rassemblements festifs non déclarés. Il cartographie les menaces juridiques en cours d'adoption.

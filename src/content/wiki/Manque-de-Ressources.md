@@ -1,5 +1,9 @@
 # Manque de ressources : La faille opérationnelle structurelle
 
+> Résumé : la faille structurelle des effectifs insuffisants face au nombre de rassemblements.
+> Statut : stable
+> Mise à jour : juin 2026
+
 **La gendarmerie nationale ne dispose pas des effectifs nécessaires pour intervenir systématiquement sur tous les rassemblements festifs. Entre les crises en outre-mer, les Jeux olympiques, la Nouvelle-Calédonie et les interventions routières, les ressources disponibles sont éparpillées. Cette pénurie structurelle est une faille que l'État lui-même reconnaît.**
 
 ---

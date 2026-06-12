@@ -1,5 +1,9 @@
 # Recours Juridiques
 
+> Résumé : quels recours engager, à quel moment et devant quelle juridiction.
+> Statut : stable
+> Mise à jour : juin 2026
+
 **Ce que je peux faire, à quel moment, devant quelle juridiction.**
 
 Ce fichier documente l'ensemble des voies de recours disponibles face à la répression des free parties : contestation d'arrêtés préfectoraux, défense pénale en garde à vue, contestation de saisie de matériel, recours administratifs et constitutionnels. Chaque voie est classée par timing et par type de situation.
@@ -47,7 +51,7 @@ RÉPRESSION
 
 ---
 
-## Voie 1 - Recours administratif contre un arrêté préfectoral
+## Voie 1 : Recours administratif contre un arrêté préfectoral
 
 ### Contexte
 
@@ -100,7 +104,7 @@ Un préfet prend un arrêté d'interdiction des rassemblements festifs sur son d
 
 ---
 
-## Voie 2 - Droits en garde à vue
+## Voie 2 : Droits en garde à vue
 
 ### Droits fondamentaux dès la notification de GAV
 
@@ -142,7 +146,7 @@ Un participant, un conducteur, un propriétaire de sound system, un administrate
 
 ---
 
-## Voie 3 - Contester la saisie du matériel
+## Voie 3 : Contester la saisie du matériel
 
 ### Le mécanisme de saisie
 
@@ -180,7 +184,7 @@ Devant le juge des libertés et de la détention (JLD) ou directement devant le 
 
 Les droits du tiers de bonne foi sont protégés et peuvent justifier une contestation de la saisie. Si le matériel appartient à quelqu'un qui n'était pas impliqué dans l'infraction (propriétaire prêtant le son, association), la saisie peut être contestée sur ce fondement.
 
-### FSJS - Fonds de Soutien Juridique des Sons
+### FSJS : Fonds de Soutien Juridique des Sons
 
 * **Contact :** contact@fsjs.fr
 * **Facebook :** https://www.facebook.com/association.fsjs/
@@ -190,7 +194,7 @@ Les droits du tiers de bonne foi sont protégés et peuvent justifier une contes
 
 ---
 
-## Voie 4 - Contestation d'une contravention (avant PPL 1133)
+## Voie 4 : Contestation d'une contravention (avant PPL 1133)
 
 ### Pour les organisateurs sanctionnés d'une contravention de 5e classe
 
@@ -208,7 +212,7 @@ Des publications sur la page Facebook du FSJS expliquent comment contester les c
 
 ---
 
-## Voie 5 - Recours en appel et cassation
+## Voie 5 : Recours en appel et cassation
 
 ### Appel correctionnel
 
@@ -231,7 +235,7 @@ Des publications sur la page Facebook du FSJS expliquent comment contester les c
 
 ---
 
-## Voie 6 - Question Prioritaire de Constitutionnalité (QPC)
+## Voie 6 : Question Prioritaire de Constitutionnalité (QPC)
 
 ### Principe
 
@@ -273,7 +277,7 @@ L'amendement CL34 instaure une présomption de connaissance du caractère illici
 
 ---
 
-## Voie 7 - Recours devant la Cour Européenne des Droits de l'Homme (CEDH)
+## Voie 7 : Recours devant la Cour Européenne des Droits de l'Homme (CEDH)
 
 ### Principe
 
@@ -281,17 +285,17 @@ La CEDH peut être saisie après épuisement des voies de recours internes. Elle
 
 ### Articles applicables aux free parties
 
-**Article 11 CESDH - Liberté de réunion et d'association**
+**Article 11 CESDH, Liberté de réunion et d'association**
 
 L'article 11 de la Convention de sauvegarde des droits de l'Homme et des libertés fondamentales proclame la liberté de réunion pacifique, entendue de façon très large, puisque la Cour européenne des droits de l'homme juge que cet article s'applique aux réunions présentant un caractère essentiellement social, comme un rassemblement dans un café (CEDH 7 mai 2015, n°59135/09, Emin Huseynov c. Azerbaïdjan, §91), ou un rassemblement culturel (CEDH 14 mai 2022, n°66336/01, Gypsy Council c. Royaume-Uni).
 
 **Argument pour les free parties :** la CEDH reconnaît les rassemblements culturels. Une free party est un rassemblement culturel. La pénalisation de la participation constitue une restriction à la liberté de réunion qui doit être "nécessaire dans une société démocratique".
 
-**Article 1 du Protocole n°1 CESDH - Protection de la propriété**
+**Article 1 du Protocole n°1 CESDH, Protection de la propriété**
 
 Le matériel saisi (sono, camion, ordinateurs) est confisqué définitivement, même en cas de relaxe ou de non-lieu. Atteinte au droit de propriété (Protocole 1, art. 1 CEDH) et à la présomption d'innocence.
 
-**Article 7 CESDH - Légalité des délits**
+**Article 7 CESDH, Légalité des délits**
 
 La CEDH exige que les infractions soient définies avec une précision suffisante. La formulation "contributeur direct ou indirect" peut être contestée.
 
@@ -309,7 +313,7 @@ La CEDH exige que les infractions soient définies avec une précision suffisant
 
 ---
 
-## Voie 8 - Défense préventive : la déclaration préalable
+## Voie 8 : Défense préventive : la déclaration préalable
 
 ### La voie légale comme protection
 

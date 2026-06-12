@@ -1,0 +1,81 @@
+---
+// src/pages/actu.astro
+// Page actualités : message de bienvenue (lancement) + reprise détaillée
+// de toutes les entrées du ticker de la page d'accueil.
+import Layout from '../layouts/Layout.astro';
+import { tickerItems } from '../data/ticker';
+
+function parseItem(s: string): { tag: string; body: string } {
+  const m = s.match(/^\[\s*([^\]]+?)\s*\]\s*(.*)$/);
+  return m ? { tag: m[1], body: m[2] } : { tag: 'INFO', body: s };
+}
+const items = tickerItems.map(parseItem);
+
+const TAG_ACCENT: Record<string, string> = {
+  'MAINTENANCE': '#ff4444',
+  'JUIN 2026': '#00ff9f',
+  'VEILLE': '#ffb000',
+  'WIKI': '#00d9ff',
+  'OPSEC': '#00ff9f',
+  'INFRA': '#7a7a8a',
+  'DROIT': '#ffb000',
+};
+const accentOf = (tag: string) => TAG_ACCENT[tag] ?? '#00ff9f';
+---
+
+<Layout
+  title="Actualités"
+  category="ACTUS"
+  description="Le fil d'actualité de SoundSystemHardening : maintenance, veille législative, nouvelles pages du wiki, infrastructure et droit."
+>
+
+  <h1>Actualités</h1>
+  <p class="text-dedsec-muted text-sm font-mono tracking-widest uppercase mb-8">
+    ▸ Le fil de la bannière, en détail
+  </p>
+
+  <!-- ════════ MOT DE BIENVENUE ════════ -->
+  <div class="not-prose border border-dedsec-border bg-dedsec-darker p-6 md:p-8 mb-12" style="border-top:2px solid rgba(0,255,159,0.5);background:linear-gradient(180deg,rgba(0,255,159,0.04),rgba(8,8,12,0.4));">
+    <div class="font-mono text-[11px] font-bold tracking-[0.25em] text-neon-green uppercase mb-4">◆ Bienvenue · Lancement fin juin 2026</div>
+
+    <p class="text-dedsec-text leading-relaxed mb-4" style="font-family:'Space Grotesk',sans-serif;">
+      Ce site ouvre ses portes à la fin du mois de juin 2026. C'est une première version, entièrement neuve, construite par le mouvement et pour le mouvement.
+    </p>
+
+    <p class="text-dedsec-text leading-relaxed mb-4" style="font-family:'Space Grotesk',sans-serif;">
+      Nous y portons le plus grand soin, mais nous tenons à être clairs : ce projet reste expérimental. Il est ouvert à la contribution, et tout ce qui s'y trouve demeure potentiellement corrigible et optimisable. Une donnée peut être incomplète, une page peut évoluer, une analyse peut être affinée. Si vous repérez une erreur ou une piste d'amélioration, dites-le nous. C'est ainsi que cet outil gagnera en fiabilité.
+    </p>
+
+    <p class="text-dedsec-text leading-relaxed m-0" style="font-family:'Space Grotesk',sans-serif;">
+      Nous espérons sincèrement qu'il sera utile. Qu'il aide à porter le mouvement, à protéger celles et ceux qui le font vivre, et à servir la cause d'une culture libre. C'est la seule raison d'être de ces pages.
+    </p>
+
+    <div class="flex flex-wrap gap-3 mt-6">
+      <a href="/contribuer" class="inline-flex items-center gap-2 font-mono text-[11px] font-bold tracking-widest no-underline px-4 py-2 transition-all" style="border:1px solid rgba(0,255,159,0.5);color:rgba(0,255,159,0.9);">✦ Contribuer</a>
+      <a href="/reseaux" class="inline-flex items-center gap-2 font-mono text-[11px] font-bold tracking-widest no-underline px-4 py-2 transition-all" style="border:1px solid rgba(42,42,58,0.9);color:rgba(122,122,138,0.9);">▸ Nous suivre</a>
+    </div>
+  </div>
+
+  <!-- ════════ LE FIL ════════ -->
+  <h2>Le fil d'actualité</h2>
+  <p>
+    Voici, repris une à une, toutes les informations qui défilent dans la bannière de l'accueil. Le fil est mis à jour au rythme du projet.
+  </p>
+
+  <div class="not-prose flex flex-col gap-px bg-dedsec-border my-6">
+    {items.map(item => (
+      <div class="bg-dedsec-darker p-5 flex flex-col sm:flex-row sm:items-center gap-3" style={`border-left:3px solid ${accentOf(item.tag)};`}>
+        <span
+          class="font-mono text-[10px] font-bold tracking-[0.18em] uppercase px-3 py-1 self-start whitespace-nowrap"
+          style={`color:${accentOf(item.tag)};border:1px solid ${accentOf(item.tag)}55;background:${accentOf(item.tag)}12;`}
+        >{item.tag}</span>
+        <span class="font-mono text-[12.5px] text-dedsec-text/85 leading-relaxed">{item.body}</span>
+      </div>
+    ))}
+  </div>
+
+  <p class="text-[11px] text-dedsec-muted/60 font-mono mt-8">
+    Le formulaire de contact est en cours de sécurisation jusqu'au 25 juin. En attendant, écrivez-nous par mail à crxzydiam0nd@protonmail.com ou sur Signal (KernelRequiem.27). Voir aussi la page <a href="/reseaux" class="text-neon-green/70 hover:text-neon-green">réseaux sociaux</a>.
+  </p>
+
+</Layout>

@@ -73,7 +73,7 @@ Les incidents documentés sont nombreux : Redon en juin 2021 (un jeune homme a e
 Chaque incident majeur doit faire l'objet d'un dossier structuré :
 
 * Collecte de témoignages écrits avec dates, heures, descriptions précises
-* Éléments vidéo et photos (en respectant les règles de nettoyage des métadonnées, voir [`cyber-opsec/metadonnees-exif.md`](https://github.com/menardrop-cpu/digital-rights/blob/main/cyber-opsec/metadonnees-exif.md))
+* Éléments vidéo et photos (en respectant les règles de nettoyage des métadonnées, voir [`cyber-opsec/metadonnees-exif.md`](https://github.com/KernelRequiem/digital-rights/blob/main/cyber-opsec/metadonnees-exif.md))
 * Dépôt de plainte systématique, même si le parquet classe sans suite
 * Saisine de l'IGPN ou IGGN avec copie aux médias partenaires
 * Transmission à Amnesty International et à la Ligue des droits de l'homme
@@ -147,7 +147,7 @@ L'amendement n°29 de la loi 1133, élaboré avec Freeform, Techno+, Planet Para
 
 ### Documenter la culture pour en légitimer l'existence
 
-Archives sonores, photos, témoignages, histoire des collectifs : cette documentation construit la légitimité patrimoniale du mouvement et empêche l'État de réécrire l'histoire en ne retenant que les incidents. Voir la page [[Histoire-Culture]] du wiki.
+Archives sonores, photos, témoignages, histoire des collectifs : cette documentation construit la légitimité patrimoniale du mouvement et empêche l'État de réécrire l'histoire en ne retenant que les incidents. Voir la page [[Histoire-&-Culture]] du wiki.
 
 ### La tekno comme export culturel
 
@@ -169,46 +169,46 @@ La tekno française est reconnue mondialement. Des producteurs issus du mouvemen
 
 ## Liens connexes
 
-* Base légale détaillée → [`droits-libertes/arsenal-legislatif.md`](https://github.com/menardrop-cpu/digital-rights/blob/main/droits-libertes/arsenal-legislatif.md)
-* Sécurité numérique des acteurs → [`cyber-opsec/`](https://github.com/menardrop-cpu/digital-rights/tree/main/cyber-opsec)
+* Base légale détaillée → [`droits-libertes/arsenal-legislatif.md`](https://github.com/KernelRequiem/digital-rights/blob/main/droits-libertes/arsenal-legislatif.md)
+* Sécurité numérique des acteurs → [`cyber-opsec/`](https://github.com/KernelRequiem/digital-rights/tree/main/cyber-opsec)
 * Outils d'action concrets → [[Mobilisation]]
-* Suivi des textes en cours → [[Veille]]
-* Histoire et mémoire → [[Histoire-Culture]]
+* Suivi des textes en cours → [[Vue-d'ensemble-veille]]
+* Histoire et mémoire → [[Histoire-&-Culture]]
 
 ---
 
 ## Sources
 
-[1] Tsugi - Free party : la répression se durcit pour les fêtes libres, avril 2026 - https://www.tsugi.fr/free-party-la-repression-se-durcit-pour-les-fetes-libres/
+[1] Tsugi, Free party : la répression se durcit pour les fêtes libres, avril 2026. https://www.tsugi.fr/free-party-la-repression-se-durcit-pour-les-fetes-libres/
 
-[2] Public Sénat - Projet de loi RIPOST : ce que contient le texte du Sénat, mai 2026 - https://www.publicsenat.fr/actualites/parlementaire/projet-de-loi-ripost-contre-les-troubles-a-lordre-public-ce-que-contient-le-texte-du-senat
+[2] Public Sénat, Projet de loi RIPOST : ce que contient le texte du Sénat, mai 2026. https://www.publicsenat.fr/actualites/parlementaire/projet-de-loi-ripost-contre-les-troubles-a-lordre-public-ce-que-contient-le-texte-du-senat
 
-[3] Légifrance - Livre V : Le référé (articles L511-1 à L555-2), Code de justice administrative - https://www.legifrance.gouv.fr/codes/section_lc/LEGITEXT000006070933/LEGISCTA000006118213/
+[3] Légifrance, Livre V : Le référé (articles L511-1 à L555-2), Code de justice administrative. https://www.legifrance.gouv.fr/codes/section_lc/LEGITEXT000006070933/LEGISCTA000006118213/
 
-[4] Green Law Avocat - Recours contre les arrêtés préfectoraux : référé-suspension et référé-liberté - https://www.green-law-avocat.fr/quels-recours-contre-les-mesures-covid-19/
+[4] Green Law Avocat, Recours contre les arrêtés préfectoraux : référé-suspension et référé-liberté. https://www.green-law-avocat.fr/quels-recours-contre-les-mesures-covid-19/
 
-[5] Légifrance - Article L521-2 CJA (référé-liberté), délai de 48 heures - https://www.legifrance.gouv.fr/codes/section_lc/LEGITEXT000006070933/LEGISCTA000006118213/
+[5] Légifrance, Article L521-2 CJA (référé-liberté), délai de 48 heures. https://www.legifrance.gouv.fr/codes/section_lc/LEGITEXT000006070933/LEGISCTA000006118213/
 
-[6] Service Public - Litige avec l'administration : référé-liberté, procédure - https://www.service-public.gouv.fr/particuliers/vosdroits/F2551
+[6] Service Public, Litige avec l'administration : référé-liberté, procédure. https://www.service-public.gouv.fr/particuliers/vosdroits/F2551
 
-[7] Assemblée nationale - Question écrite, annulations d'arrêtés préfectoraux du Hérault en référé-liberté (octobre 2023) - https://www.assemblee-nationale.fr/dyn/17/questions/QANR5L17QE1127.pdf
+[7] Assemblée nationale, Question écrite, annulations d'arrêtés préfectoraux du Hérault en référé-liberté (octobre 2023). https://www.assemblee-nationale.fr/dyn/17/questions/QANR5L17QE1127.pdf
 
-[8] France24 - Cinq choses à savoir sur les free parties au centre d'une proposition de loi, avril 2026 - https://www.france24.com/fr/info-en-continu/20260407-cinq-choses-%C3%A0-savoir-sur-les-free-parties-au-centre-d-une-proposition-de-loi
+[8] France24, Cinq choses à savoir sur les free parties au centre d'une proposition de loi, avril 2026. https://www.france24.com/fr/info-en-continu/20260407-cinq-choses-%C3%A0-savoir-sur-les-free-parties-au-centre-d-une-proposition-de-loi
 
-[9] Mixmag France - Les teufeurs se mobilisent contre la répression des fêtes libres - https://mixmag.fr/read/free-party-les-teufeurs-se-mobilisent-contre-la-repression-des-fetes-libres-news
+[9] Mixmag France, Les teufeurs se mobilisent contre la répression des fêtes libres. https://mixmag.fr/read/free-party-les-teufeurs-se-mobilisent-contre-la-repression-des-fetes-libres-news
 
-[10] Contre-attaque - On les encercle et on les tape : la répression continue de se durcir, septembre 2025 - https://contre-attaque.net/2025/09/04/on-les-encercle-et-on-les-tape-la-repression-des-free-party-continue-de-se-durcir/
+[10] Contre-attaque, On les encercle et on les tape : la répression continue de se durcir, septembre 2025. https://contre-attaque.net/2025/09/04/on-les-encercle-et-on-les-tape-la-repression-des-free-party-continue-de-se-durcir/
 
-[11] Contre-attaque - Loi 1133 : l'État fait la guerre à la free party, mars 2026 - https://contre-attaque.net/2026/03/04/loi-1133-letat-fait-la-guerre-a-la-free-party/
+[11] Contre-attaque, Loi 1133 : l'État fait la guerre à la free party, mars 2026. https://contre-attaque.net/2026/03/04/loi-1133-letat-fait-la-guerre-a-la-free-party/
 
-[12] Techno+ - Chronologie de la résistance festive des free parties - https://technoplus.org/chronologie-de-la-resistance-festive-des-free-parties/
+[12] Techno+, Chronologie de la résistance festive des free parties. https://technoplus.org/chronologie-de-la-resistance-festive-des-free-parties/
 
-[13] Techno+ - Les associations sanitaires en espace festif condamnent la répression - https://technoplus.org/les-associations-sanitaires-en-espace-festif-condamnent-la-repression-envers-les-free-parties/
+[13] Techno+, Les associations sanitaires en espace festif condamnent la répression. https://technoplus.org/les-associations-sanitaires-en-espace-festif-condamnent-la-repression-envers-les-free-parties/
 
-[14] Franceinfo - Loi Ripost : le gouvernement veut frapper plus fort contre les free-party, mai 2026 - https://www.franceinfo.fr/politique/parlement-francais/senat/loi-ripost-le-gouvernement-veut-frapper-plus-fort-contre-les-free-party_8011544.html
+[14] Franceinfo, Loi Ripost : le gouvernement veut frapper plus fort contre les free-party, mai 2026. https://www.franceinfo.fr/politique/parlement-francais/senat/loi-ripost-le-gouvernement-veut-frapper-plus-fort-contre-les-free-party_8011544.html
 
-[15] Franceinfo - L'Assemblée nationale adopte un arsenal renforcé de sanctions, avril 2026 - https://www.franceinfo.fr/culture/musique/free-party-l-assemblee-nationale-adopte-un-arsenal-renforce-de-sanctions-les-fetes-illegales_7929092.html
+[15] Franceinfo, L'Assemblée nationale adopte un arsenal renforcé de sanctions, avril 2026. https://www.franceinfo.fr/culture/musique/free-party-l-assemblee-nationale-adopte-un-arsenal-renforce-de-sanctions-les-fetes-illegales_7929092.html
 
-[16] Techno+ - Rapport 2026 du Sénat sur les raves-parties illégales : Techno+ auditionnée - https://technoplus.org/fete-libre/9142-rapport-2026-du-senat-sur-les-raves-parties-illegales-techno-auditionnee/
+[16] Techno+, Rapport 2026 du Sénat sur les raves-parties illégales : Techno+ auditionnée. https://technoplus.org/fete-libre/9142-rapport-2026-du-senat-sur-les-raves-parties-illegales-techno-auditionnee/
 
-[17] Techno+ - Des associations de santé refusent de dénoncer les organisateurs de free party - https://technoplus.org/politique-des-drogues/6879-des-associations-de-sante-refusent-de-denoncer-les-organisateurs-de-free-party-qui-font-appel-a-elles/
+[17] Techno+, Des associations de santé refusent de dénoncer les organisateurs de free party. https://technoplus.org/politique-des-drogues/6879-des-associations-de-sante-refusent-de-denoncer-les-organisateurs-de-free-party-qui-font-appel-a-elles/

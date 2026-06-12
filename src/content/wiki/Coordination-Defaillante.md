@@ -1,5 +1,9 @@
 # Coordination défaillante : Les failles inter-services et territoriales
 
+> Résumé : exploiter les failles de coordination entre gendarmerie, police et échelons territoriaux.
+> Statut : stable
+> Mise à jour : juin 2026
+
 **La France dispose de deux forces de sécurité indépendantes sur le territoire : la gendarmerie et la police nationale. Chacune a ses zones de compétence. Cette division crée des failles de coordination qui freinent ou compliquent l'intervention sur les rassemblements festifs. Plusieurs cas documentés le montrent.**
 
 ---

@@ -30,16 +30,19 @@ const totalWikiPages = readdirSync(join(process.cwd(), 'src/content/wiki'))
        TICKER PLEINE LARGEUR
   ═══════════════════════════════════════════════════════════ -->
   <div class="ticker-fullbleed">
-    <div class="ticker-wrap">
-      <div class="ticker-label">ACTUS</div>
-      <div class="ticker-mask">
-        <div class="ticker-track">
-          {[...tickerItems, ...tickerItems].map(item => (
-            <span class="ticker-item">{item}</span>
-          ))}
+    <a href="/actu" class="ticker-link no-underline" aria-label="Voir toutes les actualités">
+      <div class="ticker-wrap">
+        <div class="ticker-label">ACTUS</div>
+        <div class="ticker-mask">
+          <div class="ticker-track">
+            {[...tickerItems, ...tickerItems].map(item => (
+              <span class="ticker-item">{item}</span>
+            ))}
+          </div>
         </div>
+        <div class="ticker-cta">TOUT VOIR ›</div>
       </div>
-    </div>
+    </a>
   </div>
 
   <!-- ═══════════════════════════════════════════════════════════
@@ -75,17 +78,15 @@ const totalWikiPages = readdirSync(join(process.cwd(), 'src/content/wiki'))
     <!-- Ligne de contraste -->
     <div class="hero-contrast">
       <div class="contrast-side contrast-side-them">
-        <span class="contrast-tag">EUX</span>
-        <p class="contrast-text">Ils produisent des arrêtés,<br/>des contrôles et des saisies.</p>
+        <span class="contrast-tag"><span class="contrast-dot dot-them"></span>EUX</span>
+        <p class="contrast-text">Ils produisent des arrêtés, des contrôles et des saisies.</p>
       </div>
       <div class="contrast-vs">
-        <div class="contrast-vs-line"></div>
         <span class="contrast-arrow">▸</span>
-        <div class="contrast-vs-line"></div>
       </div>
       <div class="contrast-side contrast-side-us">
-        <span class="contrast-tag contrast-tag-us">NOUS</span>
-        <p class="contrast-text contrast-text-us">Nous avons maintenant les outils<br/>pour déjouer et documenter.</p>
+        <span class="contrast-tag contrast-tag-us">NOUS<span class="contrast-dot dot-us"></span></span>
+        <p class="contrast-text contrast-text-us">Nous avons désormais les outils pour déjouer, protéger et documenter.</p>
       </div>
     </div>
 
@@ -103,8 +104,23 @@ const totalWikiPages = readdirSync(join(process.cwd(), 'src/content/wiki'))
 
     <!-- Statement principal -->
     <p class="si-statement">
-      Une infrastructure d'autodéfense pour le mouvement free party. Wiki juridique, outils numériques, carte de répression - construit par le mouvement, pour le mouvement.
+      Une infrastructure d'autodéfense pour le mouvement free party. Wiki juridique, outils numériques, carte de répression, construit par le mouvement, pour le mouvement.
     </p>
+
+    <!-- MOT DE BIENVENUE · LANCEMENT (temporaire) : à retirer après la période de lancement -->
+    <div class="si-welcome">
+      <div class="si-welcome-label">◆ Bienvenue · Lancement fin juin 2026</div>
+      <p class="si-welcome-text">
+        Ce site ouvre ses portes à la fin du mois de juin 2026. C'est une première version, entièrement neuve, construite par le mouvement et pour le mouvement.
+      </p>
+      <p class="si-welcome-text">
+        Nous y portons le plus grand soin, mais nous tenons à être clairs : ce projet reste expérimental. Il est ouvert à la contribution, et tout ce qui s'y trouve demeure potentiellement corrigible et optimisable. Si vous repérez une erreur ou une piste d'amélioration, dites-le nous.
+      </p>
+      <p class="si-welcome-text">
+        Nous espérons sincèrement qu'il sera utile. Qu'il aide à porter le mouvement, à protéger celles et ceux qui le font vivre, et à servir la cause d'une culture libre.
+      </p>
+      <a href="/actu" class="si-welcome-link no-underline">▸ Lire le mot complet et le fil d'actualité</a>
+    </div>
 
     <!-- Trois axes visuels -->
     <div class="si-pillars">
@@ -172,7 +188,7 @@ const totalWikiPages = readdirSync(join(process.cwd(), 'src/content/wiki'))
         </summary>
         <div class="manifeste-body">
           <p>Jamaïque, années 1950. Les sound systems sortent la musique des clubs fermés et la portent dans les rues, les cours, les terrains vagues. Quand on n'a pas les moyens d'entrer, on construit sa propre scène.</p>
-          <p>Angleterre, 1994. Le <strong>Criminal Justice Act</strong> criminalise les rassemblements à musique répétitive. Spiral Tribe quitte le pays. La répression n'a pas tué la free party  -  elle l'a exportée sur le continent.</p>
+          <p>Angleterre, 1994. Le <strong>Criminal Justice Act</strong> criminalise les rassemblements à musique répétitive. Spiral Tribe quitte le pays. La répression n'a pas tué la free party, elle l'a exportée sur le continent.</p>
           <p>France, 2001. L'<strong>amendement Mariani</strong> impose la déclaration préalable. La free party entre dans le droit pour mieux être réprimée. France, 2026 : la loi RIPOST ajoute 2 ans de prison. À chaque vague répressive, le mouvement s'est outillé. <strong>Ce wiki aussi.</strong></p>
         </div>
       </details>
@@ -277,7 +293,7 @@ const totalWikiPages = readdirSync(join(process.cwd(), 'src/content/wiki'))
     <!-- VI. Citation : hors accordéon -->
     <div class="manifeste-closing">
       <p class="closing-body">
-        La free party a survécu au Criminal Justice Act (1994), à la loi Mariani (2001), à des centaines d'arrêtés préfectoraux et à des dizaines de saisies de matériel. Elle a survécu parce qu'elle <strong>ne dépend de personne</strong>  -  pas d'un label rachetable, pas d'un festival sans financement, pas d'un serveur qui peut être mis sous scellés.
+        La free party a survécu au Criminal Justice Act (1994), à la loi Mariani (2001), à des centaines d'arrêtés préfectoraux et à des dizaines de saisies de matériel. Elle a survécu parce qu'elle <strong>ne dépend de personne</strong> : pas d'un label rachetable, pas d'un festival sans financement, pas d'un serveur qui peut être mis sous scellés.
       </p>
       <p class="closing-body">
         La loi RIPOST ajoute un chapitre au même livre. Ce wiki est notre réponse. <strong>Rendre l'information aussi difficile à saisir que la musique.</strong>
@@ -420,6 +436,68 @@ const totalWikiPages = readdirSync(join(process.cwd(), 'src/content/wiki'))
     0%   { transform: translateX(0); }
     100% { transform: translateX(-50%); }
   }
+  .ticker-link { display: block; color: inherit; }
+
+  /* Mot de bienvenue lancement (temporaire) */
+  .si-welcome {
+    margin: 28px 0 4px;
+    padding: 22px 24px;
+    border: 1px solid rgba(42, 42, 58, 0.8);
+    border-top: 2px solid rgba(0, 255, 159, 0.5);
+    background: linear-gradient(180deg, rgba(0, 255, 159, 0.04), rgba(8, 8, 12, 0.4));
+  }
+  .si-welcome-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: #00ff9f;
+    margin-bottom: 14px;
+  }
+  .si-welcome-text {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 14px;
+    line-height: 1.7;
+    color: rgba(232, 232, 240, 0.9);
+    margin: 0 0 12px;
+  }
+  .si-welcome-text:last-of-type { margin-bottom: 0; }
+  .si-welcome-link {
+    display: inline-block;
+    margin-top: 16px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(0, 255, 159, 0.9);
+    border: 1px solid rgba(0, 255, 159, 0.5);
+    padding: 8px 14px;
+    transition: background 0.15s, color 0.15s;
+  }
+  .si-welcome-link:hover { background: rgba(0, 255, 159, 0.1); color: #00ff9f; }
+  .ticker-cta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    color: rgba(0, 255, 159, 0.85);
+    background: rgba(0, 255, 159, 0.07);
+    border-left: 1px solid rgba(0, 255, 159, 0.18);
+    padding: 0 14px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    text-transform: uppercase;
+    transition: background 0.15s, color 0.15s;
+  }
+  .ticker-link:hover .ticker-cta { background: rgba(0, 255, 159, 0.16); color: #00ff9f; }
+  .ticker-link:hover .ticker-label { background: rgba(0, 255, 159, 0.16); }
+  @media (max-width: 640px) {
+    .ticker-cta { display: none; }
+  }
 
   /* ═══════════════════════════════════════════════════════
      HERO
@@ -560,72 +638,109 @@ const totalWikiPages = readdirSync(join(process.cwd(), 'src/content/wiki'))
 
   /* ── CONTRASTE EUX / NOUS ── */
   .hero-contrast {
+    position: relative;
     display: grid;
     grid-template-columns: 1fr auto 1fr;
-    align-items: center;
+    align-items: stretch;
     gap: 0;
     max-width: 820px;
     margin: 0 auto;
-    border: 1px solid rgba(42, 42, 58, 0.5);
+    border: 1px solid rgba(42, 42, 58, 0.6);
     background: rgba(8, 8, 12, 0.5);
     overflow: hidden;
     animation: hero-fade-up 0.65s ease both;
     animation-delay: 0.56s;
   }
+  /* Liseré haut : dégradé rouge (répression) vers vert (résistance) */
+  .hero-contrast::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, rgba(255,68,68,0.7) 0%, rgba(255,68,68,0.2) 38%, rgba(42,42,58,0.4) 50%, rgba(0,255,159,0.2) 62%, rgba(0,255,159,0.75) 100%);
+  }
   .contrast-side {
-    padding: 20px 28px;
+    padding: 24px 30px;
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 12px;
+    transition: background 0.25s;
   }
   .contrast-side-them {
-    border-right: 1px solid rgba(42, 42, 58, 0.5);
     text-align: left;
+    background: linear-gradient(115deg, rgba(255,68,68,0.05) 0%, transparent 70%);
   }
   .contrast-side-us {
-    border-left: 1px solid rgba(0, 255, 159, 0.12);
     text-align: right;
+    background: linear-gradient(245deg, rgba(0,255,159,0.06) 0%, transparent 70%);
   }
+  .hero-contrast:hover .contrast-side-them { background: linear-gradient(115deg, rgba(255,68,68,0.09) 0%, transparent 72%); }
+  .hero-contrast:hover .contrast-side-us   { background: linear-gradient(245deg, rgba(0,255,159,0.11) 0%, transparent 72%); }
   .contrast-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
     font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
+    font-size: 13px;
     font-weight: 700;
-    letter-spacing: 0.2em;
-    color: rgba(122, 122, 138, 0.65);
+    letter-spacing: 0.32em;
+    color: rgba(255, 110, 110, 0.85);
     text-transform: uppercase;
   }
   .contrast-tag-us {
-    color: rgba(0, 255, 159, 0.72);
+    justify-content: flex-end;
+    color: rgba(0, 255, 159, 0.9);
+  }
+  .contrast-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .dot-them {
+    background: #ff4444;
+    box-shadow: 0 0 7px rgba(255, 68, 68, 0.8);
+  }
+  .dot-us {
+    background: #00ff9f;
+    box-shadow: 0 0 7px rgba(0, 255, 159, 0.8);
+    animation: ssh-footer-pulse 2s ease-in-out infinite;
   }
   .contrast-text {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 12px;
-    line-height: 1.65;
-    color: rgba(170, 170, 185, 0.65);
+    font-size: 12.5px;
+    line-height: 1.7;
+    color: rgba(190, 175, 178, 0.7);
     letter-spacing: 0.02em;
     margin: 0;
   }
   .contrast-text-us {
-    color: rgba(0, 255, 159, 0.8);
+    color: rgba(0, 255, 159, 0.82);
   }
   .contrast-vs {
     display: flex;
-    flex-direction: column;
     align-items: center;
-    gap: 6px;
-    padding: 20px 16px;
-  }
-  .contrast-vs-line {
-    width: 1px;
-    flex: 1;
-    background: rgba(0, 255, 159, 0.12);
-    min-height: 12px;
+    justify-content: center;
+    padding: 0 4px;
+    border-left: 1px solid rgba(42, 42, 58, 0.5);
+    border-right: 1px solid rgba(42, 42, 58, 0.5);
+    background: rgba(0, 0, 0, 0.25);
   }
   .contrast-arrow {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 14px;
-    color: rgba(0, 255, 159, 0.5);
+    font-size: 18px;
+    color: rgba(0, 255, 159, 0.7);
     flex-shrink: 0;
+    animation: contrast-arrow-slide 2.2s ease-in-out infinite;
+  }
+  @keyframes contrast-arrow-slide {
+    0%, 100% { transform: translateX(-2px); opacity: 0.55; }
+    50%      { transform: translateX(2px); opacity: 1; }
+  }
+  @media (max-width: 560px) {
+    .contrast-tag { font-size: 11px; letter-spacing: 0.24em; }
+    .contrast-text { font-size: 11.5px; }
+    .contrast-side { padding: 18px 18px; }
   }
 
   /* ═══════════════════════════════════════════════════════
@@ -1065,8 +1180,8 @@ const totalWikiPages = readdirSync(join(process.cwd(), 'src/content/wiki'))
      SPIRAL TRIBE QUOTE
   ═══════════════════════════════════════════════════════ */
   .st-section {
-    margin-top: 20px;
-    padding: 64px 0 80px;
+    margin-top: 12px;
+    padding: 44px 0 28px;
     position: relative;
     text-align: center;
     overflow: hidden;
@@ -1095,7 +1210,7 @@ const totalWikiPages = readdirSync(join(process.cwd(), 'src/content/wiki'))
   }
 
   .st-inner {
-    padding: 60px 24px 52px;
+    padding: 44px 24px 28px;
     position: relative;
     display: flex;
     flex-direction: column;

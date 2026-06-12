@@ -1,5 +1,9 @@
 # Camouflage de l'événement : Rester invisible jusqu'à la dernière seconde
 
+> Résumé : méthode pour retarder la divulgation du lieu et priver l'État de tout préavis.
+> Statut : stable
+> Mise à jour : juin 2026
+
 **Une free party qui reste secrète jusqu'à l'arrivée des premiers teufeurs laisse l'État sans préavis. C'est le fondement même du modèle clandestin. Le camouflage passe par la localisation, la communication, et l'absence de trace écrite. Plusieurs techniques le permettent.**
 
 ---

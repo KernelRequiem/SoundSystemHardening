@@ -1,5 +1,9 @@
 # Prescription et délai : Les fenêtres temporelles qui protègent
 
+> Résumé : les délais de prescription qui éteignent les poursuites et protègent dans le temps.
+> Statut : stable
+> Mise à jour : juin 2026
+
 **Tout acte criminel ou contravention a une durée de vie légale. Une fois prescrite, l'infraction ne peut plus être poursuivie, quelle que soit la preuve. La prescription est une protection inscrite dans la loi elle-même. Comprendre les délais qui s'appliquent à chaque type d'infraction est une question de stratégie juridique.**
 
 ---

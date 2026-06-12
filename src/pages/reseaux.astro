@@ -1,0 +1,174 @@
+---
+// src/pages/reseaux.astro
+// Page reseaux sociaux : presence officielle (Telegram + Signal uniquement)
+// et volet pedagogique sur la gestion des donnees de chaque plateforme.
+import Layout from '../layouts/Layout.astro';
+
+const TELEGRAM_URL = 'https://t.me/SOUNDSYSTEMHARD';
+const TELEGRAM_HANDLE = '@SOUNDSYSTEMHARD';
+const SIGNAL_USER = 'KernelRequiem.27';
+---
+
+<Layout
+  title="Réseaux sociaux"
+  category="RÉSEAUX"
+  description="Présence officielle de SoundSystemHardening : Telegram pour l'information publique, Signal pour les échanges chiffrés. Comprendre la gestion des données de chaque plateforme."
+>
+
+  <h1>Réseaux sociaux</h1>
+  <p class="text-dedsec-muted text-sm font-mono tracking-widest uppercase mb-6">
+    ▸ Deux canaux officiels, pas un de plus
+  </p>
+
+  <p>
+    Notre présence en ligne se limite volontairement à deux plateformes : Telegram pour la diffusion publique et Signal pour les échanges sensibles. Ce choix n'est pas un manque, c'est une décision de sécurité. Chaque réseau supplémentaire est une surface d'exposition de plus, une collecte de données de plus, un point de défaillance de plus. Nous préférons deux canaux maîtrisés à dix canaux subis.
+  </p>
+
+  <p>
+    Avant de nous suivre, prends une minute pour comprendre ce que chaque plateforme sait de toi. C'est le but de cette page : t'informer pour que tu choisisses le bon canal selon ce que tu as à dire.
+  </p>
+
+  <!-- ════════ CANAUX OFFICIELS ════════ -->
+  <div class="not-prose grid grid-cols-1 md:grid-cols-2 gap-px bg-dedsec-border my-10">
+
+    <!-- TELEGRAM -->
+    <div class="bg-dedsec-darker p-6 flex flex-col gap-4" style="border-top:2px solid rgba(0,217,255,0.6);">
+      <div class="flex items-center gap-3">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <circle cx="12" cy="12" r="11" fill="rgba(0,217,255,0.12)" stroke="rgba(0,217,255,0.6)"/>
+          <path d="M5.5 11.8l11-4.3c.5-.2 1 .1.8.9l-1.9 9c-.1.6-.5.7-1 .4l-2.8-2-1.3 1.3c-.2.2-.3.3-.6.3l.2-3 5.2-4.7c.2-.2 0-.3-.3-.1l-6.4 4-2.7-.9c-.6-.2-.6-.6.1-.9z" fill="rgba(0,217,255,0.85)"/>
+        </svg>
+        <div>
+          <div class="font-mono text-xs font-bold tracking-widest" style="color:rgba(0,217,255,0.85)">◆ TELEGRAM</div>
+          <div class="font-mono text-[10px] text-dedsec-muted">Canal public d'information</div>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-xl p-3 self-start">
+        <img src="/telegram-soundsystemhard-qr.png" alt="QR Code Telegram SoundSystemHardening" class="w-40 h-40 object-contain no-border" />
+      </div>
+
+      <div class="font-mono text-lg text-dedsec-text tracking-wide">{TELEGRAM_HANDLE}</div>
+      <a href={TELEGRAM_URL} target="_blank" rel="noopener"
+         class="inline-flex items-center gap-2 self-start font-mono text-xs font-bold tracking-widest no-underline px-4 py-2 transition-all"
+         style="border:1px solid rgba(0,217,255,0.5);color:rgba(0,217,255,0.9);">
+        ▸ Rejoindre le canal
+      </a>
+      <p class="text-xs text-dedsec-muted font-mono leading-relaxed m-0">
+        Annonces, veille législative, alertes terrain. À traiter comme une place publique : tout ce qui y passe peut être lu par n'importe qui. On n'y partage jamais d'information sensible.
+      </p>
+    </div>
+
+    <!-- SIGNAL -->
+    <div class="bg-dedsec-darker p-6 flex flex-col gap-4" style="border-top:2px solid rgba(0,255,159,0.6);">
+      <div class="flex items-center gap-3">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <circle cx="12" cy="12" r="11" fill="rgba(0,255,159,0.12)" stroke="rgba(0,255,159,0.6)"/>
+          <path d="M12 6.2a5.8 5.8 0 0 0-5 8.7l-.7 2.4 2.5-.7A5.8 5.8 0 1 0 12 6.2z" fill="none" stroke="rgba(0,255,159,0.85)" stroke-width="1.4"/>
+        </svg>
+        <div>
+          <div class="font-mono text-xs font-bold tracking-widest text-neon-green">◆ SIGNAL</div>
+          <div class="font-mono text-[10px] text-dedsec-muted">Échanges chiffrés et témoignages</div>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-xl p-3 self-start">
+        <img src="/KernelRequiem-signal-qr.png" alt="QR Code Signal KernelRequiem.27" class="w-40 h-40 object-contain no-border" />
+      </div>
+
+      <div class="font-mono text-lg text-dedsec-text tracking-wide">{SIGNAL_USER}</div>
+      <span class="inline-flex items-center gap-2 self-start font-mono text-xs font-bold tracking-widest px-4 py-2"
+            style="border:1px solid rgba(0,255,159,0.5);color:rgba(0,255,159,0.9);">
+        ▸ Scanner ou chercher le nom d'utilisateur
+      </span>
+      <p class="text-xs text-dedsec-muted font-mono leading-relaxed m-0">
+        Pour les témoignages d'incidents, les signalements et tout échange qui doit rester privé. Chiffré de bout en bout par défaut. Scanne le QR dans Signal ou cherche le nom d'utilisateur, sans avoir à partager ton numéro.
+      </p>
+    </div>
+  </div>
+
+  <hr />
+
+  <!-- ════════ GESTION DES DONNÉES ════════ -->
+  <h2>Comprendre la gestion des données</h2>
+
+  <p>
+    Toutes les messageries ne se valent pas. La différence ne se joue pas sur l'interface, mais sur ce que la plateforme conserve et sur ce qu'elle peut transmettre à un tiers. Voici, sans jargon, ce que chacune fait de tes données.
+  </p>
+
+  <div class="not-prose overflow-x-auto my-6">
+    <table class="w-full border-collapse font-mono text-xs">
+      <thead>
+        <tr>
+          <th class="bg-dedsec-darker text-left p-3 border border-dedsec-border" style="color:rgba(122,122,138,0.9)">Critère</th>
+          <th class="bg-dedsec-darker text-left p-3 border border-dedsec-border" style="color:rgba(0,217,255,0.85)">Telegram</th>
+          <th class="bg-dedsec-darker text-left p-3 border border-dedsec-border text-neon-green">Signal</th>
+        </tr>
+      </thead>
+      <tbody class="text-dedsec-text/85">
+        <tr>
+          <td class="p-3 border border-dedsec-border">Chiffrement par défaut</td>
+          <td class="p-3 border border-dedsec-border">Chiffré en transit, mais lisible sur les serveurs de Telegram. Le bout en bout existe seulement dans les "discussions secrètes", à activer manuellement.</td>
+          <td class="p-3 border border-dedsec-border">Bout en bout pour tout : messages, appels, groupes. Personne d'autre que les participants ne peut lire.</td>
+        </tr>
+        <tr>
+          <td class="p-3 border border-dedsec-border">Groupes et canaux</td>
+          <td class="p-3 border border-dedsec-border">Jamais chiffrés de bout en bout. Stockés et lisibles côté serveur.</td>
+          <td class="p-3 border border-dedsec-border">Chiffrés de bout en bout, comme les conversations privées.</td>
+        </tr>
+        <tr>
+          <td class="p-3 border border-dedsec-border">Données conservées</td>
+          <td class="p-3 border border-dedsec-border">Numéro, contacts importés, adresses IP, infos appareil, et les messages des discussions cloud sur ses serveurs.</td>
+          <td class="p-3 border border-dedsec-border">Le strict minimum : le numéro à l'inscription, la date de création du compte et la date de dernière connexion.</td>
+        </tr>
+        <tr>
+          <td class="p-3 border border-dedsec-border">Transmission aux autorités</td>
+          <td class="p-3 border border-dedsec-border">Depuis septembre 2024, Telegram indique pouvoir communiquer l'adresse IP et le numéro de téléphone en réponse à une requête judiciaire valide.</td>
+          <td class="p-3 border border-dedsec-border">Ne peut transmettre que la date de création du compte et la dernière connexion. Le contenu reste inaccessible, même sur réquisition.</td>
+        </tr>
+        <tr>
+          <td class="p-3 border border-dedsec-border">Code et gouvernance</td>
+          <td class="p-3 border border-dedsec-border">Application ouverte, serveurs fermés. Société commerciale.</td>
+          <td class="p-3 border border-dedsec-border">Entièrement open source, audité. Porté par une fondation à but non lucratif.</td>
+        </tr>
+        <tr>
+          <td class="p-3 border border-dedsec-border">Masquer son numéro</td>
+          <td class="p-3 border border-dedsec-border">Possible via un nom d'utilisateur public, mais le numéro reste connu de Telegram.</td>
+          <td class="p-3 border border-dedsec-border">Possible via un nom d'utilisateur. Le numéro n'est pas exposé aux autres.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Ce qu'il faut en retenir</h3>
+
+  <p>
+    Telegram est un mégaphone. Il sert à diffuser largement et vite, et c'est très bien pour ça. Mais ses discussions ordinaires ne sont pas chiffrées de bout en bout et ses serveurs conservent beaucoup. On l'utilise donc comme un espace public : pour s'informer, jamais pour confier quoi que ce soit de sensible.
+  </p>
+
+  <p>
+    Signal est un coffre. Tout y est chiffré de bout en bout par défaut, et la plateforme ne garde presque rien. C'est le canal des témoignages, des signalements et de toute conversation qui ne doit jamais sortir du cercle des participants.
+  </p>
+
+  <div class="not-prose border border-dedsec-border bg-dedsec-darker p-5 my-6" style="border-left:3px solid rgba(0,255,159,0.6);">
+    <div class="font-mono text-xs text-neon-green font-bold tracking-widest mb-3">◆ RÉFLEXES D'USAGE</div>
+    <ul class="font-mono text-xs text-dedsec-text/85 leading-relaxed space-y-2 m-0 pl-4 list-disc">
+      <li>Pour t'informer et relayer : Telegram, en gardant en tête que tout y est public.</li>
+      <li>Pour témoigner, signaler ou échanger sur un cas précis : Signal, toujours.</li>
+      <li>Sur Signal, active un nom d'utilisateur pour ne pas exposer ton numéro.</li>
+      <li>Ne copie jamais une information sensible reçue sur Signal vers Telegram.</li>
+      <li>Avant d'envoyer une photo, pense aux métadonnées. Voir la fiche dédiée du wiki.</li>
+    </ul>
+  </div>
+
+  <h3>Pourquoi pas les autres réseaux</h3>
+
+  <p>
+    Nous ne sommes ni sur Facebook, ni sur Instagram, ni sur X, ni sur TikTok, ni sur WhatsApp. Ces plateformes vivent de la collecte et de la revente du comportement de leurs utilisateurs, et plusieurs partagent leurs données au sein de grands groupes publicitaires. Pour un mouvement confronté à la surveillance, confier son audience et ses contacts à ces acteurs serait une contradiction. Notre absence est un choix cohérent avec ce que défend ce wiki.
+  </p>
+
+  <p class="text-[11px] text-dedsec-muted/60 font-mono mt-8">
+    Les pratiques des plateformes évoluent. Ces informations reflètent l'état connu à la mise à jour de cette page et ne remplacent pas la lecture des politiques de confidentialité officielles. Pour aller plus loin, voir les fiches OPSEC du wiki sur la <a href="/wiki/messagerie-chiffree" class="text-neon-green/70 hover:text-neon-green">messagerie chiffrée</a> et les <a href="/wiki/metadonnees-exif" class="text-neon-green/70 hover:text-neon-green">métadonnées</a>.
+  </p>
+
+</Layout>

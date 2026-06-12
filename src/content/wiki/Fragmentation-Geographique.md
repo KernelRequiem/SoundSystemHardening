@@ -1,5 +1,9 @@
 # Fragmentation géographique : Multiplier les événements pour diluer la réponse
 
+> Résumé : multiplier les sites pour diluer la réponse policière et rendre toute intervention partielle.
+> Statut : stable
+> Mise à jour : juin 2026
+
 **Concentrer 40 000 personnes sur un seul site crée une cible facile pour l'État. Disperser le même nombre de personnes sur 10, 20 ou 30 sites différents, dans des villes éloignées, crée une équation logistique insoluble pour la gendarmerie. La fragmentation géographique est une stratégie de multiplicité qui épuise les ressources.**
 
 ---

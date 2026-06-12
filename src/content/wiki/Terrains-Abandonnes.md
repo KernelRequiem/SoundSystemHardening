@@ -1,5 +1,9 @@
 # Terrains abandonnés : Propriétaire fantôme et abstention garantie
 
+> Résumé : pourquoi un terrain sans propriétaire actif neutralise le déclencheur de l'intervention.
+> Statut : stable
+> Mise à jour : juin 2026
+
 Terrain vide depuis 5+ ans. Clôtures rouillées. Pas d'entretien. Propriétaire = société dissoute, héritage en litige ou entreprise en liquidation.
 
 L'État n'intervient presque jamais. Raison : propriétaire inexistant légalement.

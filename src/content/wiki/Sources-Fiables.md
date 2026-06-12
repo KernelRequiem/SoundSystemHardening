@@ -1,5 +1,8 @@
 # Veille Législative et Tactique : Sources Fiables
 
+> Résumé : annuaire des sources et vigies juridiques fiables pour alimenter la veille.
+> Statut : actif
+> Mise à jour : juin 2026
 
 Cette section recense les infrastructures informationnelles et les vigies juridiques indispensables pour alimenter notre veille. Dans un contexte d'inflation législative et de guerre de l'information, la qualité d'une contre-mesure dépend de la fiabilité de sa source. Les rumeurs de forums ou les chaînes de messages non vérifiées sur Telegram ne doivent pas entrer dans ce dépôt.
 

@@ -1,5 +1,9 @@
 # Changelog et Historique des Mises à Jour
 
+> Résumé : journal chronologique des évolutions du dépôt technique et du wiki.
+> Statut : actif
+> Mise à jour : juin 2026
+
 Ce document retrace chronologiquement toutes les modifications majeures apportées au dépôt technique (code/protocoles) et au Wiki (stratégie/veille). 
 
 **Pourquoi documenter rigoureusement les mises à jour ?** 
@@ -7,7 +11,7 @@ Une documentation de sécurité opérationnelle ou de droit pénal qui n'est pas
 
 ---
 
-## [Juin 2026] - Migration infrastructure vers souveraineté suisse
+## [Juin 2026] : Migration infrastructure vers souveraineté suisse
 
 ### Modifications techniques
 * **[Infrastructure]** Migration de l'hébergement vers un VPS Infomaniak (Genève, Suisse). *Pourquoi : hébergement souverain en Suisse, protection des données renforcée (nLPD), aucune dépendance à une plateforme cloud américaine pour l'hébergement du site.*
@@ -17,7 +21,7 @@ Une documentation de sécurité opérationnelle ou de droit pénal qui n'est pas
 
 ---
 
-## [Mai 2026] - Refonte Cyber-OpSec et Veille RIPOST
+## [Mai 2026] : Refonte Cyber-OpSec et Veille RIPOST
 
 ### Ajouts
 * **[Repo / cyber-opsec]** Création de `canaux-diffusion.md` : Ajout des protocoles de création de comptes administrateurs anonymes ("burners") sur Telegram et Signal via l'usage de Fragment (numéros blockchain) et VoIP. *Pourquoi : Le modèle de menace a pivoté ; le risque principal n'est plus l'interception de la ligne, mais l'infiltration OSINT des boucles publiques par les cellules d'investigation numérique.*
@@ -31,7 +35,7 @@ Une documentation de sécurité opérationnelle ou de droit pénal qui n'est pas
 
 ---
 
-## [Avril 2026] - Initialisation de l'infrastructure et PPL 1133
+## [Avril 2026] : Initialisation de l'infrastructure et PPL 1133
 
 ### Ajouts
 * **[Architecture]** Séparation structurelle du projet en deux entités : un dépôt versionné sous Git pour l'OpSec stricte et un Wiki éditable pour la stratégie. *Pourquoi : Limiter la surface d'attaque des données techniques sensibles tout en conservant une friction minimale pour la collaboration militante et juridique.*

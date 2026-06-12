@@ -1,10 +1,10 @@
 # Axe organisationnel
 
-> Page rattachée à : [[Strategie-Resistance]]
+> Page rattachée à : [[Stratégie-résistance]]
 > Statut : stable
 > Dernière mise à jour : mai 2026
 
-Cette page documente le quatrième axe de la stratégie de résistance : l'organisation interne du mouvement comme protection structurelle. L'axe organisationnel ne s'improvise pas - il s'anticipe. La décentralisation, la mémoire collective, la gestion des nuisances et la transmission sont des pratiques actives, pas des états naturels.
+Cette page documente le quatrième axe de la stratégie de résistance : l'organisation interne du mouvement comme protection structurelle. L'axe organisationnel ne s'improvise pas, il s'anticipe. La décentralisation, la mémoire collective, la gestion des nuisances et la transmission sont des pratiques actives, pas des états naturels.
 
 ---
 
@@ -95,7 +95,7 @@ Elle ancre la légitimité patrimoniale :
   → Un mouvement de 30 ans n'est pas un phénomène de mode
   → Il constitue une tradition culturelle documentable
   → Il peut revendiquer une inscription patrimoniale
-    (voir [[Axe-Politique]] sur l'argument UNESCO)
+    (voir [[Politique]] sur l'argument UNESCO)
 ```
 
 **Ce que "transmettre la mémoire" signifie en pratique :**
@@ -113,7 +113,7 @@ Elle ancre la légitimité patrimoniale :
 
 Le cadrage des textes répressifs de 2026 repose principalement sur les nuisances : pollution sonore pour les riverains, dégradations environnementales, affrontements. En 2025, dans l'Aude, une free party avait provoqué des affrontements entre agriculteurs et teufeurs. Des élus ont pu affirmer à l'Assemblée que les fêtes "transforment les campagnes en latrines géantes" [4].
 
-Ces affirmations sont politiquement exploitables parce qu'elles contiennent une part de réalité - certains événements laissent des sites dégradés, certaines interactions avec les riverains sont conflictuelles. Nier ce fait est contre-productif. Le traiter à la source est la seule réponse efficace.
+Ces affirmations sont politiquement exploitables parce qu'elles contiennent une part de réalité, certains événements laissent des sites dégradés, certaines interactions avec les riverains sont conflictuelles. Nier ce fait est contre-productif. Le traiter à la source est la seule réponse efficace.
 
 **Le principe :** chaque nuisance documentée dans la presse est une munition pour les textes répressifs. Chaque nuisance évitée est une munition retirée à l'adversaire.
 
@@ -193,7 +193,7 @@ Erreur 3 - Utilisation politique
 
 **Ce que l'incident a produit politiquement :** il a fourni aux partisans de la répression un exemple concret d'affrontement en lieu et place des événements qui se passent sans incident (la grande majorité). La presse a couvert l'incident, pas les 336 autres free parties de 2025 qui se sont déroulées sans affrontement.
 
-**La leçon :** un incident évitable dans un collectif affecte tous les collectifs. La gestion des nuisances n'est pas une question de bonne volonté individuelle - c'est une responsabilité collective.
+**La leçon :** un incident évitable dans un collectif affecte tous les collectifs. La gestion des nuisances n'est pas une question de bonne volonté individuelle, c'est une responsabilité collective.
 
 ---
 
@@ -207,7 +207,7 @@ Les sound systems ont une durée de vie variable. Les membres fondateurs vieilli
 
 **Freeform** produit des fiches techniques sur la création et la gestion d'associations, la RdR, l'éco-responsabilité. Ce sont des ressources de transmission du savoir-faire juridique et organisationnel [8].
 
-**Les réseaux informels** entre collectifs anciens et nouveaux constituent le canal principal de transmission de la culture organisationnelle. Cette transmission ne s'institutionnalise pas - elle se maintient par la pratique et le contact direct.
+**Les réseaux informels** entre collectifs anciens et nouveaux constituent le canal principal de transmission de la culture organisationnelle. Cette transmission ne s'institutionnalise pas, elle se maintient par la pratique et le contact direct.
 
 **Les teknivals** (rassemblements de plusieurs sound systems) sont historiquement les espaces où les savoir-faire s'échangent : technique son, organisation logistique, relations avec les autorités, RdR. Leur répression progressive nuit à cette fonction de transmission au-delà de la pratique festive elle-même.
 
@@ -239,35 +239,35 @@ Documenter les erreurs organisationnelles est aussi important que documenter les
 
 **Ne pas traiter chaque événement comme un acte politique isolé.** Chaque teuf mal gérée affecte tous les collectifs. Chaque teuf bien gérée renforce la position de l'ensemble.
 
-**Ne pas concentrer le risque légal sur des individus identifiables.** Post-loi 1133, la diffusion d'informations pratiques suffit à constituer une participation à l'organisation. Les pratiques de compartimentage de l'information (voir [`cyber-opsec/compartimentation.md`](https://github.com/menardrop-cpu/digital-rights/blob/main/cyber-opsec/compartimentation.md)) ne sont plus optionnelles.
+**Ne pas concentrer le risque légal sur des individus identifiables.** Post-loi 1133, la diffusion d'informations pratiques suffit à constituer une participation à l'organisation. Les pratiques de compartimentage de l'information (voir [`cyber-opsec/compartimentation.md`](https://github.com/KernelRequiem/digital-rights/blob/main/cyber-opsec/compartimentation.md)) ne sont plus optionnelles.
 
 ---
 
 ## Liens connexes dans ce wiki
 
-* Vue d'ensemble → [[Strategie-Resistance]]
-* Axe juridique (recours) → [[Axe-Juridique]]
-* Axe politique (manifestives, coalitions) → [[Axe-Politique]]
-* Axe sanitaire (RdR, gestion des incidents) → [[Axe-Sanitaire-RdR]]
+* Vue d'ensemble → [[Stratégie-résistance]]
+* Axe juridique (recours) → [[Juridique]]
+* Axe politique (manifestives, coalitions) → [[Politique]]
+* Axe sanitaire (RdR, gestion des incidents) → [[Axe-sanitaire]]
 * Annuaire des structures → [[Coalitions]]
-* Sécurité numérique du mouvement → repo [`cyber-opsec/`](https://github.com/menardrop-cpu/digital-rights/tree/main/cyber-opsec)
+* Sécurité numérique du mouvement → repo [`cyber-opsec/`](https://github.com/KernelRequiem/digital-rights/tree/main/cyber-opsec)
 
 ---
 
 ## Sources
 
-[1] Franceinfo - L'Assemblée nationale adopte un arsenal renforcé de sanctions, avril 2026 - https://www.franceinfo.fr/culture/musique/free-party-l-assemblee-nationale-adopte-un-arsenal-renforce-de-sanctions-les-fetes-illegales_7929092.html
+[1] Franceinfo, L'Assemblée nationale adopte un arsenal renforcé de sanctions, avril 2026. https://www.franceinfo.fr/culture/musique/free-party-l-assemblee-nationale-adopte-un-arsenal-renforce-de-sanctions-les-fetes-illegales_7929092.html
 
-[2] Politis - Entretien Pierre Levent : "La répression ne va pas éteindre les free parties", avril 2026 - https://www.politis.fr/articles/2026/04/entretien-pierre-levent-la-repression-ne-va-pas-eteindre-les-free-parties/
+[2] Politis, Entretien Pierre Levent : "La répression ne va pas éteindre les free parties", avril 2026. https://www.politis.fr/articles/2026/04/entretien-pierre-levent-la-repression-ne-va-pas-eteindre-les-free-parties/
 
-[3] Radio FG - Les députés adoptent un texte qui pénalise durement les free parties, avril 2026 - https://www.radiofg.com/les-deputes-adoptent-un-texte-qui-penalise-durement-les-free-parties
+[3] Radio FG, Les députés adoptent un texte qui pénalise durement les free parties, avril 2026. https://www.radiofg.com/les-deputes-adoptent-un-texte-qui-penalise-durement-les-free-parties
 
-[4] Sud Radio - L'Assemblée durcit les sanctions contre les free parties, avril 2026 - https://www.sudradio.fr/societe/free-parties-les-deputes-vont-ils-siffler-la-fin-de-la-fete
+[4] Sud Radio, L'Assemblée durcit les sanctions contre les free parties, avril 2026. https://www.sudradio.fr/societe/free-parties-les-deputes-vont-ils-siffler-la-fin-de-la-fete
 
-[5] Assemblée nationale - Question écrite sur les nuisances des free parties pour les communes rurales - https://questions.assemblee-nationale.fr/dyn/17/questions/QANR5L17QE9627.pdf
+[5] Assemblée nationale, Question écrite sur les nuisances des free parties pour les communes rurales. https://questions.assemblee-nationale.fr/dyn/17/questions/QANR5L17QE9627.pdf
 
-[6] France24 - Cinq choses à savoir sur les free parties au centre d'une proposition de loi, avril 2026 - https://www.france24.com/fr/info-en-continu/20260407-cinq-choses-à-savoir-sur-les-free-parties-au-centre-d-une-proposition-de-loi
+[6] France24, Cinq choses à savoir sur les free parties au centre d'une proposition de loi, avril 2026. https://www.france24.com/fr/info-en-continu/20260407-cinq-choses-à-savoir-sur-les-free-parties-au-centre-d-une-proposition-de-loi
 
-[7] Techno+ - Formations Forma'SON et Forma'PAIRS - https://technoplus.org/formason/ et https://technoplus.org/formapairs/
+[7] Techno+, Formations Forma'SON et Forma'PAIRS. https://technoplus.org/formason/ et https://technoplus.org/formapairs/
 
-[8] Techno+ - FREEFORM, une asso pour défendre et promouvoir la culture free - https://technoplus.org/actualites/874-freeform-une-asso-pour-defendre-et-promouvoir-la-culture-free/
+[8] Techno+, FREEFORM, une asso pour défendre et promouvoir la culture free. https://technoplus.org/actualites/874-freeform-une-asso-pour-defendre-et-promouvoir-la-culture-free/

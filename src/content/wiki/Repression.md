@@ -1,5 +1,9 @@
 # Répression
 
+> Résumé : comment opèrent les forces de l'ordre, quels sont mes droits et comment documenter les violences.
+> Statut : stable
+> Mise à jour : juin 2026
+
 **Comprendre comment les forces de l'ordre opèrent contre les free parties, anticiper leurs tactiques, connaître mes droits, documenter les violences et me défendre après coup.**
 
 Ce fichier est ma synthèse opérationnelle sur la répression policière des rassemblements festifs. Je l'ai construit pour comprendre le fonctionnement réel des dispositifs de maintien de l'ordre, identifier les points où je peux agir légalement, et savoir exactement quoi faire face à un contrôle, une charge ou une saisie. Tout est sourcé.

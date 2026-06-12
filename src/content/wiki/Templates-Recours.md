@@ -1,5 +1,9 @@
 # Templates Recours
 
+> Résumé : lettres types prêtes à adapter, une par situation juridique documentée.
+> Statut : stable
+> Mise à jour : juin 2026
+
 **Lettres prêtes à adapter. Chaque template correspond à une situation précise, documentée dans `droits-libertes/recours-juridiques.md`.**
 
 Ces templates sont des bases de travail, pas des formules magiques. Chaque situation est unique. Les passages entre `[crochets]` sont à remplacer. Les passages entre `{accolades}` sont à choisir selon le cas. Toujours faire relire par un avocat ou le FSJS pour les dossiers importants.

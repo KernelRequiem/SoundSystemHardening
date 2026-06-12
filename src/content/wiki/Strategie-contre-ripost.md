@@ -1,5 +1,9 @@
 # Contester la répression : Guide de résistance juridique et collective
 
+> Résumé : guide de résistance juridique et collective face au projet de loi RIPOST.
+> Statut : actif
+> Mise à jour : juin 2026
+
 > **Statut au 8 juin 2026 : RIPOST n'est pas encore en vigueur.**
 > Le projet de loi RIPOST a été adopté par le Sénat le 26 mai 2026. Il doit encore être examiné et adopté par l'Assemblée nationale pour devenir loi. Tant qu'il n'est pas promulgué, le droit actuel s'applique : la participation à une free party n'est soumise à aucune sanction spécifique. Seuls les organisateurs sont exposés à une contravention de 5e classe (1 500 €).
 

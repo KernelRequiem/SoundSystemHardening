@@ -1,6 +1,10 @@
 
 # Manifeste
 
+> Résumé : texte fondateur : ce que nous sommes, ce que nous défendons, pourquoi nous continuons.
+> Statut : stable
+> Mise à jour : juin 2026
+
 **Ce que nous sommes. Ce que nous défendons. Pourquoi nous ne nous arrêterons pas.**
 
 

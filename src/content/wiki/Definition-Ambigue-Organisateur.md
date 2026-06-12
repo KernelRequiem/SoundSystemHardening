@@ -1,5 +1,9 @@
 # Définition ambiguë de l'organisateur : La faille centrale du droit des free parties
 
+> Résumé : analyse de l'absence de définition juridique claire de l'organisateur, faille centrale du droit applicable.
+> Statut : stable
+> Mise à jour : juin 2026
+
 **La loi punit l'organisateur. Mais ni le Code de la sécurité intérieure ni la jurisprudence ne définissent clairement ce qu'est un organisateur dans le cadre d'une free party autogérée et décentralisée. Cette ambiguïté est la faille légale la plus structurante du dispositif répressif.**
 
 ---

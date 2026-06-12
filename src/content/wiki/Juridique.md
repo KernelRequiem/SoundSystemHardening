@@ -1,6 +1,6 @@
 # Axe juridique
 
-> Page rattachée à : [[Strategie-Resistance]]
+> Page rattachée à : [[Stratégie-résistance]]
 > Statut : stable
 > Dernière mise à jour : mai 2026
 
@@ -21,7 +21,7 @@ Cette page détaille le premier axe de la stratégie de résistance : utiliser l
 5. [Constituer un dossier de violences policières](#constituer-un-dossier-de-violences-policières)
    - [Les étapes du dossier](#les-étapes-du-dossier)
    - [Déposer plainte : voies et obstacles](#déposer-plainte--voies-et-obstacles)
-   - [Les limites réelles de l'IGPN/IGGN](#les-limites-réelles-de-lignpiggn)
+   - [Les limites réelles de l'IGPN/IGGN](#les-limites-réelles-de-ligpniggn)
 6. [Avocats et ressources juridiques](#avocats-et-ressources-juridiques)
 7. [Ce que la loi 1133 et RIPOST changent juridiquement](#ce-que-la-loi-1133-et-ripost-changent-juridiquement)
 8. [Sources](#sources)
@@ -40,7 +40,7 @@ Avant d'engager une procédure, il faut identifier précisément le type d'acte 
 | Violence lors d'une intervention | Policiers / gendarmes | Plainte pénale, IGPN/IGGN, Défenseur des droits |
 | Poursuites pénales pour organisation | Parquet | Défense pénale, avocat spécialisé |
 
-Les textes de référence applicables aux rassemblements festifs sont détaillés dans [`droits-libertes/arsenal-legislatif.md`](https://github.com/menardrop-cpu/digital-rights/blob/main/droits-libertes/arsenal-legislatif.md).
+Les textes de référence applicables aux rassemblements festifs sont détaillés dans [`droits-libertes/arsenal-legislatif.md`](https://github.com/KernelRequiem/digital-rights/blob/main/droits-libertes/arsenal-legislatif.md).
 
 ---
 
@@ -150,7 +150,7 @@ Le 3 janvier 2025, le préfet de l'Hérault François-Xavier Lauch a édicté un
 
 Deux recours (un référé-liberté et un référé-suspension) ont été examinés le 20 février 2025 par le tribunal administratif de Montpellier. Le 21 février 2025, le juge des référés a rejeté les deux recours et maintenu l'interdiction [8]. Les organisations requérantes ont annoncé porter appel devant le Conseil d'État [8].
 
-**Argument clé soulevé lors de l'audience** : l'interdiction de transport de matériel sonore posait une difficulté pratique documentée par les requérants - comment prouver qu'un équipement est destiné à une soirée de plus de 500 personnes (soumise à déclaration) plutôt qu'à un événement sous ce seuil (non soumis à déclaration) [9] ? Cet argument de l'impossibilité de preuve a priori constitue un moyen juridique solide pour les recours ultérieurs.
+**Argument clé soulevé lors de l'audience** : l'interdiction de transport de matériel sonore posait une difficulté pratique documentée par les requérants, comment prouver qu'un équipement est destiné à une soirée de plus de 500 personnes (soumise à déclaration) plutôt qu'à un événement sous ce seuil (non soumis à déclaration) [9] ? Cet argument de l'impossibilité de preuve a priori constitue un moyen juridique solide pour les recours ultérieurs.
 
 ### Arrêté Hérault 2023 : succès en référé-liberté
 
@@ -193,7 +193,7 @@ Le guide pratique de la LDH [12] identifie les étapes suivantes, à engager rap
 
 **Dans les jours suivants :**
 * Rassembler les témoignages de personnes présentes (écrits, datés, signés)
-* Collecter les vidéos et photos disponibles (en nettoyant les métadonnées EXIF avant tout partage, voir [`cyber-opsec/metadonnees-exif.md`](https://github.com/menardrop-cpu/digital-rights/blob/main/cyber-opsec/metadonnees-exif.md))
+* Collecter les vidéos et photos disponibles (en nettoyant les métadonnées EXIF avant tout partage, voir [`cyber-opsec/metadonnees-exif.md`](https://github.com/KernelRequiem/digital-rights/blob/main/cyber-opsec/metadonnees-exif.md))
 * Identifier les caméras de surveillance susceptibles d'avoir filmé la scène (demander leur conservation avant effacement, délai habituel de 30 jours)
 * Constituer une copie papier ET numérique de l'intégralité du dossier
 
@@ -227,12 +227,12 @@ Un rapport de l'ONG Flagrant Déni publié en novembre 2025 documente les dysfon
 ## Avocats et ressources juridiques
 
 **Avocate documentée sur le sujet :**
-* Marianne Rostan - co-signataire de la tribune Télérama d'avril 2026 avec Technopol et Tekno Anti Rep [11]. Intervient sur les questions de droit des pratiques culturelles alternatives.
+* Marianne Rostan, co-signataire de la tribune Télérama d'avril 2026 avec Technopol et Tekno Anti Rep [11]. Intervient sur les questions de droit des pratiques culturelles alternatives.
 
 **Structures ressources :**
-* Ligue des droits de l'homme (LDH) - guide pratique violences policières, accompagnement [12] - ldh-france.org
-* Défenseur des droits - saisine en ligne - defenseurdesdroits.fr
-* Techno+ - accompagnement des associations de RdR face aux pressions judiciaires [16] - technoplus.org
+* Ligue des droits de l'homme (LDH) : guide pratique violences policières, accompagnement [12]. ldh-france.org
+* Défenseur des droits : saisine en ligne. defenseurdesdroits.fr
+* Techno+ : accompagnement des associations de RdR face aux pressions judiciaires [16]. technoplus.org
 
 **Trouver un avocat spécialisé :**
 * Barreaux locaux → rubrique "droit public" ou "droit pénal"
@@ -254,7 +254,7 @@ Cette extension crée de nouveaux risques pour :
 * Les bénévoles RdR (partiellement protégés par l'amendement n°29, mais protection fragile)
 * Les personnes présentes physiquement avant le début de l'événement
 
-**Ce que ça change pour la défense :** toute communication numérique traçable devient un élément de preuve potentiel. La défense devra systématiquement contester la qualification d'"information pratique" et démontrer l'absence de lien de causalité entre la communication et l'organisation effective. Voir [`cyber-opsec/compartimentation.md`](https://github.com/menardrop-cpu/digital-rights/blob/main/cyber-opsec/compartimentation.md) pour les contre-mesures.
+**Ce que ça change pour la défense :** toute communication numérique traçable devient un élément de preuve potentiel. La défense devra systématiquement contester la qualification d'"information pratique" et démontrer l'absence de lien de causalité entre la communication et l'organisation effective. Voir [`cyber-opsec/compartimentation.md`](https://github.com/KernelRequiem/digital-rights/blob/main/cyber-opsec/compartimentation.md) pour les contre-mesures.
 
 ### RIPOST : élévation au rang de délit
 
@@ -264,51 +264,51 @@ Le projet de loi RIPOST, voté au Sénat le 26 mai 2026 [18], élève l'organisa
 
 ## Liens connexes dans ce wiki
 
-* Vue d'ensemble de la stratégie → [[Strategie-Resistance]]
+* Vue d'ensemble de la stratégie → [[Stratégie-résistance]]
 * Outils de mobilisation et templates de recours → [[Mobilisation]]
-* Suivi des textes législatifs en cours → [[Veille]]
+* Suivi des textes législatifs en cours → [[Vue-d'ensemble-veille]]
 
 ## Liens vers le repo
 
-* Textes législatifs détaillés → [`droits-libertes/arsenal-legislatif.md`](https://github.com/menardrop-cpu/digital-rights/blob/main/droits-libertes/arsenal-legislatif.md)
-* Sécurité des communications pour la constitution de dossiers → [`cyber-opsec/`](https://github.com/menardrop-cpu/digital-rights/tree/main/cyber-opsec)
+* Textes législatifs détaillés → [`droits-libertes/arsenal-legislatif.md`](https://github.com/KernelRequiem/digital-rights/blob/main/droits-libertes/arsenal-legislatif.md)
+* Sécurité des communications pour la constitution de dossiers → [`cyber-opsec/`](https://github.com/KernelRequiem/digital-rights/tree/main/cyber-opsec)
 
 ---
 
 ## Sources
 
-[1] Légifrance - Article L521-1 CJA (référé-suspension) - https://www.legifrance.gouv.fr/codes/section_lc/LEGITEXT000006070933/LEGISCTA000006118213/
+[1] Légifrance, Article L521-1 CJA (référé-suspension). https://www.legifrance.gouv.fr/codes/section_lc/LEGITEXT000006070933/LEGISCTA000006118213/
 
-[2] Green Law Avocat - Recours contre les arrêtés préfectoraux : référé-suspension - https://www.green-law-avocat.fr/quels-recours-contre-les-mesures-covid-19/
+[2] Green Law Avocat, Recours contre les arrêtés préfectoraux : référé-suspension. https://www.green-law-avocat.fr/quels-recours-contre-les-mesures-covid-19/
 
-[3] Mixmag France - Arrêtés préfectoraux d'interdiction Hérault et Haute-Marne 2025 - https://mixmag.fr/read/free-party-les-teufeurs-se-mobilisent-contre-la-repression-des-fetes-libres-news
+[3] Mixmag France, Arrêtés préfectoraux d'interdiction Hérault et Haute-Marne 2025. https://mixmag.fr/read/free-party-les-teufeurs-se-mobilisent-contre-la-repression-des-fetes-libres-news
 
-[4] Légifrance - Article L521-2 CJA (référé-liberté), délai 48h - https://www.legifrance.gouv.fr/codes/section_lc/LEGITEXT000006070933/LEGISCTA000006118213/
+[4] Légifrance, Article L521-2 CJA (référé-liberté), délai 48h. https://www.legifrance.gouv.fr/codes/section_lc/LEGITEXT000006070933/LEGISCTA000006118213/
 
-[5] Le Foyer de Costil - Référé-liberté : procédure et conditions - https://louislefoyerdecostil.fr/comment-introduire-un-refere-liberte/
+[5] Le Foyer de Costil, Référé-liberté : procédure et conditions. https://louislefoyerdecostil.fr/comment-introduire-un-refere-liberte/
 
-[6] Service Public - Référé-liberté, procédure officielle - https://www.service-public.gouv.fr/particuliers/vosdroits/F2551
+[6] Service Public, Référé-liberté, procédure officielle. https://www.service-public.gouv.fr/particuliers/vosdroits/F2551
 
-[7] Tribunal administratif de Montpellier - Arrêté Hérault du 3 janvier 2025, maintien de l'interdiction - https://montpellier.tribunal-administratif.fr/decisions-de-justice/dernieres-decisions/le-juge-des-referes-maintient-l-interdiction-des-rave-party-non-declarees-et-non-autorisees-et-l-interdiction-du-transport-de-materiel-de-son-desti
+[7] Tribunal administratif de Montpellier, Arrêté Hérault du 3 janvier 2025, maintien de l'interdiction. https://montpellier.tribunal-administratif.fr/decisions-de-justice/dernieres-decisions/le-juge-des-referes-maintient-l-interdiction-des-rave-party-non-declarees-et-non-autorisees-et-l-interdiction-du-transport-de-materiel-de-son-desti
 
-[8] Le Poing - Arrêté anti free-parties Hérault : le tribunal administratif rejette les recours, 21 février 2025 - https://lepoing.net/herault-larrete-prefectoral-anti-free-party-attaque-au-tribunal-administratif/
+[8] Le Poing, Arrêté anti free-parties Hérault : le tribunal administratif rejette les recours, 21 février 2025. https://lepoing.net/herault-larrete-prefectoral-anti-free-party-attaque-au-tribunal-administratif/
 
-[9] InfoLibertaire - Hérault : l'arrêté préfectoral anti free-party attaqué au tribunal administratif, 20 février 2025 - https://www.infolibertaire.net/herault-larrete-prefectoral-anti-free-party-attaque-au-tribunal-administratif/
+[9] InfoLibertaire, Hérault : l'arrêté préfectoral anti free-party attaqué au tribunal administratif, 20 février 2025. https://www.infolibertaire.net/herault-larrete-prefectoral-anti-free-party-attaque-au-tribunal-administratif/
 
-[10] Assemblée nationale - Question écrite, annulations d'arrêtés préfectoraux du Hérault en référé-liberté (octobre 2023) - https://www.assemblee-nationale.fr/dyn/17/questions/QANR5L17QE1127.pdf
+[10] Assemblée nationale, Question écrite, annulations d'arrêtés préfectoraux du Hérault en référé-liberté (octobre 2023). https://www.assemblee-nationale.fr/dyn/17/questions/QANR5L17QE1127.pdf
 
-[11] Techno+ - Chronologie de la résistance festive des free parties - https://technoplus.org/chronologie-de-la-resistance-festive-des-free-parties/
+[11] Techno+, Chronologie de la résistance festive des free parties. https://technoplus.org/chronologie-de-la-resistance-festive-des-free-parties/
 
-[12] LDH - Que faire face aux violences policières ? Guide pratique, avril 2024 - https://www.ldh-france.org/wp-content/uploads/2024/04/Que-faire_ViolencesPO_DEF.pdf
+[12] LDH, Que faire face aux violences policières ? Guide pratique, avril 2024. https://www.ldh-france.org/wp-content/uploads/2024/04/Que-faire_ViolencesPO_DEF.pdf
 
-[13] Justifit - Porter plainte contre la police ou la gendarmerie : le guide - https://www.justifit.fr/b/guides/droit-penal/violences-policieres-porter-plainte/
+[13] Justifit, Porter plainte contre la police ou la gendarmerie : le guide. https://www.justifit.fr/b/guides/droit-penal/violences-policieres-porter-plainte/
 
-[14] Politis - Culpabilisation, intimidation : six personnes racontent leur passage à l'IGPN, novembre 2025 - https://www.politis.fr/articles/2025/11/six-personnes-racontent-leur-passage-a-ligpn/
+[14] Politis, Culpabilisation, intimidation : six personnes racontent leur passage à l'IGPN, novembre 2025. https://www.politis.fr/articles/2025/11/six-personnes-racontent-leur-passage-a-ligpn/
 
-[15] Flagrant Déni - Rapport 2025 : Polices des polices en France, pourquoi il faut tout changer - https://www.flagrant-deni.fr/wp-content/uploads/2025/11/FD-RAPPORT-numerique-vf.pdf
+[15] Flagrant Déni, Rapport 2025 : Polices des polices en France, pourquoi il faut tout changer. https://www.flagrant-deni.fr/wp-content/uploads/2025/11/FD-RAPPORT-numerique-vf.pdf
 
-[16] Techno+ - Associations de santé refusent de dénoncer les organisateurs - https://technoplus.org/politique-des-drogues/6879-des-associations-de-sante-refusent-de-denoncer-les-organisateurs-de-free-party-qui-font-appel-a-elles/
+[16] Techno+, Associations de santé refusent de dénoncer les organisateurs. https://technoplus.org/politique-des-drogues/6879-des-associations-de-sante-refusent-de-denoncer-les-organisateurs-de-free-party-qui-font-appel-a-elles/
 
-[17] Franceinfo - L'Assemblée nationale adopte un arsenal renforcé de sanctions, avril 2026 - https://www.franceinfo.fr/culture/musique/free-party-l-assemblee-nationale-adopte-un-arsenal-renforce-de-sanctions-les-fetes-illegales_7929092.html
+[17] Franceinfo, L'Assemblée nationale adopte un arsenal renforcé de sanctions, avril 2026. https://www.franceinfo.fr/culture/musique/free-party-l-assemblee-nationale-adopte-un-arsenal-renforce-de-sanctions-les-fetes-illegales_7929092.html
 
-[18] Public Sénat - Projet de loi RIPOST : ce que contient le texte du Sénat, mai 2026 - https://www.publicsenat.fr/actualites/parlementaire/projet-de-loi-ripost-contre-les-troubles-a-lordre-public-ce-que-contient-le-texte-du-senat
+[18] Public Sénat, Projet de loi RIPOST : ce que contient le texte du Sénat, mai 2026. https://www.publicsenat.fr/actualites/parlementaire/projet-de-loi-ripost-contre-les-troubles-a-lordre-public-ce-que-contient-le-texte-du-senat

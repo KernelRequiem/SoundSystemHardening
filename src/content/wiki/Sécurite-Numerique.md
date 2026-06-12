@@ -1,5 +1,9 @@
 # Opsec : Protection des informations sensibles
 
+> Résumé : méthode OPSEC pour identifier et neutraliser les informations sensibles d'un collectif.
+> Statut : stable
+> Mise à jour : juin 2026
+
 **L'OPSEC est une méthode pour identifier et éliminer les informations sensibles qui pourraient compromettre une structure ou une action. Dans le contexte des free parties, c'est simple : empêcher que des informations cruciales (localisation, identités, coordination) ne tombent entre les mains des autorités. Quatre règles fondamentales structurent tout l'opsec numérique. Ce wiki explique pourquoi, et comment les appliquer.**
 
 ---

@@ -40,6 +40,22 @@ export const POST: APIRoute = async ({ request }) => {
     );
   }
 
+  // ── Limites de taille (anti-DoS, anti-email geant) ──────────────────────────
+  if (
+    data.objet.length > 200 ||
+    data.message.length > 5000 ||
+    (data.reponse?.length ?? 0) > 200
+  ) {
+    return new Response(
+      JSON.stringify({ ok: false, error: 'Champs trop longs.' }),
+      { status: 400, headers: { 'Content-Type': 'application/json', ...corsHeaders } }
+    );
+  }
+  // L'objet alimente l'en-tete Subject : on retire tout retour a la ligne pour
+  // fermer le vecteur d'injection d'en-tete SMTP (defense en profondeur, en plus
+  // de l'encodage natif de nodemailer).
+  data.objet = data.objet.replace(/[\r\n]+/g, ' ').trim();
+
   // ── Envoi SMTP ────────────────────────────────────────────────────────────
   // process.env = lecture au runtime (Coolify injecte les vars sur le container)
   // Lire depuis process.env (runtime Docker/Coolify) avec fallback import.meta.env (dev local)

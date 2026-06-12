@@ -1,5 +1,9 @@
 # Documentation préemptive : Créer la preuve avant l'intervention
 
+> Résumé : créer la preuve avant l'intervention pour contrer les dénégations et nourrir les recours.
+> Statut : stable
+> Mise à jour : juin 2026
+
 **Une intervention policière n'est documentée que si quelqu'un la filme et la rend publique. L'absence de documentation laisse place aux dénégations. La documentation préemptive / preuve pré-recueillie crée un contre-récit qui met en lumière la disproportion et protège les participants par la transparence.**
 
 ---

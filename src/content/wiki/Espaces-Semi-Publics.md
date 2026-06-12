@@ -1,5 +1,9 @@
 # Espaces semi-publics : Ambiguïté entre droit public et privé
 
+> Résumé : exploiter l'ambiguïté juridique des lieux à propriétaire public mais à fonction abandonnée.
+> Statut : stable
+> Mise à jour : juin 2026
+
 **Gares, écoles fermées, bâtiments de service désaffectés. Propriétaire public mais fonction abandonnée. L'État hésite entre intervention administrative et passivité.**
 
 Ces espaces créent une faille : propriétaire identifiable mais impuissant à agir vite.

@@ -1,5 +1,9 @@
 # Zones limitrophes : Frontières de compétence et vide administratif
 
+> Résumé : exploiter les frontières de compétence et les vides administratifs entre juridictions.
+> Statut : stable
+> Mise à jour : juin 2026
+
 **Limites entre deux juridictions. Limites entre territoire national et propriété privée. Limites entre domaine public et domaine privé. Chaque frontière crée une ambiguïté que l'État répond difficilement.**
 
 ---

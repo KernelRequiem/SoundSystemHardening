@@ -1,5 +1,9 @@
 # L'Esprit de la Fête : Le Code de Route
 
+> Résumé : le code de conduite et les valeurs qui fondent la culture de la fête libre.
+> Statut : stable
+> Mise à jour : juin 2026
+
 La free party n'est pas un festival payant où tu es client. Ce n'est pas non plus une zone de non-droit où tout est permis. C'est un espace commun, fragile, que nous construisons collectivement à chaque événement. Si nous ne prenons pas soin de cet espace, il disparaît.
 
 Voici ce qui définit notre culture. Ce n'est pas une liste de règles administratives, c'est ce qui nous a permis de survivre pendant trente ans.

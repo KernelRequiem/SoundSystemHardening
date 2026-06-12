@@ -1,7 +1,7 @@
 # Chronologie
 
-> Page rattachée à : [[Histoire-Culture]]
-> Statut : actif - enrichissement en continu
+> Page rattachée à : [[Histoire-&-Culture]]
+> Statut : actif, enrichissement en continu
 > Dernière mise à jour : mai 2026
 
 Chronologie des événements fondateurs, des teknivals marquants, des textes législatifs et des incidents de répression du mouvement en France, de 1988 à 2026. Deux fils distincts sont croisés : l'histoire festive (teknivals, multisons, événements culturels) et l'histoire politique (lois, circulaires, incidents, résistance).
@@ -15,7 +15,7 @@ Chronologie des événements fondateurs, des teknivals marquants, des textes lé
 
 ---
 
-## 1988-1992 - Les origines britanniques
+## 1988-1992 : Les origines britanniques
 
 **1988** 🎵
 "Summer of Love" au Royaume-Uni. Vague acid house, premières raves de masse dans des entrepôts et des champs. Naissance de la culture rave européenne.
@@ -31,10 +31,10 @@ Face à la répression britannique imminente, Spiral Tribe et Bedlam Circus s'ex
 
 ---
 
-## 1993 - Fondation en France
+## 1993 : Fondation en France
 
 **Juillet 1993** 🎵
-**Premier teknival français** - Beauvais (Oise), organisé par Spiral Tribe avec le Nomad Sound System. Le premier flyer porte un texte fondateur. Quelques milliers de participants. C'est l'acte de naissance du mouvement freetekno en France.
+**Premier teknival français**, Beauvais (Oise), organisé par Spiral Tribe avec le Nomad Sound System. Le premier flyer porte un texte fondateur. Quelques milliers de participants. C'est l'acte de naissance du mouvement freetekno en France.
 
 > "Il y a eu Woodstock en 1969 et Beauvais en 1993." (témoignage d'un vétéran du premier teknival)
 
@@ -43,20 +43,20 @@ Spiral Tribe à Montpellier. Deuxième teknival à Fontainebleau à l'automne. F
 
 ---
 
-## 1994 - Expansion et répression britannique
+## 1994 : Expansion et répression britannique
 
 **1994** ⚖️
 **Criminal Justice and Public Order Act** (Royaume-Uni) : criminalise les rassemblements de plus de 20 personnes écoutant de la "musique répétitive". Cible explicitement la culture techno.
 
 **1994** 🎵
-Teknival du Chaos de Montpellier-le-Vieux (près de Millau). Premier teknival CzechTek en République tchèque, co-organisé par Spiral Tribe - événement qui deviendra annuel.
+Teknival du Chaos de Montpellier-le-Vieux (près de Millau). Premier teknival CzechTek en République tchèque, co-organisé par Spiral Tribe, événement qui deviendra annuel.
 
 **1994** 🎵
 Teknivals au 1er mai aux Écrennes (Seine-et-Marne), Derval (Loire-Atlantique). Multiplication des sound systems français.
 
 ---
 
-## 1995 - La guerre de l'État, naissance des structures de résistance
+## 1995 : La guerre de l'État, naissance des structures de résistance
 
 **Mai 1995** ⚖️
 **Circulaire Pasqua** "Les soirées raves : des situations à hauts risques" pilotée par la MILAD (Mission de lutte anti-drogue). Déclaration de guerre officielle aux soirées techno. Nombreuses raves annulées ou interdites.
@@ -65,17 +65,17 @@ Teknivals au 1er mai aux Écrennes (Seine-et-Marne), Derval (Loire-Atlantique). 
 La répression accélère paradoxalement la politisation du mouvement et la création de structures de défense.
 
 **1995** 🛡️
-**Fondation de Techno+** - association de santé communautaire spécialisée en réduction des risques en milieu festif. Première association de ce type en France. Intervient dès l'origine dans les free parties légales et illégales.
+**Fondation de Techno+**, association de santé communautaire spécialisée en réduction des risques en milieu festif. Première association de ce type en France. Intervient dès l'origine dans les free parties légales et illégales.
 
 **1995** 🛡️
-**Fondation de Technopol** - association de promotion et défense des musiques électroniques.
+**Fondation de Technopol**, association de promotion et défense des musiques électroniques.
 
 **Été 1995** 🎵
-**Alien Festival** - Tarnos (Landes) : 10 jours de teknival, co-organisé par Spiral Tribe et le teknozine TNT. L'un des premiers grands rassemblements de l'histoire du mouvement français.
+**Alien Festival**, Tarnos (Landes) : 10 jours de teknival, co-organisé par Spiral Tribe et le teknozine TNT. L'un des premiers grands rassemblements de l'histoire du mouvement français.
 
 ---
 
-## 1996-1999 - L'âge d'or
+## 1996-1999 : L'âge d'or
 
 **1996** 🎵
 Spiral Tribe se sépare. Certains membres fondent de nouveaux collectifs, d'autres entament des carrières solo. Leur influence sur la scène française est durable.
@@ -97,7 +97,7 @@ Euro Teknival 2000 à Rousset (Bouches-du-Rhône).
 
 ---
 
-## 2000-2001 - Apogée et première loi
+## 2000-2001 : Apogée et première loi
 
 **Été 2000** 🎵
 Teknival off des Vieilles Charrues à Carhaix-Plouguer : environ 30 000 personnes.
@@ -119,7 +119,7 @@ Teknival off des Vieilles Charrues à Paule (Côtes-d'Armor) : 25 000 participan
 
 ---
 
-## 2002 - La loi entre en vigueur, premières résistances
+## 2002 : La loi entre en vigueur, premières résistances
 
 **1er mai 2002** 🎵⚖️
 Teknival de Mer (Loir-et-Cher) : dernier teknival du 1er mai avant l'application pleine de la loi Mariani.
@@ -135,10 +135,10 @@ Teknival en marge des Trans Musicales à Marcillé-Raoul : conciliation avec le 
 
 ---
 
-## 2003-2006 - La période légale et ses contradictions
+## 2003-2006 : La période légale et ses contradictions
 
 **1er mai 2003** 🎵🏛️
-**FrenchTek (1er Free Open Festival légal)** - base désaffectée de Marigny, Marne, avec l'accord des autorités : **70 000 participants**. Premier teknival légal de grande ampleur. Les sound systems collectent 45 000 euros de donations reversées aux autorités pour financer les infrastructures.
+**FrenchTek (1er Free Open Festival légal)**, base désaffectée de Marigny, Marne, avec l'accord des autorités : **70 000 participants**. Premier teknival légal de grande ampleur. Les sound systems collectent 45 000 euros de donations reversées aux autorités pour financer les infrastructures.
 
 **Juillet 2003** 🔴
 **Affrontements aux Vieilles Charrues** (Bretagne) : lors d'un teknival organisé en marge du festival, des affrontements éclatent entre teufeurs et forces de l'ordre. **Un teufeur perd la main à cause d'une grenade offensive.** Premier incident grave d'amputation documenté sur une free party française.
@@ -154,7 +154,7 @@ Premiers "Fuck Sarkoval" dans le sud, teknivals de résistance discrets. Ouvertu
 
 ---
 
-## 2007-2015 - Durcissement progressif
+## 2007-2015 : Durcissement progressif
 
 **2009** ⚖️
 Début de la "stratégie de la confrontation" documentée par Techno+ : multiplication des arrêtés préfectoraux, interventions musclées pour stopper les événements en cours, saisies hors cadre légal.
@@ -164,10 +164,10 @@ Groupe de travail interministériel Tekno/État : réunions à partir de septemb
 
 ---
 
-## 2019 - Steve Maïa Caniço
+## 2019 : Steve Maïa Caniço
 
 **22 juin 2019** 🔴
-**Mort de Steve Maïa Caniço** - Nantes. Steve, 24 ans, présent à une soirée techno sur les berges de la Loire pendant la Fête de la Musique, tombe dans le fleuve lors d'une intervention policière. Parmi une dizaine de personnes qui chutent, il est le seul à ne pas remonter à la surface.
+**Mort de Steve Maïa Caniço**, Nantes. Steve, 24 ans, présent à une soirée techno sur les berges de la Loire pendant la Fête de la Musique, tombe dans le fleuve lors d'une intervention policière. Parmi une dizaine de personnes qui chutent, il est le seul à ne pas remonter à la surface.
 
 **30 juillet 2019** 🔴
 Son corps est retrouvé dans la Loire, 38 jours après sa disparition. Le hashtag **#JusticePourSteve** se répand. Sa mort provoque une onde nationale de contestation sur les violences policières et leur impunité.
@@ -177,27 +177,27 @@ Le commissaire Grégoire Chassaing est poursuivi pour homicide involontaire. Il 
 
 ---
 
-## 2021 - Lieuron et Redon
+## 2021 : Lieuron et Redon
 
 **31 décembre 2020 / 2 janvier 2021** 🎵🔴
 **Teuf du Nouvel An à Lieuron** (Ille-et-Vilaine) : environ 2 500 personnes, en pleine période de restrictions sanitaires covid. Forte médiatisation nationale, arrestations, amendes.
 
 **18-19 juin 2021** 🎵🔴
-**Teknival de Redon** (Bretagne) : environ 1 000 personnes, hommage à Steve Maïa Caniço. Intervention musclée des forces de l'ordre - grenades lacrymogènes et explosives en pleine nuit dans un champ. **Un jeune homme de 22 ans a la main arrachée par une grenade.**
+**Teknival de Redon** (Bretagne) : environ 1 000 personnes, hommage à Steve Maïa Caniço. Intervention musclée des forces de l'ordre, grenades lacrymogènes et explosives en pleine nuit dans un champ. **Un jeune homme de 22 ans a la main arrachée par une grenade.**
 
 **11 mars 2022** ⚖️🔴
 L'affaire de Redon est **classée sans suite** par le parquet de Rennes, alors même que l'enquête démontre la disproportion de la force et les responsabilités de la préfecture et du ministère de l'Intérieur.
 
 ---
 
-## 2023 - 30 ans de teknival
+## 2023 : 30 ans de teknival
 
 **Mai 2023** 🎵🏛️
-**FrenchTek25** - aérodrome de Marigny (Marne) : **30 000 participants** pour les 30 ans du teknival. Une dizaine d'associations de RdR coordonnent un dispositif de prévention d'ampleur. Premier séminaire de la CNRDR (Coordination Nationale de Réduction des Risques), renommée SNIF (Synergie Nationale des Intervenant·es en Freeparty), rassemblant plus d'une vingtaine d'associations.
+**FrenchTek25**, aérodrome de Marigny (Marne) : **30 000 participants** pour les 30 ans du teknival. Une dizaine d'associations de RdR coordonnent un dispositif de prévention d'ampleur. Premier séminaire de la CNRDR (Coordination Nationale de Réduction des Risques), renommée SNIF (Synergie Nationale des Intervenant·es en Freeparty), rassemblant plus d'une vingtaine d'associations.
 
 ---
 
-## 2024-2025 - Escalade répressive
+## 2024-2025 : Escalade répressive
 
 **Mai 2024** 🔴
 **Maine-et-Loire** : charge policière sur une free party de plusieurs milliers de participants. Grenades lacrymogènes, grenades explosives, balles en caoutchouc.
@@ -237,7 +237,7 @@ Emmanuel Macron se dit favorable à l'inscription de la French Touch au patrimoi
 
 ---
 
-## 2026 - Double vague législative et résistance
+## 2026 : Double vague législative et résistance
 
 **18 mars 2025** ⚖️
 Dépôt de la proposition de loi n°1133 par Laetitia Saint-Paul (groupe Horizons) à l'Assemblée nationale.
@@ -255,12 +255,12 @@ Tribune dans Télérama co-signée par Technopol, Tekno Anti Rep, des associatio
 Tribune de 30 artistes de la scène techno dans Télérama contre la PPL 1133, dont Laurent Garnier, Barbara Butch, Rebeka Warrior, Maud Geffray.
 
 **1er mai 2026** 🎵🛡️
-**FrenchTek33 (Teknival International Impedance)** - polygone de tir de Bourges (Cher) : entre 20 000 et 25 000 participants. Teknival revendicatif, antimilitariste, antifasciste, organisé symboliquement près de Bourges ville natale du ministre de l'Intérieur Laurent Nunez. Plus de 150 bénévoles de RdR. Le ministre se rend sur place le dimanche 3 mai.
+**FrenchTek33 (Teknival International Impedance)**, polygone de tir de Bourges (Cher) : entre 20 000 et 25 000 participants. Teknival revendicatif, antimilitariste, antifasciste, organisé symboliquement près de Bourges ville natale du ministre de l'Intérieur Laurent Nunez. Plus de 150 bénévoles de RdR. Le ministre se rend sur place le dimanche 3 mai.
 
 **26 mai 2026** ⚖️
 **Adoption du projet de loi RIPOST au Sénat** : crée un délit d'organisation de free party (2 ans de prison, 30 000 € d'amende), amende délictuelle de 1 500 € pour les participants.
 
-**30 mai - 13 juin 2026** 🛡️🎵
+**30 mai, 13 juin 2026** 🛡️🎵
 **Manifestives 2026** : plus de 30 villes en France sur quatre vagues (30 mai, 31 mai, 6 juin, 13 juin). Appel "There Are Alternatives" (T.A.A). Plusieurs centaines de participants à Dijon le 30 mai, première ville mobilisée.
 
 ---
@@ -275,23 +275,23 @@ Tribune de 30 artistes de la scène techno dans Télérama contre la PPL 1133, d
 | Saisies de matériel en 2024 | 50+ (dont 56% sous le seuil légal) | Tekno Anti Rep |
 | Participants FrenchTek25 (2023) | 30 000 | Techno+ |
 | Participants FrenchTek33 (2026) | 20 000 à 25 000 | Wikipedia |
-| Pic historique - Chambley (2004) | 100 000+ | Sources dokumentées |
+| Pic historique, Chambley (2004) | 100 000+ | Sources documentées |
 | 1er Free Open Festival légal (2003) | 70 000 | Wikipedia |
 
 ---
 
 ## Liens vers les sources primaires
 
-* Techno+ - Chronologie de la résistance festive : https://technoplus.org/chronologie-de-la-resistance-festive-des-free-parties/
-* Wikipedia FR - Chronologie des teknivals en France : https://fr.wikipedia.org/wiki/Chronologie_des_teknivals_en_France
-* Cheperz - Chronologie des teknivals 1993-2025 : https://www.cheperz.org/chronologie-teknivals-free-parties-france.html
-* Wikipedia FR - Spiral Tribe : https://fr.wikipedia.org/wiki/Spiral_Tribe
+* Techno+, Chronologie de la résistance festive : https://technoplus.org/chronologie-de-la-resistance-festive-des-free-parties/
+* Wikipedia FR, Chronologie des teknivals en France : https://fr.wikipedia.org/wiki/Chronologie_des_teknivals_en_France
+* Cheperz, Chronologie des teknivals 1993-2025 : https://www.cheperz.org/chronologie-teknivals-free-parties-france.html
+* Wikipedia FR, Spiral Tribe : https://fr.wikipedia.org/wiki/Spiral_Tribe
 
 ---
 
 ## Liens connexes dans ce wiki
 
-* Contexte historique → [[Histoire-Culture]]
-* Incidents détaillés → [[Histoire-Culture#les-incidents-répressifs-marquants]]
-* Textes législatifs → repo [`droits-libertes/arsenal-legislatif.md`](https://github.com/menardrop-cpu/digital-rights/blob/main/droits-libertes/arsenal-legislatif.md)
-* Actualités récentes → [[Veille]]
+* Contexte historique → [[Histoire-&-Culture]]
+* Incidents détaillés → [[Histoire-&-Culture#les-incidents-répressifs-marquants]]
+* Textes législatifs → repo [`droits-libertes/arsenal-legislatif.md`](https://github.com/KernelRequiem/digital-rights/blob/main/droits-libertes/arsenal-legislatif.md)
+* Actualités récentes → [[Vue-d'ensemble-veille]]

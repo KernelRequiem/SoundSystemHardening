@@ -1,5 +1,9 @@
 # Coordination décentralisée : Organiser sans chef identifiable
 
+> Résumé : organiser un événement sans chef identifiable pour priver l'autorité d'une cible pénale.
+> Statut : stable
+> Mise à jour : juin 2026
+
 **Une free party n'a pas de PDG, pas de comité exécutif, pas de responsable désigné. Les décisions se prennent par consensus horizontal. Cette absence de hiérarchie n'est pas un défaut à corriger : c'est une stratégie juridique et opérationnelle. Sans chef, pas d'organisateur poursuivable.**
 
 ---

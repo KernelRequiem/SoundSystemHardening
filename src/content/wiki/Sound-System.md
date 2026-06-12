@@ -1,7 +1,7 @@
 # Sound Systems
 
-> Page rattachée à : [[Histoire-Culture](https://github.com/menardrop-cpu/digital-rights/wiki/Histoire-&-Culture)
-> Statut : partiel - enrichissement en continu
+> Page rattachée à : [[Histoire-&-Culture]]
+> Statut : partiel, enrichissement en continu
 > Dernière mise à jour : mai 2026
 
 Cette page documente les principaux sound systems et collectifs qui ont construit le mouvement freetekno en France. Elle n'est pas exhaustive : des centaines de collectifs existent ou ont existé. Elle se concentre sur les acteurs fondateurs dont l'histoire est documentée et l'influence vérifiable.
@@ -98,7 +98,7 @@ OQP est l'un des premiers sound systems français, fondé en 1993 dans le sillag
 
 OQP est un sound system exclusivement "traveller" : il ne s'ancre pas dans une ville mais circule à travers l'Europe. La photographe britannique Vinca Petersen documente la vie des sound systems travellers des années 90 dans son livre *No System*. Nombre de ses clichés montrent des campements OQP [6].
 
-En 1997, une partie du groupe revient à Marseille et fonde le label **Okupe Production**. L'autre partie fusionne avec deux autres sound systems - Total Resistance et Facom Unit - pour donner naissance à **Sound Conspiracy**, collectif international qui accomplit un road trip jusqu'en Inde. Le documentaire *Mission to India* (visible sur Youtube) retrace ce périple [6].
+En 1997, une partie du groupe revient à Marseille et fonde le label **Okupe Production**. L'autre partie fusionne avec deux autres sound systems (Total Resistance et Facom Unit) pour donner naissance à **Sound Conspiracy**, collectif international qui accomplit un road trip jusqu'en Inde. Le documentaire *Mission to India* (visible sur Youtube) retrace ce périple [6].
 
 **Labels issus d'OQP :** Okupe Production, Twist Records, TKX Recz, Cosmos, Micromachine Concept, South Side Project.
 
@@ -111,7 +111,7 @@ En 1997, une partie du groupe revient à Marseille et fonde le label **Okupe Pro
 **Origine :** France
 **Fondation :** début 1990s
 
-TNT est à la fois un sound system et un teknozine (fanzine militant de la culture tekno). Co-organisateurs de l'Alien Festival à Tarnos (Landes) avec Spiral Tribe en 1995 - dix jours de teknival, l'un des premiers grands rassemblements français. Présents sur de nombreuses dates de la chronologie française des années 1990 [3][4].
+TNT est à la fois un sound system et un teknozine (fanzine militant de la culture tekno). Co-organisateurs de l'Alien Festival à Tarnos (Landes) avec Spiral Tribe en 1995, dix jours de teknival, l'un des premiers grands rassemblements français. Présents sur de nombreuses dates de la chronologie française des années 1990 [3][4].
 
 Les teknozines produits par TNT et d'autres collectifs constituent un média autonome de diffusion de la culture et des informations pratiques des teufs, en dehors de tout circuit commercial.
 
@@ -150,8 +150,8 @@ Le collectif se forme à Paris vers 1995-1996, à l'initiative d'un groupe d'ami
 **Les événements mythiques des années 1990**
 
 Dès la fin des années 1990, Heretik marque les esprits avec des raves dans des lieux improbables devenus cultes [8] :
-* **1999 - Gare de fret de Bercy** (Paris) : rave clandestine dans l'une des plus grandes gares de fret d'Europe, en plein Paris
-* **2001 - Piscine Molitor** : rave dans la piscine Molitor abandonnée avant sa rénovation, symbole de l'occupation créative de lieux désaffectés
+* **1999, Gare de fret de Bercy** (Paris) : rave clandestine dans l'une des plus grandes gares de fret d'Europe, en plein Paris
+* **2001, Piscine Molitor** : rave dans la piscine Molitor abandonnée avant sa rénovation, symbole de l'occupation créative de lieux désaffectés
 
 Ces événements définissent une esthétique de la transgression géographique et architecturale qui devient une signature du collectif.
 
@@ -168,8 +168,8 @@ Combinant organisation et production musicale, Heretik a produit plus d'une cent
 
 **Les événements légaux**
 
-* **Février 2007 - Zénith de Paris** : à guichets fermés, près de 7 000 places. Mise en scène globale réunissant DJs, live acts, VJs, artistes de théâtre de rue, cabaret, light jockeys [9]
-* **Février 2008 - Olympia** : "Grand Magic Tekno Circus", 2 500 personnes
+* **Février 2007, Zénith de Paris** : à guichets fermés, près de 7 000 places. Mise en scène globale réunissant DJs, live acts, VJs, artistes de théâtre de rue, cabaret, light jockeys [9]
+* **Février 2008, Olympia** : "Grand Magic Tekno Circus", 2 500 personnes
 
 **2026 : retour complet**
 
@@ -204,7 +204,7 @@ Collectif tekno français de référence des années 1990-2000. A développé so
 **Origine :** France
 **Fondation :** milieu 1990s
 
-Facom Unit est un des sound systems français fondateurs des années 1990. En fusionnant avec OQP et Total Resistance, ils créent **Sound Conspiracy** - collectif international qui réalise un road trip jusqu'en Inde documenté dans le film *Mission to India* [6].
+Facom Unit est un des sound systems français fondateurs des années 1990. En fusionnant avec OQP et Total Resistance, ils créent **Sound Conspiracy**, collectif international qui réalise un road trip jusqu'en Inde documenté dans le film *Mission to India* [6].
 
 Les membres de Facom Unit ont côtoyé certains membres de Spiral Tribe au Centre Autonome d'Expérimentation Sociale (CAES) de Ris-Orangis à la fin des années 1990 [4].
 
@@ -272,26 +272,26 @@ Centre / Lozère / Aveyron :
 
 ## Sources
 
-[1] Wikipedia FR - Teknival - https://fr.wikipedia.org/wiki/Teknival
+[1] Wikipedia FR, Teknival. https://fr.wikipedia.org/wiki/Teknival
 
-[2] Wikipedia EN - Spiral Tribe - https://en.wikipedia.org/wiki/Spiral_Tribe
+[2] Wikipedia EN, Spiral Tribe. https://en.wikipedia.org/wiki/Spiral_Tribe
 
-[3] Wikipedia FR - Spiral Tribe - https://fr.wikipedia.org/wiki/Spiral_Tribe
+[3] Wikipedia FR, Spiral Tribe. https://fr.wikipedia.org/wiki/Spiral_Tribe
 
-[4] Wikipedia FR - Chronologie des teknivals en France - https://fr.wikipedia.org/wiki/Chronologie_des_teknivals_en_France
+[4] Wikipedia FR, Chronologie des teknivals en France. https://fr.wikipedia.org/wiki/Chronologie_des_teknivals_en_France
 
-[5] Wikipedia FR - Heretik System - https://fr.wikipedia.org/wiki/Heretik_System
+[5] Wikipedia FR, Heretik System. https://fr.wikipedia.org/wiki/Heretik_System
 
-[6] Wikipedia FR - OQP Sound System - https://fr.wikipedia.org/wiki/OQP_Sound_System
+[6] Wikipedia FR, OQP Sound System. https://fr.wikipedia.org/wiki/OQP_Sound_System
 
-[7] Last.fm - Heretik System biographie - https://www.last.fm/fr/music/Heretik+System/+wiki
+[7] Last.fm, Heretik System biographie. https://www.last.fm/fr/music/Heretik+System/+wiki
 
-[8] Electro-news.eu - Heretik System : le mythique collectif de free party est de retour, avril 2026 - https://electro-news.eu/heretik-system-le-mythique-collectif-de-free-party-est-de-retour-au-complet-a-paris/
+[8] Electro-news.eu, Heretik System : le mythique collectif de free party est de retour, avril 2026. https://electro-news.eu/heretik-system-le-mythique-collectif-de-free-party-est-de-retour-au-complet-a-paris/
 
-[9] Paperblog - Les Heretik : un sound system activiste dans le milieu des free parties - https://la-guerre-des-potards.com/les-heretik-un-sound-system-activiste-dans-le-milieu-des-free-parties/
+[9] Paperblog, Les Heretik : un sound system activiste dans le milieu des free parties. https://la-guerre-des-potards.com/les-heretik-un-sound-system-activiste-dans-le-milieu-des-free-parties/
 
-[10] Wikipedia FR - Tekno - https://fr.wikipedia.org/wiki/Tekno
+[10] Wikipedia FR, Tekno. https://fr.wikipedia.org/wiki/Tekno
 
-[11] Cheperz - Les sound systems : collectifs et crews techno - https://www.cheperz.org/les-sound-systems.html
+[11] Cheperz, Les sound systems : collectifs et crews techno. https://www.cheperz.org/les-sound-systems.html
 
-[12] Cheperz - Tribe : histoire, caractéristiques et culture tekno - https://www.cheperz.org/tribe.html
+[12] Cheperz, Tribe : histoire, caractéristiques et culture tekno. https://www.cheperz.org/tribe.html

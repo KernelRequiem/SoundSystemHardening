@@ -1,5 +1,9 @@
 # ZAD : Pourquoi l'État évite l'intervention
 
+> Résumé : analyse du calcul coûts-bénéfices qui pousse l'État à l'abstention sur une ZAD.
+> Statut : stable
+> Mise à jour : juin 2026
+
 **Analyse des contraintes qui poussent les autorités à l'abstention. Calcul coûts-bénéfices. Facteurs protecteurs d'une ZAD.**
 
 Ceci est l'observation directe des décisions administratives entre 2016 et 2026 sur les ZAD française. On documente les logiques réelles, pas les intentions.

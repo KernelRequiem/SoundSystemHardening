@@ -40,6 +40,21 @@ export const POST: APIRoute = async ({ request }) => {
     );
   }
 
+  // ── Limites de taille (anti-DoS, anti-email geant) ──────────────────────────
+  if (
+    data.type.length > 100 ||
+    data.description.length > 5000 ||
+    (data.page?.length ?? 0) > 300
+  ) {
+    return new Response(
+      JSON.stringify({ ok: false, error: 'Champs trop longs.' }),
+      { status: 400, headers: { 'Content-Type': 'application/json', ...corsHeaders } }
+    );
+  }
+  // Type/page alimentent l'en-tete Subject : on neutralise les retours a la ligne.
+  data.type = data.type.replace(/[\r\n]+/g, ' ').trim();
+  if (data.page) data.page = data.page.replace(/[\r\n]+/g, ' ').trim();
+
   // ── Envoi SMTP ────────────────────────────────────────────────────────────
   // process.env = lecture au runtime (Coolify injecte les vars sur le container)
   const smtpHost = process.env.SMTP_HOST || import.meta.env.SMTP_HOST || 'mail.infomaniak.com';

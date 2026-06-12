@@ -1,5 +1,9 @@
 # Propriété privée fermée : Ambiguïté juridique comme bouclier
 
+> Résumé : comment l'occupation d'une propriété privée fermée crée une barrière procédurale à l'intervention.
+> Statut : stable
+> Mise à jour : juin 2026
+
 **Analyse de l'ambiguïté légale que crée une propriété privée occupée. Comment l'État hésite. Où le droit s'arrête.**
 
 Ceci n'est pas un guide pour "occuper sans conséquence". C'est une documentation de la zone grise juridique qui ralentit ou bloque l'intervention étatique.
@@ -297,7 +301,7 @@ M. Dupont : "Oui."
 
 Gendarmes : "Bon, c'est un accord entre vous. Si vous changez d'avis, venez nous voir avec un papier."
 
-**Samedi 22h - Dimanche 14h :**
+**Samedi 22h, Dimanche 14h :**
 Événement se déroule. Zéro intervention gendarmes (propriétaire a dit oui = pas crime = pas trouble).
 
 **Dimanche 22h :**

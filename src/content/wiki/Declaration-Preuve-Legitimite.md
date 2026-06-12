@@ -1,5 +1,9 @@
 # Déclaration comme preuve de légitimité : Retourner l'obligation contre elle-même
 
+> Résumé : retourner l'obligation de déclaration en preuve de bonne foi et de légitimité.
+> Statut : stable
+> Mise à jour : juin 2026
+
 **La déclaration préalable est une obligation légale pour les rassemblements dépassant le seuil. La plupart des collectifs la voient comme une contrainte. Elle peut aussi fonctionner comme un bouclier. Déclarer, c'est forcer l'État à répondre formellement, à motiver ses refus, et à s'exposer à un recours en urgence devant le tribunal administratif.**
 
 ---

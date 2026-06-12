@@ -1,5 +1,9 @@
 # Jurisprudence
 
+> Résumé : les décisions de justice qui tracent la ligne entre légalité et répression.
+> Statut : stable
+> Mise à jour : juin 2026
+
 **Les décisions judiciaires qui définissent la ligne entre légalité et répression des free parties.**
 
 Ce fichier documente les arrêts et jugements significatifs rendus sur l'organisation et le déroulement des rassemblements festifs à caractère musical. Chaque décision est sourcée, son contexte est explicité, et ses implications pour les collectifs sont précisées.
@@ -8,14 +12,14 @@ Ce fichier documente les arrêts et jugements significatifs rendus sur l'organis
 
 ---
 
-## 1. Cour de Cassation - 17 mars 2020 - Seuls les organisateurs encourent les peines
+## 1. Cour de Cassation : 17 mars 2020 : Seuls les organisateurs encourent les peines
 
 ### Référence
 * **Cour de Cassation, Chambre Criminelle**
 * **Arrêt du 17 mars 2020**
 * **Pourvoi n° 19-82.117**
 * **Décision attaquée :** Cour d'appel de Reims, 25 janvier 2019
-* **Source :** Juricaf - https://juricaf.org/arret/FRANCE-COURDECASSATION-20200317-1982117
+* **Source :** Juricaf. https://juricaf.org/arret/FRANCE-COURDECASSATION-20200317-1982117
 
 ### Décision
 
@@ -40,14 +44,14 @@ La Cour de Cassation établissait un critère clair de distinction entre organis
 
 ---
 
-## 2. Tribunal Administratif de Montpellier - 21 février 2025 - Légalité des interdictions préfectorales
+## 2. Tribunal Administratif de Montpellier : 21 février 2025 : Légalité des interdictions préfectorales
 
 ### Référence
 * **Tribunal Administratif de Montpellier**
 * **Ordonnance du 21 février 2025**
 * **Numéro d'affaire :** 2501240
 * **Juge rapporteur :** M. Jérôme Charvin, Vice-Président
-* **Source :** Tribunal administratif de Montpellier - https://montpellier.tribunal-administratif.fr/decisions-de-justice/dernieres-decisions/le-juge-des-referes-maintient-l-interdiction-des-rave-party-non-declarees-et-non-autorisees-et-l-interdiction-du-transport-de-materiel-de-son-desti
+* **Source :** Tribunal administratif de Montpellier. https://montpellier.tribunal-administratif.fr/decisions-de-justice/dernieres-decisions/le-juge-des-referes-maintient-l-interdiction-des-rave-party-non-declarees-et-non-autorisees-et-l-interdiction-du-transport-de-materiel-de-son-desti
 
 ### Contexte
 
@@ -96,13 +100,13 @@ La décision du tribunal administratif du 21 février 2025 peut être contestée
 
 ---
 
-## 3. Tribunal Correctionnel de Saumur - Mars 2025 - Condamnation pour rave-party de Parnay (mai 2024)
+## 3. Tribunal Correctionnel de Saumur : Mars 2025 : Condamnation pour rave-party de Parnay (mai 2024)
 
 ### Référence
 * **Tribunal Correctionnel de Saumur**
 * **Jugement de mars 2025** (rendu plus d'un mois après l'audience du 30 janvier 2025)
 * **Affaire :** Rave-party de Parnay (Maine-et-Loire), 8-12 mai 2024
-* **Source :** Confluences Avocats - https://www.confluences-avocats.fr/rave-party-geante-des-organisateurs-condamnes/
+* **Source :** Confluences Avocats. https://www.confluences-avocats.fr/rave-party-geante-des-organisateurs-condamnes/
 
 ### Contexte
 

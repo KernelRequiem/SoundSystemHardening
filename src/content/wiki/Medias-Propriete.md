@@ -1,8 +1,8 @@
----
-title: "Médias & Propriété"
-description: "Qui possède quoi dans les médias français ? Ownership map, groupes majeurs, conflits d'intérêts, orientations politiques."
-category: "Médias & Infos"
----
+# Médias & Propriété
+
+> Résumé : qui possède les médias français et comment cette propriété pèse sur le traitement du mouvement.
+> Statut : stable
+> Mise à jour : juin 2026
 
 ## Vue d'ensemble
 
@@ -12,7 +12,7 @@ Les médias français sont concentrés entre 9 groupes majeurs contrôlés par d
 
 ## Propriétaires réels & leurs empires
 
-### 1. Bernard Arnault (LVMH) - 200+ Md€
+### 1. Bernard Arnault (LVMH) : 200+ Md€
 
 **Médias contrôlés :**
 - Les Échos (quotidien économique)
@@ -26,7 +26,7 @@ Les médias français sont concentrés entre 9 groupes majeurs contrôlés par d
 
 ---
 
-### 2. Serge Dassault (Groupe Dassault) - 20+ Md€
+### 2. Serge Dassault (Groupe Dassault) : 20+ Md€
 
 **Médias contrôlés :**
 - Le Figaro (quotidien droite)
@@ -41,7 +41,7 @@ Les médias français sont concentrés entre 9 groupes majeurs contrôlés par d
 
 ---
 
-### 3. Vincent Bolloré (Groupe Bolloré) - 10+ Md€
+### 3. Vincent Bolloré (Groupe Bolloré) : 10+ Md€
 
 **Médias contrôlés :**
 - Canal+ (chaîne payante)
@@ -56,7 +56,7 @@ Les médias français sont concentrés entre 9 groupes majeurs contrôlés par d
 
 ---
 
-### 4. Famille Rothschild (Finance historique) - Patrimoine ?
+### 4. Famille Rothschild (Finance historique) : Patrimoine ?
 
 **Médias contrôlés :**
 - Libération (quotidien gauche, minoritaire)
@@ -69,7 +69,7 @@ Les médias français sont concentrés entre 9 groupes majeurs contrôlés par d
 
 ---
 
-### 5. État français (France Télévisions) - Redevance publique
+### 5. État français (France Télévisions) : Redevance publique
 
 **Médias contrôlés :**
 - France 2 (généraliste première chaîne)
@@ -88,7 +88,7 @@ Les médias français sont concentrés entre 9 groupes majeurs contrôlés par d
 
 ## Autres groupes majeurs
 
-### Groupe TF1 (Bouygues) - 30% audience
+### Groupe TF1 (Bouygues) : 30% audience
 
 **Médias :**
 - TF1 (chaîne généraliste #1)
@@ -115,7 +115,7 @@ Les médias français sont concentrés entre 9 groupes majeurs contrôlés par d
 
 ---
 
-### Groupe Mediapart (Édouard de Rothschild) - 100% indépendant
+### Groupe Mediapart (Édouard de Rothschild) : 100% indépendant
 
 **Médias :**
 - Mediapart (journal enquête, payant)
@@ -173,7 +173,7 @@ Les médias français sont concentrés entre 9 groupes majeurs contrôlés par d
 
 ## Agences de presse
 
-### AFP (Agence France-Presse) - Semi-publique
+### AFP (Agence France-Presse) : Semi-publique
 - Fournit info à 90% médias français
 - **Orientation :** Pro-gouvernement de facto
 - **Impact :** Monoculture informationnelle

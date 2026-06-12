@@ -3,9 +3,9 @@
 > Statut : stable
 > Dernière mise à jour : mai 2026
 > Dossier : `cyber-opsec/`
-> Prérequis : lire [`threat-model.md`](threat-model.md) avant ce fichier
+> Prérequis : lire [`threat-model.md`](threat-model) avant ce fichier
 
-Ce fichier documente les outils d'anonymisation réseau : ce qu'ils font, ce qu'ils ne font pas, et quand les utiliser. VPN, Tor et Tails OS ne sont pas interchangeables - ils répondent à des menaces différentes. Choisir le mauvais outil pour la bonne raison est aussi dangereux que ne rien faire.
+Ce fichier documente les outils d'anonymisation réseau : ce qu'ils font, ce qu'ils ne font pas, et quand les utiliser. VPN, Tor et Tails OS ne sont pas interchangeables, ils répondent à des menaces différentes. Choisir le mauvais outil pour la bonne raison est aussi dangereux que ne rien faire.
 
 ---
 
@@ -13,9 +13,9 @@ Ce fichier documente les outils d'anonymisation réseau : ce qu'ils font, ce qu'
 
 1. [Pourquoi anonymiser sa connexion](#1-pourquoi-anonymiser-sa-connexion)
 2. [Ce qu'est une adresse IP et pourquoi elle vous expose](#2-ce-quest-une-adresse-ip-et-pourquoi-elle-vous-expose)
-3. [VPN - ce que ça fait vraiment](#3-vpn--ce-que-ça-fait-vraiment)
-4. [Tor - routage en oignon](#4-tor--routage-en-oignon)
-5. [Tails OS - l'environnement amnésique](#5-tails-os--lenvironnement-amnésique)
+3. [VPN : ce que ça fait vraiment](#3-vpn--ce-que-ça-fait-vraiment)
+4. [Tor : routage en oignon](#4-tor--routage-en-oignon)
+5. [Tails OS : l'environnement amnésique](#5-tails-os--lenvironnement-amnésique)
 6. [Comparaison et cas d'usage](#6-comparaison-et-cas-dusage)
 7. [Les erreurs qui détruisent l'anonymat](#7-les-erreurs-qui-détruisent-lanonymat)
 8. [Configuration pratique](#8-configuration-pratique)
@@ -29,7 +29,7 @@ Chaque fois que votre appareil se connecte à internet, il laisse deux traces fo
 
 **L'adresse IP** : l'identifiant réseau de votre connexion, visible par tout serveur que vous contactez. Elle peut être corrélée à votre identité réelle via votre FAI (Fournisseur d'Accès Internet).
 
-**Les métadonnées de trafic** : qui vous contactez, quand, combien de fois, depuis quelle localisation géographique - même si le contenu est chiffré.
+**Les métadonnées de trafic** : qui vous contactez, quand, combien de fois, depuis quelle localisation géographique, même si le contenu est chiffré.
 
 Pour un collectif organisant des activités sensibles en 2026, les situations où l'anonymisation est utile incluent :
 
@@ -38,13 +38,13 @@ Pour un collectif organisant des activités sensibles en 2026, les situations o�
 * Consulter des ressources sans laisser de trace associée à l'identité réelle
 * Correspondre via email sans lier l'adresse IP à l'identité
 
-**Ce que ce fichier ne couvre pas :** l'anonymisation sur mobile (voir [`surveillance-mobile.md`](surveillance-mobile.md)). Ce fichier se concentre sur les connexions depuis un ordinateur.
+**Ce que ce fichier ne couvre pas :** l'anonymisation sur mobile (voir [`surveillance-mobile.md`](surveillance-mobile)). Ce fichier se concentre sur les connexions depuis un ordinateur.
 
 ---
 
 ## 2. Ce qu'est une adresse IP et pourquoi elle vous expose
 
-### L'adresse IP - fonctionnement
+### L'adresse IP : fonctionnement
 
 Toute communication internet nécessite une adresse d'origine et une adresse de destination. L'adresse IP (*Internet Protocol*) est l'adresse réseau de votre appareil au moment de la connexion.
 
@@ -85,7 +85,7 @@ La plupart des connexions résidentielles ont une IP **dynamique** : elle change
 
 ---
 
-## 3. VPN - ce que ça fait vraiment
+## 3. VPN : ce que ça fait vraiment
 
 ### Définition et fonctionnement
 
@@ -106,7 +106,7 @@ Avec VPN :
                      = serveur VPN)
 ```
 
-**Ce que le VPN déplace :** il ne supprime pas la confiance nécessaire - il la déplace de votre FAI vers votre fournisseur VPN. Votre FAI ne voit plus vos destinations. Votre fournisseur VPN les voit toutes.
+**Ce que le VPN déplace :** il ne supprime pas la confiance nécessaire, il la déplace de votre FAI vers votre fournisseur VPN. Votre FAI ne voit plus vos destinations. Votre fournisseur VPN les voit toutes.
 
 ### Ce qu'un VPN protège
 
@@ -143,7 +143,7 @@ Avec VPN :
     du serveur VPN, il peut corréler par analyse temporelle
 ```
 
-### Choisir un VPN - critères
+### Choisir un VPN : critères
 
 La promesse "no-log" que tous les VPN affichent est difficile à vérifier. Ces critères permettent de filtrer :
 
@@ -171,13 +171,13 @@ Un fournisseur qui a soumis son infrastructure à un audit indépendant publié 
 
 **3. Paiement anonyme**
 
-Un fournisseur qui accepte les paiements en cash ou en cryptomonnaie (Monero de préférence - meilleure confidentialité que Bitcoin) ne peut pas corréler votre compte VPN à une identité financière.
+Un fournisseur qui accepte les paiements en cash ou en cryptomonnaie (Monero de préférence, meilleure confidentialité que Bitcoin) ne peut pas corréler votre compte VPN à une identité financière.
 
 **4. Open source**
 
 Un client VPN dont le code est public peut être audité par des tiers. Un client propriétaire ne peut l'être.
 
-### Mullvad - le choix de référence
+### Mullvad : le choix de référence
 
 Mullvad est le fournisseur VPN le plus recommandé par les organisations de défense des droits numériques pour un usage sensible.
 
@@ -228,7 +228,7 @@ mullvad dns check
 
 ---
 
-## 4. Tor - routage en oignon
+## 4. Tor : routage en oignon
 
 ### Concept fondamental
 
@@ -238,7 +238,7 @@ L'objectif de Tor est l'**anonymat**, pas seulement la confidentialité. La diff
 * **Confidentialité** (VPN) : le contenu est secret, mais quelqu'un sait que vous avez communiqué
 * **Anonymat** (Tor) : personne ne sait avec certitude qui a communiqué avec qui
 
-### Mécanisme du routage en oignon - expliqué pas à pas
+### Mécanisme du routage en oignon : expliqué pas à pas
 
 ```
 Vous voulez accéder à site.com de façon anonyme.
@@ -329,7 +329,7 @@ Résultat :
   → Tor Browser active HTTPS-Only par défaut
 ```
 
-### Tor Browser - l'outil recommandé
+### Tor Browser : l'outil recommandé
 
 Tor Browser est le navigateur officiel du projet Tor. Il configure automatiquement Tor et applique des protections supplémentaires contre le fingerprinting.
 
@@ -370,7 +370,7 @@ Configuration incluse dans Tor Browser :
 
 ---
 
-## 5. Tails OS - l'environnement amnésique
+## 5. Tails OS : l'environnement amnésique
 
 ### Concept
 
@@ -527,7 +527,7 @@ Possible mais compliqué à configurer correctement. La cascade VPN → Tor masq
 
 Ce sont les erreurs les plus courantes qui rendent un outil d'anonymisation totalement inefficace.
 
-### Erreur 1 - Se connecter à un compte personnel
+### Erreur 1 : Se connecter à un compte personnel
 
 ```
 Scénario :
@@ -544,7 +544,7 @@ Règle absolue :
   lié à l'identité réelle. Jamais.
 ```
 
-### Erreur 2 - Ouvrir des fichiers téléchargés hors Tails / Tor Browser
+### Erreur 2 : Ouvrir des fichiers téléchargés hors Tails / Tor Browser
 
 ```
 Scénario :
@@ -566,7 +566,7 @@ Solution :
     avant d'ouvrir un fichier téléchargé
 ```
 
-### Erreur 3 - Le fingerprinting de navigateur
+### Erreur 3 : Le fingerprinting de navigateur
 
 ```
 Votre navigateur envoie à chaque site web de nombreuses informations :
@@ -590,7 +590,7 @@ Règle : ne jamais redimensionner Tor Browser, ne jamais installer
         d'extensions dans Tor Browser.
 ```
 
-### Erreur 4 - Les métadonnées dans les fichiers publiés
+### Erreur 4 : Les métadonnées dans les fichiers publiés
 
 ```
 Publier un document via Tor ne sert à rien si le document lui-même
@@ -603,9 +603,9 @@ Workflow correct :
   4. Publier via Tor Browser ou Tails
 ```
 
-Voir [`metadonnees-exif.md`](metadonnees-exif.md) pour le nettoyage.
+Voir [`metadonnees-exif.md`](metadonnees-exif) pour le nettoyage.
 
-### Erreur 5 - Utiliser Tor depuis son domicile en permanence
+### Erreur 5 : Utiliser Tor depuis son domicile en permanence
 
 ```
 Problème :
@@ -673,25 +673,25 @@ Solutions :
 ## 9. Sources et références
 
 **Sur le VPN :**
-* Mullvad - documentation officielle - https://mullvad.net/fr/help/
-* Privacy Guides - recommandations VPN vérifiées - https://www.privacyguides.org/en/vpn/
-* EFF - What Is a VPN? - https://www.eff.org/deeplinks/2019/11/what-vpn
+* Mullvad, documentation officielle. https://mullvad.net/fr/help/
+* Privacy Guides, recommandations VPN vérifiées. https://www.privacyguides.org/en/vpn/
+* EFF, What Is a VPN?. https://www.eff.org/deeplinks/2019/11/what-vpn
 
 **Sur Tor :**
-* The Tor Project - documentation officielle - https://tb-manual.torproject.org/fr/
-* Tor Project - How Tor Works - https://www.torproject.org/about/history/
-* EFF - Tor and HTTPS - https://www.eff.org/pages/tor-and-https
+* The Tor Project, documentation officielle. https://tb-manual.torproject.org/fr/
+* Tor Project, How Tor Works. https://www.torproject.org/about/history/
+* EFF, Tor and HTTPS. https://www.eff.org/pages/tor-and-https
 
 **Sur Tails :**
-* Tails - documentation officielle - https://tails.boum.org/doc/index.fr.html
-* Tails - Pourquoi utiliser Tails ? - https://tails.boum.org/about/index.fr.html
+* Tails, documentation officielle. https://tails.boum.org/doc/index.fr.html
+* Tails, Pourquoi utiliser Tails ?. https://tails.boum.org/about/index.fr.html
 
 **Guides pratiques :**
-* EFF - Surveillance Self-Defense : Tor - https://ssd.eff.org/module/how-use-tor-windows
-* Security in a Box - Anonymat en ligne - https://securityinabox.org/fr/
+* EFF, Surveillance Self-Defense : Tor. https://ssd.eff.org/module/how-use-tor-windows
+* Security in a Box, Anonymat en ligne. https://securityinabox.org/fr/
 
 ---
 
 *Fichiers suivants dans ce dossier :*
-* [`identites-numeriques.md`](identites-numeriques.md) - séparation des identités
-* [`compartimentation.md`](compartimentation.md) - architecture d'information sécurisée
+* [`identites-numeriques.md`](identites-numeriques), séparation des identités
+* [`compartimentation.md`](compartimentation), architecture d'information sécurisée

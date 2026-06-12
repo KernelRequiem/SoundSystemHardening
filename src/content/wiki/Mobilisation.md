@@ -1,4 +1,8 @@
-# Mobilisation - Vue d'ensemble
+# Mobilisation : Vue d'ensemble
+
+> Résumé : état des lieux du mouvement de résistance : qui se mobilise, comment et avec quels outils.
+> Statut : stable
+> Mise à jour : juin 2026
 
 **Qui se mobilise, comment, depuis quand, et avec quels outils. L'état du mouvement de résistance des free parties en France.**
 
@@ -207,11 +211,11 @@ La limite de l'argument : la distinction entre techno commerciale (clubs, festiv
 
 ## Liens avec les autres dossiers du repo
 
-* `droits-libertes/arsenal-legislatif.md` - détail PPL 1133 et RIPOST
-* `droits-libertes/recours-juridiques.md` - comment contester légalement
-* `droits-libertes/repression.md` - documentation des violences
-* `droits-libertes/jurisprudence.md` - décisions de justice exploitables
-* `cyber-opsec/` - sécurité opérationnelle pour les collectifs
+* `droits-libertes/arsenal-legislatif.md`, détail PPL 1133 et RIPOST
+* `droits-libertes/recours-juridiques.md`, comment contester légalement
+* `droits-libertes/repression.md`, documentation des violences
+* `droits-libertes/jurisprudence.md`, décisions de justice exploitables
+* `cyber-opsec/`, sécurité opérationnelle pour les collectifs
 
 ---
 

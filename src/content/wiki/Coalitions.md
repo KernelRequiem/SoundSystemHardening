@@ -1,5 +1,9 @@
 # Stratégie et Résistance : Construire des Coalitions
 
+> Résumé : méthode pour sortir de l'isolement en construisant des alliances institutionnelles, associatives et rurales.
+> Statut : stable
+> Mise à jour : juin 2026
+
 Ce document définit la méthode pour sortir de l'isolement structurel du mouvement free party. L'asymétrie de moyens face aux forces de l'ordre rend la résistance frontale inefficace. La construction de coalitions avec des acteurs institutionnels, associatifs et ruraux permet de créer un bouclier juridique, médiatique et politique.
 
 ## 1. Cartographie des Alliés Stratégiques

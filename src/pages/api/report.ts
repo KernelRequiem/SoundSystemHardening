@@ -52,6 +52,18 @@ export const POST: APIRoute = async ({ request }) => {
     return json(400, { ok: false, error: 'Champs requis manquants : lieu, date, type, description' });
   }
 
+  // ── Limites de taille (anti-DoS, anti-pollution de la base Airtable) ─────────
+  if (
+    lieu.length > 200 ||
+    date.length > 50 ||
+    type.length > 100 ||
+    description.length > 5000 ||
+    (source?.length ?? 0) > 500 ||
+    (bilan?.length ?? 0) > 1000
+  ) {
+    return json(400, { ok: false, error: 'Champs trop longs.' });
+  }
+
   const TOKEN = process.env.AIRTABLE_WRITE_TOKEN || import.meta.env.AIRTABLE_WRITE_TOKEN;
   const BASE  = process.env.AIRTABLE_BASE_ID || import.meta.env.AIRTABLE_BASE_ID;
 

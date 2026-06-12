@@ -1,5 +1,9 @@
 # Modus Operandi : Tactiques et Contournement
 
+> Résumé : comprendre les logiques d'intervention de l'État pour les anticiper et les contrer légalement.
+> Statut : stable
+> Mise à jour : juin 2026
+
 **Comprendre comment les forces de l'ordre opèrent. Identifier les failles. Anticiper les interventions. Documenter les abus.**
 
 Ce wiki n'est pas un guide pour affronter l'État. C'est un guide pour **les éviter légalement**, les **anticiper tactiquement** et les **contrer opérationnellement** en restant dans la légalité.

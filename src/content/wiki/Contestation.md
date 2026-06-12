@@ -1,5 +1,9 @@
 # Wiki : Contester une contravention free party
 
+> Résumé : procédures complètes pour contester les amendes et infractions reçues autour d'un événement.
+> Statut : stable
+> Mise à jour : juin 2026
+
 **Toutes les procédures pour faire valoir ses droits face aux amendes et infractions reçues avant, pendant ou après un événement.**
 
 Ce wiki est basé sur le [Guide de contestation du FSJS](https://drive.google.com/file/d/1LQp8x98UdDRAgh6cpCDCNhb2Py1EaKpl/view) (Fonds de Soutien Juridique des Sons, version 19 novembre 2024), enrichi et complété pour couvrir l'ensemble des situations possibles. Contact FSJS : contact@fsjs.fr
@@ -65,7 +69,7 @@ Une contravention peut reposer sur deux types de preuves :
 
 ## 2. Deux choix : payer ou contester
 
-### Option A - Payer
+### Option A : Payer
 
 | Délai | Montant | Mode |
 |---|---|---|
@@ -77,7 +81,7 @@ Une contravention peut reposer sur deux types de preuves :
 
 Payer c'est reconnaître l'infraction. Les points de permis associés sont perdus immédiatement.
 
-### Option B - Contester
+### Option B : Contester
 
 Contester, c'est exercer son droit de faire valoir son innocence. La procédure est gratuite. Elle ne t'engage à rien tant que tu n'es pas condamné.
 
@@ -541,7 +545,7 @@ Les contraventions se prescrivent en 1 an à compter des faits. Si l'avis de con
 
 ## 12. Ressources et contacts
 
-### FSJS - Fonds de Soutien Juridique des Sons
+### FSJS : Fonds de Soutien Juridique des Sons
 
 Organisation spécialisée dans la défense juridique des sound systems et participants aux free parties.
 
@@ -561,9 +565,9 @@ Organisation spécialisée dans la défense juridique des sound systems et parti
 
 ### Associations de défense des libertés
 
-* **LDH (Ligue des Droits de l'Homme) :** https://www.ldh-france.org - permanences juridiques gratuites
-* **Syndicat des Avocats de France (SAF) :** https://lesaf.org - avocats sensibles aux libertés publiques
-* **Techno+ :** https://technoplus.org - réduction des risques et ressources légales
+* **LDH (Ligue des Droits de l'Homme) :** https://www.ldh-france.org, permanences juridiques gratuites
+* **Syndicat des Avocats de France (SAF) :** https://lesaf.org, avocats sensibles aux libertés publiques
+* **Techno+ :** https://technoplus.org, réduction des risques et ressources légales
 
 ### Textes de référence
 

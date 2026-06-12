@@ -1,8 +1,12 @@
 # 🏠 Bienvenue sur le Wiki du projet SoundSystemHardening
 
+> Résumé : porte d'entrée du wiki collectif du mouvement, ses objectifs et sa navigation.
+> Statut : actif
+> Mise à jour : juin 2026
+
 **Cet espace est le cerveau collectif du mouvement.**
 
-Ici, nous ne faisons pas que consester la répression : nous l'analysons, nous la documentons et nous construisons les outils pour nous en protéger. Ce Wiki est un espace vivant, destiné aux organisateurs, aux collectifs et aux participants qui refusent de voir une culture populaire de trente ans être effacée par l'exception législative.
+Ici, nous ne faisons pas que contester la répression : nous l'analysons, nous la documentons et nous construisons les outils pour nous en protéger. Ce Wiki est un espace vivant, destiné aux organisateurs, aux collectifs et aux participants qui refusent de voir une culture populaire de trente ans être effacée par l'exception législative.
 
 ## Pourquoi ce Wiki ?
 
@@ -19,8 +23,8 @@ Le mouvement de la fête libre est aujourd'hui confronté à une asymétrie de m
 Le Wiki est structuré par domaines d'action. Utilise la barre latérale pour accéder aux sections détaillées :
 
 * [L'esprit des Teufeurs](L'esprit-des-teufeurs) : Nos valeurs, nos racines et ce qui fait la force de notre culture.
-* [Stratégie de résistance](Strategie-Resistance) : Nos axes d'action pour construire un bouclier juridique, politique et sanitaire face aux autorités.
-* [Histoire et culture](Histoire-Culture) : Ce que nous défendons : trente ans de patrimoine, de musique et de lutte.
+* [Stratégie de résistance](Stratégie-résistance) : Nos axes d'action pour construire un bouclier juridique, politique et sanitaire face aux autorités.
+* [Histoire et culture](Histoire-&-Culture) : Ce que nous défendons : trente ans de patrimoine, de musique et de lutte.
 * [Mobilisation](Mobilisation) : Vos outils opérationnels : templates de recours, argumentaires de terrain et contacts alliés.
 * [Modus Operandi](Modus-Operandi) : Comprendre comment les autorités opèrent, identifier les failles légales et opérationnelles, anticiper les interventions.
 * [Veille](Vue-d'ensemble-veille) : Le suivi en temps réel de la menace législative et des nouvelles tactiques de maintien de l'ordre.
