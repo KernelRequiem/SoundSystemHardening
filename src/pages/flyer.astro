@@ -1,189 +1,165 @@
 ---
 // src/pages/flyer.astro
-// Flyer terrain imprimable : QR (vers le site) + URL + accroche.
-// Optimise impression noir/blanc sur A6. Le QR pointe vers le site (decouverte),
-// le contact passe par le formulaire web (/contact), pas par Signal.
+// Section "Flyers imprimables" : 2 themes (sombre neon / clair encre) x 3 formats (A6/A5/A4).
+// PDF print-ready full-bleed dans /public/flyers/. Le QR pointe vers le site (decouverte),
+// le contact passe par le formulaire web (/contact).
 import Layout from '../layouts/Layout.astro';
+
+const themes = [
+  {
+    id: 'sombre',
+    nom: 'Thème sombre',
+    desc: "Fond noir, accents vert néon, logo qui glow. Identique à l'identité du site. Impact maximal, idéal en impression couleur ou affichage écran.",
+    preview: '/flyers/preview-sombre.png',
+    note: "Couvre la page de noir : prévoir une imprimante qui n'ignore pas les fonds.",
+  },
+  {
+    id: 'clair',
+    nom: 'Thème clair',
+    desc: 'Fond blanc, logo noir, accents vert ponctuels. Économe en encre, parfait pour la distribution en volume et la photocopie.',
+    preview: '/flyers/preview-clair.png',
+    note: "Lisible partout, coût d'impression réduit.",
+  },
+];
+
+const formats = [
+  { code: 'A6', dim: '10,5 × 14,8 cm', usage: 'Carte à distribuer en main' },
+  { code: 'A5', dim: '14,8 × 21 cm', usage: 'Demi-page, meilleur compromis' },
+  { code: 'A4', dim: '21 × 29,7 cm', usage: 'Affiche à coller en lieu de passage' },
+];
 ---
 
 <Layout
-  title="Flyer imprimable"
+  title="Flyers imprimables"
   category="DIFFUSION"
-  description="Flyer A6 imprimable noir et blanc : QR vers le wiki, accroche, URL. À distribuer en rassemblement, meetup, événement terrain."
+  description="Flyers imprimables prêts à l'emploi : 2 thèmes (sombre néon, clair encre) en A6, A5 et A4. QR vers le wiki, accroche, URL. À distribuer en rassemblement, meetup, événement terrain."
 >
 
-  <div class="no-print">
-    <h1>Flyer imprimable</h1>
-    <p class="text-dedsec-muted text-sm font-mono tracking-widest uppercase mb-6">
-      ▸ Format A6 · Noir & blanc · Prêt à coller
-    </p>
+  <h1>Flyers imprimables</h1>
+  <p class="text-dedsec-muted text-sm font-mono tracking-widest uppercase mb-6">
+    ▸ 2 thèmes · A6 / A5 / A4 · PDF prêt à imprimer
+  </p>
 
-    <div class="info-box mb-6">
-      Aperçu ci-dessous. Le bouton <strong>Imprimer</strong> sort une page A6 noir sur blanc,
-      sans le reste de l'interface. Idéal pour les rassemblements, meetups et événements terrain.
-      Le QR mène au wiki ; le contact se fait par le formulaire du site.
-    </div>
-
-    <div class="flex flex-wrap gap-3 mb-8">
-      <button id="printBtn" class="btn-neon" type="button">⎙ Imprimer le flyer</button>
-      <a href="/flyer-qr.png" download class="btn-neon" style="border-color:rgba(122,122,138,0.4);color:#7a7a8a;">⬇ QR seul (PNG)</a>
-      <a href="/presse" class="btn-neon" style="border-color:rgba(122,122,138,0.4);color:#7a7a8a;">→ Dossier de presse</a>
-    </div>
+  <div class="info-box mb-8">
+    Chaque flyer reprend l'identité du site : logo, wordmark, palette néon. Le QR mène au wiki,
+    le contact se fait par le formulaire. Deux thèmes au choix, trois formats chacun.
+    <strong>Gratuit, libre, sans pub, sans tracker.</strong>
   </div>
 
-  <!-- ═══════════════════════════════════════════════════════ -->
-  <!-- CARTE FLYER (sert d'aperçu écran ET de zone imprimée)   -->
-  <!-- ═══════════════════════════════════════════════════════ -->
-  <div class="flyer-card">
-    <div class="flyer-inner">
-      <div class="flyer-tag">// RESISTANCE TOOLKIT</div>
+  <div class="flyer-grid">
+    {themes.map((t) => (
+      <section class="flyer-block">
+        <div class="flyer-preview-wrap">
+          <img src={t.preview} alt={`Aperçu du flyer SoundSystem Hardening — ${t.nom}`} loading="lazy" class="flyer-preview no-border" />
+        </div>
 
-      <div class="flyer-title">SOUNDSYSTEM<br/>HARDENING</div>
+        <div class="flyer-meta">
+          <h2 class="flyer-h2">{t.nom}</h2>
+          <p class="flyer-desc">{t.desc}</p>
 
-      <div class="flyer-accroche">
-        Tes droits. Ta sécu numérique. Ton terrain.<br/>
-        Le wiki du mouvement free party.
-      </div>
+          <div class="flyer-formats">
+            {formats.map((f) => (
+              <a href={`/flyers/flyer-ssh-${t.id}-${f.code}.pdf`} download class="btn-neon flyer-fmt">
+                <span class="fmt-code">⬇ {f.code}</span>
+                <span class="fmt-dim">{f.dim}</span>
+                <span class="fmt-usage">{f.usage}</span>
+              </a>
+            ))}
+          </div>
 
-      <div class="flyer-qr-wrap">
-        <img src="/flyer-qr.png" alt="QR code vers soundsystemhardening.fr" class="flyer-qr no-border" />
-      </div>
-
-      <div class="flyer-scan">SCANNE · LIS · PARTAGE</div>
-      <div class="flyer-url">soundsystemhardening.fr</div>
-
-      <div class="flyer-footer">
-        Droits face aux contrôles · OpSec · Recours juridiques · Carte des incidents<br/>
-        Un truc à signaler ? Formulaire sur soundsystemhardening.fr/contact
-      </div>
-    </div>
+          <p class="flyer-note">{t.note}</p>
+        </div>
+      </section>
+    ))}
   </div>
 
-  <script>
-    document.getElementById('printBtn')?.addEventListener('click', () => window.print());
-  </script>
+  <div class="flex flex-wrap gap-3 mt-10">
+    <a href="/flyer-qr.png" download class="btn-neon" style="border-color:rgba(122,122,138,0.4);color:#7a7a8a;">⬇ QR seul (PNG)</a>
+    <a href="/presse" class="btn-neon" style="border-color:rgba(122,122,138,0.4);color:#7a7a8a;">→ Dossier de presse</a>
+  </div>
 
 </Layout>
 
-<style is:global>
-  /* ───────── Aperçu écran : carte A6 façon papier ───────── */
-  .flyer-card {
-    width: 105mm;
-    height: 148mm;
-    max-width: 100%;
-    margin: 0 auto 2rem;
-    background: #ffffff;
-    color: #000000;
-    border: 1px solid #2a2a3a;
-    box-shadow: 0 0 40px rgba(0, 255, 159, 0.08);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+<style>
+  .flyer-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+  @media (min-width: 880px) {
+    .flyer-grid { grid-template-columns: 1fr 1fr; }
   }
 
-  .flyer-inner {
-    width: 100%;
-    height: 100%;
-    box-sizing: border-box;
-    padding: 9mm 7mm;
+  .flyer-block {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    text-align: center;
-    font-family: 'JetBrains Mono', monospace;
-    color: #000;
+    gap: 1.25rem;
   }
 
-  .flyer-tag {
-    font-size: 8pt;
-    font-weight: 700;
-    letter-spacing: 0.22em;
-    color: #000;
-    border: 1.5px solid #000;
-    padding: 2px 8px;
-    margin-bottom: 6mm;
+  .flyer-preview-wrap {
+    border: 1px solid var(--color-border);
+    background: #0a0a0f;
+    padding: 0;
+    overflow: hidden;
   }
-
-  .flyer-title {
-    font-family: 'Space Grotesk', sans-serif;
-    font-weight: 700;
-    font-size: 20pt;
-    line-height: 1.02;
-    letter-spacing: -0.01em;
-    color: #000;
-    margin-bottom: 4mm;
-  }
-
-  .flyer-accroche {
-    font-size: 8.5pt;
-    line-height: 1.5;
-    color: #111;
-    margin-bottom: 6mm;
-    max-width: 80mm;
-  }
-
-  .flyer-qr-wrap {
-    border: 2px solid #000;
-    padding: 3mm;
-    margin-bottom: 4mm;
-    background: #fff;
-  }
-
-  .flyer-qr {
+  .flyer-preview {
     display: block;
-    width: 42mm;
-    height: 42mm;
-    image-rendering: pixelated;
-  }
-
-  .flyer-scan {
-    font-size: 8pt;
-    font-weight: 700;
-    letter-spacing: 0.18em;
-    color: #000;
-    margin-bottom: 1.5mm;
-  }
-
-  .flyer-url {
-    font-size: 12pt;
-    font-weight: 700;
-    letter-spacing: 0.02em;
-    color: #000;
-    margin-bottom: auto;
-  }
-
-  .flyer-footer {
-    font-size: 6.5pt;
-    line-height: 1.5;
-    color: #222;
-    border-top: 1px solid #000;
-    padding-top: 2.5mm;
-    margin-top: 5mm;
     width: 100%;
+    height: auto;
+    margin: 0;
   }
 
-  /* ───────── Impression : A6 noir sur blanc, rien d'autre ───────── */
-  @media print {
-    @page {
-      size: A6;
-      margin: 0;
-    }
-    /* On masque tout, on ne réaffiche que la carte flyer. */
-    body { visibility: hidden; background: #fff !important; }
-    .flyer-card, .flyer-card * { visibility: visible; }
-    .flyer-card {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 105mm;
-      height: 148mm;
-      margin: 0;
-      border: none;
-      box-shadow: none;
-      background: #fff;
-    }
-    .no-print { display: none !important; }
-    /* Neutralise l'éventuel reset prose / couleurs sombres héritées */
-    .flyer-inner, .flyer-title, .flyer-tag, .flyer-url, .flyer-scan { color: #000 !important; }
+  .flyer-h2 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.25rem;
+    margin: 0 0 0.5rem;
+    color: var(--color-text);
+  }
+  .flyer-desc {
+    font-size: 0.9rem;
+    line-height: 1.55;
+    color: var(--color-muted);
+    margin: 0 0 1.1rem;
+  }
+
+  .flyer-formats {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+  .flyer-fmt {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto auto;
+    column-gap: 0.9rem;
+    align-items: baseline;
+    text-align: left;
+    padding: 0.7rem 0.95rem;
+  }
+  .fmt-code {
+    grid-row: 1 / 3;
+    align-self: center;
+    font-weight: 700;
+    font-size: 1.05rem;
+    letter-spacing: 0.05em;
+  }
+  .fmt-dim {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--color-text);
+  }
+  .fmt-usage {
+    grid-column: 2;
+    font-size: 0.72rem;
+    color: var(--color-muted);
+  }
+
+  .flyer-note {
+    margin: 0.9rem 0 0;
+    font-size: 0.72rem;
+    line-height: 1.45;
+    color: var(--color-muted);
+    border-left: 2px solid var(--color-border);
+    padding-left: 0.7rem;
   }
 </style>
