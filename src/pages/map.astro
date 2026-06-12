@@ -13,13 +13,16 @@ const TYPES = {
 
 const DEPT_NAMES: Record<string, string> = {
   '05':'Hautes-Alpes','11':'Aude','18':'Cher','22':'Côtes-d\'Armor',
-  '29':'Finistère','34':'Hérault','35':'Ille-et-Vilaine','36':'Indre',
-  '42':'Loire','46':'Lot','48':'Lozère','51':'Marne','57':'Moselle',
-  '69':'Rhône','71':'Saône-et-Loire','72':'Sarthe','75':'Paris',
-  '85':'Vendée','86':'Vienne',
+  '24':'Dordogne','27':'Eure','29':'Finistère','30':'Gard',
+  '34':'Hérault','35':'Ille-et-Vilaine','36':'Indre','42':'Loire',
+  '44':'Loire-Atlantique','46':'Lot','48':'Lozère','51':'Marne',
+  '53':'Mayenne','56':'Morbihan','57':'Moselle','69':'Rhône',
+  '70':'Haute-Saône','71':'Saône-et-Loire','72':'Sarthe','75':'Paris',
+  '76':'Seine-Maritime','85':'Vendée','86':'Vienne',
 };
 
-const lastUpdate = incidents.reduce((max, i) => i.date > max ? i.date : max, '');
+// Date de dernière mise à jour des données (à actualiser à chaque ajout d'incident)
+const lastUpdate = '2026-06-13';
 const lastUpdateFR = lastUpdate
   ? new Date(lastUpdate).toLocaleDateString('fr-FR', { day:'numeric', month:'long', year:'numeric' })
   : '-';
