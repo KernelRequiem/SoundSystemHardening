@@ -8,10 +8,20 @@ const { slug } = Astro.params;
 const wikiDir = join(process.cwd(), 'src/content/wiki');
 let rawContent = '';
 
-try {
-  rawContent = readFileSync(join(wikiDir, `${slug}.md`), 'utf-8');
-} catch (e) {
+// Allowlist stricte : lettres (accents inclus), chiffres, tiret, underscore,
+// apostrophe et esperluette. Tout separateur de chemin (/ \ .) ou sequence
+// ".." est exclu de fait, ce qui ferme la traversee de repertoire :
+// le slug ne peut plus pointer hors de src/content/wiki.
+const isSafeSlug = typeof slug === 'string' && /^[\p{L}\p{N}_'&-]+$/u.test(slug);
+
+if (!isSafeSlug) {
   rawContent = '# Page non trouvée\n\nCe contenu n\'est pas encore disponible.';
+} else {
+  try {
+    rawContent = readFileSync(join(wikiDir, `${slug}.md`), 'utf-8');
+  } catch (e) {
+    rawContent = '# Page non trouvée\n\nCe contenu n\'est pas encore disponible.';
+  }
 }
 
 // Extract title from first H1
@@ -34,25 +44,66 @@ function renderMarkdown(md: string): string {
     inlineCodes.push(code);
     return `__INLINECODE_${inlineCodes.length - 1}__`;
   });
-  
-  // Headers
-  html = html.replace(/^######\s+(.+)$/gm, '<h6>$1</h6>');
-  html = html.replace(/^#####\s+(.+)$/gm, '<h5>$1</h5>');
-  html = html.replace(/^####\s+(.+)$/gm, '<h4>$1</h4>');
-  html = html.replace(/^###\s+(.+)$/gm, '<h3>$1</h3>');
-  html = html.replace(/^##\s+(.+)$/gm, '<h2>$1</h2>');
-  html = html.replace(/^#\s+(.+)$/gm, '<h1>$1</h1>');
+
+  // ── Echappement HTML global (anti-XSS stocke) ──────────────────────────────
+  // Le contenu wiki provient de contributions Markdown ouvertes (PR GitHub).
+  // Sans cet echappement, tout HTML brut (<script>, <img onerror=...>) injecte
+  // dans un .md traversait le renderer et s'executait via set:html cote client,
+  // d'autant que le CSP autorise encore 'unsafe-inline'. On neutralise donc tout
+  // < > & du source AVANT d'appliquer les transformations Markdown, qui se
+  // contentent ensuite d'ajouter leurs propres balises (deja sures).
+  html = html
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+
+  // Filtre de schema d'URL : seuls http(s), mailto et les liens relatifs sont
+  // autorises. Bloque javascript:, data:, vbscript: et echappe les guillemets
+  // pour empecher toute evasion d'attribut href/src.
+  const safeUrl = (raw: string): string => {
+    const url = raw.trim();
+    const hasScheme = /^[a-z][a-z0-9+.-]*:/i.test(url);
+    const allowed =
+      !hasScheme || /^(https?:|mailto:)/i.test(url);
+    if (!allowed) return '#';
+    return url.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  };
+
+  // Headers (avec ancres GitHub-style pour que le sommaire et les liens
+  // profonds fonctionnent : #titre-slugifie)
+  const slugifyHeading = (text: string): string =>
+    text
+      .replace(/[*`]/g, '')                       // marqueurs markdown résiduels
+      .replace(/\[([^\]]+)\]\([^)]*\)/g, '$1')     // [texte](url) -> texte
+      .replace(/<[^>]+>/g, '')                      // balises éventuelles
+      .trim()
+      .toLowerCase()
+      .replace(/[^\p{L}\p{N} \-_]/gu, '')          // ponctuation retirée, accents gardés
+      .replace(/ /g, '-');
+  const hx = (level: number) => (_m: string, content: string) =>
+    `<h${level} id="${slugifyHeading(content)}">${content}</h${level}>`;
+  html = html.replace(/^######\s+(.+)$/gm, hx(6));
+  html = html.replace(/^#####\s+(.+)$/gm, hx(5));
+  html = html.replace(/^####\s+(.+)$/gm, hx(4));
+  html = html.replace(/^###\s+(.+)$/gm, hx(3));
+  html = html.replace(/^##\s+(.+)$/gm, hx(2));
+  html = html.replace(/^#\s+(.+)$/gm, hx(1));
   
   // Bold, italic
   html = html.replace(/\*\*\*(.+?)\*\*\*/g, '<strong><em>$1</em></strong>');
   html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
   html = html.replace(/\*(.+?)\*/g, '<em>$1</em>');
   
+  // Images (traitees avant les liens : la syntaxe ![]() contient []())
+  html = html.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (_m, alt, src) => {
+    const cleanAlt = String(alt).replace(/"/g, '&quot;');
+    return `<img src="${safeUrl(src)}" alt="${cleanAlt}" />`;
+  });
+
   // Links
-  html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
-  
-  // Images
-  html = html.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1" />');
+  html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_m, text, href) => {
+    return `<a href="${safeUrl(href)}">${text}</a>`;
+  });
   
   // Horizontal rules
   html = html.replace(/^---+$/gm, '<hr />');
@@ -110,8 +161,9 @@ function renderMarkdown(md: string): string {
   
   // Convert internal wiki links [[Page]] or wiki-style links
   html = html.replace(/\[\[([^\]]+)\]\]/g, (match, page) => {
-    const slug = page.replace(/\s+/g, '-');
-    return `<a href="/wiki/${slug}">${page}</a>`;
+    const slug = encodeURIComponent(String(page).trim().replace(/\s+/g, '-'));
+    const label = String(page).replace(/"/g, '&quot;');
+    return `<a href="/wiki/${slug}">${label}</a>`;
   });
   
   return html;

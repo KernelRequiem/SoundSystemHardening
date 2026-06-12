@@ -437,6 +437,153 @@ import Layout from '../layouts/Layout.astro';
     border-color: rgba(138, 158, 232, 0.5);
     background: rgba(138, 158, 232, 0.08);
   }
+
+  /* ── Document légal : conteneur ── */
+  .legal-wrap {
+    border: 1px solid rgba(138, 158, 232, 0.22);
+    background: rgba(138, 158, 232, 0.03);
+    padding: 22px 22px 24px;
+    margin-top: 8px;
+  }
+  .legal-meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(138, 158, 232, 0.78);
+    margin-bottom: 6px;
+  }
+  .legal-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: rgba(232, 232, 240, 0.96);
+    margin: 0 0 8px;
+    letter-spacing: -0.01em;
+  }
+  .legal-intro {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 12.5px;
+    line-height: 1.7;
+    color: rgba(122, 122, 138, 0.92);
+    margin: 0 0 14px;
+  }
+  .legal-recipient {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: rgba(232, 232, 240, 0.62);
+    border-left: 2px solid rgba(138, 158, 232, 0.4);
+    padding: 6px 12px;
+    margin-bottom: 16px;
+    background: rgba(8, 8, 12, 0.4);
+  }
+
+  /* ── Formulaire ── */
+  .legal-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px 14px;
+    margin-bottom: 18px;
+  }
+  @media (max-width: 640px) {
+    .legal-form { grid-template-columns: 1fr; }
+  }
+  .legal-field { display: flex; flex-direction: column; gap: 5px; }
+  .legal-field.full { grid-column: 1 / -1; }
+  .legal-field label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(122, 122, 138, 0.85);
+  }
+  .legal-field input,
+  .legal-field textarea {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12.5px;
+    color: rgba(232, 232, 240, 0.95);
+    background: rgba(8, 8, 12, 0.7);
+    border: 1px solid rgba(42, 42, 58, 0.85);
+    padding: 9px 11px;
+    width: 100%;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    resize: vertical;
+  }
+  .legal-field textarea { min-height: 64px; line-height: 1.6; }
+  .legal-field input:focus,
+  .legal-field textarea:focus {
+    outline: none;
+    border-color: rgba(138, 158, 232, 0.6);
+    box-shadow: 0 0 0 1px rgba(138, 158, 232, 0.25);
+  }
+
+  /* ── Aperçu ── */
+  .legal-preview-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
+  .legal-preview-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(122, 122, 138, 0.7);
+  }
+  .legal-preview {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    line-height: 1.75;
+    color: rgba(232, 232, 240, 0.86);
+    background: rgba(4, 4, 7, 0.75);
+    border: 1px solid rgba(42, 42, 58, 0.7);
+    padding: 18px 18px;
+    white-space: pre-wrap;
+    word-break: break-word;
+    max-height: 340px;
+    overflow: auto;
+    margin: 0 0 16px;
+  }
+  .legal-blank {
+    color: rgba(138, 158, 232, 0.85);
+    border-bottom: 1px dotted rgba(138, 158, 232, 0.6);
+  }
+
+  /* ── Barre d'export ── */
+  .legal-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+  .legal-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 9px 16px;
+    cursor: pointer;
+    background: rgba(8, 8, 12, 0.6);
+    border: 1px solid rgba(42, 42, 58, 0.85);
+    color: rgba(232, 232, 240, 0.8);
+    transition: all 0.15s;
+  }
+  .legal-btn:hover {
+    border-color: rgba(138, 158, 232, 0.55);
+    color: #e8e8f0;
+    background: rgba(138, 158, 232, 0.07);
+    transform: translateY(-1px);
+  }
+  .legal-btn-primary {
+    border-color: rgba(138, 158, 232, 0.4);
+    color: rgba(138, 158, 232, 0.92);
+    background: rgba(138, 158, 232, 0.06);
+  }
+  .legal-btn-primary:hover {
+    border-color: rgba(138, 158, 232, 0.85);
+    color: #aab8f2;
+    background: rgba(138, 158, 232, 0.12);
+  }
+  .legal-btn.copied { border-color: rgba(0, 255, 159, 0.6); color: #00ff9f; }
 </style>
 
 <script>
@@ -449,6 +596,7 @@ import {
   type Phase,
   type DecisionNode,
 } from '../data/decision';
+import { LEGAL_DOCS, type LegalDoc, type LegalField } from '../data/legal-docs';
 
 // ─── ÉTAT ─────────────────────────────────────────────────────────────────────
 
@@ -743,7 +891,245 @@ function renderResult(node: DecisionNode): string {
     </div>
   ` : '';
 
-  return header + contextBlock + actionsBlock + rightsBlock + pitfallsBlock + resourcesBlock + nextPhaseBlock;
+  const legalBlock = buildLegalSection(node.id);
+
+  return header + contextBlock + actionsBlock + rightsBlock + pitfallsBlock + resourcesBlock + legalBlock + nextPhaseBlock;
+}
+
+// ─── RENDER : DOCUMENT LÉGAL + FORMULAIRE ─────────────────────────────────────
+
+function escapeHtml(s: string): string {
+  return s
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+function renderField(f: LegalField): string {
+  const cls   = 'legal-field' + (f.full ? ' full' : '');
+  const ph    = f.placeholder ? ` placeholder="${escapeHtml(f.placeholder)}"` : '';
+  const input = f.type === 'textarea'
+    ? `<textarea data-field="${f.id}" rows="3"${ph}></textarea>`
+    : `<input type="${f.type ?? 'text'}" data-field="${f.id}"${ph} />`;
+  return `
+    <div class="${cls}">
+      <label for="lf-${f.id}">${escapeHtml(f.label)}</label>
+      ${input}
+    </div>
+  `;
+}
+
+function buildLegalSection(nodeId: string): string {
+  const doc = LEGAL_DOCS[nodeId];
+  if (!doc) return '';
+
+  const recipient = doc.recipient
+    ? `<div class="legal-recipient">À adresser à : ${escapeHtml(doc.recipient)}</div>`
+    : '';
+
+  const refs = doc.legalRefs?.length
+    ? `<div class="legal-meta" style="margin-top:14px;opacity:0.7">Fondements : ${doc.legalRefs.map(escapeHtml).join(' · ')}</div>`
+    : '';
+
+  const wikiLink = doc.wiki
+    ? `<a href="${doc.wiki.href}" class="resource-badge resource-badge-template" style="margin-top:14px">
+         <span class="opacity-60">▸</span>
+         <span>${escapeHtml(doc.wiki.label)}</span>
+         <span class="opacity-40">→</span>
+       </a>`
+    : '';
+
+  return `
+    <div class="mt-7 animate-fade-in">
+      ${sectionHead('▤', 'Document légal', 'text-[#8a9ee8]/70')}
+      <div class="legal-wrap" data-legal="${nodeId}">
+        <div class="legal-meta">${escapeHtml(doc.docType)}</div>
+        <h3 class="legal-title">${escapeHtml(doc.title)}</h3>
+        <p class="legal-intro">${escapeHtml(doc.intro)}</p>
+        ${recipient}
+        <form class="legal-form" onsubmit="return false">
+          ${doc.fields.map(renderField).join('')}
+        </form>
+        <div class="legal-preview-head">
+          <span class="legal-preview-label">▸ Aperçu du document</span>
+        </div>
+        <div class="legal-preview" data-legal-preview></div>
+        ${refs}
+        ${wikiLink}
+        <div class="legal-actions">
+          <button type="button" class="legal-btn legal-btn-primary" data-legal-act="print">⎙ Imprimer / PDF</button>
+          <button type="button" class="legal-btn" data-legal-act="email">✉ Email</button>
+          <button type="button" class="legal-btn" data-legal-act="copy">⧉ Copier</button>
+          <button type="button" class="legal-btn" data-legal-act="txt">↓ .txt</button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// ─── DOCUMENT LÉGAL : LOGIQUE D'EXPORT ────────────────────────────────────────
+
+function legalValues(wrap: HTMLElement): Record<string, string> {
+  const values: Record<string, string> = {};
+  wrap.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>('[data-field]').forEach(el => {
+    values[el.dataset.field!] = el.value;
+  });
+  return values;
+}
+
+function fillTemplate(body: string, values: Record<string, string>, mode: 'preview' | 'export'): string {
+  if (mode === 'export') {
+    return body.replace(/\{\{(\w+)\}\}/g, (_, k) => {
+      const v = (values[k] ?? '').trim();
+      return v ? v : '............................';
+    });
+  }
+  // preview : HTML échappé + champs vides surlignés
+  return escapeHtml(body).replace(/\{\{(\w+)\}\}/g, (_, k) => {
+    const v = (values[k] ?? '').trim();
+    return v
+      ? `<span style="color:rgba(138,158,232,0.95)">${escapeHtml(v)}</span>`
+      : `<span class="legal-blank">·············</span>`;
+  });
+}
+
+function updateLegalPreview(wrap: HTMLElement): void {
+  const id  = wrap.dataset.legal!;
+  const doc = LEGAL_DOCS[id];
+  if (!doc) return;
+  const preview = wrap.querySelector<HTMLElement>('[data-legal-preview]');
+  if (preview) preview.innerHTML = fillTemplate(doc.body, legalValues(wrap), 'preview');
+}
+
+function legalPlainText(wrap: HTMLElement): { doc: LegalDoc; text: string } {
+  const id  = wrap.dataset.legal!;
+  const doc = LEGAL_DOCS[id];
+  const head = doc.recipient ? `À adresser à : ${doc.recipient}\n\n` : '';
+  const text = head + fillTemplate(doc.body, legalValues(wrap), 'export');
+  return { doc, text };
+}
+
+function printLegalDoc(wrap: HTMLElement): void {
+  const { doc, text } = legalPlainText(wrap);
+  const iframe = document.createElement('iframe');
+  iframe.style.position = 'fixed';
+  iframe.style.right = '0';
+  iframe.style.bottom = '0';
+  iframe.style.width = '0';
+  iframe.style.height = '0';
+  iframe.style.border = '0';
+  document.body.appendChild(iframe);
+
+  const docHtml = `<!doctype html><html lang="fr"><head><meta charset="utf-8">
+    <title>${escapeHtml(doc.title)}</title>
+    <style>
+      @page { margin: 22mm 20mm; }
+      * { box-sizing: border-box; }
+      body { font-family: Georgia, 'Times New Roman', serif; color: #111; margin: 0; }
+      .doc-type { font-family: Arial, sans-serif; font-size: 10px; letter-spacing: 0.14em;
+        text-transform: uppercase; color: #555; margin-bottom: 4px; }
+      h1 { font-size: 17px; margin: 0 0 18px; border-bottom: 1.5px solid #111; padding-bottom: 8px; }
+      pre { font-family: 'Courier New', monospace; font-size: 12px; line-height: 1.7;
+        white-space: pre-wrap; word-break: break-word; margin: 0; }
+      .refs { margin-top: 22px; padding-top: 10px; border-top: 1px solid #999;
+        font-family: Arial, sans-serif; font-size: 9.5px; color: #666; }
+      .foot { margin-top: 26px; font-family: Arial, sans-serif; font-size: 8.5px; color: #999; }
+    </style></head><body>
+    <div class="doc-type">${escapeHtml(doc.docType)}</div>
+    <h1>${escapeHtml(doc.title)}</h1>
+    <pre>${escapeHtml(text)}</pre>
+    ${doc.legalRefs?.length ? `<div class="refs">Fondements : ${escapeHtml(doc.legalRefs.join(' · '))}</div>` : ''}
+    <div class="foot">Modèle indicatif à adapter. Pour les actes contentieux, faire valider par un avocat.</div>
+    </body></html>`;
+
+  const idoc = iframe.contentWindow?.document;
+  if (!idoc) { iframe.remove(); return; }
+  idoc.open();
+  idoc.write(docHtml);
+  idoc.close();
+
+  const doPrint = () => {
+    iframe.contentWindow?.focus();
+    iframe.contentWindow?.print();
+    setTimeout(() => iframe.remove(), 1500);
+  };
+  if (iframe.contentWindow?.document.readyState === 'complete') {
+    setTimeout(doPrint, 60);
+  } else {
+    iframe.onload = () => setTimeout(doPrint, 60);
+  }
+}
+
+function emailLegalDoc(wrap: HTMLElement): void {
+  const { doc, text } = legalPlainText(wrap);
+  const subject = encodeURIComponent(`${doc.docType} - ${doc.title}`);
+  const body    = encodeURIComponent(text);
+  window.location.href = `mailto:?subject=${subject}&body=${body}`;
+}
+
+function copyLegalDoc(wrap: HTMLElement, btn: HTMLElement): void {
+  const { text } = legalPlainText(wrap);
+  const done = () => {
+    const original = btn.textContent;
+    btn.textContent = '✓ Copié';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = original; btn.classList.remove('copied'); }, 1600);
+  };
+  if (navigator.clipboard?.writeText) {
+    navigator.clipboard.writeText(text).then(done).catch(() => fallbackCopy(text, done));
+  } else {
+    fallbackCopy(text, done);
+  }
+}
+
+function fallbackCopy(text: string, done: () => void): void {
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand('copy'); done(); } catch {}
+  ta.remove();
+}
+
+function downloadLegalTxt(wrap: HTMLElement): void {
+  const { doc, text } = legalPlainText(wrap);
+  const slug = doc.title.toLowerCase()
+    .normalize('NFD').replace(/[̀-ͯ]/g, '')
+    .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+  const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href = url;
+  a.download = `${slug || 'document'}.txt`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+function bindLegalSection(): void {
+  const wrap = document.querySelector<HTMLElement>('[data-legal]');
+  if (!wrap) return;
+
+  updateLegalPreview(wrap);
+
+  wrap.querySelectorAll<HTMLElement>('[data-field]').forEach(el => {
+    el.addEventListener('input', () => updateLegalPreview(wrap));
+  });
+
+  wrap.querySelectorAll<HTMLButtonElement>('[data-legal-act]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      switch (btn.dataset.legalAct) {
+        case 'print': printLegalDoc(wrap);          break;
+        case 'email': emailLegalDoc(wrap);          break;
+        case 'copy':  copyLegalDoc(wrap, btn);      break;
+        case 'txt':   downloadLegalTxt(wrap);       break;
+      }
+    });
+  });
 }
 
 // ─── RENDER : BOUTONS DE NAVIGATION ───────────────────────────────────────────
@@ -837,6 +1223,8 @@ function bindEvents(): void {
     history = ['root'];
     render();
   });
+
+  bindLegalSection();
 }
 
 // ─── PHASE BAR CLICKS ─────────────────────────────────────────────────────────

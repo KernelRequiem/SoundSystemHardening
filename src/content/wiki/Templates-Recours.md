@@ -4,6 +4,8 @@
 
 Ces templates sont des bases de travail, pas des formules magiques. Chaque situation est unique. Les passages entre `[crochets]` sont à remplacer. Les passages entre `{accolades}` sont à choisir selon le cas. Toujours faire relire par un avocat ou le FSJS pour les dossiers importants.
 
+> **Version interactive :** l'[outil Décision](/decision) génère, pour chaque situation (Avant / Pendant / Après), une version pré-remplissable et exportable de ces documents (formulaire, aperçu en direct, impression PDF, email, copie). Les modèles longs ci-dessous restent la référence détaillée, avec leurs variantes selon le type d'infraction.
+
 ---
 
 ## Sommaire
