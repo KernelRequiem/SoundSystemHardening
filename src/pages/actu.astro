@@ -3,13 +3,14 @@
 // Page actualités : message de bienvenue (lancement) + reprise détaillée
 // de toutes les entrées du ticker de la page d'accueil.
 import Layout from '../layouts/Layout.astro';
-import { tickerItems } from '../data/ticker';
+import { baseTickerItems } from '../data/ticker';
+import { actuPosts } from '../data/actu-posts';
 
 function parseItem(s: string): { tag: string; body: string } {
   const m = s.match(/^\[\s*([^\]]+?)\s*\]\s*(.*)$/);
   return m ? { tag: m[1], body: m[2] } : { tag: 'INFO', body: s };
 }
-const items = tickerItems.map(parseItem);
+const items = baseTickerItems.map(parseItem);
 
 const TAG_ACCENT: Record<string, string> = {
   'MAINTENANCE': '#ff4444',
@@ -19,6 +20,8 @@ const TAG_ACCENT: Record<string, string> = {
   'OPSEC': '#00ff9f',
   'INFRA': '#7a7a8a',
   'DROIT': '#ffb000',
+  'MOBILISATION': '#ff3bd4',
+  'CULTURE': '#00d9ff',
 };
 const accentOf = (tag: string) => TAG_ACCENT[tag] ?? '#00ff9f';
 ---
@@ -31,8 +34,52 @@ const accentOf = (tag: string) => TAG_ACCENT[tag] ?? '#00ff9f';
 
   <h1>Actualités</h1>
   <p class="text-dedsec-muted text-sm font-mono tracking-widest uppercase mb-8">
-    ▸ Le fil de la bannière, en détail
+    ▸ À la une, puis le fil de la bannière en détail
   </p>
+
+  <!-- ════════ À LA UNE (posts détaillés) ════════ -->
+  <div class="not-prose flex flex-col gap-6 mb-12">
+    {actuPosts.map(post => (
+      <article class="border border-dedsec-border bg-dedsec-darker p-6 md:p-8" style={`border-top:2px solid ${accentOf(post.tag)};`}>
+        <div class="flex items-center gap-3 mb-3 flex-wrap">
+          <span
+            class="font-mono text-[10px] font-bold tracking-[0.2em] uppercase px-3 py-1"
+            style={`color:${accentOf(post.tag)};border:1px solid ${accentOf(post.tag)}55;background:${accentOf(post.tag)}12;`}
+          >{post.tag}</span>
+          <span class="font-mono text-[10px] tracking-widest uppercase text-dedsec-muted">{post.dateFR}</span>
+        </div>
+
+        <h2 class="text-dedsec-text font-bold mb-3" style="font-family:'Space Grotesk',sans-serif;font-size:21px;line-height:1.3;">{post.titre}</h2>
+
+        <p class="text-dedsec-text leading-relaxed mb-5" style={`font-family:'Space Grotesk',sans-serif;font-weight:600;border-left:3px solid ${accentOf(post.tag)};padding-left:14px;`}>{post.chapo}</p>
+
+        {post.corps.map(par => (
+          <p class="text-dedsec-text/90 leading-relaxed mb-4" style="font-family:'Space Grotesk',sans-serif;">{par}</p>
+        ))}
+
+        {post.encadre && (
+          <div class="my-5 p-4" style={`background:${accentOf(post.tag)}0d;border-left:3px solid ${accentOf(post.tag)};`}>
+            <div class="font-mono text-[10px] font-bold tracking-[0.2em] uppercase mb-2" style={`color:${accentOf(post.tag)};`}>{post.encadre.titre}</div>
+            <p class="text-dedsec-text/90 leading-relaxed m-0" style="font-family:'Space Grotesk',sans-serif;font-style:italic;">{post.encadre.texte}</p>
+          </div>
+        )}
+
+        {post.liens && (
+          <div class="flex flex-wrap gap-3 mt-5">
+            {post.liens.map(l => (
+              <a href={l.href} class="inline-flex items-center gap-2 font-mono text-[11px] font-bold tracking-widest no-underline px-3 py-2 transition-all" style="border:1px solid rgba(0,255,159,0.4);color:rgba(0,255,159,0.9);">▸ {l.label}</a>
+            ))}
+          </div>
+        )}
+
+        {post.source && (
+          <p class="text-[11px] text-dedsec-muted/70 font-mono mt-5 m-0">
+            Source : <a href={post.source.url} target="_blank" rel="noopener" class="text-neon-green/70 hover:text-neon-green">{post.source.label} ↗</a>
+          </p>
+        )}
+      </article>
+    ))}
+  </div>
 
   <!-- ════════ MOT DE BIENVENUE ════════ -->
   <div class="not-prose border border-dedsec-border bg-dedsec-darker p-6 md:p-8 mb-12" style="border-top:2px solid rgba(0,255,159,0.5);background:linear-gradient(180deg,rgba(0,255,159,0.04),rgba(8,8,12,0.4));">
