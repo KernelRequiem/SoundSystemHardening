@@ -1,0 +1,897 @@
+---
+/**
+ * SoundCheck.astro — Simulateur d'empreinte acoustique topographique (v2)
+ * -------------------------------------------------------------------------
+ * Module SOUNDCHECK / Soundsystem Hardening. 100 % client-side.
+ * Saisie directe des coordonnées (zéro tuile chargée), carte à la demande,
+ * orientation du stack, radar polaire, rapport exportable.
+ */
+---
+
+<!-- Leaflet 1.9.4 — seul asset externe (tuiles OSM exclues).
+     Pas de SRI : aligné sur map.astro, l'origine est verrouillée par la CSP. -->
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  crossorigin=""
+/>
+<script
+  is:inline
+  src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+  crossorigin=""></script>
+
+<section id="soundcheck" class="sc-shell">
+
+  <!-- == HEADER INSTRUMENT ============================================== -->
+  <header class="sc-head">
+    <div>
+      <div class="sc-head-title"><span class="sc-head-pulse"></span>≋ SOUNDCHECK <span class="sc-head-version">v2.0</span></div>
+      <div class="sc-head-sub">EMPREINTE ACOUSTIQUE · RAYCASTING TOPO · DIRECTIVITÉ · CLIENT-SIDE</div>
+    </div>
+    <div class="sc-head-coords">
+      <span class="sc-head-coords-label">SOURCE</span>
+      <span id="sc-coords" class="sc-head-coords-value">NON FIXÉE</span>
+    </div>
+  </header>
+
+  <!-- == PANNEAU SOURCE ================================================= -->
+  <div class="sc-source-panel">
+    <div class="sc-panel-label">⌖ POINT SOURCE</div>
+    <div class="sc-source-row">
+      <div class="sc-field">
+        <label for="sc-lat">LATITUDE</label>
+        <input id="sc-lat" type="number" step="any" min="-90" max="90" placeholder="46.60000" inputmode="decimal" />
+      </div>
+      <div class="sc-field">
+        <label for="sc-lng">LONGITUDE</label>
+        <input id="sc-lng" type="number" step="any" min="-180" max="180" placeholder="2.40000" inputmode="decimal" />
+      </div>
+      <button id="sc-fix-btn" class="sc-btn-sm">[ FIXER ]</button>
+    </div>
+    <div class="sc-source-opts">
+      <button id="sc-loadmap-btn" class="sc-btn-sm sc-btn-ghost">▦ CHARGER LA CARTE</button>
+      <label class="sc-check">
+        <input type="checkbox" id="sc-offline" />
+        <span class="sc-check-box" aria-hidden="true"></span>
+        HORS-LIGNE STRICT <span class="sc-check-hint">(zéro requête topo)</span>
+      </label>
+    </div>
+  </div>
+
+  <!-- == ZONE CARTE (lazy — aucune tuile sans action explicite) ========= -->
+  <div id="sc-map-placeholder" class="sc-map-placeholder">
+    <div class="sc-map-placeholder-icon">▦</div>
+    <div class="sc-map-placeholder-title">CARTE NON CHARGÉE</div>
+    <div class="sc-map-placeholder-text">
+      OPSEC : les tuiles cartographiques révèlent la zone consultée à l'opérateur de tuiles.
+      Saisis les coordonnées directement, ou charge la carte en connaissance de cause.
+    </div>
+  </div>
+  <div id="sc-map-wrap" class="relative hidden">
+    <div id="sc-map" class="h-[50vh] min-h-[300px] w-full"></div>
+  </div>
+
+  <!-- == ENVIRONNEMENT D'EMISSION ======================================= -->
+  <div class="sc-venue-panel">
+    <div class="sc-panel-label">⌂ ENVIRONNEMENT D'ÉMISSION</div>
+    <div class="sc-venue-grid">
+      <button type="button" class="sc-venue-btn active" data-venue="openair">⛶<span>PLEIN AIR</span></button>
+      <button type="button" class="sc-venue-btn" data-venue="canvas">⌅<span>CHAPITEAU</span></button>
+      <button type="button" class="sc-venue-btn" data-venue="metal">▤<span>HANGAR MÉTAL</span></button>
+      <button type="button" class="sc-venue-btn" data-venue="masonry">▦<span>BÂTIMENT DUR</span></button>
+      <button type="button" class="sc-venue-btn" data-venue="basement">▼<span>SOUS-SOL</span></button>
+    </div>
+    <div id="sc-openings-row" class="sc-openings hidden">
+      <span class="sc-openings-label">OUVERTURES</span>
+      <button type="button" class="sc-open-btn active" data-open="closed">FERMÉES</button>
+      <button type="button" class="sc-open-btn" data-open="partial">PARTIELLES</button>
+      <button type="button" class="sc-open-btn" data-open="open">OUVERTES</button>
+    </div>
+    <div id="sc-venue-hint" class="sc-venue-hint"></div>
+  </div>
+
+  <!-- == CONTROLES TERRAIN ============================================== -->
+  <div class="sc-controls">
+    <div class="sc-panel-label">⊿ PARAMÈTRES DU RIG</div>
+
+    <!-- Slider puissance par stack -->
+    <div>
+      <div class="sc-slider-row">
+        <label for="sc-power" class="sc-slider-label">Puissance par stack</label>
+        <span id="sc-power-val" class="sc-slider-value">10 kW / stack</span>
+      </div>
+      <input id="sc-power" type="range" min="1" max="200" step="1" value="10"
+        class="sc-slider w-full" aria-label="Puissance électrique par stack en kilowatts" />
+    </div>
+
+    <!-- Slider nombre de stacks (teknival : cumul énergétique) -->
+    <div>
+      <div class="sc-slider-row">
+        <label for="sc-count" class="sc-slider-label">Nombre de stacks <span class="sc-slider-hint">(sound systems sur site)</span></label>
+        <span id="sc-count-val" class="sc-slider-value">1 stack</span>
+      </div>
+      <input id="sc-count" type="range" min="1" max="40" step="1" value="1"
+        class="sc-slider w-full" aria-label="Nombre de stacks ou sound systems sur le site" />
+      <div id="sc-total-val" class="sc-total-line">10 kW — stack unique</div>
+    </div>
+
+    <!-- Slider hauteur du mur -->
+    <div>
+      <div class="sc-slider-row">
+        <label for="sc-height" class="sc-slider-label">Hauteur du mur de son</label>
+        <span id="sc-height-val" class="sc-slider-value">2 m</span>
+      </div>
+      <input id="sc-height" type="range" min="1" max="8" step="0.5" value="2"
+        class="sc-slider w-full" aria-label="Hauteur du mur de son en mètres" />
+    </div>
+
+    <!-- Slider orientation + boussole -->
+    <div class="sc-orient-row">
+      <div class="sc-orient-slider">
+        <div class="sc-slider-row">
+          <label for="sc-orient" class="sc-slider-label"><span id="sc-orient-label">Orientation du stack</span> <span id="sc-orient-hint" class="sc-slider-hint">(face avant)</span></label>
+          <span id="sc-orient-val" class="sc-slider-value">0° N</span>
+        </div>
+        <input id="sc-orient" type="range" min="0" max="355" step="5" value="0"
+          class="sc-slider w-full" aria-label="Orientation de la face avant du stack en degrés" />
+      </div>
+      <canvas id="sc-compass" class="sc-compass" width="64" height="64" aria-hidden="true"></canvas>
+    </div>
+
+    <!-- Bouton d'action principal — règle des 3 clics -->
+    <button id="sc-scan-btn" disabled class="sc-scan-btn">
+      [ LANCER LE SCAN TOPOGRAPHIQUE ]
+    </button>
+    <div class="sc-progress-track">
+      <div id="sc-progress" class="sc-progress-bar"></div>
+    </div>
+  </div>
+
+  <!-- == READOUTS BRUTS ================================================== -->
+  <div class="sc-readouts">
+    <div class="sc-readout">
+      <div class="sc-readout-label">Empreinte audible</div>
+      <div id="sc-out-area" class="sc-readout-value">--</div>
+    </div>
+    <div class="sc-readout">
+      <div class="sc-readout-label">Masque naturel</div>
+      <div id="sc-out-mask" class="sc-readout-value">--</div>
+      <div class="sc-gauge-track"><div id="sc-gauge-mask" class="sc-gauge-bar"></div></div>
+    </div>
+    <div class="sc-readout">
+      <div class="sc-readout-label">Rayon réf. plat</div>
+      <div id="sc-out-flat" class="sc-readout-value">--</div>
+    </div>
+    <div class="sc-readout">
+      <div class="sc-readout-label">Mode calcul</div>
+      <div id="sc-out-mode" class="sc-readout-value">--</div>
+    </div>
+  </div>
+
+  <!-- == RADAR POLAIRE (fonctionne sans carte) =========================== -->
+  <div id="sc-radar-wrap" class="sc-radar-wrap hidden">
+    <div class="sc-panel-label">◉ RADAR D'EMPREINTE — VUE POLAIRE</div>
+    <canvas id="sc-radar" class="sc-radar"></canvas>
+    <div class="sc-radar-legend">
+      <span><i class="sc-lg sc-lg-45"></i> audible ≥ 45 dB</span>
+      <span><i class="sc-lg sc-lg-30"></i> résiduel ≥ 30 dB</span>
+      <span><i class="sc-lg sc-lg-flat"></i> réf. terrain plat</span>
+      <span><i class="sc-lg sc-lg-axis"></i> axe du stack</span>
+    </div>
+  </div>
+
+  <!-- == RAPPORT ========================================================= -->
+  <div id="sc-report-wrap" class="sc-report-wrap hidden">
+    <div class="sc-report-head">
+      <div class="sc-panel-label" style="margin:0;">▤ RAPPORT D'ANALYSE — PRÊT À L'EXPORT</div>
+      <div class="sc-report-actions">
+        <button id="sc-export-md" class="sc-btn-sm">↓ EXPORT .MD</button>
+        <button id="sc-export-print" class="sc-btn-sm sc-btn-ghost">⎙ IMPRIMER / PDF</button>
+      </div>
+    </div>
+    <div id="sc-report" class="sc-report"></div>
+  </div>
+
+  <!-- == CONSOLE SYSTEME ================================================ -->
+  <div id="sc-console" class="sc-console" aria-live="polite"></div>
+
+  <footer class="sc-foot">
+    OPSEC: coordonnées en RAM uniquement · carte et topo uniquement sur action explicite ·
+    fallback hors-ligne ISO 9613-2 · seuils 45/30 dB SPL · rapport généré localement
+  </footer>
+</section>
+
+<!-- Logique client (bundlée par Astro/Vite) -->
+<script src="../scripts/soundcheck-logic.js"></script>
+
+<style is:global>
+  /* ══════════════════════════════════════════════════════════
+     SOUNDCHECK v2 — instrument panel, raccord DA dedsec
+     Typo : Space Grotesk (corps) · JetBrains Mono (codes)
+  ══════════════════════════════════════════════════════════ */
+
+  .sc-shell {
+    background:
+      linear-gradient(180deg, rgba(0,255,159,0.025) 0%, rgba(8,8,12,0) 120px),
+      rgba(8, 8, 12, 0.55);
+    border: 1px solid rgba(42, 42, 58, 0.65);
+    border-left: 3px solid rgba(0, 255, 159, 0.28);
+    overflow: hidden;
+    position: relative;
+  }
+  /* Scanline subtile sur tout l'instrument */
+  .sc-shell::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: repeating-linear-gradient(
+      0deg, transparent 0 3px, rgba(0, 0, 0, 0.06) 3px 4px
+    );
+    z-index: 1;
+  }
+  .sc-shell > * { position: relative; z-index: 2; }
+
+  /* ── Labels de panneau ── */
+  .sc-panel-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: rgba(0, 255, 159, 0.65);
+    margin-bottom: 14px;
+  }
+
+  /* ── Header instrument ── */
+  .sc-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 15px 18px;
+    border-bottom: 1px solid rgba(42, 42, 58, 0.65);
+    background: rgba(5, 6, 10, 0.85);
+  }
+  .sc-head-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: #00ff9f;
+    text-shadow: 0 0 14px rgba(0, 255, 159, 0.3);
+  }
+  .sc-head-pulse {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: #00ff9f;
+    box-shadow: 0 0 8px #00ff9f;
+    animation: sc-pulse 2.2s ease-in-out infinite;
+  }
+  @keyframes sc-pulse {
+    0%, 100% { opacity: 1; box-shadow: 0 0 8px #00ff9f; }
+    50% { opacity: 0.45; box-shadow: 0 0 3px #00ff9f; }
+  }
+  .sc-head-version { color: rgba(122, 122, 138, 0.6); font-weight: 400; }
+  .sc-head-sub {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8.5px;
+    letter-spacing: 0.18em;
+    color: rgba(122, 122, 138, 0.7);
+    margin-top: 5px;
+  }
+  .sc-head-coords { text-align: right; line-height: 1.5; }
+  .sc-head-coords-label {
+    display: block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.22em;
+    color: rgba(122, 122, 138, 0.6);
+    text-transform: uppercase;
+  }
+  .sc-head-coords-value {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: #ffb000;
+  }
+
+  /* ── Panneau source ── */
+  .sc-source-panel {
+    padding: 18px;
+    border-bottom: 1px solid rgba(42, 42, 58, 0.65);
+  }
+  .sc-source-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
+    gap: 12px;
+    align-items: end;
+  }
+  @media (max-width: 540px) {
+    .sc-source-row { grid-template-columns: 1fr 1fr; }
+    .sc-source-row .sc-btn-sm { grid-column: 1 / -1; }
+  }
+  .sc-field { display: flex; flex-direction: column; gap: 6px; }
+  .sc-field label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8.5px;
+    letter-spacing: 0.2em;
+    color: rgba(122, 122, 138, 0.8);
+  }
+  .sc-field input {
+    background: rgba(5, 6, 10, 0.92);
+    border: 1px solid rgba(42, 42, 58, 0.85);
+    color: #e8e8f0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    padding: 11px 12px;
+    outline: none;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    -moz-appearance: textfield;
+  }
+  .sc-field input::-webkit-outer-spin-button,
+  .sc-field input::-webkit-inner-spin-button { -webkit-appearance: none; }
+  .sc-field input:focus {
+    border-color: rgba(0, 255, 159, 0.55);
+    box-shadow: 0 0 12px rgba(0, 255, 159, 0.12);
+  }
+
+  .sc-source-opts {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 16px;
+    margin-top: 14px;
+  }
+
+  /* ── Petits boutons ── */
+  .sc-btn-sm {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    padding: 11px 16px;
+    background: rgba(0, 255, 159, 0.08);
+    border: 1px solid rgba(0, 255, 159, 0.4);
+    color: #00ff9f;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .sc-btn-sm:hover {
+    background: rgba(0, 255, 159, 0.16);
+    box-shadow: 0 0 14px rgba(0, 255, 159, 0.2);
+  }
+  .sc-btn-ghost {
+    background: none;
+    border-color: rgba(42, 42, 58, 0.9);
+    color: rgba(122, 122, 138, 0.9);
+  }
+  .sc-btn-ghost:hover {
+    border-color: rgba(0, 255, 159, 0.4);
+    color: #00ff9f;
+    background: rgba(0, 255, 159, 0.04);
+    box-shadow: none;
+  }
+
+  /* ── Checkbox custom ── */
+  .sc-check {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.14em;
+    color: rgba(154, 162, 180, 0.9);
+    cursor: pointer;
+    user-select: none;
+  }
+  .sc-check input { position: absolute; opacity: 0; pointer-events: none; }
+  .sc-check-box {
+    width: 16px; height: 16px;
+    flex-shrink: 0;
+    border: 1px solid rgba(42, 42, 58, 1);
+    background: rgba(5, 6, 10, 0.92);
+    position: relative;
+    transition: all 0.15s;
+  }
+  .sc-check input:checked + .sc-check-box {
+    border-color: #00ff9f;
+    background: rgba(0, 255, 159, 0.12);
+    box-shadow: 0 0 10px rgba(0, 255, 159, 0.25);
+  }
+  .sc-check input:checked + .sc-check-box::after {
+    content: '✕';
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #00ff9f;
+    font-size: 10px;
+  }
+  .sc-check-hint { color: rgba(122, 122, 138, 0.55); }
+
+  /* ── Placeholder carte ── */
+  .sc-map-placeholder {
+    padding: 34px 24px;
+    text-align: center;
+    border-bottom: 1px solid rgba(42, 42, 58, 0.65);
+    background:
+      radial-gradient(ellipse at center, rgba(0, 255, 159, 0.03) 0%, transparent 70%),
+      rgba(5, 6, 10, 0.6);
+  }
+  .sc-map-placeholder-icon {
+    font-size: 26px;
+    color: rgba(0, 255, 159, 0.3);
+    margin-bottom: 8px;
+  }
+  .sc-map-placeholder-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.26em;
+    color: rgba(122, 122, 138, 0.9);
+    margin-bottom: 8px;
+  }
+  .sc-map-placeholder-text {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 11.5px;
+    color: rgba(122, 122, 138, 0.7);
+    line-height: 1.7;
+    max-width: 520px;
+    margin: 0 auto;
+  }
+
+  /* ── Carte ── */
+  #sc-map { background: #050609; }
+  #sc-map .sc-tiles {
+    filter: invert(1) hue-rotate(180deg) saturate(0.3) brightness(0.7) contrast(1.1);
+  }
+  .sc-crosshair {
+    color: #00ff9f;
+    font-size: 26px;
+    line-height: 32px;
+    text-align: center;
+    text-shadow: 0 0 10px rgba(0, 255, 159, 0.8);
+  }
+
+  /* ── Environnement d'émission ── */
+  .sc-venue-panel {
+    padding: 18px;
+    border-top: 1px solid rgba(42, 42, 58, 0.65);
+  }
+  .sc-venue-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+  }
+  @media (max-width: 640px) {
+    .sc-venue-grid { grid-template-columns: repeat(2, 1fr); }
+    .sc-venue-grid .sc-venue-btn:last-child { grid-column: 1 / -1; }
+  }
+  .sc-venue-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 12px 6px 10px;
+    background: rgba(5, 6, 10, 0.7);
+    border: 1px solid rgba(42, 42, 58, 0.9);
+    color: rgba(122, 122, 138, 0.85);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8.5px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .sc-venue-btn > :first-child { font-size: 17px; line-height: 1; font-weight: 400; }
+  .sc-venue-btn:hover {
+    border-color: rgba(0, 255, 159, 0.35);
+    color: rgba(0, 255, 159, 0.8);
+  }
+  .sc-venue-btn.active {
+    border-color: #00ff9f;
+    color: #00ff9f;
+    background: rgba(0, 255, 159, 0.07);
+    box-shadow: 0 0 14px rgba(0, 255, 159, 0.15), inset 0 0 18px rgba(0, 255, 159, 0.04);
+    text-shadow: 0 0 8px rgba(0, 255, 159, 0.4);
+  }
+
+  .sc-openings {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+  }
+  .sc-openings-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8.5px;
+    letter-spacing: 0.2em;
+    color: rgba(122, 122, 138, 0.7);
+    margin-right: 4px;
+  }
+  .sc-open-btn {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    padding: 7px 13px;
+    background: rgba(5, 6, 10, 0.7);
+    border: 1px solid rgba(42, 42, 58, 0.9);
+    color: rgba(122, 122, 138, 0.85);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .sc-open-btn:hover { border-color: rgba(255, 176, 0, 0.4); color: #ffb000; }
+  .sc-open-btn.active {
+    border-color: #ffb000;
+    color: #ffb000;
+    background: rgba(255, 176, 0, 0.07);
+    box-shadow: 0 0 10px rgba(255, 176, 0, 0.15);
+  }
+
+  .sc-venue-hint {
+    margin-top: 12px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 11px;
+    line-height: 1.65;
+    color: rgba(122, 122, 138, 0.8);
+    border-left: 2px solid rgba(0, 255, 159, 0.25);
+    padding-left: 10px;
+  }
+
+  /* ── Contrôles ── */
+  .sc-controls {
+    display: grid;
+    gap: 22px;
+    padding: 20px 18px;
+    border-top: 1px solid rgba(42, 42, 58, 0.65);
+  }
+  .sc-slider-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 10px;
+  }
+  .sc-slider-label {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: rgba(122, 122, 138, 0.88);
+  }
+  .sc-slider-hint {
+    color: rgba(122, 122, 138, 0.5);
+    text-transform: none;
+    font-weight: 400;
+  }
+  .sc-slider-value {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    color: #00ff9f;
+    text-shadow: 0 0 10px rgba(0, 255, 159, 0.3);
+  }
+  .sc-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 12px;
+    background: rgba(5, 6, 10, 0.92);
+    border: 1px solid rgba(42, 42, 58, 0.8);
+    outline: none;
+  }
+  .sc-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 32px; height: 32px;
+    background: linear-gradient(135deg, #00ff9f 0%, #00cc7f 100%);
+    border: 2px solid #08080c;
+    box-shadow: 0 0 12px rgba(0, 255, 159, 0.4);
+    cursor: pointer;
+  }
+  .sc-slider::-moz-range-thumb {
+    width: 32px; height: 32px;
+    background: linear-gradient(135deg, #00ff9f 0%, #00cc7f 100%);
+    border: 2px solid #08080c;
+    border-radius: 0;
+    box-shadow: 0 0 12px rgba(0, 255, 159, 0.4);
+    cursor: pointer;
+  }
+
+  .sc-total-line {
+    margin-top: 9px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: rgba(255, 176, 0, 0.9);
+    border-left: 2px solid rgba(255, 176, 0, 0.4);
+    padding-left: 10px;
+  }
+
+  /* Orientation + boussole */
+  .sc-orient-row {
+    display: grid;
+    grid-template-columns: 1fr 64px;
+    gap: 18px;
+    align-items: center;
+  }
+  .sc-compass {
+    width: 64px; height: 64px;
+    flex-shrink: 0;
+  }
+
+  /* ── Bouton scan ── */
+  .sc-scan-btn {
+    width: 100%;
+    padding: 19px 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #08080c;
+    background: linear-gradient(180deg, #00ff9f 0%, #00e68f 100%);
+    border: 1px solid #00ff9f;
+    cursor: pointer;
+    transition: all 0.15s;
+    box-shadow: 0 0 22px rgba(0, 255, 159, 0.2), inset 0 1px 0 rgba(255,255,255,0.25);
+  }
+  .sc-scan-btn:hover:not(:disabled) {
+    background: rgba(0, 255, 159, 0.08);
+    color: #00ff9f;
+    box-shadow: 0 0 28px rgba(0, 255, 159, 0.3);
+    text-shadow: 0 0 10px rgba(0, 255, 159, 0.5);
+  }
+  .sc-scan-btn:active:not(:disabled) { transform: scale(0.995); }
+  .sc-scan-btn:disabled {
+    background: rgba(19, 19, 26, 0.8);
+    border-color: rgba(42, 42, 58, 0.8);
+    color: rgba(122, 122, 138, 0.5);
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+  .sc-scan-btn.sc-scanning {
+    animation: sc-scanning 1.2s ease-in-out infinite;
+    color: #00ff9f;
+    background: rgba(0, 255, 159, 0.05);
+  }
+  @keyframes sc-scanning {
+    0%, 100% { border-color: rgba(0, 255, 159, 0.3); }
+    50% { border-color: #00ff9f; box-shadow: 0 0 24px rgba(0, 255, 159, 0.35); }
+  }
+
+  .sc-progress-track {
+    height: 3px;
+    background: rgba(42, 42, 58, 0.6);
+    margin-top: -1px;
+  }
+  .sc-progress-bar {
+    height: 100%;
+    width: 0;
+    background: linear-gradient(90deg, #00cc7f, #00ff9f);
+    box-shadow: 0 0 10px rgba(0, 255, 159, 0.6);
+    transition: width 0.2s;
+  }
+
+  /* ── Readouts ── */
+  .sc-readouts {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    border-top: 1px solid rgba(42, 42, 58, 0.65);
+  }
+  @media (min-width: 640px) {
+    .sc-readouts { grid-template-columns: repeat(4, 1fr); }
+  }
+  .sc-readout {
+    padding: 15px 12px 13px;
+    text-align: center;
+    border-right: 1px solid rgba(42, 42, 58, 0.45);
+    border-bottom: 1px solid rgba(42, 42, 58, 0.45);
+    background: rgba(5, 6, 10, 0.4);
+  }
+  .sc-readout:last-child { border-right: none; }
+  .sc-readout-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8.5px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(122, 122, 138, 0.7);
+  }
+  .sc-readout-value {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 18px;
+    font-weight: 700;
+    color: #e8e8f0;
+    margin-top: 7px;
+  }
+  .sc-good { color: #00ff9f !important; text-shadow: 0 0 10px rgba(0, 255, 159, 0.45); }
+  .sc-mid  { color: #ffb000 !important; text-shadow: 0 0 10px rgba(255, 176, 0, 0.3); }
+  .sc-bad  { color: #ff4444 !important; text-shadow: 0 0 10px rgba(255, 68, 68, 0.3); }
+
+  .sc-gauge-track {
+    height: 3px;
+    background: rgba(42, 42, 58, 0.7);
+    margin-top: 9px;
+  }
+  .sc-gauge-bar {
+    height: 100%;
+    width: 0;
+    transition: width 0.6s ease, background 0.3s;
+  }
+
+  /* ── Radar ── */
+  .sc-radar-wrap {
+    padding: 20px 18px 14px;
+    border-top: 1px solid rgba(42, 42, 58, 0.65);
+    background:
+      radial-gradient(ellipse at center, rgba(0, 255, 159, 0.025) 0%, transparent 65%),
+      rgba(5, 6, 10, 0.5);
+  }
+  .sc-radar {
+    display: block;
+    width: 100%;
+    max-width: 560px;
+    margin: 0 auto;
+  }
+  .sc-radar-legend {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 14px;
+    margin-top: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    color: rgba(122, 122, 138, 0.85);
+  }
+  .sc-radar-legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .sc-lg { display: inline-block; width: 14px; height: 0; border-top: 2px solid; }
+  .sc-lg-45   { border-color: #ff5c33; }
+  .sc-lg-30   { border-color: #00ff9f; border-top-style: dashed; }
+  .sc-lg-flat { border-color: #ffb000; border-top-style: dashed; }
+  .sc-lg-axis { border-color: #00ff9f; border-top-style: dotted; }
+
+  /* ── Rapport ── */
+  .sc-report-wrap {
+    border-top: 1px solid rgba(42, 42, 58, 0.65);
+  }
+  .sc-report-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 16px 18px;
+    background: rgba(5, 6, 10, 0.7);
+    border-bottom: 1px solid rgba(42, 42, 58, 0.5);
+  }
+  .sc-report-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+
+  .sc-report { padding: 18px; }
+
+  .sc-rp-block {
+    border: 1px solid rgba(42, 42, 58, 0.55);
+    border-left: 2px solid rgba(0, 255, 159, 0.3);
+    background: rgba(8, 8, 12, 0.5);
+    padding: 16px 18px;
+    margin-bottom: 14px;
+  }
+  .sc-rp-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9.5px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    color: #00ff9f;
+    margin-bottom: 13px;
+    padding-bottom: 7px;
+    border-bottom: 1px solid rgba(0, 255, 159, 0.12);
+  }
+  .sc-rp-grid div {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 12px;
+    color: rgba(200, 200, 216, 0.9);
+    padding: 5px 0;
+    border-bottom: 1px dotted rgba(42, 42, 58, 0.6);
+  }
+  .sc-rp-grid div:last-child { border-bottom: none; }
+  .sc-rp-k { color: rgba(122, 122, 138, 0.85); }
+  .sc-rp-hl { color: #00ff9f; font-weight: 700; }
+  .sc-rp-mono { font-family: 'JetBrains Mono', monospace; font-size: 11px; }
+  .sc-rp-dim { color: rgba(122, 122, 138, 0.55); }
+
+  .sc-rp-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 11.5px;
+  }
+  .sc-rp-table th {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8.5px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(122, 122, 138, 0.75);
+    text-align: left;
+    padding: 6px 10px;
+    border-bottom: 1px solid rgba(42, 42, 58, 0.8);
+  }
+  .sc-rp-table td {
+    padding: 7px 10px;
+    color: rgba(200, 200, 216, 0.85);
+    border-bottom: 1px solid rgba(42, 42, 58, 0.35);
+  }
+  .sc-rp-table tr:hover td { background: rgba(0, 255, 159, 0.025); }
+  .sc-rp-ok   { color: #00ff9f; font-family: 'JetBrains Mono', monospace; font-size: 10px; }
+  .sc-rp-warn { color: #ffb000; font-family: 'JetBrains Mono', monospace; font-size: 10px; }
+
+  .sc-rp-law-cadre, .sc-rp-check {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 11.5px;
+    line-height: 1.7;
+    color: rgba(154, 162, 180, 0.9);
+    background: rgba(0, 255, 159, 0.03);
+    border: 1px solid rgba(0, 255, 159, 0.1);
+    border-left: 2px solid rgba(0, 255, 159, 0.4);
+    padding: 11px 14px;
+    margin: 0 0 12px;
+  }
+  .sc-rp-check { margin: 12px 0 0; }
+  .sc-rp-law strong { color: rgba(220, 226, 240, 0.95); }
+  .sc-rp-args {
+    margin: 0;
+    padding-left: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .sc-rp-args li {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 12px;
+    line-height: 1.75;
+    color: rgba(170, 178, 196, 0.9);
+  }
+  .sc-rp-reserves p {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 11px;
+    line-height: 1.7;
+    color: rgba(122, 122, 138, 0.8);
+    margin: 0;
+  }
+
+  /* ── Console ── */
+  .sc-console {
+    height: 128px;
+    overflow-y: auto;
+    padding: 10px 18px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px;
+    line-height: 1.7;
+    background: rgba(5, 6, 10, 0.85);
+    border-top: 1px solid rgba(42, 42, 58, 0.65);
+  }
+  .sc-log      { color: rgba(122, 122, 138, 0.85); }
+  .sc-log-ok   { color: #00ff9f; }
+  .sc-log-warn { color: #ffb000; }
+  .sc-log-err  { color: #ff4444; }
+
+  /* ── Footer OPSEC ── */
+  .sc-foot {
+    padding: 9px 18px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8.5px;
+    letter-spacing: 0.08em;
+    color: rgba(122, 122, 138, 0.55);
+    background: rgba(5, 6, 10, 0.85);
+    border-top: 1px solid rgba(42, 42, 58, 0.65);
+  }
+</style>

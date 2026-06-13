@@ -4,7 +4,7 @@ import Layout from '../layouts/Layout.astro';
 
 <Layout
   title="Outils"
-  description="Index de tous les outils interactifs du site : URGENCE, DÉCISION, MAP, TimeSeal, InfoCrypt, StripMeta. Chaque outil est 100% client-side, sans compte, sans serveur."
+  description="Index de tous les outils interactifs du site : URGENCE, DÉCISION, MAP, SoundCheck, TimeSeal, InfoCrypt, StripMeta. Chaque outil est 100% client-side, sans compte, sans serveur."
   category="OUTILS"
 >
 
@@ -79,6 +79,43 @@ import Layout from '../layouts/Layout.astro';
       </div>
     </a>
 
+    <!-- SOUNDCHECK -->
+    <a href="/soundcheck" class="tool-card">
+      <div class="tool-card-head">
+        <span class="tool-icon">≋</span>
+        <div>
+          <div class="tool-name">SOUNDCHECK</div>
+          <div class="tool-tag">TERRAIN · ACOUSTIQUE</div>
+        </div>
+        <span class="tool-arrow">→</span>
+      </div>
+      <p class="tool-desc">
+        Simulateur d'empreinte acoustique topographique. Saisis les coordonnées du spot (zéro tuile chargée) ou place le point sur la carte, règle puissance, hauteur et orientation du stack : l'outil trace 48 rayons sur le relief réel (ISO 9613-2 + diffraction de Maekawa + directivité) et affiche l'empreinte sur radar polaire. Rapport détaillé exportable (.md / PDF) avec analyse par secteur et argumentaire juridique prêt pour la zone. Web Worker, mode hors-ligne strict.
+      </p>
+      <div class="tool-meta">
+        <span>Web Worker · Raycasting · Radar polaire · Rapport juridique</span>
+        <span>ISO 9613-2 · 48 azimuts · Export MD/PDF</span>
+      </div>
+    </a>
+
+    <!-- COPWATCH -->
+    <a href="/copwatch" class="tool-card">
+      <div class="tool-card-head">
+        <span class="tool-icon">◎</span>
+        <div>
+          <div class="tool-name">COPWATCH</div>
+          <div class="tool-tag">VEILLE · DOCUMENTATION</div>
+        </div>
+        <span class="tool-arrow">→</span>
+      </div>
+      <p class="tool-desc">
+        Observatoire documentaire des tactiques policières observées contre les free parties : renseignement, arrêtés préfectoraux, filtrage routier, saisies, usage de la force, exploitation des téléphones, qualification d'organisateur. Fiches sourcées et graduées en fiabilité, heatmap tactique par phase, renvois directs vers l'Outil Décision et le wiki juridique. Documentation publique uniquement, aucun conseil d'évitement.
+      </p>
+      <div class="tool-meta">
+        <span>Données locales · Sans stockage</span>
+        <span>9 fiches · Heatmap</span>
+      </div>
+    </a>
 
   </div>
 
@@ -200,6 +237,13 @@ import Layout from '../layouts/Layout.astro';
           <td>Orgas, collectifs</td>
           <td><span class="no">✕ Non</span></td>
           <td><span class="no">Aucune (lecture)</span></td>
+        </tr>
+        <tr>
+          <td><a href="/soundcheck" class="tools-table-link">≋ SOUNDCHECK</a></td>
+          <td>Repérage et choix du spot, avant l'événement</td>
+          <td>Orgas son, techniciens</td>
+          <td><span class="no">Optionnelle (topo)</span></td>
+          <td><span class="no">Aucune</span></td>
         </tr>
         <tr>
           <td><a href="/timeseal" class="tools-table-link">⊡ TIMESEAL</a></td>

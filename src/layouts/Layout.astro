@@ -130,6 +130,8 @@ const navigation = [
     { href: '/wiki/wiki-ports-reseau', label: 'Ports réseau', emoji: '🔌' },
   ], tools: [
     { href: '/tools',       label: 'Index outils',  icon: '⊛' },
+    { href: '/soundcheck',  label: 'SoundCheck',     icon: '≋' },
+    { href: '/copwatch',    label: 'CopWatch',       icon: '◎' },
     { href: '/opsec-tools', label: 'OpSec Tools',   icon: '⊠' },
     { href: '/timeseal',    label: 'TimeSeal',       icon: '⊡' },
     { href: '/infocrypt',   label: 'InfoCrypt',      icon: '⊕' },
@@ -739,6 +741,8 @@ const navigation = [
               <!-- Lien OUTILS → /tools  (dropdown au hover, géré par JS ci-dessous) -->
               {(() => {
                 const toolItems = [
+                  { href: '/soundcheck', label: 'SoundCheck', icon: '≋', desc: 'Empreinte acoustique topographique' },
+                  { href: '/copwatch',   label: 'CopWatch',  icon: '◎', desc: 'Observatoire des tactiques policières' },
                   { href: '/opsec-tools', label: 'OpSec Tools', icon: '⊠', desc: 'Modèle de menace + Rig Splitting' },
                   { href: '/timeseal',   label: 'TimeSeal',  icon: '⊡', desc: 'Manifeste de saisie horodaté' },
                   { href: '/infocrypt',  label: 'InfoCrypt', icon: '⊕', desc: 'Chiffrement AES-GCM de fiches' },
@@ -780,6 +784,8 @@ const navigation = [
           style="position:fixed;z-index:300;min-width:240px;background:#08080c;border:1px solid rgba(42,42,58,0.95);border-top:2px solid rgba(0,255,159,0.5);box-shadow:0 8px 32px rgba(0,0,0,0.7);"
         >
           {[
+            { href: '/soundcheck', label: 'SoundCheck', icon: '≋', desc: 'Empreinte acoustique topographique' },
+            { href: '/copwatch',   label: 'CopWatch',  icon: '◎', desc: 'Observatoire des tactiques policières' },
             { href: '/opsec-tools', label: 'OpSec Tools', icon: '⊠', desc: 'Modèle de menace + Rig Splitting' },
             { href: '/timeseal',   label: 'TimeSeal',  icon: '⊡', desc: 'Manifeste de saisie horodaté' },
             { href: '/infocrypt',  label: 'InfoCrypt', icon: '⊕', desc: 'Chiffrement AES-GCM de fiches' },
@@ -843,6 +849,8 @@ const navigation = [
                   OUTILS
                 </div>
                 <a href="/tools" class="ssh-footer-link">Index outils</a>
+                <a href="/soundcheck" class="ssh-footer-link">SoundCheck</a>
+                <a href="/copwatch" class="ssh-footer-link">CopWatch</a>
                 <a href="/opsec-tools" class="ssh-footer-link">OpSec Tools</a>
                 <a href="/timeseal" class="ssh-footer-link">TimeSeal</a>
                 <a href="/infocrypt" class="ssh-footer-link">InfoCrypt</a>

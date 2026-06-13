@@ -1,0 +1,384 @@
+---
+import Layout from '../layouts/Layout.astro';
+import SoundCheck from '../components/SoundCheck.astro';
+---
+
+<Layout
+  title="SoundCheck"
+  description="Simulateur d'empreinte acoustique topographique. Calcule la propagation sonore d'un mur de son et le masque naturel du relief par raycasting. 100% client-side, fallback hors-ligne ISO 9613-2."
+  category="OUTILS"
+  categoryHref="/tools"
+>
+
+  <!-- ═══════════════════════════════════════════════════════
+       EN-TÊTE
+  ═══════════════════════════════════════════════════════ -->
+  <div class="rl-header">
+    <div class="rl-badge">≋ OUTIL TERRAIN</div>
+    <h1 class="rl-title">SoundCheck</h1>
+    <p class="rl-subtitle">Simulateur d'empreinte acoustique topographique — propagation, relief et masque naturel</p>
+    <div class="rl-local-notice">
+      <span class="notice-icon">⚿</span>
+      <span>Tout le calcul s'exécute <strong>localement dans ton navigateur</strong> (Web Worker). Les coordonnées ne sont jamais stockées ni envoyées à un serveur du site. Sans réseau, l'outil bascule en mode plat ISO 9613-2.</span>
+    </div>
+
+    <!-- Bouton guide -->
+    <button id="guideToggle" class="rl-guide-btn" aria-expanded="false" aria-controls="guidePanel">
+      <span id="guideArrow">▸</span> GUIDE D'UTILISATION
+    </button>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       DROPDOWN GUIDE
+  ═══════════════════════════════════════════════════════ -->
+  <div id="guidePanel" class="rl-guide-panel" aria-hidden="true">
+    <div class="rl-guide-inner">
+
+      <div class="rl-guide-col">
+        <div class="rl-guide-section-title">≋ CE QUE C'EST</div>
+        <p class="rl-guide-text">SoundCheck estime <strong>jusqu'où le son d'un mur de son porte réellement</strong> en tenant compte du relief. Il trace 48 rayons autour du point choisi, récupère le profil topographique, et calcule l'atténuation selon la norme <strong>ISO 9613-2</strong> (divergence, air, sol) plus la <strong>diffraction de Maekawa</strong> derrière chaque colline. Le résultat : l'empreinte audible réelle vs le pire cas en terrain plat.</p>
+
+        <div class="rl-guide-section-title" style="margin-top:18px">◎ UTILITÉ</div>
+        <ul class="rl-guide-list">
+          <li><span class="rl-guide-bullet">▸</span>Choisir un spot dont le relief <strong>contient naturellement le son</strong> et limite la gêne aux riverains</li>
+          <li><span class="rl-guide-bullet">▸</span>Objectiver la <strong>conformité acoustique</strong> d'un site face aux autorités (facteur de masque chiffré)</li>
+          <li><span class="rl-guide-bullet">▸</span>Dimensionner la <strong>puissance et la hauteur</strong> du rig avant de charger le camion</li>
+          <li><span class="rl-guide-bullet">▸</span>Comparer plusieurs sites en quelques scans, <strong>sur smartphone, de nuit, en 4G faible</strong></li>
+        </ul>
+      </div>
+
+      <div class="rl-guide-col">
+        <div class="rl-guide-section-title">▸ COMMENT L'UTILISER</div>
+        <ol class="rl-guide-steps">
+          <li><span class="rl-guide-num">01</span><span><strong>Saisis les coordonnées</strong> du spot (mode discret, zéro tuile chargée) ou charge la carte et touche le point</span></li>
+          <li><span class="rl-guide-num">02</span><span>Choisis l'<strong>environnement d'émission</strong> (plein air, chapiteau, hangar, bâtiment dur, sous-sol) et l'état des <strong>ouvertures</strong>, puis règle <strong>puissance par stack</strong>, <strong>nombre de stacks</strong> (teknival : le cumul est calculé), <strong>hauteur</strong> et <strong>orientation</strong></span></li>
+          <li><span class="rl-guide-num">03</span><span>Appuie sur <strong>LANCER LE SCAN TOPOGRAPHIQUE</strong> — coche HORS-LIGNE STRICT pour un calcul sans aucune requête</span></li>
+          <li><span class="rl-guide-num">04</span><span>Lis le <strong>radar polaire</strong> : zone orange = audible (≥ 45 dB), vert pointillé = résiduel (30 dB), ambre = pire cas terrain plat</span></li>
+          <li><span class="rl-guide-num">05</span><span>Exporte le <strong>rapport détaillé</strong> (.md ou PDF) : paramètres, analyse par secteur et argumentaire juridique prêt pour la zone</span></li>
+        </ol>
+
+        <div class="rl-guide-opsec">
+          <span class="rl-guide-opsec-icon">⚿</span>
+          <div>
+            <div class="rl-guide-opsec-title">OPSEC</div>
+            <p>Zéro backend propriétaire. Seuls flux sortants : <strong>tuiles OSM</strong> et <strong>API publique Open-Elevation</strong> (sans cookie, sans referrer). Ces requêtes contiennent par nature les coordonnées de la zone scannée : pour un site sensible, scanne <strong>en amont, loin du spot, ou hors ligne</strong> (mode plat). Rien n'est écrit sur le disque.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       INSTRUMENT
+  ═══════════════════════════════════════════════════════ -->
+  <SoundCheck />
+
+  <!-- ═══════════════════════════════════════════════════════
+       LECTURE DES RÉSULTATS
+  ═══════════════════════════════════════════════════════ -->
+  <div class="sc-legend-grid">
+    <div class="sc-legend-item">
+      <span class="sc-legend-swatch" style="background:rgba(255,92,51,0.25); border:2px solid #ff5c33;"></span>
+      <div>
+        <div class="sc-legend-title">Empreinte audible</div>
+        <div class="sc-legend-desc">Zone où le niveau reste ≥ 45 dB SPL en tenant compte du relief. C'est la surface à contenir.</div>
+      </div>
+    </div>
+    <div class="sc-legend-item">
+      <span class="sc-legend-swatch" style="border:2px dashed #ffb000;"></span>
+      <div>
+        <div class="sc-legend-title">Référence terrain plat</div>
+        <div class="sc-legend-desc">Portée théorique sans relief (ISO 9613-2). Le pire cas, opposable comme borne haute.</div>
+      </div>
+    </div>
+    <div class="sc-legend-item">
+      <span class="sc-legend-swatch" style="background:rgba(0,255,159,0.15); border:2px solid #00ff9f;"></span>
+      <div>
+        <div class="sc-legend-title">Masque naturel</div>
+        <div class="sc-legend-desc">Part de l'empreinte théorique absorbée par le relief. Plus c'est haut, plus le spot est défendable.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-box mb-6" style="margin-top:28px;">
+    <strong>Limites du modèle :</strong> SoundCheck est un outil d'estimation stratégique, pas une étude d'impact acoustique certifiée. Le modèle ne tient pas compte du vent, des inversions thermiques nocturnes (qui portent le son plus loin), ni de la végétation. Pour un dossier officiel, croise avec des mesures réelles au sonomètre. Le facteur de masque reste un argument technique solide pour le choix du site.
+  </div>
+
+  <div class="flex flex-wrap gap-3 mt-8">
+    <a href="/tools" class="btn-neon">↳ Index des outils</a>
+    <a href="/opsec-tools" class="btn-secondary">↳ OpSec Tools : Rig Splitting</a>
+    <a href="/wiki/Sound-System" class="btn-secondary">↳ Wiki : Sound Systems</a>
+  </div>
+
+  <!-- ── Toggle guide ── -->
+  <script is:inline>
+  (function () {
+    const btn = document.getElementById('guideToggle');
+    const panel = document.getElementById('guidePanel');
+    if (!btn || !panel) return;
+
+    btn.addEventListener('click', function () {
+      const open = panel.classList.toggle('open');
+      btn.classList.toggle('open', open);
+      btn.setAttribute('aria-expanded', String(open));
+      panel.setAttribute('aria-hidden', String(!open));
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && panel.classList.contains('open')) {
+        panel.classList.remove('open');
+        btn.classList.remove('open');
+        btn.setAttribute('aria-expanded', 'false');
+        panel.setAttribute('aria-hidden', 'true');
+        btn.focus();
+      }
+    });
+  })();
+  </script>
+
+</Layout>
+
+<style is:global>
+
+  /* ══════════════════════════════════════════════════════════
+     SoundCheck — page (réplique du design system rl-* TimeSeal)
+  ══════════════════════════════════════════════════════════ */
+
+  /* ── En-tête ── */
+  .rl-header {
+    margin-bottom: 36px;
+    padding-bottom: 28px;
+    border-bottom: 1px solid rgba(42, 42, 58, 0.60);
+    position: relative;
+  }
+  .rl-header::before {
+    content: '';
+    position: absolute;
+    left: -28px; top: 0; bottom: 0;
+    width: 2px;
+    background: linear-gradient(180deg, #00ff9f 0%, rgba(0,255,159,0.03) 100%);
+  }
+  .rl-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: #00ff9f;
+    border: 1px solid rgba(0,255,159,0.28);
+    background: rgba(0,255,159,0.04);
+    padding: 4px 12px;
+    margin-bottom: 14px;
+  }
+  .rl-title {
+    font-family: 'Bebas Neue', 'JetBrains Mono', sans-serif !important;
+    font-size: 52px !important;
+    color: #e8e8f0 !important;
+    letter-spacing: 0.08em !important;
+    line-height: 1 !important;
+    margin: 0 0 10px !important;
+    padding: 0 !important;
+    border: none !important;
+    text-shadow: 0 0 40px rgba(0,255,159,0.12);
+  }
+  .rl-subtitle {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    color: rgba(122, 122, 138, 0.88);
+    letter-spacing: 0.01em;
+    line-height: 1.55;
+    margin-bottom: 20px;
+  }
+  .rl-local-notice {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    background: rgba(0,255,159,0.035);
+    border: 1px solid rgba(0,255,159,0.16);
+    border-left: 3px solid rgba(0,255,159,0.55);
+    padding: 12px 16px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 12px;
+    color: rgba(200, 200, 216, 0.82);
+    line-height: 1.65;
+  }
+  .notice-icon { color: #00ff9f; font-size: 15px; flex-shrink: 0; line-height: 1.6; }
+  .rl-local-notice strong { color: #00ff9f; }
+
+  /* ── Bouton + panneau guide ── */
+  .rl-guide-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 20px;
+    background: none;
+    border: 1px solid rgba(0,255,159,0.18);
+    color: rgba(0,255,159,0.62);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.20em;
+    text-transform: uppercase;
+    padding: 9px 18px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .rl-guide-btn:hover,
+  .rl-guide-btn.open {
+    border-color: rgba(0,255,159,0.45);
+    color: #00ff9f;
+    background: rgba(0,255,159,0.04);
+  }
+  #guideArrow { display: inline-block; transition: transform 0.2s; }
+  .rl-guide-btn.open #guideArrow { transform: rotate(90deg); }
+
+  .rl-guide-panel {
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.35s ease, opacity 0.25s ease;
+    opacity: 0;
+    margin: 0 0 28px 0;
+  }
+  .rl-guide-panel.open { max-height: 800px; opacity: 1; }
+  .rl-guide-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border: 1px solid rgba(42, 42, 58, 0.65);
+    border-left: 3px solid rgba(0,255,159,0.18);
+    background: rgba(5, 6, 10, 0.62);
+  }
+  .rl-guide-col { padding: 22px 24px; }
+  .rl-guide-col:first-child { border-right: 1px solid rgba(42, 42, 58, 0.45); }
+
+  .rl-guide-section-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.22em;
+    color: #00ff9f;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid rgba(0,255,159,0.10);
+  }
+  .rl-guide-text {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 12px;
+    color: rgba(154, 162, 180, 0.88);
+    line-height: 1.75;
+    margin: 0;
+  }
+  .rl-guide-text strong { color: rgba(192, 200, 216, 0.95); }
+
+  .rl-guide-list { list-style: none; margin: 0; padding: 0; }
+  .rl-guide-list li {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 12px;
+    color: rgba(154, 162, 180, 0.88);
+    line-height: 1.65;
+    padding: 4px 0;
+  }
+  .rl-guide-list strong { color: rgba(192, 200, 216, 0.95); }
+  .rl-guide-bullet { color: #00ff9f; flex-shrink: 0; margin-top: 3px; }
+
+  .rl-guide-steps {
+    list-style: none; margin: 0; padding: 0;
+    display: flex; flex-direction: column; gap: 12px;
+  }
+  .rl-guide-steps li {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 12px;
+    color: rgba(154, 162, 180, 0.88);
+    line-height: 1.65;
+  }
+  .rl-guide-steps strong { color: rgba(192, 200, 216, 0.95); }
+  .rl-guide-num {
+    flex-shrink: 0;
+    width: 22px; height: 22px;
+    display: flex; align-items: center; justify-content: center;
+    border: 1px solid rgba(0,255,159,0.28);
+    background: rgba(0,255,159,0.04);
+    color: #00ff9f;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px; font-weight: 700;
+    margin-top: 2px;
+  }
+
+  .rl-guide-opsec {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    margin-top: 20px;
+    background: rgba(0,255,159,0.03);
+    border: 1px solid rgba(0,255,159,0.10);
+    border-left: 2px solid rgba(0,255,159,0.38);
+    padding: 13px 16px;
+  }
+  .rl-guide-opsec-icon { color: #00ff9f; font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+  .rl-guide-opsec-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px; letter-spacing: 0.22em;
+    color: #00ff9f; text-transform: uppercase;
+    margin-bottom: 5px;
+  }
+  .rl-guide-opsec p {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 11px; color: rgba(122, 122, 138, 0.85);
+    line-height: 1.65; margin: 0;
+  }
+  .rl-guide-opsec strong { color: rgba(136, 146, 164, 0.90); }
+
+  /* ── Légende de lecture ── */
+  .sc-legend-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin-top: 20px;
+  }
+  @media (min-width: 768px) {
+    .sc-legend-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+  .sc-legend-item {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 14px 16px;
+    border: 1px solid rgba(42, 42, 58, 0.65);
+    background: rgba(8, 8, 12, 0.55);
+  }
+  .sc-legend-swatch {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    margin-top: 2px;
+  }
+  .sc-legend-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: rgba(232, 232, 240, 0.92);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .sc-legend-desc {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 11.5px;
+    color: rgba(154, 162, 180, 0.8);
+    line-height: 1.6;
+    margin-top: 4px;
+  }
+
+  @media (max-width: 600px) {
+    .rl-guide-inner { grid-template-columns: 1fr; }
+    .rl-guide-col:first-child { border-right: none; border-bottom: 1px solid rgba(42,42,58,0.45); }
+    .rl-guide-panel.open { max-height: 1300px; }
+  }
+</style>

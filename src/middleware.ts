@@ -13,7 +13,10 @@ const CSP = [
   "style-src 'self' 'unsafe-inline' https://unpkg.com",
   "img-src 'self' data: https://*.tile.openstreetmap.org https://*.basemaps.cartocdn.com",
   "font-src 'self'",
-  "connect-src 'self' https://overpass-api.de https://overpass.kumi.systems",
+  // api.open-elevation.com : profils topographiques de l'outil SoundCheck
+  "connect-src 'self' https://overpass-api.de https://overpass.kumi.systems https://api.open-elevation.com",
+  // Web Worker local (acousticWorker.js de SoundCheck)
+  "worker-src 'self'",
   "frame-ancestors 'none'",
   "base-uri 'self'",
   "form-action 'self'",
