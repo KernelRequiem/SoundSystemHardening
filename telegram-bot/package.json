@@ -1,0 +1,18 @@
+{
+  "name": "ssh-telegram-bot",
+  "version": "1.0.0",
+  "description": "Bot Telegram de pilotage du site SoundSystem Hardening (monitoring, deploiement, maintenance, moderation)",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "node src/index.js",
+    "start:local": "node --env-file=.env src/index.js",
+    "dev": "node --watch --env-file=.env src/index.js",
+    "check": "for f in $(find src -name '*.js'); do node --check \"$f\" || exit 1; done && echo 'syntax OK'"
+  },
+  "dependencies": {
+    "grammy": "^1.30.0"
+  }
+}

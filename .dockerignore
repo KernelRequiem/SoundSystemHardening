@@ -7,3 +7,5 @@ dist
 *.patch
 *.backup
 *.bak
+# Le bot Telegram est une application Coolify distincte : exclu du build du site.
+telegram-bot
