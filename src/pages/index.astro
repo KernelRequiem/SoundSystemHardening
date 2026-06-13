@@ -126,7 +126,6 @@ const totalWikiPages = readdirSync(join(process.cwd(), 'src/content/wiki'))
       <p class="si-welcome-text">
         Nous espérons sincèrement qu'il sera utile. Qu'il aide à porter le mouvement, à protéger celles et ceux qui le font vivre, et à servir la cause d'une culture libre.
       </p>
-      <a href="/actu" class="si-welcome-link no-underline">▸ Lire le mot complet et le fil d'actualité</a>
     </div>
 
     <!-- Trois axes visuels -->
@@ -445,45 +444,64 @@ const totalWikiPages = readdirSync(join(process.cwd(), 'src/content/wiki'))
   }
   .ticker-link { display: block; color: inherit; }
 
-  /* Mot de bienvenue lancement (temporaire) */
+  /* Mot de bienvenue lancement (temporaire) : doré, scintillant, séparé du reste */
   .si-welcome {
-    margin: 28px 0 4px;
-    padding: 22px 24px;
-    border: 1px solid rgba(42, 42, 58, 0.8);
-    border-top: 2px solid rgba(0, 255, 159, 0.5);
-    background: linear-gradient(180deg, rgba(0, 255, 159, 0.04), rgba(8, 8, 12, 0.4));
+    position: relative;
+    margin: 46px 0 44px;
+    padding: 26px 28px;
+    border: 1px solid rgba(227, 179, 65, 0.35);
+    border-top: 2px solid rgba(227, 179, 65, 0.8);
+    background:
+      radial-gradient(120% 100% at 0% 0%, rgba(227, 179, 65, 0.11) 0%, transparent 60%),
+      linear-gradient(180deg, rgba(227, 179, 65, 0.05), rgba(8, 8, 12, 0.45));
+    box-shadow: 0 8px 44px rgba(227, 179, 65, 0.09);
+    overflow: hidden;
   }
+  .si-welcome::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -60%;
+    width: 45%;
+    height: 100%;
+    background: linear-gradient(105deg, transparent 0%, rgba(255, 238, 180, 0.13) 50%, transparent 100%);
+    transform: skewX(-18deg);
+    animation: si-welcome-sheen 6.5s ease-in-out infinite;
+    pointer-events: none;
+  }
+  @keyframes si-welcome-sheen {
+    0% { left: -60%; }
+    55%, 100% { left: 135%; }
+  }
+  .si-welcome > * { position: relative; z-index: 1; }
   .si-welcome-label {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 700;
     letter-spacing: 0.22em;
     text-transform: uppercase;
-    color: #00ff9f;
+    background: linear-gradient(90deg, #b8860b, #f7e08a, #e3b341, #fff3c0, #e3b341);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    animation: si-welcome-shimmer 4s linear infinite;
     margin-bottom: 14px;
   }
+  @keyframes si-welcome-shimmer { to { background-position: 200% center; } }
   .si-welcome-text {
     font-family: 'Space Grotesk', sans-serif;
     font-size: 14px;
     line-height: 1.7;
-    color: rgba(232, 232, 240, 0.9);
+    color: rgba(242, 230, 198, 0.92);
     margin: 0 0 12px;
   }
   .si-welcome-text:last-of-type { margin-bottom: 0; }
-  .si-welcome-link {
-    display: inline-block;
-    margin-top: 16px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: rgba(0, 255, 159, 0.9);
-    border: 1px solid rgba(0, 255, 159, 0.5);
-    padding: 8px 14px;
-    transition: background 0.15s, color 0.15s;
+  @media (prefers-reduced-motion: reduce) {
+    .si-welcome::after, .si-welcome-label { animation: none; }
+    .si-welcome-label { color: #e3b341; -webkit-text-fill-color: #e3b341; }
   }
-  .si-welcome-link:hover { background: rgba(0, 255, 159, 0.1); color: #00ff9f; }
   .ticker-cta {
     font-family: 'JetBrains Mono', monospace;
     font-size: 9px;
@@ -775,18 +793,21 @@ const totalWikiPages = readdirSync(join(process.cwd(), 'src/content/wiki'))
   /* Statement principal */
   .si-statement {
     margin: 0 0 40px;
-    max-width: 760px;
     border-left: 2px solid rgba(0, 255, 159, 0.30);
     padding-left: 22px;
   }
   .si-statement-lead {
     font-family: 'Space Grotesk', sans-serif;
-    font-size: clamp(18px, 2.6vw, 26px);
+    font-size: clamp(14px, 3vw, 30px);
     font-weight: 600;
     color: #e8e8f0;
-    line-height: 1.4;
+    line-height: 1.3;
     letter-spacing: -0.01em;
+    white-space: nowrap;
     margin: 0 0 18px;
+  }
+  @media (max-width: 480px) {
+    .si-statement-lead { white-space: normal; font-size: 18px; line-height: 1.4; }
   }
   .si-statement-tags {
     display: flex;
