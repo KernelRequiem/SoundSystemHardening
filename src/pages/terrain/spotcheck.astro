@@ -1,0 +1,71 @@
+---
+/**
+ * /terrain/spotcheck — SpotCheck SPA (auth-gated)
+ *
+ * Cette page vérifie l'authentification puis retourne le HTML de SpotCheck
+ * directement comme Response, sans layout Astro.
+ * Le fichier source est importé en tant que string brute par Vite (?raw),
+ * ce qui l'embarque dans le bundle serveur : aucune dépendance filesystem en prod.
+ */
+import { checkAdminAuth } from '../../lib/adminAuth';
+import { readFileSync }   from 'fs';
+import { join }           from 'path';
+
+// ── Auth check ───────────────────────────────────────────────────────
+const auth = checkAdminAuth(Astro.cookies);
+if (!auth.valid) {
+  return Astro.redirect('/terrain/auth?r=/terrain/spotcheck', 302);
+}
+
+// ── Charger SpotCheck HTML ───────────────────────────────────────────
+// On lit le fichier à la racine du projet avec process.cwd() (SSR Node).
+// En développement ET en production Docker, spotcheck/index.html doit être
+// présent à la racine du projet (inclus dans l'image Docker — voir DEPLOY.md).
+let spotcheckHtml: string;
+
+try {
+  spotcheckHtml = readFileSync(join(process.cwd(), 'spotcheck', 'index.html'), 'utf-8');
+} catch (err) {
+  // Fallback : si le fichier n'est pas trouvé, page d'erreur claire
+  return new Response(
+    `<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8">
+     <title>SpotCheck — Erreur</title>
+     <style>body{font-family:monospace;background:#07070d;color:#ff4757;display:flex;
+     align-items:center;justify-content:center;height:100vh;flex-direction:column;gap:12px}
+     h1{color:#f0f0fa}p{color:#a0a0c0;font-size:13px}</style></head>
+     <body><h1>⚠️ SpotCheck non trouvé</h1>
+     <p>spotcheck/index.html manquant à la racine du projet.</p>
+     <p>Vérifier que le dossier spotcheck/ est présent dans le répertoire de déploiement.</p>
+     <a href="/terrain" style="color:#6c63ff;margin-top:8px">← Retour au dashboard</a>
+     </body></html>`,
+    { status: 500, headers: { 'Content-Type': 'text/html; charset=utf-8' } }
+  );
+}
+
+// ── Injecter le lien "retour" dans SpotCheck ─────────────────────────
+// On injecte un bouton de retour discret avant </body> pour ne pas casser le SPA
+const backButton = `
+<div style="position:fixed;bottom:14px;left:14px;z-index:9999">
+  <a href="/terrain" style="
+    display:flex;align-items:center;gap:6px;padding:6px 12px;
+    background:rgba(14,14,24,0.92);border:1px solid rgba(255,255,255,0.1);
+    border-radius:7px;color:#a0a0c0;text-decoration:none;font-family:Inter,system-ui,sans-serif;
+    font-size:11px;font-weight:600;backdrop-filter:blur(8px);transition:color .15s;
+    box-shadow:0 4px 16px rgba(0,0,0,0.4);" onmouseover="this.style.color='#f0f0fa'"
+    onmouseout="this.style.color='#a0a0c0'">
+    ← Dashboard
+  </a>
+</div>`;
+
+const injectedHtml = spotcheckHtml.replace('</body>', backButton + '\n</body>');
+
+// ── Renvoyer le HTML brut (bypass total du layout Astro) ─────────────
+return new Response(injectedHtml, {
+  status: 200,
+  headers: {
+    'Content-Type': 'text/html; charset=utf-8',
+    'Cache-Control': 'no-store, no-cache, must-revalidate',
+    'X-Robots-Tag': 'noindex, nofollow',
+  },
+});
+---

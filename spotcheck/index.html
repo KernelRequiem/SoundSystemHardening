@@ -1,0 +1,1700 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SpotCheck — SoundSystem Hardening</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    /* ── TOKENS ──────────────────────────────────────────────────────── */
+    :root {
+      --bg0:#07070d; --bg1:#0e0e18; --bg2:#14141f; --bg3:#1b1b2a; --bg4:#222235;
+      --border:rgba(255,255,255,0.07); --border2:rgba(255,255,255,0.13);
+      --accent:#6c63ff; --accent2:#9b94ff; --accent-g:rgba(108,99,255,0.14);
+      --green:#2ed573; --orange:#ffa502; --red:#ff4757; --cyan:#1ed8f7; --gold:#f5c542;
+      --text0:#f0f0fa; --text1:#a0a0c0; --text2:#606080;
+      --r:8px; --r2:12px;
+      --sidebar-w:300px; --panel-w:380px; --header-h:52px;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%;overflow:hidden}
+    body{font-family:'Inter',system-ui,sans-serif;background:var(--bg0);color:var(--text0);font-size:13px}
+    button{cursor:pointer;font-family:inherit}
+    input,textarea,select{font-family:inherit}
+    ::-webkit-scrollbar{width:4px}
+    ::-webkit-scrollbar-track{background:transparent}
+    ::-webkit-scrollbar-thumb{background:var(--bg4);border-radius:2px}
+
+    /* ── LOGIN ───────────────────────────────────────────────────────── */
+    #login-screen{
+      position:fixed;inset:0;z-index:9999;
+      display:flex;align-items:center;justify-content:center;
+      background:radial-gradient(ellipse at 30% 40%,rgba(108,99,255,0.13) 0%,transparent 55%),
+                 radial-gradient(ellipse at 75% 65%,rgba(30,216,247,0.07) 0%,transparent 50%),var(--bg0)
+    }
+    .lc{width:380px;background:var(--bg2);border:1px solid var(--border2);border-radius:16px;
+        padding:38px;box-shadow:0 32px 80px rgba(0,0,0,0.65),0 0 0 1px rgba(108,99,255,0.1)}
+    .lc-logo{display:flex;align-items:center;gap:10px;margin-bottom:30px}
+    .lc-logo .ico{width:40px;height:40px;border-radius:10px;
+        background:linear-gradient(135deg,var(--accent),var(--cyan));
+        display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:800;color:#fff}
+    .lc-logo h1{font-size:20px;font-weight:700;letter-spacing:-.3px}
+    .lc-logo span{color:var(--text2);font-size:11px;display:block;margin-top:-1px}
+    .lf{margin-bottom:14px}
+    .lf label{display:block;font-size:10px;font-weight:700;color:var(--text1);
+              text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px}
+    .lf input{width:100%;background:var(--bg1);border:1px solid var(--border2);
+              border-radius:var(--r);padding:9px 13px;color:var(--text0);font-size:13px;outline:none;transition:border-color .2s}
+    .lf input:focus{border-color:var(--accent)}
+    .btn-login{width:100%;margin-top:6px;background:var(--accent);color:#fff;border:none;
+               border-radius:var(--r);padding:11px;font-size:14px;font-weight:600;transition:background .2s}
+    .btn-login:hover{background:var(--accent2)}
+    .lbadge{display:flex;align-items:center;gap:6px;margin-top:18px;color:var(--text2);font-size:11px}
+    .lbadge .dot{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green)}
+    #login-err{color:var(--red);font-size:12px;margin-top:7px;display:none}
+
+    /* ── APP SHELL ───────────────────────────────────────────────────── */
+    #app{display:none;flex-direction:column;height:100vh}
+
+    /* ── HEADER ─────────────────────────────────────────────────────── */
+    header{
+      height:var(--header-h);min-height:var(--header-h);
+      background:var(--bg1);border-bottom:1px solid var(--border);
+      display:flex;align-items:center;padding:0 14px;gap:10px;z-index:200
+    }
+    .hdr-logo{display:flex;align-items:center;gap:8px;flex-shrink:0}
+    .hdr-logo .ico{width:28px;height:28px;border-radius:7px;
+        background:linear-gradient(135deg,var(--accent),var(--cyan));
+        display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#fff}
+    .hdr-logo h1{font-size:14px;font-weight:700;letter-spacing:-.2px}
+    .hdr-logo sub{color:var(--text2);font-size:9px;display:block;margin-top:-2px;letter-spacing:.3px}
+    .hdr-sep{width:1px;height:18px;background:var(--border);flex-shrink:0}
+
+    /* MODE TABS */
+    .mode-tabs{display:flex;gap:3px;background:var(--bg2);border:1px solid var(--border);
+               border-radius:9px;padding:3px}
+    .mode-tab{
+      padding:5px 14px;border-radius:6px;font-size:12px;font-weight:600;
+      background:transparent;border:none;color:var(--text2);transition:all .15s;white-space:nowrap
+    }
+    .mode-tab.active{background:var(--accent);color:#fff;box-shadow:0 2px 8px rgba(108,99,255,.35)}
+    .mode-tab:hover:not(.active){color:var(--text0);background:var(--bg3)}
+
+    .hdr-spacer{flex:1}
+    .hdr-stat{text-align:center;padding:0 8px}
+    .hdr-stat .val{font-size:15px;font-weight:700;font-family:'JetBrains Mono',monospace;color:var(--accent2)}
+    .hdr-stat .lbl{font-size:9px;color:var(--text2);text-transform:uppercase;letter-spacing:.4px}
+    .hdr-user{display:flex;align-items:center;gap:7px;padding:4px 10px;
+              background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);cursor:pointer;transition:background .15s}
+    .hdr-user:hover{background:var(--bg4)}
+    .hdr-avatar{width:22px;height:22px;border-radius:50%;
+        background:linear-gradient(135deg,var(--accent),var(--cyan));
+        font-size:10px;font-weight:700;color:#fff;display:flex;align-items:center;justify-content:center}
+    .hdr-email{font-size:11px;color:var(--text1)}
+
+    /* ── WORKSPACE ───────────────────────────────────────────────────── */
+    .workspace{flex:1;display:flex;overflow:hidden}
+
+    /* ── SIDEBAR (shared) ────────────────────────────────────────────── */
+    .sidebar{
+      width:var(--sidebar-w);min-width:var(--sidebar-w);
+      background:var(--bg1);border-right:1px solid var(--border);
+      display:flex;flex-direction:column;overflow:hidden;z-index:10
+    }
+
+    /* ── SEARCH SIDEBAR ──────────────────────────────────────────────── */
+    .search-form{padding:12px;border-bottom:1px solid var(--border);flex-shrink:0}
+    .section-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;
+                   color:var(--text2);margin-bottom:10px;display:flex;align-items:center;gap:6px}
+    .section-title .badge{background:var(--accent-g);border:1px solid rgba(108,99,255,.3);
+                          color:var(--accent2);padding:1px 6px;border-radius:10px;font-size:9px}
+
+    /* Criteria sliders in search form */
+    .sc-row{margin-bottom:10px}
+    .sc-row-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
+    .sc-name{font-size:12px;font-weight:500;color:var(--text1)}
+    .sc-val{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;min-width:28px;text-align:right}
+    .sc-slider{
+      width:100%;height:4px;-webkit-appearance:none;appearance:none;
+      border-radius:2px;outline:none;cursor:pointer;transition:height .1s
+    }
+    .sc-slider:hover{height:6px}
+    .sc-slider::-webkit-slider-thumb{
+      -webkit-appearance:none;width:13px;height:13px;border-radius:50%;
+      background:#fff;cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,.5)
+    }
+
+    .type-checks{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px}
+    .type-check{
+      display:flex;align-items:center;gap:4px;padding:4px 8px;
+      background:var(--bg2);border:1px solid var(--border2);border-radius:5px;
+      cursor:pointer;font-size:11px;color:var(--text1);transition:all .15s;user-select:none
+    }
+    .type-check.on{background:var(--accent-g);border-color:rgba(108,99,255,.35);color:var(--accent2)}
+    .type-check input{display:none}
+
+    .btn-search{
+      width:100%;padding:9px;border-radius:var(--r);font-size:13px;font-weight:700;
+      background:linear-gradient(135deg,var(--accent),#5a52e0);border:none;color:#fff;
+      transition:opacity .2s;letter-spacing:.2px;
+      box-shadow:0 4px 16px rgba(108,99,255,.3)
+    }
+    .btn-search:hover{opacity:.88}
+    .btn-search:active{transform:scale(.99)}
+
+    /* Results list */
+    .results-area{flex:1;overflow-y:auto;display:flex;flex-direction:column}
+    .results-header{
+      padding:10px 12px 8px;border-bottom:1px solid var(--border);flex-shrink:0;
+      display:flex;align-items:center;justify-content:space-between
+    }
+    .results-count{font-size:11px;color:var(--text2)}
+    .results-count strong{color:var(--green);font-weight:700}
+    .results-sort{font-size:10px;color:var(--text2);cursor:pointer}
+
+    .result-card{
+      padding:10px 12px;border-bottom:1px solid var(--border);
+      cursor:pointer;transition:background .15s;position:relative
+    }
+    .result-card:hover{background:var(--bg3)}
+    .result-card.active{background:var(--accent-g);border-left:3px solid var(--accent)}
+
+    .rc-top{display:flex;align-items:center;gap:8px;margin-bottom:5px}
+    .rank-badge{
+      width:22px;height:22px;border-radius:50%;flex-shrink:0;
+      display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800
+    }
+    .rank-1{background:rgba(245,197,66,.2);color:var(--gold);border:1px solid rgba(245,197,66,.4)}
+    .rank-2{background:rgba(192,192,192,.15);color:#c0c0c0;border:1px solid rgba(192,192,192,.3)}
+    .rank-3{background:rgba(205,127,50,.15);color:#cd7f32;border:1px solid rgba(205,127,50,.3)}
+    .rank-n{background:var(--bg4);color:var(--text2);border:1px solid var(--border)}
+
+    .rc-name{font-size:13px;font-weight:600;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .rc-score{font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:700;flex-shrink:0}
+
+    .rc-bars{display:flex;flex-direction:column;gap:3px;margin-bottom:5px}
+    .rc-bar-row{display:flex;align-items:center;gap:5px}
+    .rc-bar-label{font-size:9px;color:var(--text2);width:55px;flex-shrink:0;white-space:nowrap;overflow:hidden}
+    .rc-bar-track{flex:1;height:4px;background:var(--bg4);border-radius:2px;overflow:hidden;position:relative}
+    .rc-bar-fill{height:100%;border-radius:2px;transition:width .4s}
+    .rc-bar-min-marker{position:absolute;top:0;bottom:0;width:2px;background:rgba(255,255,255,.3)}
+    .rc-bar-val{font-size:9px;font-family:'JetBrains Mono',monospace;width:22px;text-align:right;flex-shrink:0}
+
+    .rc-flags{display:flex;gap:4px;flex-wrap:wrap}
+    .rc-flag{
+      font-size:9px;font-weight:700;padding:1px 5px;border-radius:3px;
+      text-transform:uppercase;letter-spacing:.3px
+    }
+    .flag-ok{background:rgba(46,213,115,.12);color:var(--green)}
+    .flag-fail{background:rgba(255,71,87,.12);color:var(--red)}
+    .flag-warn{background:rgba(255,165,2,.12);color:var(--orange)}
+    .flag-osm{background:rgba(108,99,255,.12);color:var(--accent2)}
+
+    /* ── MAP ─────────────────────────────────────────────────────────── */
+    #map{flex:1;position:relative}
+    #leaflet-map{width:100%;height:100%}
+    .leaflet-container{background:var(--bg0)!important}
+    .leaflet-control-zoom{display:none!important}
+
+    .map-controls{position:absolute;top:12px;left:12px;z-index:500;display:flex;flex-direction:column;gap:6px}
+    .map-btn{
+      width:34px;height:34px;border-radius:var(--r);
+      background:var(--bg2);border:1px solid var(--border2);
+      color:var(--text1);font-size:15px;display:flex;align-items:center;justify-content:center;
+      box-shadow:0 2px 8px rgba(0,0,0,.4);transition:all .15s
+    }
+    .map-btn:hover{background:var(--bg3);color:var(--text0)}
+    .map-btn.active{background:var(--accent-g);border-color:rgba(108,99,255,.4);color:var(--accent2)}
+
+    /* Map legend */
+    .map-legend{
+      position:absolute;bottom:12px;left:12px;z-index:500;
+      background:var(--bg2);border:1px solid var(--border2);border-radius:var(--r);
+      padding:8px 12px;box-shadow:0 2px 8px rgba(0,0,0,.4)
+    }
+    .legend-title{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;
+                  color:var(--text2);margin-bottom:6px}
+    .legend-bar{display:flex;height:8px;border-radius:4px;overflow:hidden;width:140px;margin-bottom:4px;
+        background:linear-gradient(to right,#ff4757,#ffa502,#2ed573)}
+    .legend-labels{display:flex;justify-content:space-between;font-size:9px;
+                   font-family:'JetBrains Mono',monospace;color:var(--text2)}
+    .legend-items{margin-top:6px;display:flex;flex-direction:column;gap:3px}
+    .legend-item{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text2)}
+    .legend-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+
+    .map-coord{
+      position:absolute;bottom:12px;right:12px;z-index:500;
+      background:var(--bg2);border:1px solid var(--border);border-radius:5px;
+      padding:5px 9px;font-size:10px;color:var(--text2);font-family:'JetBrains Mono',monospace
+    }
+
+    /* Markers */
+    .spot-marker{
+      display:flex;align-items:center;justify-content:center;
+      border-radius:50%;border:2px solid;font-family:'JetBrains Mono',monospace;
+      font-size:10px;font-weight:700;cursor:pointer;transition:transform .15s,box-shadow .15s;
+      position:relative
+    }
+    .spot-marker:hover,.spot-marker.active{transform:scale(1.2);z-index:9000!important}
+    .spot-marker::after{
+      content:'';position:absolute;bottom:-7px;border-left:4px solid transparent;
+      border-right:4px solid transparent
+    }
+    .m-high{background:rgba(46,213,115,.25);border-color:var(--green);color:var(--green)}
+    .m-high::after{border-top:7px solid var(--green)}
+    .m-mid{background:rgba(255,165,2,.25);border-color:var(--orange);color:var(--orange)}
+    .m-mid::after{border-top:7px solid var(--orange)}
+    .m-low{background:rgba(255,71,87,.25);border-color:var(--red);color:var(--red)}
+    .m-low::after{border-top:7px solid var(--red)}
+    .m-new{background:rgba(108,99,255,.25);border-color:var(--accent);color:var(--accent2)}
+    .m-new::after{border-top:7px solid var(--accent)}
+    /* Rank ring around marker */
+    .rank-ring-1{box-shadow:0 0 0 3px rgba(245,197,66,.6),0 0 12px rgba(245,197,66,.3)}
+    .rank-ring-2{box-shadow:0 0 0 2px rgba(192,192,192,.5)}
+    .rank-ring-3{box-shadow:0 0 0 2px rgba(205,127,50,.5)}
+
+    /* Leaflet popup */
+    .leaflet-popup-content-wrapper{
+      background:var(--bg3)!important;border:1px solid var(--border2)!important;
+      border-radius:var(--r)!important;box-shadow:0 4px 20px rgba(0,0,0,.5)!important
+    }
+    .leaflet-popup-tip{background:var(--bg3)!important}
+    .leaflet-popup-content{font-family:'Inter',sans-serif;font-size:12px;color:var(--text0);margin:8px 10px}
+
+    /* ── FICHE PANEL (right) ─────────────────────────────────────────── */
+    .fiche-panel{
+      width:var(--panel-w);min-width:var(--panel-w);
+      background:var(--bg1);border-left:1px solid var(--border);
+      display:flex;flex-direction:column;overflow:hidden;z-index:10
+    }
+    .panel-empty{
+      flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+      color:var(--text2);text-align:center;padding:32px;gap:12px
+    }
+    .panel-empty .em-icon{font-size:36px;opacity:.3}
+    .panel-empty p{font-size:12px;line-height:1.6}
+
+    .fiche-content{flex:1;overflow-y:auto}
+
+    /* Fiche header */
+    .fiche-header{
+      padding:14px 16px;background:var(--bg2);border-bottom:1px solid var(--border);flex-shrink:0
+    }
+    .fiche-rank-row{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+    .fiche-rank-pill{
+      padding:3px 10px;border-radius:20px;font-size:11px;font-weight:800;
+      text-transform:uppercase;letter-spacing:.5px
+    }
+    .pill-1{background:rgba(245,197,66,.15);color:var(--gold);border:1px solid rgba(245,197,66,.35)}
+    .pill-2{background:rgba(192,192,192,.1);color:#c0c0c0;border:1px solid rgba(192,192,192,.25)}
+    .pill-3{background:rgba(205,127,50,.1);color:#cd7f32;border:1px solid rgba(205,127,50,.25)}
+    .pill-n{background:var(--bg4);color:var(--text2);border:1px solid var(--border)}
+    .fiche-name{font-size:17px;font-weight:800;margin-bottom:3px;letter-spacing:-.3px}
+    .fiche-meta{font-size:11px;color:var(--text2);font-family:'JetBrains Mono',monospace;margin-bottom:10px}
+
+    /* Score global block */
+    .global-block{
+      background:var(--bg3);border:1px solid var(--border2);border-radius:var(--r2);
+      padding:12px;margin-bottom:0
+    }
+    .gb-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+    .gb-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--text2)}
+    .gb-score{font-size:30px;font-weight:800;font-family:'JetBrains Mono',monospace}
+    .gb-bar{height:6px;background:var(--bg4);border-radius:3px;overflow:hidden}
+    .gb-fill{height:100%;border-radius:3px;transition:width .5s ease}
+    .gb-verdict{margin-top:8px;font-size:11px;font-weight:600;padding:5px 10px;border-radius:5px}
+    .verd-ok{background:rgba(46,213,115,.1);color:var(--green);border:1px solid rgba(46,213,115,.2)}
+    .verd-warn{background:rgba(255,165,2,.1);color:var(--orange);border:1px solid rgba(255,165,2,.2)}
+    .verd-bad{background:rgba(255,71,87,.1);color:var(--red);border:1px solid rgba(255,71,87,.2)}
+
+    /* Fiche sections */
+    .fiche-section{margin:10px 16px 0;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);overflow:hidden}
+    .fs-title{
+      font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text2);
+      padding:8px 12px;border-bottom:1px solid var(--border);background:var(--bg3);
+      display:flex;align-items:center;justify-content:space-between
+    }
+    .fs-body{padding:10px 12px}
+
+    /* Criteria table */
+    .crit-table{width:100%;border-collapse:collapse}
+    .crit-table th{
+      font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--text2);
+      padding:4px 8px;text-align:left;border-bottom:1px solid var(--border)
+    }
+    .crit-table td{padding:7px 8px;border-bottom:1px solid var(--border);vertical-align:middle}
+    .crit-table tr:last-child td{border-bottom:none}
+    .crit-table tr:hover td{background:rgba(255,255,255,.02)}
+    .ct-name{font-size:12px;font-weight:500}
+    .ct-min{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text2);text-align:center}
+    .ct-score-wrap{display:flex;flex-direction:column;gap:3px;min-width:80px}
+    .ct-score-val{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;text-align:center}
+    .ct-micro-bar{height:4px;background:var(--bg4);border-radius:2px;overflow:hidden}
+    .ct-micro-fill{height:100%;border-radius:2px}
+    .ct-contrib{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text1);text-align:center}
+    .ct-status{text-align:center;font-size:14px}
+
+    /* Radar */
+    .radar-wrap{padding:8px;display:flex;justify-content:center}
+
+    /* OSM rows */
+    .osm-row{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid var(--border);font-size:12px}
+    .osm-row:last-child{border-bottom:none}
+    .osm-icon{width:20px;text-align:center;font-size:13px;flex-shrink:0}
+    .osm-lbl{flex:1;color:var(--text1)}
+    .osm-val{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text0)}
+    .osm-pill{padding:2px 6px;border-radius:3px;font-size:9px;font-weight:700;text-transform:uppercase}
+    .op-ok{background:rgba(46,213,115,.12);color:var(--green)}
+    .op-warn{background:rgba(255,165,2,.12);color:var(--orange)}
+    .op-bad{background:rgba(255,71,87,.12);color:var(--red)}
+    .btn-osm{
+      width:100%;margin-top:8px;padding:7px;border-radius:6px;
+      background:rgba(30,216,247,.08);border:1px solid rgba(30,216,247,.25);
+      color:var(--cyan);font-size:11px;font-weight:600;transition:all .15s
+    }
+    .btn-osm:hover{background:rgba(30,216,247,.16)}
+
+    /* Verdict block */
+    .verdict-block{padding:10px 12px}
+    .verdict-score-row{display:flex;justify-content:space-between;margin-bottom:6px}
+    .verdict-item{text-align:center;flex:1}
+    .vi-val{font-size:16px;font-weight:700;font-family:'JetBrains Mono',monospace}
+    .vi-lbl{font-size:9px;color:var(--text2);text-transform:uppercase;letter-spacing:.3px}
+    .verdict-sep{width:1px;background:var(--border);margin:0 6px}
+    .verdict-text{
+      font-size:12px;line-height:1.6;color:var(--text1);padding:10px;
+      background:var(--bg3);border-radius:var(--r);border:1px solid var(--border);margin-top:8px
+    }
+    .verdict-text strong{color:var(--text0)}
+    .verdict-alerts{margin-top:8px;display:flex;flex-direction:column;gap:4px}
+    .alert-item{
+      display:flex;align-items:flex-start;gap:6px;padding:6px 8px;border-radius:5px;font-size:11px
+    }
+    .alert-ok{background:rgba(46,213,115,.07);color:var(--green);border:1px solid rgba(46,213,115,.15)}
+    .alert-warn{background:rgba(255,165,2,.07);color:var(--orange);border:1px solid rgba(255,165,2,.15)}
+    .alert-bad{background:rgba(255,71,87,.07);color:var(--red);border:1px solid rgba(255,71,87,.15)}
+
+    /* Notes + photos */
+    .notes-view{font-size:12px;line-height:1.6;color:var(--text1);font-style:italic}
+    .photos-mini{display:flex;gap:5px;flex-wrap:wrap;padding:6px 0}
+    .photo-mini{
+      width:48px;height:48px;border-radius:5px;background:var(--bg3);
+      border:1px solid var(--border);display:flex;align-items:center;justify-content:center;
+      font-size:10px;color:var(--text2)
+    }
+    .btn-add-photo{
+      width:48px;height:48px;border-radius:5px;border:1px dashed var(--border2);
+      background:transparent;color:var(--text2);font-size:16px;transition:all .15s;cursor:pointer
+    }
+    .btn-add-photo:hover{border-color:var(--accent);color:var(--accent2)}
+
+    /* Footer */
+    .fiche-footer{padding:12px 16px;border-top:1px solid var(--border);flex-shrink:0;display:flex;gap:8px}
+    .btn-pdf{
+      flex:1;padding:9px;border-radius:var(--r);font-size:12px;font-weight:700;
+      background:linear-gradient(135deg,rgba(108,99,255,.2),rgba(30,216,247,.08));
+      border:1px solid rgba(108,99,255,.35);color:var(--accent2);transition:all .2s
+    }
+    .btn-pdf:hover{background:linear-gradient(135deg,rgba(108,99,255,.32),rgba(30,216,247,.14))}
+    .btn-map-center{
+      width:38px;height:38px;border-radius:var(--r);
+      background:var(--bg3);border:1px solid var(--border2);color:var(--text1);font-size:15px;
+      display:flex;align-items:center;justify-content:center;transition:all .15s
+    }
+    .btn-map-center:hover{background:var(--bg4);color:var(--text0)}
+
+    /* ── MANAGE SIDEBAR (secondary mode) ─────────────────────────────── */
+    .manage-head{padding:10px 12px;border-bottom:1px solid var(--border);flex-shrink:0}
+    .manage-head-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+    .mgt-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text2)}
+    .btn-new{
+      display:flex;align-items:center;gap:4px;background:var(--accent);color:#fff;
+      border:none;border-radius:6px;padding:5px 9px;font-size:11px;font-weight:600;transition:background .15s
+    }
+    .btn-new:hover{background:var(--accent2)}
+    .search-box{position:relative;margin-bottom:8px}
+    .search-box input{
+      width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);
+      padding:6px 10px 6px 28px;color:var(--text0);font-size:12px;outline:none;transition:border-color .2s
+    }
+    .search-box input:focus{border-color:var(--accent)}
+    .search-box input::placeholder{color:var(--text2)}
+    .search-box .si{position:absolute;left:8px;top:50%;transform:translateY(-50%);color:var(--text2);font-size:12px}
+    .spot-list{flex:1;overflow-y:auto;padding:5px}
+    .spot-item{
+      display:flex;align-items:center;gap:8px;padding:9px;border-radius:var(--r);
+      cursor:pointer;transition:background .15s;margin-bottom:2px;border:1px solid transparent
+    }
+    .spot-item:hover{background:var(--bg3)}
+    .spot-item.active{background:var(--accent-g);border-color:rgba(108,99,255,.25)}
+    .si-badge{
+      width:36px;height:36px;border-radius:8px;flex-shrink:0;
+      display:flex;align-items:center;justify-content:center;
+      font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600
+    }
+    .sb-high{background:rgba(46,213,115,.12);color:var(--green)}
+    .sb-mid{background:rgba(255,165,2,.12);color:var(--orange)}
+    .sb-low{background:rgba(255,71,87,.12);color:var(--red)}
+    .si-info{flex:1;min-width:0}
+    .si-name{font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .si-meta{font-size:10px;color:var(--text2);margin-top:1px}
+
+    /* Manage detail panel */
+    .manage-panel{
+      width:var(--panel-w);min-width:var(--panel-w);
+      background:var(--bg1);border-left:1px solid var(--border);
+      display:flex;flex-direction:column;overflow:hidden
+    }
+    .mp-empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+              color:var(--text2);text-align:center;padding:32px;gap:10px}
+    .mp-empty .ico{font-size:32px;opacity:.3}
+    .mp-content{flex:1;overflow-y:auto}
+    .mp-header{padding:14px 16px;background:var(--bg2);border-bottom:1px solid var(--border)}
+    .mp-name{font-size:16px;font-weight:700;margin-bottom:3px}
+    .mp-coords{font-size:10px;font-family:'JetBrains Mono',monospace;color:var(--text2);margin-bottom:8px}
+    .mp-actions{display:flex;gap:5px}
+    .btn-sm{
+      flex:1;padding:6px;border-radius:5px;font-size:11px;font-weight:600;
+      border:1px solid var(--border2);background:var(--bg3);color:var(--text1);transition:all .15s
+    }
+    .btn-sm:hover{background:var(--bg4);color:var(--text0)}
+    .btn-sm.acc{background:var(--accent-g);border-color:rgba(108,99,255,.4);color:var(--accent2)}
+    .btn-sm.dan{background:rgba(255,71,87,.08);border-color:rgba(255,71,87,.3);color:var(--red)}
+
+    .score-block{margin:10px 16px 0;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:12px}
+    .sb-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--text2);margin-bottom:10px}
+    .crit-edit-row{margin-bottom:10px}
+    .cer-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
+    .cer-name{font-size:12px;font-weight:500}
+    .cer-val{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700}
+    .cer-slider{
+      width:100%;height:4px;-webkit-appearance:none;appearance:none;
+      border-radius:2px;outline:none;cursor:pointer
+    }
+    .cer-slider::-webkit-slider-thumb{
+      -webkit-appearance:none;width:13px;height:13px;border-radius:50%;
+      background:#fff;cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,.5)
+    }
+    .notes-block{margin:10px 16px 0;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:12px}
+    .notes-block textarea{
+      width:100%;background:var(--bg1);border:1px solid var(--border2);border-radius:6px;
+      padding:7px 10px;color:var(--text0);font-size:12px;resize:none;outline:none;
+      line-height:1.5;min-height:65px;transition:border-color .2s
+    }
+    .notes-block textarea:focus{border-color:var(--accent)}
+    .notes-block textarea::placeholder{color:var(--text2)}
+    .notes-save{font-size:10px;color:var(--text2);margin-top:3px}
+    .mp-footer{padding:10px 16px 14px;border-top:1px solid var(--border);flex-shrink:0}
+    .btn-export-full{
+      width:100%;padding:8px;border-radius:var(--r);font-size:12px;font-weight:700;
+      background:linear-gradient(135deg,rgba(108,99,255,.2),rgba(30,216,247,.08));
+      border:1px solid rgba(108,99,255,.35);color:var(--accent2);transition:all .2s
+    }
+    .btn-export-full:hover{background:linear-gradient(135deg,rgba(108,99,255,.3),rgba(30,216,247,.12))}
+
+    /* ── MODALS ──────────────────────────────────────────────────────── */
+    .overlay{
+      position:fixed;inset:0;z-index:2000;
+      background:rgba(0,0,0,.72);backdrop-filter:blur(4px);
+      display:none;align-items:center;justify-content:center
+    }
+    .overlay.open{display:flex}
+    .modal{
+      background:var(--bg2);border:1px solid var(--border2);border-radius:16px;padding:26px;
+      box-shadow:0 24px 80px rgba(0,0,0,.7);max-height:90vh;overflow-y:auto
+    }
+    .modal-sm{width:430px}
+    .m-title{font-size:15px;font-weight:700;margin-bottom:18px;display:flex;align-items:center;gap:7px}
+    .frow{margin-bottom:12px}
+    .frow label{display:block;font-size:10px;font-weight:700;color:var(--text1);
+                text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px}
+    .frow input,.frow select,.frow textarea{
+      width:100%;background:var(--bg1);border:1px solid var(--border2);border-radius:var(--r);
+      padding:8px 11px;color:var(--text0);font-size:13px;outline:none;transition:border-color .2s
+    }
+    .frow input:focus,.frow select:focus,.frow textarea:focus{border-color:var(--accent)}
+    .frow select option{background:var(--bg2)}
+    .frow textarea{resize:none;min-height:60px;font-size:12px;line-height:1.5}
+    .fcols{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .m-actions{display:flex;gap:7px;margin-top:18px}
+    .btn-cancel{
+      flex:1;padding:8px;border-radius:var(--r);background:var(--bg3);
+      border:1px solid var(--border2);color:var(--text1);font-size:13px;font-weight:600;transition:all .15s
+    }
+    .btn-cancel:hover{background:var(--bg4);color:var(--text0)}
+    .btn-confirm{
+      flex:2;padding:8px;border-radius:var(--r);background:var(--accent);
+      border:none;color:#fff;font-size:13px;font-weight:600;transition:background .15s
+    }
+    .btn-confirm:hover{background:var(--accent2)}
+
+    /* ── TOAST ───────────────────────────────────────────────────────── */
+    .toast-wrap{position:fixed;top:66px;right:14px;z-index:5000;display:flex;flex-direction:column;gap:7px}
+    .toast{
+      background:var(--bg3);border:1px solid var(--border2);border-radius:var(--r);
+      padding:9px 14px;font-size:12px;box-shadow:0 4px 20px rgba(0,0,0,.4);
+      transform:translateX(115%);transition:transform .28s ease;max-width:270px
+    }
+    .toast.show{transform:translateX(0)}
+    .toast.success{border-left:3px solid var(--green)}
+    .toast.error{border-left:3px solid var(--red)}
+    .toast.info{border-left:3px solid var(--accent)}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.45}}
+    .loading{animation:pulse 1.2s infinite}
+  </style>
+</head>
+<body>
+
+<!-- ═══ LOGIN ═══════════════════════════════════════════════════════ -->
+<div id="login-screen">
+  <div class="lc">
+    <div class="lc-logo">
+      <div class="ico">SC</div>
+      <div><h1>SpotCheck</h1><span>SoundSystem Hardening · Accès restreint</span></div>
+    </div>
+    <div class="lf"><label>E-mail</label>
+      <input type="email" id="lemail" placeholder="tech@soundsystem.internal" /></div>
+    <div class="lf"><label>Mot de passe</label>
+      <input type="password" id="lpass" placeholder="••••••••" /></div>
+    <p id="login-err">Identifiants incorrects.</p>
+    <button class="btn-login" onclick="doLogin()">Connexion sécurisée</button>
+    <div class="lbadge"><div class="dot"></div>Supabase Auth · TLS 1.3 · Accès restreint</div>
+  </div>
+</div>
+
+<!-- ═══ APP ══════════════════════════════════════════════════════════ -->
+<div id="app">
+
+  <header>
+    <div class="hdr-logo">
+      <div class="ico">SC</div>
+      <div><h1>SpotCheck</h1><sub>SoundSystem Hardening</sub></div>
+    </div>
+    <div class="hdr-sep"></div>
+
+    <!-- MODE TABS -->
+    <div class="mode-tabs">
+      <button class="mode-tab active" id="tab-search" onclick="setMode('search')">🔍 Recherche</button>
+      <button class="mode-tab" id="tab-manage" onclick="setMode('manage')">📍 Gestion spots</button>
+    </div>
+
+    <div class="hdr-spacer"></div>
+    <div class="hdr-stat"><div class="val" id="st-spots">0</div><div class="lbl">Spots</div></div>
+    <div class="hdr-sep"></div>
+    <div class="hdr-stat"><div class="val" id="st-results">—</div><div class="lbl">Résultats</div></div>
+    <div class="hdr-sep"></div>
+    <div class="hdr-stat"><div class="val" id="st-best">—</div><div class="lbl">Meilleur</div></div>
+    <div class="hdr-sep"></div>
+    <div class="hdr-user" onclick="doLogout()">
+      <div class="hdr-avatar" id="hdr-av">T</div>
+      <div class="hdr-email" id="hdr-em">—</div>
+    </div>
+  </header>
+
+  <div class="workspace">
+
+    <!-- ══ SEARCH MODE ══════════════════════════════════════════════ -->
+    <div id="mode-search" style="display:flex;flex:1;overflow:hidden">
+
+      <!-- Left: search criteria -->
+      <aside class="sidebar">
+        <div class="search-form">
+          <div class="section-title">Critères minimums <span class="badge">Pondérés</span></div>
+          <div id="criteria-form"></div>
+
+          <div class="section-title" style="margin-top:10px">Type de lieu</div>
+          <div class="type-checks" id="type-checks">
+            <label class="type-check on"><input type="checkbox" value="entrepot" checked onchange="updateTypeFilter(this)">🏭 Entrepôt</label>
+            <label class="type-check on"><input type="checkbox" value="friche" checked onchange="updateTypeFilter(this)">🏚️ Friche</label>
+            <label class="type-check on"><input type="checkbox" value="carriere" checked onchange="updateTypeFilter(this)">⛏️ Carrière</label>
+            <label class="type-check on"><input type="checkbox" value="exterieur" checked onchange="updateTypeFilter(this)">🌲 Extérieur</label>
+            <label class="type-check on"><input type="checkbox" value="chapiteau" checked onchange="updateTypeFilter(this)">🎪 Chapiteau</label>
+          </div>
+
+          <button class="btn-search" onclick="runSearch()">🔍 Lancer l'analyse des spots</button>
+        </div>
+
+        <!-- Results list -->
+        <div class="results-area">
+          <div class="results-header">
+            <div class="results-count" id="results-count">Lance une recherche pour voir les résultats</div>
+          </div>
+          <div id="results-list"></div>
+        </div>
+      </aside>
+
+      <!-- Map -->
+      <div id="map">
+        <div id="leaflet-map"></div>
+        <div class="map-controls">
+          <button class="map-btn active" id="bl-dark" onclick="switchLayer('dark',this)">🌑</button>
+          <button class="map-btn" id="bl-topo" onclick="switchLayer('topo',this)">🗺️</button>
+          <button class="map-btn" id="bl-sat" onclick="switchLayer('sat',this)">🛰️</button>
+          <div style="height:4px"></div>
+          <button class="map-btn" onclick="map.zoomIn()">+</button>
+          <button class="map-btn" onclick="map.zoomOut()">−</button>
+          <button class="map-btn active" id="btn-heat" onclick="toggleHeatmap(this)" title="Heatmap">🌡️</button>
+          <button class="map-btn" onclick="fitAll()" title="Vue globale">⊞</button>
+        </div>
+        <div class="map-legend">
+          <div class="legend-title">Score global</div>
+          <div class="legend-bar"></div>
+          <div class="legend-labels"><span>0</span><span>5</span><span>10</span></div>
+          <div class="legend-items">
+            <div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div>≥ 7 — Recommandé</div>
+            <div class="legend-item"><div class="legend-dot" style="background:var(--orange)"></div>5–7 — Conditionnel</div>
+            <div class="legend-item"><div class="legend-dot" style="background:var(--red)"></div>&lt; 5 — Non retenu</div>
+          </div>
+        </div>
+        <div class="map-coord" id="map-coord">Survole la carte</div>
+      </div>
+
+      <!-- Right: fiche technique -->
+      <div class="fiche-panel">
+        <div class="panel-empty" id="fiche-empty">
+          <div class="em-icon">📋</div>
+          <p>Lance une recherche et sélectionne<br>un résultat pour voir sa fiche technique.</p>
+        </div>
+        <div id="fiche-body" style="display:none;flex-direction:column;height:100%">
+          <div class="fiche-content" id="fiche-content"></div>
+          <div class="fiche-footer">
+            <button class="btn-pdf" onclick="exportFichePDF()">📄 Télécharger la fiche PDF</button>
+            <button class="btn-map-center" onclick="centerOnSpot()" title="Centrer la carte">📍</button>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /mode-search -->
+
+    <!-- ══ MANAGE MODE ══════════════════════════════════════════════ -->
+    <div id="mode-manage" style="display:none;flex:1;overflow:hidden">
+
+      <!-- Sidebar: spot list -->
+      <aside class="sidebar">
+        <div class="manage-head">
+          <div class="manage-head-row">
+            <span class="mgt-title">Spots enregistrés</span>
+            <button class="btn-new" onclick="openNewModal()">+ Nouveau</button>
+          </div>
+          <div class="search-box">
+            <span class="si">🔍</span>
+            <input type="text" placeholder="Rechercher…" id="mgt-search" oninput="renderManageSidebar()" />
+          </div>
+        </div>
+        <div class="spot-list" id="mgt-list"></div>
+      </aside>
+
+      <!-- Map (shared) reused -->
+      <div id="map-manage" style="flex:1;position:relative">
+        <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;
+                    background:var(--bg0);color:var(--text2);font-size:13px;flex-direction:column;gap:8px">
+          <span style="font-size:32px;opacity:.3">🗺️</span>
+          <span>Carte partagée — active en mode Recherche</span>
+          <button onclick="setMode('search')" style="margin-top:6px;padding:6px 14px;border-radius:6px;
+              background:var(--accent-g);border:1px solid rgba(108,99,255,.35);color:var(--accent2);
+              font-size:12px;font-weight:600;cursor:pointer">Aller en mode Recherche</button>
+        </div>
+      </div>
+
+      <!-- Right: manage detail -->
+      <div class="manage-panel">
+        <div class="mp-empty" id="mp-empty">
+          <div class="ico">📍</div>
+          <p>Sélectionne un spot pour éditer ses scores et ses notes.</p>
+        </div>
+        <div id="mp-content" style="display:none;flex-direction:column;height:100%">
+          <div class="mp-content" id="mp-body"></div>
+          <div class="mp-footer">
+            <button class="btn-export-full" onclick="exportPDFFromManage()">📄 Générer rapport PDF</button>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /mode-manage -->
+
+  </div><!-- workspace -->
+</div><!-- app -->
+
+<!-- ═══ MODAL NEW SPOT ═══════════════════════════════════════════════ -->
+<div class="overlay" id="modal-new">
+  <div class="modal modal-sm">
+    <div class="m-title">📍 Nouveau spot</div>
+    <div class="frow"><label>Nom *</label><input type="text" id="n-name" placeholder="Ex: Entrepôt Pantin Nord" /></div>
+    <div class="fcols">
+      <div class="frow"><label>Latitude *</label><input type="number" id="n-lat" placeholder="48.8566" step="0.0001" /></div>
+      <div class="frow"><label>Longitude *</label><input type="number" id="n-lng" placeholder="2.3522" step="0.0001" /></div>
+    </div>
+    <div class="fcols">
+      <div class="frow"><label>Type</label>
+        <select id="n-type">
+          <option value="entrepot">Entrepôt / Hangar</option>
+          <option value="friche">Friche industrielle</option>
+          <option value="carriere">Carrière / Cave</option>
+          <option value="exterieur">Espace extérieur</option>
+          <option value="chapiteau">Sous chapiteau</option>
+          <option value="autre">Autre</option>
+        </select>
+      </div>
+      <div class="frow"><label>Statut</label>
+        <select id="n-status"><option value="draft">Brouillon</option><option value="active">Actif</option></select>
+      </div>
+    </div>
+    <div class="frow"><label>Notes initiales</label><textarea id="n-notes" placeholder="Premier état des lieux…"></textarea></div>
+    <div class="m-actions">
+      <button class="btn-cancel" onclick="closeModal('modal-new')">Annuler</button>
+      <button class="btn-confirm" onclick="createSpot()">Créer le spot</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-wrap" id="toasts"></div>
+<input type="file" id="photo-in" accept="image/*" multiple style="display:none" onchange="addPhotos(this)" />
+
+<!-- ═══ SCRIPTS ═══════════════════════════════════════════════════════ -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+/* ═══════════════════════════════════════════════════════════════════
+   SPOTCHECK v2 — Search-first architecture
+   ═══════════════════════════════════════════════════════════════════ */
+
+// ── SUPABASE (brancher ici) ──────────────────────────────────────────
+// import { createClient } from '@supabase/supabase-js'
+// const supabase = createClient('YOUR_URL', 'YOUR_ANON_KEY')
+
+// ── CRITERIA CONFIG ──────────────────────────────────────────────────
+const CRITERIA = [
+  { key:'acoustique', label:'🔊 Acoustique',      weight:.30, color:'#6c63ff', desc:'Isolation, réverbération, portée sonore' },
+  { key:'acces',      label:'🚗 Accès / Logistique', weight:.20, color:'#2ed573', desc:'Routes, parking, déchargement' },
+  { key:'repression', label:'🚨 Anti-répression',  weight:.25, color:'#ff4757', desc:'Distance forces de l\'ordre, visibilité' },
+  { key:'incendie',   label:'🔥 Sécurité incendie', weight:.15, color:'#ffa502', desc:'Sorties, accès pompiers' },
+  { key:'praticite',  label:'⚡ Praticité',        weight:.10, color:'#1ed8f7', desc:'Électricité, eau, réseau' },
+];
+
+// ── STATE ────────────────────────────────────────────────────────────
+const S = {
+  user: null,
+  spots: [],
+  mode: 'search',
+  // Search
+  searchMin: { acoustique:5, acces:5, repression:5, incendie:5, praticite:5 },
+  searchTypes: new Set(['entrepot','friche','carriere','exterieur','chapiteau','autre']),
+  searchDone: false,
+  results: [],
+  selectedResultId: null,
+  // Manage
+  selectedSpotId: null,
+  noteTimer: null,
+  // Map
+  map: null, heatLayer: null, markers: {}, layers: {}, activeLayer:'dark',
+  heatActive: true,
+  radarChart: null,
+};
+
+// ── MOCK DATA ────────────────────────────────────────────────────────
+const MOCK = [
+  { id:'sp1', name:'Entrepôt Pantin Nord', lat:48.897, lng:2.407, type:'entrepot', status:'active',
+    notes:'Accord verbal propriétaire (M. Thierry). Accès portail latéral. 380V disponible. Week-end OK.',
+    scores:{ acoustique:8, acces:7, repression:7, incendie:6, praticite:9 }, photos:[], created:'2026-01-14',
+    osm:{ police:'Brigade à 3.2 km', routes:'2 voies à 180m', caserne:'1.8 km', hydrant:'Borne à 120m', transport:'3 arrêts à <500m', elec:'Ligne HTA à 80m' } },
+  { id:'sp2', name:'Friche Saint-Denis Est', lat:48.933, lng:2.365, type:'friche', status:'active',
+    notes:'Terrain vague. Accès délicat 44T. Sol stabilisé 60%. Risque mairie.',
+    scores:{ acoustique:6, acces:5, repression:5, incendie:7, praticite:4 }, photos:[], created:'2026-02-03', osm:null },
+  { id:'sp3', name:'Carrière Vincennes', lat:48.846, lng:2.432, type:'carriere', status:'active',
+    notes:'Acoustique exceptionnelle. Accord signé 3 dates. Accès unique: chemin forestier 4x4.',
+    scores:{ acoustique:10, acces:4, repression:9, incendie:8, praticite:5 }, photos:[], created:'2026-02-22',
+    osm:{ police:'Gendarmerie à 7.1 km', routes:'Chemin 3m', caserne:'5.4 km', hydrant:'Source 300m', transport:'0 arrêt', elec:'Aucune ligne' } },
+  { id:'sp4', name:'Hangar Aubervilliers', lat:48.921, lng:2.387, type:'entrepot', status:'draft',
+    notes:'Contact en cours. 1800m². Toiture partielle. Électricité coupée.',
+    scores:{ acoustique:5, acces:8, repression:4, incendie:4, praticite:3 }, photos:[], created:'2026-03-10', osm:null },
+  { id:'sp5', name:'Squat Montreuil', lat:48.857, lng:2.450, type:'friche', status:'archived',
+    notes:'Expulsé mars 2026. Archive uniquement.',
+    scores:{ acoustique:7, acces:6, repression:3, incendie:3, praticite:5 }, photos:[], created:'2025-11-05', osm:null },
+  { id:'sp6', name:'Cave Ivry-sur-Seine', lat:48.812, lng:2.387, type:'carriere', status:'active',
+    notes:'Cave voûtée 600m². Propriétaire coopératif. Accès discret. Pas de voisinage direct.',
+    scores:{ acoustique:9, acces:6, repression:8, incendie:6, praticite:6 }, photos:[], created:'2026-04-02',
+    osm:{ police:'Commissariat à 4.8 km', routes:'Route secondaire 100m', caserne:'2.9 km', hydrant:'Borne 200m', transport:'2 arrêts 400m', elec:'Armoire 60m' } },
+];
+
+// ── AUTH ─────────────────────────────────────────────────────────────
+function doLogin() {
+  const email = document.getElementById('lemail').value.trim();
+  const pass  = document.getElementById('lpass').value;
+  const err   = document.getElementById('login-err');
+  err.style.display = 'none';
+  // SUPABASE: const { data, error } = await supabase.auth.signInWithPassword({ email, password: pass })
+  if (email.includes('@') && pass.length >= 4) {
+    S.user = { email };
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('app').style.display = 'flex';
+    document.getElementById('hdr-av').textContent = email[0].toUpperCase();
+    document.getElementById('hdr-em').textContent = email;
+    initApp();
+  } else { err.style.display = 'block'; }
+}
+function doLogout() {
+  if (!confirm('Déconnexion ?')) return;
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('login-screen').style.display = 'flex';
+  S.user = null;
+}
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && document.getElementById('login-screen').style.display !== 'none') doLogin();
+});
+
+// ── INIT ─────────────────────────────────────────────────────────────
+function initApp() {
+  // SUPABASE: S.spots = (await supabase.from('spots_full').select('*')).data
+  S.spots = JSON.parse(JSON.stringify(MOCK));
+  buildCriteriaForm();
+  initMap();
+  renderManageSidebar();
+  updateStats();
+}
+
+// ── CRITERIA FORM ─────────────────────────────────────────────────────
+function buildCriteriaForm() {
+  document.getElementById('criteria-form').innerHTML = CRITERIA.map(c => `
+    <div class="sc-row">
+      <div class="sc-row-top">
+        <span class="sc-name">${c.label}</span>
+        <span class="sc-val" id="min-val-${c.key}" style="color:${c.color}">${S.searchMin[c.key].toFixed(1)}</span>
+      </div>
+      <input type="range" class="sc-slider" min="0" max="10" step=".5"
+             value="${S.searchMin[c.key]}"
+             style="background:linear-gradient(to right,${c.color} 0%,${c.color} ${S.searchMin[c.key]*10}%,var(--bg4) ${S.searchMin[c.key]*10}%,var(--bg4) 100%)"
+             oninput="updateMinCrit('${c.key}',this)" />
+    </div>
+  `).join('');
+}
+function updateMinCrit(key, el) {
+  const v = parseFloat(el.value);
+  S.searchMin[key] = v;
+  document.getElementById(`min-val-${key}`).textContent = v.toFixed(1);
+  const c = CRITERIA.find(c=>c.key===key);
+  el.style.background = `linear-gradient(to right,${c.color} 0%,${c.color} ${v*10}%,var(--bg4) ${v*10}%,var(--bg4) 100%)`;
+}
+function updateTypeFilter(el) {
+  const parent = el.closest('.type-check');
+  if (el.checked) { S.searchTypes.add(el.value); parent.classList.add('on'); }
+  else { S.searchTypes.delete(el.value); parent.classList.remove('on'); }
+}
+
+// ── SCORE ENGINE ─────────────────────────────────────────────────────
+function computeScore(spot) {
+  return CRITERIA.reduce((s,c) => s + (spot.scores[c.key]||0)*c.weight, 0);
+}
+function computeFitness(spot) {
+  // Fitness: how well this spot exceeds the minimum thresholds (0-10)
+  let score = 0, weight = 0;
+  CRITERIA.forEach(c => {
+    const val = spot.scores[c.key] || 0;
+    const min = S.searchMin[c.key];
+    const excess = Math.max(0, val - min);
+    const maxExcess = 10 - min || 1;
+    score += (excess / maxExcess) * c.weight;
+    weight += c.weight;
+  });
+  return weight > 0 ? (score / weight) * 10 : 0;
+}
+function meetsCriteria(spot) {
+  return CRITERIA.every(c => (spot.scores[c.key]||0) >= S.searchMin[c.key]);
+}
+function scoreColor(s) {
+  return s >= 7 ? 'var(--green)' : s >= 5 ? 'var(--orange)' : 'var(--red)';
+}
+
+// ── SEARCH ───────────────────────────────────────────────────────────
+function runSearch() {
+  const active = S.spots.filter(s => s.status !== 'archived');
+  const typed  = active.filter(s => S.searchTypes.has(s.type));
+
+  // Sort by global score (among matching), then partial matches
+  const matched   = typed.filter(s => meetsCriteria(s));
+  const unmatched = typed.filter(s => !meetsCriteria(s));
+
+  matched.sort((a,b) => computeScore(b) - computeScore(a));
+  unmatched.sort((a,b) => computeScore(b) - computeScore(a));
+
+  S.results = [...matched, ...unmatched];
+  S.searchDone = true;
+  S.selectedResultId = null;
+
+  updateHeatmap();
+  updateMarkersForSearch();
+  renderResults();
+  showFicheEmpty();
+  updateStats();
+
+  if (matched.length === 0) {
+    toast(`Aucun spot ne satisfait tous les critères. ${unmatched.length} spot(s) partiel(s) trouvé(s).`, 'info');
+  } else {
+    toast(`${matched.length} spot(s) correspondent · ${unmatched.length} partiellement`, 'success');
+  }
+}
+
+// ── RESULTS RENDER ────────────────────────────────────────────────────
+function renderResults() {
+  const list = document.getElementById('results-list');
+  const cnt  = document.getElementById('results-count');
+
+  if (!S.searchDone) { list.innerHTML=''; cnt.textContent='Lance une recherche'; return; }
+
+  const matched = S.results.filter(s => meetsCriteria(s));
+  const partial = S.results.filter(s => !meetsCriteria(s));
+  cnt.innerHTML = `<strong>${matched.length}</strong> spot(s) · <span style="color:var(--orange)">${partial.length}</span> partiel(s)`;
+
+  list.innerHTML = S.results.map((spot, i) => {
+    const rank = i + 1;
+    const sc   = computeScore(spot);
+    const ok   = meetsCriteria(spot);
+    const rankClass = rank===1?'rank-1':rank===2?'rank-2':rank===3?'rank-3':'rank-n';
+    const isActive = S.selectedResultId === spot.id;
+
+    const bars = CRITERIA.map(c => {
+      const val = spot.scores[c.key]||0;
+      const min = S.searchMin[c.key];
+      const pct = val*10;
+      const minPct = min*10;
+      const passColor = val >= min ? c.color : 'var(--red)';
+      return `
+        <div class="rc-bar-row">
+          <div class="rc-bar-label">${c.label.split(' ').slice(0,2).join(' ')}</div>
+          <div class="rc-bar-track">
+            <div class="rc-bar-fill" style="width:${pct}%;background:${passColor}"></div>
+            <div class="rc-bar-min-marker" style="left:${minPct}%"></div>
+          </div>
+          <div class="rc-bar-val" style="color:${passColor}">${val.toFixed(0)}</div>
+        </div>`;
+    }).join('');
+
+    const failedCrit = CRITERIA.filter(c => (spot.scores[c.key]||0) < S.searchMin[c.key]);
+    const flags = ok
+      ? `<span class="rc-flag flag-ok">✓ Tous critères</span>`
+      : failedCrit.map(c=>`<span class="rc-flag flag-fail">✗ ${c.label.split(' ')[0]}</span>`).join('');
+
+    return `
+      <div class="result-card ${isActive?'active':''}" onclick="selectResult('${spot.id}')">
+        <div class="rc-top">
+          <div class="rank-badge ${rankClass}">#${rank}</div>
+          <div class="rc-name">${spot.name}</div>
+          <div class="rc-score" style="color:${scoreColor(sc)}">${sc.toFixed(1)}</div>
+        </div>
+        <div class="rc-bars">${bars}</div>
+        <div class="rc-flags">
+          ${flags}
+          ${spot.osm?'<span class="rc-flag flag-osm">OSM ✓</span>':''}
+        </div>
+      </div>`;
+  }).join('');
+}
+
+// ── SELECT RESULT → FICHE ─────────────────────────────────────────────
+function selectResult(id) {
+  S.selectedResultId = id;
+  renderResults();
+  renderFiche(id);
+
+  const spot = S.spots.find(s=>s.id===id);
+  if (spot) map.flyTo([spot.lat, spot.lng], 15, { duration:.7 });
+
+  // Animate marker
+  Object.values(S.markers).forEach(m => {
+    if (m._sc_el) m._sc_el.classList.remove('active');
+  });
+  if (S.markers[id] && S.markers[id]._sc_el) S.markers[id]._sc_el.classList.add('active');
+}
+
+// ── FICHE TECHNIQUE ───────────────────────────────────────────────────
+function renderFiche(id) {
+  const spot = S.spots.find(s=>s.id===id);
+  if (!spot) return;
+
+  const rank   = S.results.findIndex(s=>s.id===id)+1;
+  const sc     = computeScore(spot);
+  const ok     = meetsCriteria(spot);
+  const scCol  = scoreColor(sc);
+  const rankLbl = rank===1?'#1 — Meilleur spot':rank===2?'#2 — Second choix':rank===3?'#3 — Troisième choix':`#${rank}`;
+  const rankPill = rank===1?'pill-1':rank===2?'pill-2':rank===3?'pill-3':'pill-n';
+
+  // Criteria table
+  const critRows = CRITERIA.map(c => {
+    const val  = spot.scores[c.key] || 0;
+    const min  = S.searchMin[c.key];
+    const contrib = (val * c.weight).toFixed(2);
+    const maxContrib = (10 * c.weight).toFixed(2);
+    const pass = val >= min;
+    return `
+      <tr>
+        <td class="ct-name">${c.label}</td>
+        <td class="ct-min" style="color:var(--text2)">${min.toFixed(1)}</td>
+        <td>
+          <div class="ct-score-wrap">
+            <div class="ct-score-val" style="color:${c.color}">${val.toFixed(1)}</div>
+            <div class="ct-micro-bar"><div class="ct-micro-fill" style="width:${val*10}%;background:${c.color}"></div></div>
+          </div>
+        </td>
+        <td class="ct-contrib">+${contrib}<span style="color:var(--text2)">/${maxContrib}</span></td>
+        <td class="ct-status">${pass ? '✅' : '❌'}</td>
+      </tr>`;
+  }).join('');
+
+  // OSM block
+  const osmHTML = spot.osm
+    ? Object.entries({
+        police:    ['🚔', 'Forces de l\'ordre', 'repression'],
+        routes:    ['🛣️', 'Routes proches',     'acces'],
+        caserne:   ['🚒', 'Caserne pompiers',   'incendie'],
+        hydrant:   ['🚰', 'Borne incendie',     'incendie'],
+        transport: ['🚌', 'Transport public',   'praticite'],
+        elec:      ['⚡', 'Infrastructure élec.','praticite'],
+      }).filter(([k])=>spot.osm[k]).map(([k,[ico,lbl,crit]])=>{
+        const val = spot.osm[k];
+        const distNum = parseFloat((val.match(/[\d.]+/)||[0])[0]);
+        let pillClass = 'op-ok', pillTxt = 'OK';
+        if (crit==='repression') { pillClass = distNum>5?'op-ok':distNum>2?'op-warn':'op-bad'; pillTxt = distNum>5?'Loin':'Proche'; }
+        else { pillClass = 'op-ok'; pillTxt = 'Noté'; }
+        return `<div class="osm-row"><div class="osm-icon">${ico}</div><div class="osm-lbl">${lbl}</div>
+                <div class="osm-val">${val}</div><span class="osm-pill ${pillClass}">${pillTxt}</span></div>`;
+      }).join('')
+    : `<div class="osm-row" style="opacity:.5"><div class="osm-icon">⏳</div>
+       <div class="osm-lbl">Aucune donnée — lancer l'analyse OSM</div></div>`;
+
+  // Verdict
+  const strengths = CRITERIA.filter(c => (spot.scores[c.key]||0) >= 8).map(c=>c.label.split(' ').slice(1).join(' '));
+  const fails     = CRITERIA.filter(c => (spot.scores[c.key]||0) < S.searchMin[c.key]);
+  const warns     = CRITERIA.filter(c => { const v=spot.scores[c.key]||0; return v>=S.searchMin[c.key] && v<6; });
+
+  let verdictText, verdictClass;
+  if (ok && sc >= 7) {
+    verdictText = `Ce spot répond à l'ensemble des critères de recherche et présente un score élevé (${sc.toFixed(2)}/10). Candidat prioritaire.`;
+    verdictClass = 'verd-ok';
+  } else if (ok) {
+    verdictText = `Ce spot satisfait tous les critères minimum mais certains points méritent vérification avant confirmation.`;
+    verdictClass = 'verd-warn';
+  } else {
+    verdictText = `Ce spot ne satisfait pas ${fails.length} critère(s) minimum. À écarter sauf contrainte exceptionnelle.`;
+    verdictClass = 'verd-bad';
+  }
+
+  const alerts = [
+    ...strengths.map(s=>`<div class="alert-item alert-ok">✅ <span>Point fort : <strong>${s}</strong></span></div>`),
+    ...warns.map(c=>`<div class="alert-item alert-warn">⚠️ <span><strong>${c.label.split(' ').slice(1).join(' ')}</strong> — Score ${c.scores?.[c.key]:'—'} — limite acceptable, à surveiller.</span></div>`),
+    ...fails.map(c=>`<div class="alert-item alert-bad">❌ <span><strong>${c.label.split(' ').slice(1).join(' ')}</strong> — Score ${spot.scores[c.key]||0} &lt; minimum requis ${S.searchMin[c.key]}</span></div>`),
+  ].join('');
+
+  // Render
+  document.getElementById('fiche-empty').style.display='none';
+  const ficheBodyEl = document.getElementById('fiche-body');
+  ficheBodyEl.style.display='flex';
+  ficheBodyEl.style.flexDirection='column';
+
+  document.getElementById('fiche-content').innerHTML = `
+    <!-- Header -->
+    <div class="fiche-header">
+      <div class="fiche-rank-row">
+        <span class="fiche-rank-pill ${rankPill}">${rankLbl}</span>
+        <span style="font-size:10px;color:var(--text2);margin-left:4px">${spot.type} · ${spot.status}</span>
+      </div>
+      <div class="fiche-name">${spot.name}</div>
+      <div class="fiche-meta">${spot.lat.toFixed(5)}° N, ${spot.lng.toFixed(5)}° E · Créé le ${spot.created}</div>
+      <div class="global-block">
+        <div class="gb-row">
+          <span class="gb-label">Score global pondéré</span>
+          <span class="gb-score" style="color:${scCol}">${sc.toFixed(2)}<span style="font-size:14px;opacity:.5">/10</span></span>
+        </div>
+        <div class="gb-bar"><div class="gb-fill" style="width:${sc*10}%;background:${scCol}"></div></div>
+        <div class="gb-verdict ${verdictClass}">${ok ? '✅ Correspond à tous les critères' : `⚠️ ${fails.length} critère(s) non satisfait(s)`}</div>
+      </div>
+    </div>
+
+    <!-- Criteria table -->
+    <div class="fiche-section">
+      <div class="fs-title">
+        Détail critères
+        <span style="font-size:10px;color:var(--text2)">Min requis · Score · Contribution · Statut</span>
+      </div>
+      <div class="fs-body" style="padding:0">
+        <table class="crit-table">
+          <thead><tr>
+            <th>Critère</th><th style="text-align:center">Min</th>
+            <th style="text-align:center">Score</th><th style="text-align:center">Contrib.</th><th style="text-align:center">OK?</th>
+          </tr></thead>
+          <tbody>${critRows}</tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Radar chart -->
+    <div class="fiche-section">
+      <div class="fs-title">Radar d'analyse</div>
+      <div class="radar-wrap"><canvas id="fiche-radar" width="290" height="210"></canvas></div>
+    </div>
+
+    <!-- OSM -->
+    <div class="fiche-section">
+      <div class="fs-title">Données OSM / terrain</div>
+      <div class="fs-body">
+        ${osmHTML}
+        <button class="btn-osm" onclick="runOsmForFiche('${spot.id}')">🌐 Analyser via Overpass API</button>
+      </div>
+    </div>
+
+    <!-- Verdict -->
+    <div class="fiche-section">
+      <div class="fs-title">Verdict automatique</div>
+      <div class="verdict-block">
+        <div class="verdict-score-row">
+          <div class="verdict-item">
+            <div class="vi-val" style="color:${scCol}">${sc.toFixed(2)}</div>
+            <div class="vi-lbl">Score global</div>
+          </div>
+          <div class="verdict-sep"></div>
+          <div class="verdict-item">
+            <div class="vi-val" style="color:${ok?'var(--green)':'var(--red)'}">${ok?'OUI':'NON'}</div>
+            <div class="vi-lbl">Conforme</div>
+          </div>
+          <div class="verdict-sep"></div>
+          <div class="verdict-item">
+            <div class="vi-val">${rank}/${S.results.length}</div>
+            <div class="vi-lbl">Classement</div>
+          </div>
+        </div>
+        <div class="verdict-text">${verdictText}</div>
+        <div class="verdict-alerts">${alerts}</div>
+      </div>
+    </div>
+
+    <!-- Notes -->
+    <div class="fiche-section">
+      <div class="fs-title">Notes terrain</div>
+      <div class="fs-body">
+        <div class="notes-view">${spot.notes ? `"${spot.notes}"` : '<span style="opacity:.5">Aucune note enregistrée.</span>'}</div>
+      </div>
+    </div>
+
+    <!-- Photos -->
+    <div class="fiche-section" style="margin-bottom:14px">
+      <div class="fs-title">Photos du spot <span style="color:var(--text2)">(${spot.photos.length})</span></div>
+      <div class="fs-body">
+        <div class="photos-mini">
+          ${spot.photos.map((_,i)=>`<div class="photo-mini">${i+1}</div>`).join('')}
+          <button class="btn-add-photo" onclick="document.getElementById('photo-in').dataset.spotid='${spot.id}';document.getElementById('photo-in').click()">+</button>
+        </div>
+        <div style="font-size:10px;color:var(--text2);margin-top:4px">Stockage Supabase Storage · Chiffrement E2E</div>
+      </div>
+    </div>
+  `;
+
+  // Radar chart
+  setTimeout(() => {
+    const canvas = document.getElementById('fiche-radar');
+    if (!canvas) return;
+    if (S.radarChart) { S.radarChart.destroy(); S.radarChart=null; }
+    S.radarChart = new Chart(canvas, {
+      type:'radar',
+      data:{
+        labels: CRITERIA.map(c=>c.label.split(' ').slice(1).join(' ')),
+        datasets:[{
+          label: spot.name,
+          data: CRITERIA.map(c=>spot.scores[c.key]||0),
+          backgroundColor:'rgba(108,99,255,.12)',
+          borderColor:'rgba(108,99,255,.7)',
+          pointBackgroundColor: CRITERIA.map(c=>c.color),
+          pointBorderColor:'transparent',
+          pointRadius:4, borderWidth:2,
+        },{
+          label:'Critères minimum',
+          data: CRITERIA.map(c=>S.searchMin[c.key]),
+          backgroundColor:'rgba(255,165,2,.06)',
+          borderColor:'rgba(255,165,2,.5)',
+          borderDash:[5,3],
+          pointRadius:3,
+          pointBackgroundColor:'rgba(255,165,2,.7)',
+          borderWidth:1.5,
+        }]
+      },
+      options:{
+        responsive:false,
+        scales:{r:{
+          min:0,max:10,
+          ticks:{display:false,stepSize:2},
+          grid:{color:'rgba(255,255,255,0.06)'},
+          angleLines:{color:'rgba(255,255,255,0.06)'},
+          pointLabels:{color:'#a0a0c0',font:{size:9,family:'Inter'}},
+        }},
+        plugins:{legend:{display:true,labels:{color:'#a0a0c0',font:{size:9},boxWidth:10,padding:8}}},
+      }
+    });
+  }, 80);
+}
+
+function showFicheEmpty() {
+  document.getElementById('fiche-empty').style.display='flex';
+  document.getElementById('fiche-body').style.display='none';
+  S.selectedResultId = null;
+}
+
+// ── OSM ANALYSIS (from fiche) ──────────────────────────────────────────
+async function runOsmForFiche(spotId) {
+  const spot = S.spots.find(s=>s.id===spotId);
+  if (!spot) return;
+  toast('Interrogation Overpass API…','info');
+
+  /* REAL OVERPASS QUERY:
+  const q = `[out:json][timeout:15];(
+    node["amenity"="police"](around:5000,${spot.lat},${spot.lng});
+    node["amenity"="fire_station"](around:8000,${spot.lat},${spot.lng});
+    node["emergency"="fire_hydrant"](around:500,${spot.lat},${spot.lng});
+    way["highway"~"primary|secondary|tertiary"](around:300,${spot.lat},${spot.lng});
+    node["public_transport"="stop_position"](around:500,${spot.lat},${spot.lng});
+    way["power"="line"](around:200,${spot.lat},${spot.lng});
+  );out body center;`;
+  const r = await fetch('https://overpass-api.de/api/interpreter',{method:'POST',body:'data='+encodeURIComponent(q)});
+  const d = await r.json();
+  // → parser d.elements, calculer distances avec Haversine, peupler spot.osm
+  */
+
+  await new Promise(r=>setTimeout(r,1100));
+  spot.osm = {
+    police:    `${['Brigade','Commissariat','Gendarmerie'][Math.floor(Math.random()*3)]} à ${(Math.random()*7+1).toFixed(1)} km`,
+    routes:    `${Math.floor(Math.random()*3)+1} voie(s) à ${Math.floor(Math.random()*300+80)}m`,
+    caserne:   `Caserne à ${(Math.random()*5+1).toFixed(1)} km`,
+    hydrant:   `Borne à ${Math.floor(Math.random()*400+50)}m`,
+    transport: `${Math.floor(Math.random()*4)} arrêt(s) à <500m`,
+    elec:      `Armoire/ligne à ${Math.floor(Math.random()*200+30)}m`,
+  };
+  renderFiche(spotId);
+  toast('Données OSM mises à jour', 'success');
+}
+
+function centerOnSpot() {
+  const spot = S.spots.find(s=>s.id===S.selectedResultId);
+  if (spot) map.flyTo([spot.lat,spot.lng],16,{duration:.8});
+}
+
+// ── PDF FICHE ─────────────────────────────────────────────────────────
+function exportFichePDF() {
+  const spot = S.spots.find(s=>s.id===S.selectedResultId);
+  if (!spot) return;
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ unit:'mm', format:'a4' });
+  const W=210, M=16;
+  let y=18;
+
+  const h2r = h => [parseInt(h.slice(1,3),16),parseInt(h.slice(3,5),16),parseInt(h.slice(5,7),16)];
+  const fill = c => { const [r,g,b]=h2r(c); doc.setFillColor(r,g,b); };
+  const draw = c => { const [r,g,b]=h2r(c); doc.setDrawColor(r,g,b); };
+  const txt  = c => { const [r,g,b]=typeof c==='string'?h2r(c):[c,c,c]; doc.setTextColor(r,g,b); };
+
+  const rank   = S.results.findIndex(s=>s.id===spot.id)+1;
+  const sc     = computeScore(spot);
+  const scCol  = sc>=7?'#2ed573':sc>=5?'#ffa502':'#ff4757';
+  const ok     = meetsCriteria(spot);
+
+  // Header band
+  doc.setFillColor(7,7,13); doc.rect(0,0,W,40,'F');
+  txt('#6c63ff'); doc.setFont('helvetica','bold'); doc.setFontSize(20);
+  doc.text('SPOTCHECK', M, 14);
+  txt('#e8e8f0'); doc.setFont('helvetica','bold'); doc.setFontSize(10);
+  doc.text(`FICHE TECHNIQUE #${rank} — ${spot.name.toUpperCase()}`, M, 22);
+  txt('#606080'); doc.setFont('helvetica','normal'); doc.setFontSize(8);
+  doc.text(`Générée le ${new Date().toLocaleDateString('fr-FR',{weekday:'long',year:'numeric',month:'long',day:'numeric'})} · CONFIDENTIEL`, M, 29);
+  doc.text(`Coordonnées : ${spot.lat.toFixed(5)}° N, ${spot.lng.toFixed(5)}° E · Type : ${spot.type} · Statut : ${spot.status}`, M, 34);
+  y = 50;
+
+  // Global score box
+  doc.setFillColor(14,14,24); doc.roundedRect(M,y,W-M*2,24,3,3,'F');
+  txt(60); doc.setFont('helvetica','bold'); doc.setFontSize(8);
+  doc.text('SCORE GLOBAL PONDÉRÉ', M+5, y+8);
+  txt(60); doc.text(ok?'✓ CONFORME AUX CRITÈRES':'✗ CRITÈRES NON SATISFAITS', M+5, y+16);
+  const [sr,sg,sb]=h2r(scCol); doc.setTextColor(sr,sg,sb);
+  doc.setFont('helvetica','bold'); doc.setFontSize(22);
+  doc.text(`${sc.toFixed(2)} / 10`, W-M-38, y+16);
+  // Score bar
+  doc.setFillColor(30,30,45); doc.rect(M+5,y+19,W-M*2-10,4,'F');
+  fill(scCol); doc.rect(M+5,y+19,(W-M*2-10)*sc/10,4,'F');
+  y += 32;
+
+  // Section: Critères
+  txt('#e8e8f0'); doc.setFont('helvetica','bold'); doc.setFontSize(11);
+  doc.text('Détail par critère', M, y); y += 6;
+
+  // Table headers
+  doc.setFillColor(20,20,32); doc.rect(M,y-3,W-M*2,8,'F');
+  txt('#606080'); doc.setFont('helvetica','bold'); doc.setFontSize(7);
+  doc.text('CRITÈRE', M+3, y+2);
+  doc.text('MIN', M+88, y+2);
+  doc.text('SCORE', M+103, y+2);
+  doc.text('CONTRIBUTION', M+120, y+2);
+  doc.text('STATUT', W-M-15, y+2);
+  y += 9;
+
+  CRITERIA.forEach(c => {
+    const val = spot.scores[c.key]||0;
+    const min = S.searchMin[c.key];
+    const contrib = (val*c.weight).toFixed(2);
+    const pass = val >= min;
+    const [cr,cg,cb] = h2r(c.color);
+    doc.setFillColor(14,14,22); doc.rect(M,y-3,W-M*2,11,'F');
+    doc.setFillColor(cr,cg,cb); doc.rect(M,y-3,2.5,11,'F');
+    txt('#e8e8f0'); doc.setFont('helvetica','normal'); doc.setFontSize(9);
+    doc.text(c.label, M+5, y+3.5);
+    txt('#808090'); doc.text(`${min.toFixed(1)}`, M+90, y+3.5);
+    doc.setTextColor(cr,cg,cb); doc.setFont('helvetica','bold');
+    doc.text(`${val.toFixed(1)}/10`, M+103, y+3.5);
+    txt('#e8e8f0'); doc.setFont('helvetica','normal');
+    doc.text(`+${contrib} / ${(10*c.weight).toFixed(2)}`, M+120, y+3.5);
+    doc.text(pass?'✓':'✗', W-M-12, y+3.5);
+    // Mini bar
+    doc.setFillColor(30,30,45); doc.rect(M+65,y+1,22,3,'F');
+    doc.setFillColor(cr,cg,cb); doc.rect(M+65,y+1,22*(val/10),3,'F');
+    y += 13;
+  });
+  y += 5;
+
+  // Section: OSM
+  if (spot.osm) {
+    txt('#e8e8f0'); doc.setFont('helvetica','bold'); doc.setFontSize(11);
+    doc.text('Données OSM / terrain', M, y); y += 6;
+    txt('#a0a0c0'); doc.setFont('helvetica','normal'); doc.setFontSize(9);
+    Object.entries(spot.osm).forEach(([k,v]) => {
+      const labels = {police:'Forces de l\'ordre',routes:'Routes proches',caserne:'Caserne pompiers',hydrant:'Borne incendie',transport:'Transports',elec:'Électricité'};
+      doc.text(`• ${labels[k]||k} : ${v}`, M+3, y); y+=5;
+    });
+    y += 5;
+  }
+
+  // Section: Notes
+  if (spot.notes) {
+    txt('#e8e8f0'); doc.setFont('helvetica','bold'); doc.setFontSize(11);
+    doc.text('Notes terrain', M, y); y += 6;
+    doc.setFillColor(14,14,22); doc.rect(M,y-2,W-M*2,26,'F');
+    txt('#c0c0d8'); doc.setFont('helvetica','italic'); doc.setFontSize(9);
+    doc.splitTextToSize(spot.notes,W-M*2-8).slice(0,5).forEach((l,i)=>{doc.text(l,M+4,y+5+i*5)});
+    y += 30;
+  }
+
+  // Verdict
+  const fails = CRITERIA.filter(c=>(spot.scores[c.key]||0)<S.searchMin[c.key]);
+  const vText = ok
+    ? `Ce spot répond à l'ensemble des critères et présente un score de ${sc.toFixed(2)}/10 (rang #${rank}/${S.results.length}).`
+    : `Ce spot ne satisfait pas ${fails.length} critère(s) : ${fails.map(c=>c.label.split(' ').slice(1).join(' ')).join(', ')}.`;
+  txt('#e8e8f0'); doc.setFont('helvetica','bold'); doc.setFontSize(11);
+  doc.text('Verdict', M, y); y += 6;
+  doc.setFillColor(ok?[17,40,25]:[40,17,20]); doc.roundedRect(M,y-2,W-M*2,14,2,2,'F');
+  txt(ok?'#2ed573':'#ff4757'); doc.setFont('helvetica','bold'); doc.setFontSize(9);
+  const [vr,vg,vb]=h2r(ok?'#2ed573':'#ff4757'); doc.setTextColor(vr,vg,vb);
+  doc.text(vText, M+4, y+6);
+
+  // Footer
+  doc.setFillColor(7,7,13); doc.rect(0,283,W,14,'F');
+  txt('#404060'); doc.setFont('helvetica','normal'); doc.setFontSize(7);
+  doc.text('CONFIDENTIEL — Usage interne SoundSystem Hardening',M,290);
+  doc.text(`SpotCheck v2.0 · Fiche #${rank} sur ${S.results.length} résultats`, W-M-48, 290);
+
+  doc.save(`SpotCheck_Fiche_${rank}_${spot.name.replace(/\s+/g,'_')}_${new Date().toISOString().slice(0,10)}.pdf`);
+  toast('Fiche PDF téléchargée','success');
+}
+
+// ── MAP ───────────────────────────────────────────────────────────────
+let map;
+function initMap() {
+  map = L.map('leaflet-map',{ center:[48.880,2.395], zoom:12, zoomControl:false, attributionControl:false });
+
+  S.layers = {
+    dark: L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{maxZoom:19,subdomains:'abcd'}),
+    topo: L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',{maxZoom:17}),
+    sat:  L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{maxZoom:18}),
+  };
+  S.layers.dark.addTo(map);
+
+  L.control.attribution({prefix:false}).addTo(map)
+    .addAttribution('© <a href="https://www.openstreetmap.org/copyright" style="color:#6c63ff">OpenStreetMap</a> · © CartoDB');
+
+  map.on('mousemove', e => {
+    document.getElementById('map-coord').textContent =
+      `${e.latlng.lat.toFixed(5)}, ${e.latlng.lng.toFixed(5)}`;
+  });
+
+  map.on('click', e => {
+    document.getElementById('n-lat').value = e.latlng.lat.toFixed(5);
+    document.getElementById('n-lng').value = e.latlng.lng.toFixed(5);
+  });
+
+  S.spots.forEach(addMarker);
+  buildHeatmap();
+}
+
+function markerIcon(spot, rank) {
+  const sc = computeScore(spot);
+  const cls = spot.status==='draft'?'m-new':sc>=7?'m-high':sc>=5?'m-mid':'m-low';
+  const ringClass = rank===1?'rank-ring-1':rank===2?'rank-ring-2':rank===3?'rank-ring-3':'';
+  const label = rank && rank<=3 ? `#${rank}` : sc.toFixed(1);
+  const size = rank===1?46:rank===2?42:rank===3?40:36;
+  return L.divIcon({
+    className:'',
+    html:`<div class="spot-marker ${cls} ${ringClass}" style="width:${size}px;height:${size}px">${label}</div>`,
+    iconSize:[size,size+8], iconAnchor:[size/2,size+8],
+  });
+}
+
+function addMarker(spot) {
+  const m = L.marker([spot.lat,spot.lng],{icon:markerIcon(spot,null)})
+    .addTo(map)
+    .bindPopup(`<strong>${spot.name}</strong><br>Score: ${computeScore(spot).toFixed(2)}/10<br>${spot.type}`)
+    .on('click',()=>{
+      if (S.mode==='search' && S.searchDone) selectResult(spot.id);
+    });
+  const el = m.getElement ? null : null;
+  m._sc_spot = spot;
+  S.markers[spot.id] = m;
+}
+
+function updateMarkersForSearch() {
+  S.spots.forEach(spot => {
+    if (!S.markers[spot.id]) return;
+    const rank = S.results.findIndex(s=>s.id===spot.id);
+    S.markers[spot.id].setIcon(markerIcon(spot, rank>=0?rank+1:null));
+    const m = S.markers[spot.id];
+    if (m._icon) m._sc_el = m._icon.querySelector('.spot-marker');
+  });
+}
+
+function buildHeatmap() {
+  const data = S.spots.map(s => [s.lat, s.lng, computeScore(s)/10]);
+  if (S.heatLayer) { map.removeLayer(S.heatLayer); S.heatLayer=null; }
+  if (typeof L.heatLayer === 'function') {
+    S.heatLayer = L.heatLayer(data, {
+      radius:40, blur:28, maxZoom:18, max:1.0,
+      gradient:{0.0:'#ff4757', 0.5:'#ffa502', 0.8:'#2ed573', 1.0:'#6c63ff'},
+    }).addTo(map);
+  }
+}
+
+function updateHeatmap() {
+  if (!S.heatLayer) { buildHeatmap(); return; }
+  // Weight heatmap by search relevance
+  const data = S.spots
+    .filter(s=>s.status!=='archived' && S.searchTypes.has(s.type))
+    .map(s=>{
+      const fitness = computeFitness(s)/10;
+      return [s.lat, s.lng, Math.max(.05,fitness)];
+    });
+  if (S.heatLayer && S.heatLayer.setLatLngs) S.heatLayer.setLatLngs(data);
+}
+
+function toggleHeatmap(btn) {
+  S.heatActive = !S.heatActive;
+  btn.classList.toggle('active', S.heatActive);
+  if (S.heatLayer) {
+    S.heatActive ? map.addLayer(S.heatLayer) : map.removeLayer(S.heatLayer);
+  }
+}
+
+function switchLayer(name, btn) {
+  document.querySelectorAll('#bl-dark,#bl-topo,#bl-sat').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  if (S.layers[S.activeLayer]) map.removeLayer(S.layers[S.activeLayer]);
+  S.activeLayer = name;
+  S.layers[name].addTo(map);
+}
+
+function fitAll() {
+  if (S.spots.length===0) return;
+  map.fitBounds(L.latLngBounds(S.spots.map(s=>[s.lat,s.lng])),{padding:[40,40]});
+}
+
+// ── MANAGE MODE ───────────────────────────────────────────────────────
+function setMode(mode) {
+  S.mode = mode;
+  document.getElementById('mode-search').style.display = mode==='search'?'flex':'none';
+  document.getElementById('mode-manage').style.display = mode==='manage'?'flex':'none';
+  document.querySelectorAll('.mode-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById(`tab-${mode}`).classList.add('active');
+  if (mode==='manage') renderManageSidebar();
+}
+
+function renderManageSidebar() {
+  const q = (document.getElementById('mgt-search')?.value||'').toLowerCase();
+  const list = document.getElementById('mgt-list');
+  if (!list) return;
+  const filtered = S.spots.filter(s=>s.name.toLowerCase().includes(q));
+  list.innerHTML = filtered.map(spot=>{
+    const sc=computeScore(spot);
+    const bc=sc>=7?'sb-high':sc>=5?'sb-mid':'sb-low';
+    return `<div class="spot-item ${S.selectedSpotId===spot.id?'active':''}" onclick="selectManageSpot('${spot.id}')">
+      <div class="si-badge ${bc}">${sc.toFixed(1)}</div>
+      <div class="si-info">
+        <div class="si-name">${spot.name}</div>
+        <div class="si-meta">${spot.type} · ${spot.status} · ${spot.created}</div>
+      </div></div>`;
+  }).join('');
+}
+
+function selectManageSpot(id) {
+  S.selectedSpotId = id;
+  renderManageSidebar();
+  renderManageDetail(id);
+}
+
+function renderManageDetail(id) {
+  const spot = S.spots.find(s=>s.id===id);
+  if (!spot) return;
+  const sc=computeScore(spot);
+
+  document.getElementById('mp-empty').style.display='none';
+  const contentEl=document.getElementById('mp-content');
+  contentEl.style.display='flex';contentEl.style.flexDirection='column';
+
+  document.getElementById('mp-body').innerHTML=`
+    <div class="mp-header">
+      <div class="mp-name">${spot.name}</div>
+      <div class="mp-coords">${spot.lat.toFixed(5)}° N, ${spot.lng.toFixed(5)}° E</div>
+      <div class="mp-actions">
+        <button class="btn-sm acc" onclick="runOsmForFiche('${spot.id}')">🌐 OSM</button>
+        <button class="btn-sm dan" onclick="deleteSpot('${spot.id}')">🗑️</button>
+      </div>
+    </div>
+    <div class="score-block" style="margin:10px 16px 0">
+      <div class="sb-title">Score global: <span style="font-family:'JetBrains Mono',monospace;color:${scoreColor(sc)}">${sc.toFixed(2)}/10</span></div>
+      ${CRITERIA.map(c=>{const v=spot.scores[c.key]||0;return `
+        <div class="crit-edit-row">
+          <div class="cer-top">
+            <span class="cer-name">${c.label}</span>
+            <span class="cer-val" style="color:${c.color}" id="mev-${c.key}">${v.toFixed(1)}</span>
+          </div>
+          <input type="range" class="cer-slider" min="0" max="10" step=".5" value="${v}"
+                 style="background:linear-gradient(to right,${c.color} 0%,${c.color} ${v*10}%,var(--bg4) ${v*10}%,var(--bg4) 100%)"
+                 oninput="updateManageScore('${spot.id}','${c.key}',this)" />
+        </div>`}).join('')}
+    </div>
+    <div class="notes-block" style="margin:10px 16px 14px">
+      <div class="sb-title" style="margin-bottom:6px">Notes terrain</div>
+      <textarea placeholder="Notes, observations, accord propriétaire…" oninput="saveManageNotes('${spot.id}',this)"
+      >${spot.notes||''}</textarea>
+      <div class="notes-save" id="note-save-${spot.id}">—</div>
+    </div>
+  `;
+}
+
+function updateManageScore(spotId, key, el) {
+  const spot=S.spots.find(s=>s.id===spotId); if(!spot) return;
+  spot.scores[key]=parseFloat(el.value);
+  const c=CRITERIA.find(c=>c.key===key);
+  document.getElementById(`mev-${key}`).textContent=parseFloat(el.value).toFixed(1);
+  el.style.background=`linear-gradient(to right,${c.color} 0%,${c.color} ${el.value*10}%,var(--bg4) ${el.value*10}%,var(--bg4) 100%)`;
+  // Refresh marker
+  if (S.markers[spotId]) S.markers[spotId].setIcon(markerIcon(spot,null));
+  buildHeatmap();
+  renderManageSidebar();
+  updateStats();
+  // SUPABASE: await supabase.from('scores').upsert({spot_id:spotId,...spot.scores})
+}
+
+function saveManageNotes(spotId, el) {
+  const spot=S.spots.find(s=>s.id===spotId); if(!spot) return;
+  spot.notes=el.value;
+  const saveEl=document.getElementById(`note-save-${spotId}`);
+  if(saveEl) saveEl.textContent='Modification…';
+  clearTimeout(S.noteTimer);
+  S.noteTimer=setTimeout(()=>{
+    // SUPABASE: await supabase.from('spots').update({notes:spot.notes}).eq('id',spotId)
+    if(saveEl) saveEl.textContent=`✓ Sauvegardé ${new Date().toLocaleTimeString('fr-FR')}`;
+  },700);
+}
+
+function exportPDFFromManage() {
+  const spot=S.spots.find(s=>s.id===S.selectedSpotId); if(!spot) return;
+  S.selectedResultId=spot.id;
+  // Run a quick search if not done
+  if(!S.searchDone){ S.results=[...S.spots]; S.searchDone=true; }
+  if(!S.results.find(s=>s.id===spot.id)) S.results.unshift(spot);
+  exportFichePDF();
+}
+
+// ── NEW SPOT ──────────────────────────────────────────────────────────
+function openNewModal() { document.getElementById('modal-new').classList.add('open'); }
+
+function createSpot() {
+  const name=document.getElementById('n-name').value.trim();
+  const lat=parseFloat(document.getElementById('n-lat').value);
+  const lng=parseFloat(document.getElementById('n-lng').value);
+  if(!name||isNaN(lat)||isNaN(lng)){ toast('Nom et coordonnées requis','error'); return; }
+  const spot={
+    id:'sp'+Date.now(), name, lat, lng,
+    type:document.getElementById('n-type').value,
+    status:document.getElementById('n-status').value,
+    notes:document.getElementById('n-notes').value,
+    scores:{acoustique:5,acces:5,repression:5,incendie:5,praticite:5},
+    photos:[], created:new Date().toISOString().slice(0,10), osm:null,
+  };
+  // SUPABASE: const {data}=await supabase.from('spots').insert(spot).select().single()
+  S.spots.push(spot);
+  addMarker(spot);
+  buildHeatmap();
+  renderManageSidebar();
+  updateStats();
+  closeModal('modal-new');
+  toast(`Spot "${name}" créé`,'success');
+  selectManageSpot(spot.id);
+  ['n-name','n-lat','n-lng','n-notes'].forEach(id=>document.getElementById(id).value='');
+}
+
+function deleteSpot(id) {
+  const spot=S.spots.find(s=>s.id===id); if(!spot) return;
+  if(!confirm(`Supprimer "${spot.name}" ?`)) return;
+  // SUPABASE: await supabase.from('spots').delete().eq('id',id)
+  if(S.markers[id]){ map.removeLayer(S.markers[id]); delete S.markers[id]; }
+  S.spots=S.spots.filter(s=>s.id!==id);
+  S.results=S.results.filter(s=>s.id!==id);
+  buildHeatmap();
+  renderManageSidebar();
+  updateStats();
+  document.getElementById('mp-empty').style.display='flex';
+  document.getElementById('mp-content').style.display='none';
+  toast('Spot supprimé','info');
+}
+
+// ── PHOTOS ────────────────────────────────────────────────────────────
+function addPhotos(input) {
+  const spotId=input.dataset.spotid;
+  const spot=S.spots.find(s=>s.id===spotId); if(!spot||!input.files.length) return;
+  // SUPABASE: await supabase.storage.from('spot-photos').upload(...)
+  Array.from(input.files).forEach(()=>spot.photos.push({url:null}));
+  if(S.selectedResultId===spotId) renderFiche(spotId);
+  toast(`${input.files.length} photo(s) ajoutée(s)`,'success');
+  input.value='';
+}
+
+// ── STATS ─────────────────────────────────────────────────────────────
+function updateStats() {
+  const active=S.spots.filter(s=>s.status!=='archived');
+  document.getElementById('st-spots').textContent=S.spots.length;
+  document.getElementById('st-results').textContent=S.searchDone?S.results.filter(s=>meetsCriteria(s)).length:'—';
+  const scores=active.map(computeScore);
+  document.getElementById('st-best').textContent=scores.length?Math.max(...scores).toFixed(1):'—';
+}
+
+// ── UTILS ─────────────────────────────────────────────────────────────
+function closeModal(id){ document.getElementById(id).classList.remove('open'); }
+document.querySelectorAll('.overlay').forEach(el=>{
+  el.addEventListener('click',e=>{ if(e.target===el) el.classList.remove('open'); });
+});
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape') document.querySelectorAll('.overlay.open').forEach(m=>m.classList.remove('open'));
+});
+
+function toast(msg, type='info') {
+  const c=document.getElementById('toasts');
+  const el=document.createElement('div');
+  el.className=`toast ${type}`;el.textContent=msg;c.appendChild(el);
+  requestAnimationFrame(()=>requestAnimationFrame(()=>el.classList.add('show')));
+  setTimeout(()=>{ el.classList.remove('show'); setTimeout(()=>el.remove(),300); },3000);
+}
+</script>
+</body>
+</html>

@@ -22,6 +22,10 @@ COPY --from=builder /app/package.json ./package.json
 COPY --from=builder /app/src/content ./src/content
 COPY --from=builder /app/src/data ./src/data
 
+# SpotCheck SPA — lu à chaque requête par /terrain/spotcheck via fs.readFileSync
+# Le dossier doit être présent dans le runner (non bundlé par Vite, lu au runtime)
+COPY --from=builder /app/spotcheck ./spotcheck
+
 # Fix @astrojs/node v8 : resolveClientDir() cherche dans dist/server/client/
 # au lieu de dist/client/ (décalage d'un niveau dû au chunk dans chunks/)
 RUN ln -sf /app/dist/client /app/dist/server/client

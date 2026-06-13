@@ -1,12 +1,40 @@
 import { defineMiddleware } from 'astro:middleware';
+import { verifyToken, ADMIN_COOKIE } from './lib/adminAuth';
 
 // ─── Origine canonique du site ────────────────────────────────────────────────
 const ORIGIN = 'https://soundsystemhardening.fr';
 
+// ─── Routes opérationnelles internes (obfusquées) ─────────────────────────────
+// Ne pas modifier sans mettre à jour les pages correspondantes.
+// Ne JAMAIS lier ces routes depuis une page publique.
+const TERRAIN_PREFIX    = '/terrain';
+const TERRAIN_AUTH_PATH = '/terrain/auth';
+const TERRAIN_AUTH_API  = '/api/terrain-auth';
+const TERRAIN_LOGOUT    = '/api/terrain-logout';
+
 // ─── Content Security Policy ──────────────────────────────────────────────────
-// TODO : retirer https://unpkg.com et https://cdnjs.cloudflare.com une fois
-//        Leaflet, jsPDF et jszip bundlés localement (npm + build).
-//        Retirer https://*.basemaps.cartocdn.com si les tuiles passent sur OSM.
+// NOTE sécurité : 'unsafe-inline' dans script-src est un vecteur XSS résiduel.
+// À remplacer par des nonces Astro lors de la migration vers Astro 6+.
+// Voir : https://docs.astro.build/en/reference/configuration-reference/
+
+// CSP élargie pour /terrain/* — SpotCheck a besoin de polices Google + tuiles satellite
+const CSP_TERRAIN = [
+  "default-src 'self'",
+  "script-src 'self' 'unsafe-inline' https://unpkg.com https://cdnjs.cloudflare.com",
+  // SpotCheck charge Inter + JetBrains Mono depuis fonts.googleapis.com
+  "style-src 'self' 'unsafe-inline' https://unpkg.com https://fonts.googleapis.com",
+  // Polices woff2 depuis fonts.gstatic.com
+  "font-src 'self' https://fonts.gstatic.com",
+  // Tuiles CartoDB (dark) + OSM + ArcGIS (satellite) + SpotCheck markers data:
+  "img-src 'self' data: https://*.tile.openstreetmap.org https://*.basemaps.cartocdn.com https://server.arcgisonline.com https://*.tile.opentopomap.org",
+  // Overpass API pour l'analyse OSM depuis SpotCheck
+  "connect-src 'self' https://overpass-api.de https://overpass.kumi.systems https://api.open-elevation.com",
+  "worker-src 'self'",
+  // Terrain : frame-ancestors 'none' conservé
+  "frame-ancestors 'none'",
+].join('; ');
+
+// CSP du site public
 const CSP = [
   "default-src 'self'",
   "script-src 'self' 'unsafe-inline' https://unpkg.com https://cdnjs.cloudflare.com",
@@ -35,9 +63,14 @@ const RL_MAX = 8;                    // 8 POST /api par IP et par fenetre
 const rlBuckets = new Map<string, number[]>();
 
 function clientIp(context: { clientAddress?: string }, request: Request): string {
+  // Priorité à context.clientAddress (IP réelle injectée par le runtime Astro/Node
+  // depuis la connexion TCP — non falsifiable par le client).
+  // X-Forwarded-For n'est lu qu'en l'absence de clientAddress car ce header
+  // peut être forgé par n'importe quel client HTTP (bypass de rate limit).
+  if (context.clientAddress) return context.clientAddress;
   const xff = request.headers.get('x-forwarded-for');
   if (xff) return xff.split(',')[0].trim();
-  return context.clientAddress || 'unknown';
+  return 'unknown';
 }
 
 function isRateLimited(ip: string): boolean {
@@ -56,7 +89,67 @@ function isRateLimited(ip: string): boolean {
 
 // ─── Middleware ───────────────────────────────────────────────────────────────
 export const onRequest = defineMiddleware(async (context, next) => {
-  const { pathname } = context.url;
+  // ── Normalisation du pathname (anti-bypass URL encoding) ───────────────────────
+  // CVE GHSA-ggxq-hp9w-j794 / GHSA-whqg-ppgf-wp8c : Astro 4.x peut passer un
+  // pathname non-décodé au middleware. Un attaquant envoie /%74errain/spotcheck
+  // (ou /%2Fterrain) pour contourner les vérifications startsWith('/terrain').
+  // On normalise ici pour que toutes les comparaisons portent sur le chemin réel.
+  let pathname: string;
+  try {
+    pathname = decodeURIComponent(context.url.pathname);
+  } catch {
+    // URI malformée (ex. %80) → refus 400
+    return new Response(JSON.stringify({ error: 'Bad Request' }), { status: 400 });
+  }
+  const isTerrainRoute = pathname.startsWith(TERRAIN_PREFIX);
+
+  // ── Protection zone opérationnelle /terrain/* ───────────────────────────────
+  // Toutes les routes /terrain/* nécessitent un token de session valide,
+  // sauf /terrain/auth (page de login) et les endpoints d'authentification.
+  if (isTerrainRoute) {
+    const isAuthPage    = pathname === TERRAIN_AUTH_PATH || pathname === TERRAIN_AUTH_PATH + '/';
+    const isAuthApi     = pathname === TERRAIN_AUTH_API;
+    const isLogoutApi   = pathname === TERRAIN_LOGOUT;
+
+    // Ces routes sont accessibles sans token (sinon boucle infinie)
+    if (!isAuthPage && !isAuthApi && !isLogoutApi) {
+      const secret = process.env.ADMIN_SECRET;
+      const rawCookie = context.request.headers.get('cookie') || '';
+      const tokenMatch = rawCookie.match(new RegExp(`(?:^|;\\s*)${ADMIN_COOKIE}=([^;]+)`));
+      const token = tokenMatch?.[1];
+
+      let isAuthed = false;
+      if (token && secret) {
+        const result = verifyToken(token, secret);
+        isAuthed = result.valid;
+      }
+
+      if (!isAuthed) {
+        // Pas de token ou token invalide → redirection vers la page de login
+        // On encode la destination pour revenir après auth
+        const dest = encodeURIComponent(pathname);
+        return Response.redirect(
+          new URL(`${TERRAIN_AUTH_PATH}?r=${dest}`, context.url),
+          302
+        );
+      }
+    }
+
+    // Traitement de la requête terrain, puis headers sécurité spécifiques
+    const response = await next();
+
+    // CSP élargie pour /terrain (Google Fonts, ArcGIS satellite, etc.)
+    response.headers.set('Content-Security-Policy', CSP_TERRAIN);
+    response.headers.set('X-Frame-Options',         'DENY');
+    response.headers.set('X-Content-Type-Options',  'nosniff');
+    response.headers.set('Referrer-Policy',         'no-referrer');  // Plus strict sur zone interne
+    response.headers.set('X-Robots-Tag',            'noindex, nofollow, noarchive');
+    response.headers.set('Cache-Control',           'no-store, no-cache, must-revalidate');
+    if (import.meta.env.PROD) {
+      response.headers.set('Strict-Transport-Security', 'max-age=63072000; includeSubDomains; preload');
+    }
+    return response;
+  }
 
   // ── Mode maintenance ────────────────────────────────────────────────────────
   const isMaintenance = process.env.MAINTENANCE_MODE === 'true';
@@ -93,7 +186,13 @@ export const onRequest = defineMiddleware(async (context, next) => {
   // Le CORS n'est applique que par le navigateur : il n'empeche ni un POST
   // cross-site en formulaire simple, ni un appel direct (curl, bot). On verifie
   // donc l'Origin cote serveur (anti-CSRF) et on applique le rate limit.
-  if (context.request.method === 'POST' && pathname.startsWith('/api/')) {
+  //
+  // Exemption : /api/terrain-auth et /api/terrain-logout ont leur propre
+  // sécurité (PBKDF2 + HMAC token). Le check CSRF sur ces endpoints bloquerait
+  // le login en développement local (origin = http://localhost:4321 ≠ ORIGIN).
+  const isTerrainAuthEndpoint = pathname === TERRAIN_AUTH_API || pathname === TERRAIN_LOGOUT;
+
+  if (context.request.method === 'POST' && pathname.startsWith('/api/') && !isTerrainAuthEndpoint) {
     const origin = context.request.headers.get('origin');
     if (origin !== ORIGIN) {
       return new Response(

@@ -1,0 +1,264 @@
+---
+/**
+ * /terrain — Dashboard opérationnel interne
+ * Accessible uniquement aux rôles admin et moderator
+ */
+import { checkAdminAuth } from '../../lib/adminAuth';
+
+const auth = checkAdminAuth(Astro.cookies);
+if (!auth.valid) return Astro.redirect('/terrain/auth?r=/terrain', 302);
+
+const { role, email } = auth;
+const isAdmin = role === 'admin';
+const now = new Date().toLocaleString('fr-FR', {
+  weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
+  hour: '2-digit', minute: '2-digit',
+});
+---
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Zone opérationnelle · SSH</title>
+  <meta name="robots" content="noindex, nofollow, noarchive" />
+  <meta name="referrer" content="no-referrer" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg0:#07070d; --bg1:#0e0e18; --bg2:#14141f; --bg3:#1b1b2a; --bg4:#222235;
+      --border:rgba(255,255,255,0.07); --border2:rgba(255,255,255,0.13);
+      --accent:#6c63ff; --accent2:#9b94ff; --accent-g:rgba(108,99,255,0.12);
+      --green:#2ed573; --orange:#ffa502; --red:#ff4757; --cyan:#1ed8f7;
+      --text0:#f0f0fa; --text1:#a0a0c0; --text2:#606080;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{height:100%}
+    body{
+      min-height:100vh; font-family:'Inter',system-ui,sans-serif;
+      background:var(--bg0); color:var(--text0); font-size:14px;
+    }
+
+    /* Header */
+    .hdr{
+      background:var(--bg1); border-bottom:1px solid var(--border);
+      padding:0 24px; height:54px; display:flex; align-items:center; gap:14px;
+    }
+    .hdr-logo{display:flex;align-items:center;gap:8px}
+    .hdr-logo .ico{
+      width:28px; height:28px; border-radius:7px;
+      background:linear-gradient(135deg,var(--accent),var(--cyan));
+      font-size:11px; font-weight:800; color:#fff;
+      display:flex; align-items:center; justify-content:center;
+    }
+    .hdr-logo h1{font-size:14px; font-weight:700; letter-spacing:-.2px}
+    .hdr-logo sub{color:var(--text2); font-size:9px; display:block; margin-top:-2px}
+    .hdr-sep{width:1px; height:18px; background:var(--border)}
+    .role-pill{
+      padding:3px 10px; border-radius:20px; font-size:10px; font-weight:700;
+      text-transform:uppercase; letter-spacing:.4px;
+    }
+    .pill-admin{background:rgba(245,197,66,.12); color:#f5c542; border:1px solid rgba(245,197,66,.3)}
+    .pill-mod  {background:rgba(108,99,255,.12); color:var(--accent2); border:1px solid rgba(108,99,255,.3)}
+    .hdr-spacer{flex:1}
+    .hdr-email{font-size:11px; color:var(--text2); font-family:'JetBrains Mono',monospace}
+    .btn-back{
+      font-size:11px; color:var(--text2); text-decoration:none;
+      padding:4px 10px; border-radius:5px; border:1px solid var(--border2);
+      background:var(--bg3); transition:all .15s;
+    }
+    .btn-back:hover{color:var(--text0); background:var(--bg4)}
+    .btn-logout{
+      font-size:11px; color:var(--red); cursor:pointer;
+      padding:4px 10px; border-radius:5px; border:1px solid rgba(255,71,87,.25);
+      background:rgba(255,71,87,.06); font-family:inherit; transition:all .15s;
+    }
+    .btn-logout:hover{background:rgba(255,71,87,.12)}
+
+    /* Main */
+    .main{max-width:1100px; margin:0 auto; padding:32px 24px}
+    .welcome{margin-bottom:32px}
+    .welcome h2{font-size:22px; font-weight:800; letter-spacing:-.4px; margin-bottom:4px}
+    .welcome .ts{font-size:12px; color:var(--text2); font-family:'JetBrains Mono',monospace}
+
+    /* Stats bar */
+    .stats-bar{
+      display:flex; gap:1px; background:var(--border); border-radius:10px; overflow:hidden;
+      margin-bottom:32px; border:1px solid var(--border2);
+    }
+    .stat-cell{
+      flex:1; background:var(--bg2); padding:14px 18px;
+    }
+    .stat-cell:first-child{border-radius:9px 0 0 9px}
+    .stat-cell:last-child{border-radius:0 9px 9px 0}
+    .sc-val{font-size:20px; font-weight:700; font-family:'JetBrains Mono',monospace; color:var(--accent2)}
+    .sc-lbl{font-size:10px; color:var(--text2); text-transform:uppercase; letter-spacing:.4px; margin-top:2px}
+
+    /* Section */
+    .section-title{
+      font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.5px;
+      color:var(--text2); margin-bottom:14px;
+    }
+
+    /* Tool cards */
+    .tools-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:14px; margin-bottom:32px}
+    .tool-card{
+      background:var(--bg2); border:1px solid var(--border2); border-radius:12px;
+      padding:20px; text-decoration:none; color:inherit;
+      transition:all .2s; display:flex; flex-direction:column; gap:10px; position:relative;
+    }
+    .tool-card:hover{background:var(--bg3); border-color:rgba(108,99,255,.35); transform:translateY(-1px)}
+    .tool-card.disabled{opacity:.4; cursor:not-allowed; pointer-events:none}
+    .tc-head{display:flex; align-items:flex-start; justify-content:space-between}
+    .tc-icon{
+      width:42px; height:42px; border-radius:10px;
+      display:flex; align-items:center; justify-content:center; font-size:20px;
+    }
+    .tc-badge{
+      font-size:9px; font-weight:700; padding:2px 7px; border-radius:10px; text-transform:uppercase;
+    }
+    .badge-live {background:rgba(46,213,115,.12); color:var(--green); border:1px solid rgba(46,213,115,.25)}
+    .badge-soon {background:rgba(96,96,128,.12); color:var(--text2); border:1px solid var(--border2)}
+    .badge-admin{background:rgba(245,197,66,.12); color:#f5c542; border:1px solid rgba(245,197,66,.25)}
+    .tc-name{font-size:15px; font-weight:700; letter-spacing:-.2px}
+    .tc-desc{font-size:12px; color:var(--text1); line-height:1.5}
+    .tc-arrow{
+      position:absolute; bottom:16px; right:16px;
+      font-size:16px; color:var(--text2); transition:color .15s;
+    }
+    .tool-card:hover .tc-arrow{color:var(--accent2)}
+
+    /* Access log */
+    .log-card{
+      background:var(--bg2); border:1px solid var(--border); border-radius:12px;
+      padding:18px 20px;
+    }
+    .log-entry{
+      display:flex; gap:10px; align-items:flex-start;
+      padding:7px 0; border-bottom:1px solid var(--border); font-size:12px;
+    }
+    .log-entry:last-child{border-bottom:none}
+    .log-ts{font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--text2); flex-shrink:0; margin-top:1px}
+    .log-msg{color:var(--text1)}
+    .log-dot{width:6px; height:6px; border-radius:50%; flex-shrink:0; margin-top:5px}
+  </style>
+</head>
+<body>
+
+  <header class="hdr">
+    <div class="hdr-logo">
+      <div class="ico">SSH</div>
+      <div><h1>Zone opérationnelle</h1><sub>SoundSystem Hardening · Interne</sub></div>
+    </div>
+    <div class="hdr-sep"></div>
+    <span class={`role-pill ${isAdmin ? 'pill-admin' : 'pill-mod'}`}>
+      {isAdmin ? '★ Admin' : 'Modérateur'}
+    </span>
+    <div class="hdr-spacer"></div>
+    <div class="hdr-email">{email}</div>
+    <a href="/" class="btn-back">← Site public</a>
+    <button class="btn-logout" id="logout-btn">Déconnexion</button>
+  </header>
+
+  <main class="main">
+
+    <div class="welcome">
+      <h2>Bienvenue{email ? `, ${email.split('@')[0]}` : ''}</h2>
+      <div class="ts">{now}</div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-bar">
+      <div class="stat-cell">
+        <div class="sc-val">6</div>
+        <div class="sc-lbl">Spots enregistrés</div>
+      </div>
+      <div class="stat-cell">
+        <div class="sc-val">3</div>
+        <div class="sc-lbl">Spots actifs</div>
+      </div>
+      <div class="stat-cell">
+        <div class="sc-val">7.8</div>
+        <div class="sc-lbl">Meilleur score</div>
+      </div>
+      <div class="stat-cell">
+        <div class="sc-val" style="color:var(--green)">En ligne</div>
+        <div class="sc-lbl">Statut système</div>
+      </div>
+    </div>
+
+    <!-- Tools -->
+    <div class="section-title">Outils opérationnels</div>
+    <div class="tools-grid">
+
+      <!-- SpotCheck -->
+      <a href="/terrain/spotcheck" class="tool-card">
+        <div class="tc-head">
+          <div class="tc-icon" style="background:rgba(108,99,255,.12)">📍</div>
+          <span class="tc-badge badge-live">Actif</span>
+        </div>
+        <div class="tc-name">SpotCheck</div>
+        <div class="tc-desc">Recherche multi-critères, heatmap des spots, fiches techniques détaillées et export PDF.</div>
+        <div class="tc-arrow">→</div>
+      </a>
+
+      <!-- Acoustic sim — placeholder -->
+      <div class="tool-card disabled">
+        <div class="tc-head">
+          <div class="tc-icon" style="background:rgba(30,216,247,.08)">🔊</div>
+          <span class="tc-badge badge-soon">Bientôt</span>
+        </div>
+        <div class="tc-name">SoundCheck</div>
+        <div class="tc-desc">Simulation acoustique terrain, propagation sonore, analyse des contraintes de voisinage.</div>
+      </div>
+
+      <!-- CopWatch admin — admin only -->
+      {isAdmin && (
+        <div class="tool-card disabled">
+          <div class="tc-head">
+            <div class="tc-icon" style="background:rgba(255,71,87,.08)">👁️</div>
+            <span class="tc-badge badge-admin">Admin</span>
+          </div>
+          <div class="tc-name">CopWatch Admin</div>
+          <div class="tc-desc">Gestion des signalements, validation des incidents, export des données de surveillance.</div>
+        </div>
+      )}
+
+      <!-- OSM Query -->
+      <div class="tool-card disabled">
+        <div class="tc-head">
+          <div class="tc-icon" style="background:rgba(46,213,115,.08)">🌐</div>
+          <span class="tc-badge badge-soon">Bientôt</span>
+        </div>
+        <div class="tc-name">OSM Query</div>
+        <div class="tc-desc">Requêtes Overpass API avancées, export GeoJSON, analyse de zone géographique étendue.</div>
+      </div>
+
+    </div>
+
+    <!-- Access log -->
+    <div class="section-title">Journal de session</div>
+    <div class="log-card">
+      <div class="log-entry">
+        <div class="log-dot" style="background:var(--green)"></div>
+        <div class="log-ts">{new Date().toLocaleTimeString('fr-FR')}</div>
+        <div class="log-msg">Connexion réussie — <strong>{email}</strong> ({role})</div>
+      </div>
+      <div class="log-entry">
+        <div class="log-dot" style="background:var(--accent2)"></div>
+        <div class="log-ts">—</div>
+        <div class="log-msg">Journalisation Supabase active en production · Les accès sont enregistrés</div>
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    document.getElementById('logout-btn').addEventListener('click', async () => {
+      await fetch('/api/terrain-logout', { method: 'POST' });
+      window.location.href = '/terrain/auth';
+    });
+  </script>
+
+</body>
+</html>

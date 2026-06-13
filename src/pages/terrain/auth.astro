@@ -1,0 +1,207 @@
+---
+/**
+ * /terrain/auth — Page d'accès opérationnel (login admin/modérateur)
+ * Page minimaliste — ne mentionne pas "admin" ou "panel"
+ * Aucune navigation vers cette page depuis le site public
+ */
+import { checkAdminAuth } from '../../lib/adminAuth';
+
+// Déjà authentifié → rediriger directement
+const auth = checkAdminAuth(Astro.cookies);
+if (auth.valid) return Astro.redirect('/terrain', 302);
+
+const redirectTo = Astro.url.searchParams.get('r') || '/terrain';
+const loginFailed = Astro.url.searchParams.has('e');
+---
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Accès restreint</title>
+  <!-- Pas d'indexation, pas de référencement -->
+  <meta name="robots" content="noindex, nofollow, noarchive" />
+  <meta name="referrer" content="no-referrer" />
+  <style>
+    :root {
+      --bg0: #07070d; --bg1: #0e0e18; --bg2: #14141f;
+      --border: rgba(255,255,255,0.08); --border2: rgba(255,255,255,0.14);
+      --accent: #6c63ff; --accent2: #9b94ff;
+      --red: #ff4757; --green: #2ed573; --text0: #f0f0fa; --text1: #a0a0c0; --text2: #606080;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; font-family: 'Inter', system-ui, sans-serif; }
+    body {
+      background: radial-gradient(ellipse at 25% 35%, rgba(108,99,255,0.10) 0%, transparent 55%),
+                  radial-gradient(ellipse at 80% 70%, rgba(30,216,247,0.05) 0%, transparent 50%),
+                  var(--bg0);
+      display: flex; align-items: center; justify-content: center;
+      min-height: 100vh; color: var(--text0);
+    }
+
+    .card {
+      width: 360px;
+      background: var(--bg2);
+      border: 1px solid var(--border2);
+      border-radius: 14px;
+      padding: 36px 32px;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.6), 0 0 0 1px rgba(108,99,255,0.08);
+    }
+
+    .card-top {
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 28px;
+    }
+    .lock-icon {
+      width: 38px; height: 38px; border-radius: 9px;
+      background: rgba(108,99,255,0.12);
+      border: 1px solid rgba(108,99,255,0.25);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .lock-icon svg { width: 18px; height: 18px; color: var(--accent2); }
+    .card-title { font-size: 16px; font-weight: 700; letter-spacing: -0.2px; }
+    .card-sub   { font-size: 11px; color: var(--text2); margin-top: 1px; }
+
+    .field { margin-bottom: 14px; }
+    .field label {
+      display: block; font-size: 10px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.5px; color: var(--text1); margin-bottom: 5px;
+    }
+    .field input {
+      width: 100%; background: var(--bg1); border: 1px solid var(--border2);
+      border-radius: 7px; padding: 9px 12px; color: var(--text0);
+      font-size: 13px; font-family: inherit; outline: none; transition: border-color 0.2s;
+    }
+    .field input:focus { border-color: var(--accent); }
+    .field input::placeholder { color: var(--text2); }
+
+    .error {
+      background: rgba(255,71,87,0.08); border: 1px solid rgba(255,71,87,0.25);
+      border-radius: 6px; padding: 8px 10px;
+      font-size: 12px; color: var(--red); margin-bottom: 14px;
+    }
+
+    .btn-submit {
+      width: 100%; margin-top: 4px;
+      background: var(--accent); color: #fff; border: none;
+      border-radius: 7px; padding: 10px; font-size: 13px; font-weight: 600;
+      font-family: inherit; cursor: pointer; transition: background 0.2s, transform 0.1s;
+      letter-spacing: 0.1px;
+    }
+    .btn-submit:hover   { background: var(--accent2); }
+    .btn-submit:active  { transform: scale(0.99); }
+    .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .footer {
+      margin-top: 20px; display: flex; align-items: center; gap: 6px;
+      color: var(--text2); font-size: 10px;
+    }
+    .footer .dot {
+      width: 5px; height: 5px; border-radius: 50%;
+      background: var(--green); box-shadow: 0 0 5px var(--green);
+    }
+
+    /* Spinner */
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .spinner {
+      display: none; width: 14px; height: 14px;
+      border: 2px solid rgba(255,255,255,0.3); border-top-color: white;
+      border-radius: 50%; animation: spin 0.7s linear infinite;
+      margin: 0 auto;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="card-top">
+      <div class="lock-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div>
+        <div class="card-title">Accès restreint</div>
+        <div class="card-sub">Zone opérationnelle · SSH</div>
+      </div>
+    </div>
+
+    {loginFailed && (
+      <div class="error">Identifiants incorrects ou session expirée.</div>
+    )}
+
+    <form id="login-form" novalidate>
+      <div class="field">
+        <label>Identifiant</label>
+        <input type="email" id="f-email" name="email" placeholder="identifiant@domaine" autocomplete="username" required />
+      </div>
+      <div class="field">
+        <label>Phrase secrète</label>
+        <input type="password" id="f-pass" name="password" placeholder="••••••••••••" autocomplete="current-password" required />
+      </div>
+      <div id="form-error" class="error" style="display:none"></div>
+      <button type="submit" class="btn-submit" id="submit-btn">
+        <span id="btn-label">Valider</span>
+        <span class="spinner" id="spinner"></span>
+      </button>
+    </form>
+
+    <div class="footer">
+      <div class="dot"></div>
+      Connexion chiffrée · Accès journalisé
+    </div>
+  </div>
+
+  <script define:vars={{ redirectTo }}>
+    const form    = document.getElementById('login-form');
+    const errEl   = document.getElementById('form-error');
+    const btn     = document.getElementById('submit-btn');
+    const label   = document.getElementById('btn-label');
+    const spinner = document.getElementById('spinner');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      errEl.style.display = 'none';
+
+      const email    = document.getElementById('f-email').value.trim();
+      const password = document.getElementById('f-pass').value;
+      if (!email || !password) return;
+
+      btn.disabled     = true;
+      label.style.display  = 'none';
+      spinner.style.display = 'block';
+
+      try {
+        const res = await fetch('/api/terrain-auth', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password }),
+        });
+
+        if (res.ok) {
+          window.location.href = redirectTo;
+        } else {
+          errEl.textContent    = 'Identifiants incorrects.';
+          errEl.style.display  = 'block';
+          btn.disabled         = false;
+          label.style.display  = 'inline';
+          spinner.style.display = 'none';
+          document.getElementById('f-pass').value = '';
+          document.getElementById('f-pass').focus();
+        }
+      } catch {
+        errEl.textContent    = 'Erreur réseau. Réessayez.';
+        errEl.style.display  = 'block';
+        btn.disabled         = false;
+        label.style.display  = 'inline';
+        spinner.style.display = 'none';
+      }
+    });
+
+    // Bloquer le retour arrière sur cette page après login réussi
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('f-email').focus();
+    });
+  </script>
+</body>
+</html>
