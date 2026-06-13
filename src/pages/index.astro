@@ -99,13 +99,20 @@ const totalWikiPages = readdirSync(join(process.cwd(), 'src/content/wiki'))
 
     <!-- Ligne d'identité -->
     <div class="si-eyebrow">
-      <span class="si-badge">Wiki collectif · Open source · CC BY-SA 4.0</span>
+      <span class="si-badge">Plateforme collective · Open source · CC BY-SA 4.0</span>
     </div>
 
     <!-- Statement principal -->
-    <p class="si-statement">
-      Une infrastructure d'autodéfense pour le mouvement free party. Wiki juridique, outils numériques, carte de répression, construit par le mouvement, pour le mouvement.
-    </p>
+    <div class="si-statement">
+      <p class="si-statement-lead">Une infrastructure d'autodéfense pour le mouvement free party.</p>
+      <div class="si-statement-tags">
+        <span>Wiki juridique</span>
+        <span>Documentation OPSEC</span>
+        <span>Outils numériques</span>
+        <span>Carte des incidents</span>
+      </div>
+      <p class="si-statement-sign">Construit par le mouvement, pour le mouvement.</p>
+    </div>
 
     <!-- MOT DE BIENVENUE · LANCEMENT (temporaire) : à retirer après la période de lancement -->
     <div class="si-welcome">
@@ -151,7 +158,7 @@ const totalWikiPages = readdirSync(join(process.cwd(), 'src/content/wiki'))
       <div class="si-contrib-body">
         <div class="si-contrib-label">Porter le mouvement</div>
         <p class="si-contrib-text">
-          Ce wiki est une ressource vivante. Il grandit avec chaque jurisprudence ajoutée, chaque incident documenté, chaque retour de terrain partagé. Si tu connais des éléments manquants, contribue.
+          Cette plateforme est une ressource vivante. Elle grandit avec chaque jurisprudence ajoutée, chaque incident documenté, chaque retour de terrain partagé. Si tu connais des éléments manquants, contribue.
         </p>
       </div>
       <div class="si-contrib-cta">
@@ -189,7 +196,7 @@ const totalWikiPages = readdirSync(join(process.cwd(), 'src/content/wiki'))
         <div class="manifeste-body">
           <p>Jamaïque, années 1950. Les sound systems sortent la musique des clubs fermés et la portent dans les rues, les cours, les terrains vagues. Quand on n'a pas les moyens d'entrer, on construit sa propre scène.</p>
           <p>Angleterre, 1994. Le <strong>Criminal Justice Act</strong> criminalise les rassemblements à musique répétitive. Spiral Tribe quitte le pays. La répression n'a pas tué la free party, elle l'a exportée sur le continent.</p>
-          <p>France, 2001. L'<strong>amendement Mariani</strong> impose la déclaration préalable. La free party entre dans le droit pour mieux être réprimée. France, 2026 : la loi RIPOST ajoute 2 ans de prison. À chaque vague répressive, le mouvement s'est outillé. <strong>Ce wiki aussi.</strong></p>
+          <p>France, 2001. L'<strong>amendement Mariani</strong> impose la déclaration préalable. La free party entre dans le droit pour mieux être réprimée. France, 2026 : la loi RIPOST ajoute 2 ans de prison. À chaque vague répressive, le mouvement s'est outillé. <strong>Cette plateforme aussi.</strong></p>
         </div>
       </details>
 
@@ -296,7 +303,7 @@ const totalWikiPages = readdirSync(join(process.cwd(), 'src/content/wiki'))
         La free party a survécu au Criminal Justice Act (1994), à la loi Mariani (2001), à des centaines d'arrêtés préfectoraux et à des dizaines de saisies de matériel. Elle a survécu parce qu'elle <strong>ne dépend de personne</strong> : pas d'un label rachetable, pas d'un festival sans financement, pas d'un serveur qui peut être mis sous scellés.
       </p>
       <p class="closing-body">
-        La loi RIPOST ajoute un chapitre au même livre. Ce wiki est notre réponse. <strong>Rendre l'information aussi difficile à saisir que la musique.</strong>
+        La loi RIPOST ajoute un chapitre au même livre. Cette plateforme est notre réponse. <strong>Rendre l'information aussi difficile à saisir que la musique.</strong>
       </p>
     </div>
 
@@ -420,7 +427,7 @@ const totalWikiPages = readdirSync(join(process.cwd(), 'src/content/wiki'))
     display: flex;
     align-items: center;
     white-space: nowrap;
-    animation: ticker-scroll 60s linear infinite;
+    animation: ticker-scroll 90s linear infinite;
   }
   .ticker-track:hover { animation-play-state: paused; }
   .ticker-item {
@@ -767,15 +774,45 @@ const totalWikiPages = readdirSync(join(process.cwd(), 'src/content/wiki'))
 
   /* Statement principal */
   .si-statement {
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: clamp(16px, 2.2vw, 20px);
-    font-weight: 500;
-    color: rgba(210, 210, 230, 0.88);
-    line-height: 1.70;
     margin: 0 0 40px;
-    max-width: 740px;
+    max-width: 760px;
     border-left: 2px solid rgba(0, 255, 159, 0.30);
-    padding-left: 20px;
+    padding-left: 22px;
+  }
+  .si-statement-lead {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(18px, 2.6vw, 26px);
+    font-weight: 600;
+    color: #e8e8f0;
+    line-height: 1.4;
+    letter-spacing: -0.01em;
+    margin: 0 0 18px;
+  }
+  .si-statement-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 18px;
+  }
+  .si-statement-tags span {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(0, 255, 159, 0.9);
+    border: 1px solid rgba(0, 255, 159, 0.28);
+    background: rgba(0, 255, 159, 0.05);
+    padding: 5px 12px;
+  }
+  .si-statement-sign {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(122, 122, 138, 0.85);
+    margin: 0;
   }
 
   /* Trois piliers */

@@ -14,7 +14,7 @@ const { title, description, category, categoryHref, ogImage } = Astro.props;
 const currentPath = Astro.url.pathname;
 
 const siteUrl = 'https://soundsystemhardening.fr';
-const defaultDescription = 'Wiki collectif : droits, opsec et résistance pour le mouvement free party. Loi RIPOST, sécurité numérique, stratégies juridiques.';
+const defaultDescription = 'Plateforme collective : wiki, documentation et outils pour le mouvement free party. Loi RIPOST, sécurité numérique, stratégies juridiques.';
 const resolvedDescription = description || defaultDescription;
 // Image OpenGraph 1200x630 dédiée : preview large dans Signal/Telegram/X.
 // Surchargeable par page via la prop `ogImage` (chemin racine ou URL absolue).
@@ -154,7 +154,7 @@ const navigation = [
       "name": "SoundSystemHardening",
       "url": "https://soundsystemhardening.fr",
       "logo": "https://soundsystemhardening.fr/SoundSystemHardening-logo.png",
-      "description": "Wiki collectif : droits, opsec, résistance pour le mouvement free party"
+      "description": "Plateforme collective : wiki, documentation et outils pour le mouvement free party"
     }
     </script>
     <meta name="description" content={resolvedDescription} />
@@ -823,7 +823,7 @@ const navigation = [
               </a>
               <div class="ssh-footer-brand-text">
                 <div class="ssh-footer-name"><span class="text-neon-green">SoundSystem</span>Hardening</div>
-                <div class="ssh-footer-tag">Wiki collectif · droits, opsec et résistance pour le mouvement free party</div>
+                <div class="ssh-footer-tag">Plateforme collective · wiki, documentation et outils pour le mouvement free party</div>
               </div>
               <span class="ssh-footer-status"><span class="ssh-footer-dot"></span> SECURE · NO-LOG</span>
             </div>

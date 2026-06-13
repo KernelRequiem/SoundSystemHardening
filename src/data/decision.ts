@@ -72,6 +72,23 @@ export const SITUATION_ICONS: Record<Situation, string> = {
 };
 
 // ─── ARBRE DE DÉCISION ────────────────────────────────────────────────────────
+//
+// Extension juin 2026 :
+// - avant_interpellation : converti en question, 3 profils de risque
+//   (participant / conducteur-propriétaire / rôle actif).
+// - Nouveaux nœuds "pendant" : pdt_controle_arrete (arrêté préfectoral opposé),
+//   pdt_fouille_telephone (consultation du téléphone hors GAV),
+//   pdt_gav_prolongation (prolongation au-delà de 24h, art. 63 CPP).
+// - Nouveaux nœuds "après" : apr_arrete_prefectoral (référés TA, REP),
+//   apr_fouille converti en question avec 3 sorties (nullité / restitution /
+//   documentation), apr_gav_alternatives (composition pénale, APP).
+// - Nœuds AFD : ajout du moyen tiré de la non-promulgation de RIPOST
+//   (principe de légalité, art. 112-1 CP) et du délai de requête en
+//   exonération (art. 495-19 s. CPP).
+// Note de prudence : PPL 1133 et RIPOST sont en navette parlementaire à la
+// date de rédaction (juin 2026). Les nœuds distinguent systématiquement le
+// droit en vigueur (R211-27 CSI, contravention 5e classe) des textes adoptés
+// mais non promulgués. Vérifier /wiki/arsenal-legislatif avant toute mise à jour.
 
 export const tree: Record<string, DecisionNode> = {
 
@@ -369,33 +386,116 @@ export const tree: Record<string, DecisionNode> = {
 
   avant_interpellation: {
     id:        'avant_interpellation',
-    text:      'Préparer une interpellation',
+    text:      'Quel est ton profil de risque ?',
+    subtitle:  'Le risque pénal dépend du rôle réel joué sur l\'événement, pas du statut revendiqué',
+    type:      'question',
+    phase:     'avant',
+    situation: 'interpellation',
+    choices: [
+      { label: 'Simple participant',                              next: 'avant_interpel_participant' },
+      { label: 'Conducteur / propriétaire du matériel son',       next: 'avant_interpel_conducteur'  },
+      { label: 'Rôle actif (infoline, bar, RdR, installation)',   next: 'avant_interpel_role_actif'  },
+    ],
+  },
+
+  avant_interpel_participant: {
+    id:        'avant_interpel_participant',
+    text:      'Préparer une interpellation (participant)',
     type:      'result',
     phase:     'avant',
     situation: 'interpellation',
     severity:  'orange',
-    icon:      '🚔',
-    context:   'L\'interpellation est le moment où les forces de l\'ordre te privent de ta liberté d\'aller et venir pour t\'amener au poste. Avec la PPL 1133 (adoptée à l\'Assemblée le 9 avril 2026, créant un délit de participation à l\'organisation puni jusqu\'à 6 mois et 30 000 euros) et le texte RIPOST voté au Sénat le 26 mai 2026, le risque pénal lié au rôle joué sur l\'événement augmente fortement. La préparation consiste à ne donner aucune prise à une requalification en "organisateur de fait".',
+    icon:      '🚶',
+    context:   'En droit actuellement en vigueur, la participation à un rassemblement festif non déclaré n\'est pas une infraction : seule l\'organisation est sanctionnée (art. R211-27 CSI). La PPL 1133 (adoptée à l\'Assemblée le 9 avril 2026) prévoit une amende de 1 500 euros pour les participants, et le texte RIPOST (voté au Sénat le 26 mai 2026) un délit de participation à un rassemblement interdit puni de 6 mois et 7 500 euros, avec une AFD de 1 500 euros en alternative. Ces deux textes sont en navette parlementaire et ne sont pas promulgués à ce jour : vérifie leur statut sur la page Arsenal législatif. Le risque principal d\'un participant reste la requalification en "organisateur de fait" à partir de ses propres déclarations.',
     actions:   [
-      'Décide à l\'avance ta ligne : droit au silence systématique, demande d\'avocat immédiate.',
+      'Décide à l\'avance ta ligne : droit au silence systématique, demande d\'avocat immédiate en cas de GAV.',
       'Prépare ton téléphone : chiffrement, code long, biométrie désactivée, applications sensibles fermées.',
-      'Convénez dans le collectif un protocole d\'alerte : qui prévenir, quel avocat, qui récupère le matériel.',
       'Garde sur papier le numéro d\'un avocat et du référent juridique, jamais uniquement dans le téléphone.',
+      'Vérifie avant de partir le statut des textes (promulgués ou non) : il détermine ce qui peut t\'être reproché.',
     ],
     rights:    [
       'Tu as le droit de te taire à tout moment, y compris avant toute notification de garde à vue.',
+      'En droit en vigueur, ta seule présence sur le site ne constitue pas une infraction au titre du CSI.',
       'Tu as le droit de faire prévenir un proche et de demander un avocat dès la GAV.',
-      'La simple possession d\'un véhicule ou de matériel ne suffit pas à te qualifier d\'organisateur (Cass. Crim. 17 mars 2020).',
     ],
     pitfalls:  [
-      'Vouloir "expliquer" ton rôle pour minimiser : c\'est exactement ce que la définition large d\'organisateur cherche à capter.',
+      'Vouloir "expliquer" ce que tu faisais là : toute mention d\'un coup de main (montage, transport, relais d\'infos) alimente la qualification de contribution.',
       'Compter sur la mémoire pour les numéros utiles le jour J.',
       'Laisser ton téléphone déverrouillable par biométrie.',
     ],
     resources: [
+      { label: 'Arsenal législatif',   href: '/wiki/arsenal-legislatif', type: 'wiki'    },
       { label: 'Contacts & Alliés',    href: '/wiki/Contacts-Allies',    type: 'contact' },
       { label: 'Sécurité numérique',   href: '/wiki/Sécurite-Numerique', type: 'wiki'    },
-      { label: 'Recours juridiques',   href: '/wiki/recours-juridiques', type: 'wiki'    },
+    ],
+    next_phase: { label: '→ Pendant : Interpellation', next: 'pdt_interpellation' },
+  },
+
+  avant_interpel_conducteur: {
+    id:        'avant_interpel_conducteur',
+    text:      'Préparer une interpellation (conducteur / propriétaire du son)',
+    type:      'result',
+    phase:     'avant',
+    situation: 'interpellation',
+    severity:  'red',
+    icon:      '🚚',
+    context:   'Le conducteur d\'un véhicule transportant du matériel son est le profil le plus exposé : c\'est sur lui que se concentrent la qualification d\'organisateur et la saisie du matériel (art. L211-15 CSI, saisie conservatoire jusqu\'à 6 mois en vue de confiscation). La jurisprudence protège cependant : la seule possession du véhicule ou du matériel ne suffit pas à caractériser la qualité d\'organisateur (Cass. Crim. 17 mars 2020). La préparation vise deux objectifs : ne fournir aucune déclaration exploitable, et préserver les preuves de propriété hors de portée d\'une saisie.',
+    actions:   [
+      'Sépare physiquement les preuves de propriété (factures, photos datées, carte grise en copie) du matériel : laisse les originaux chez un tiers de confiance.',
+      'Si le matériel appartient à un tiers ou à une association, garde une attestation de prêt datée hors du véhicule.',
+      'Décide ta ligne : silence sur le rôle, aucune explication sur la destination du chargement.',
+      'Convenez dans le collectif d\'un protocole d\'alerte : qui prévenir, quel avocat, qui suit la saisie éventuelle.',
+    ],
+    rights:    [
+      'La possession du véhicule ou du matériel ne suffit pas à te qualifier d\'organisateur (Cass. Crim. 17 mars 2020).',
+      'Hors flagrance, la visite du véhicule suppose ton accord ou une réquisition écrite du procureur (art. 78-2-3 CPP).',
+      'Un tiers de bonne foi propriétaire du matériel peut contester la saisie et obtenir restitution.',
+      'Tu as le droit de te taire à tout moment.',
+    ],
+    pitfalls:  [
+      'Transporter factures et matériel ensemble : la saisie emporte les preuves de propriété avec le matériel.',
+      'Expliquer "où tu vas" ou "pour qui tu transportes" : ces déclarations construisent la contribution à l\'organisation.',
+      'Charger un seul véhicule avec tout le matériel du collectif : une saisie unique emporte tout.',
+    ],
+    resources: [
+      { label: 'Recours juridiques (saisies)', href: '/wiki/recours-juridiques', type: 'wiki'    },
+      { label: 'Modus Operandi',               href: '/wiki/Modus-Operandi',     type: 'wiki'    },
+      { label: 'Contacts & Alliés',            href: '/wiki/Contacts-Allies',    type: 'contact' },
+      { label: 'FSJS (saisies sound system)',  href: 'https://www.facebook.com/association.fsjs/', type: 'external' },
+    ],
+    next_phase: { label: '→ Pendant : Interpellation', next: 'pdt_interpellation' },
+  },
+
+  avant_interpel_role_actif: {
+    id:        'avant_interpel_role_actif',
+    text:      'Préparer une interpellation (rôle actif sur l\'événement)',
+    type:      'result',
+    phase:     'avant',
+    situation: 'interpellation',
+    severity:  'red',
+    icon:      '🛠',
+    context:   'La PPL 1133 vise "le fait de contribuer de manière directe ou indirecte à la préparation, à la mise en place ou au bon déroulement" d\'un rassemblement non déclaré ou interdit (délit puni de 6 mois et 30 000 euros dans le texte adopté à l\'Assemblée). Cette définition couvre potentiellement l\'infoline, la tenue d\'un bar, l\'installation, la sécurité bénévole, et la LDH alerte sur le risque de pénalisation des intervenants de réduction des risques. Le texte n\'est pas promulgué (navette parlementaire en cours), mais les enquêteurs documentent déjà les rôles. En droit en vigueur, seule la qualification d\'organisateur (art. R211-27 CSI) peut t\'être opposée, et elle suppose un rôle décisionnel réel.',
+    actions:   [
+      'Cartographie ton exposition : qu\'est-ce qui, matériellement, peut te relier à une fonction (messages, planning, caisse, matériel à ton nom) ?',
+      'Applique une compartimentation stricte : pas de listes nominatives, pas de trésorerie identifiable sur toi le jour J.',
+      'Décide ta ligne : silence total sur les rôles, les tiens comme ceux des autres.',
+      'Si tu interviens en réduction des risques, garde les éléments rattachant ton action à une association déclarée (mandat, badge, convention) : c\'est un argument de défense.',
+    ],
+    rights:    [
+      'En droit en vigueur, la qualification d\'organisateur exige un rôle décisionnel (lieu, sono, organisation), pas un simple coup de main.',
+      'Tu as le droit de te taire sur ton rôle et celui des autres, à tout moment.',
+      'Le principe de légalité des délits (art. 34 Constitution) fonde une QPC contre la définition "contribution indirecte" si elle entre en vigueur.',
+    ],
+    pitfalls:  [
+      'Décrire ton "petit rôle" pour te dédouaner : c\'est précisément la matière que la définition élargie cherche à capter.',
+      'Conserver sur ton téléphone l\'historique complet de l\'organisation : prépare tes appareils avant, pas pendant.',
+      'Confondre bénévolat associatif déclaré (défendable) et fonction informelle dans l\'organisation (exposée).',
+    ],
+    resources: [
+      { label: 'Définition ambiguë d\'organisateur', href: '/wiki/Definition-Ambigue-Organisateur', type: 'wiki' },
+      { label: 'Arsenal législatif',                 href: '/wiki/arsenal-legislatif',              type: 'wiki' },
+      { label: 'Compartimentation',                  href: '/wiki/compartimentation',               type: 'wiki' },
+      { label: 'Contacts & Alliés',                  href: '/wiki/Contacts-Allies',                 type: 'contact' },
     ],
     next_phase: { label: '→ Pendant : Interpellation', next: 'pdt_interpellation' },
   },
@@ -452,6 +552,7 @@ export const tree: Record<string, DecisionNode> = {
       { label: 'Demande de papiers, contrôle classique',     next: 'pdt_controle_simple' },
       { label: 'Ils refusent de me laisser partir',          next: 'pdt_controle_retenu' },
       { label: 'Je n\'ai aucun papier sur moi',               next: 'pdt_controle_sans_papier' },
+      { label: 'On m\'oppose un arrêté préfectoral (interdiction, demi-tour)', next: 'pdt_controle_arrete' },
       { label: 'Ils tentent une fouille sans motif clair',   next: 'pdt_fouille'        },
     ],
   },
@@ -551,6 +652,41 @@ export const tree: Record<string, DecisionNode> = {
     next_phase: { label: '→ Après : Recours et documentation', next: 'apr_controle' },
   },
 
+  pdt_controle_arrete: {
+    id:        'pdt_controle_arrete',
+    text:      'Arrêté préfectoral opposé sur place',
+    type:      'result',
+    phase:     'pendant',
+    situation: 'controle',
+    severity:  'orange',
+    icon:      '📜',
+    context:   'Le préfet peut interdire un rassemblement "de nature à troubler gravement l\'ordre public" (art. L211-7 CSI) et, par arrêtés distincts, restreindre la circulation ou le transport de matériel de sonorisation sur le département. Ces arrêtés sont présumés légaux tant qu\'ils ne sont pas suspendus ou annulés : s\'y opposer physiquement sur place t\'expose, alors qu\'ils se contestent efficacement devant le tribunal administratif (référé-liberté en 48h, art. L521-2 CJA). Beaucoup d\'arrêtés sont fragiles juridiquement : motivation stéréotypée, champ trop large (couvrant aussi des rassemblements légaux), durée disproportionnée.',
+    actions:   [
+      'Demande la référence exacte de l\'arrêté (numéro, date, préfecture) et, si possible, photographie le document présenté.',
+      'Obtempère à l\'injonction sur place : la contestation se gagne au tribunal administratif, pas au barrage.',
+      'Note précisément ce qui t\'est interdit (circuler, transporter, stationner) et ce qui t\'est confisqué ou imposé.',
+      'Récupère le texte intégral de l\'arrêté sur le site de la préfecture (recueil des actes administratifs) dès que possible.',
+    ],
+    rights:    [
+      'Tout arrêté préfectoral doit être motivé par des faits précis ; une formule générale est un motif d\'illégalité.',
+      'L\'interdiction ne peut viser que les rassemblements non déclarés ou interdits, pas toute activité festive.',
+      'Tu peux contester l\'arrêté en référé-liberté (décision en 48h) ou en recours pour excès de pouvoir (2 mois).',
+      'Un refus d\'obtempérer ne peut être sanctionné que si l\'injonction repose sur un arrêté réellement applicable au cas.',
+    ],
+    pitfalls:  [
+      'Forcer le passage ou refuser le demi-tour : tu crées une infraction certaine pour contester un acte peut-être illégal.',
+      'Repartir sans avoir identifié l\'arrêté : sans référence, le recours devient difficile.',
+      'Croire que l\'arrêté est incontestable parce que les agents l\'appliquent : la jurisprudence Montpellier (2025) montre que le juge contrôle motivation et proportionnalité.',
+    ],
+    resources: [
+      { label: 'Recours juridiques (référés)', href: '/wiki/recours-juridiques', type: 'wiki'     },
+      { label: 'Templates recours',            href: '/wiki/Templates-Recours',  type: 'template' },
+      { label: 'Arsenal législatif',           href: '/wiki/arsenal-legislatif', type: 'wiki'     },
+      { label: 'Art. L521-2 CJA (Légifrance)', href: 'https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000006449327', type: 'external' },
+    ],
+    next_phase: { label: '→ Après : Contester l\'arrêté préfectoral', next: 'apr_arrete_prefectoral' },
+  },
+
   // ═══════════════════════════════════════════════════════════════════════════
   // PENDANT : FOUILLE / PERQUISITION
   // ═══════════════════════════════════════════════════════════════════════════
@@ -565,6 +701,7 @@ export const tree: Record<string, DecisionNode> = {
       { label: 'Fouille du véhicule (coffre, habitacle)',            next: 'pdt_fouille_vehicule'     },
       { label: 'Fouille corporelle / palpation de sécurité',        next: 'pdt_fouille_corporelle'   },
       { label: 'Fouille des affaires personnelles (sac, vêtements)', next: 'pdt_fouille_affaires'     },
+      { label: 'Ils veulent consulter mon téléphone sur place',      next: 'pdt_fouille_telephone'    },
       { label: 'Perquisition au domicile',                           next: 'pdt_fouille_perquisition' },
     ],
   },
@@ -662,6 +799,40 @@ export const tree: Record<string, DecisionNode> = {
     resources: [
       { label: 'Modus Operandi',     href: '/wiki/Modus-Operandi',   type: 'wiki'     },
       { label: 'Templates recours',  href: '/wiki/Templates-Recours', type: 'template' },
+    ],
+    next_phase: { label: '→ Après : Recours fouille', next: 'apr_fouille' },
+  },
+
+  pdt_fouille_telephone: {
+    id:        'pdt_fouille_telephone',
+    text:      'Consultation du téléphone sur place',
+    type:      'result',
+    phase:     'pendant',
+    situation: 'fouille',
+    severity:  'red',
+    icon:      '📱',
+    context:   'Hors garde à vue et hors flagrance, la consultation du contenu d\'un téléphone lors d\'un simple contrôle n\'a pas de base légale autonome : l\'exploitation des données d\'un appareil est assimilée à une perquisition et exige un cadre d\'enquête. Rien ne t\'oblige à déverrouiller ton appareil lors d\'un contrôle routier ou d\'identité. La situation change en procédure : le refus de remettre une convention de déchiffrement peut alors être poursuivi sur le fondement de l\'article 434-15-2 du Code pénal, ce qui rend l\'arbitrage indissociable du conseil d\'un avocat (voir le nœud GAV téléphone).',
+    actions:   [
+      'Demande le cadre légal : "Sur quel fondement me demandez-vous l\'accès à mon téléphone ?"',
+      'Hors cadre d\'enquête notifié, indique calmement que tu ne consens pas à la consultation de ton appareil.',
+      'Ne déverrouille rien sous la pression : ni code, ni biométrie. Garde l\'appareil verrouillé dans ta poche ou ton sac.',
+      'Si l\'appareil est saisi, exige un PV mentionnant l\'appareil, son état (verrouillé) et l\'heure de la saisie.',
+    ],
+    rights:    [
+      'Lors d\'un simple contrôle, aucune disposition ne t\'oblige à déverrouiller ton téléphone.',
+      'L\'exploitation du contenu d\'un appareil relève du régime des perquisitions et exige un cadre d\'enquête.',
+      'En cas de saisie de l\'appareil, tu as droit à un procès-verbal la mentionnant.',
+      'Le droit au silence couvre aussi les questions sur le contenu et l\'usage du téléphone.',
+    ],
+    pitfalls:  [
+      'Déverrouiller "pour montrer ta bonne foi" : tu consens à une fouille de données que rien n\'imposait et tout devient exploitable.',
+      'Laisser la biométrie active : le déverrouillage par empreinte ou visage est matériellement plus simple à obtenir sous contrainte qu\'un code.',
+      'Confondre la situation du contrôle (pas d\'obligation) avec celle de la GAV (art. 434-15-2 CP en jeu) : le régime change, l\'arbitrage aussi.',
+    ],
+    resources: [
+      { label: 'Sécurité numérique',  href: '/wiki/Sécurite-Numerique', type: 'wiki'    },
+      { label: 'Surveillance mobile', href: '/wiki/surveillance-mobile', type: 'wiki'   },
+      { label: 'Art. 434-15-2 CP (Légifrance)', href: 'https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000043409816', type: 'external' },
     ],
     next_phase: { label: '→ Après : Recours fouille', next: 'apr_fouille' },
   },
@@ -867,6 +1038,7 @@ export const tree: Record<string, DecisionNode> = {
       { label: 'Droits viennent d\'être lus, premier moment', next: 'pdt_gav_debut'          },
       { label: 'Audition en cours / interrogatoire',          next: 'pdt_gav_interrogatoire' },
       { label: 'Ils veulent mon téléphone ou mon code PIN',   next: 'pdt_gav_telephone'      },
+      { label: 'On me notifie une prolongation au-delà de 24h', next: 'pdt_gav_prolongation' },
       { label: 'Un proche est en GAV, je suis dehors',        next: 'pdt_gav_proche'         },
     ],
   },
@@ -969,6 +1141,40 @@ export const tree: Record<string, DecisionNode> = {
     next_phase: { label: '→ Après : Sortie de GAV', next: 'apr_gav' },
   },
 
+  pdt_gav_prolongation: {
+    id:        'pdt_gav_prolongation',
+    text:      'Prolongation de la garde à vue',
+    type:      'result',
+    phase:     'pendant',
+    situation: 'gav',
+    severity:  'red',
+    icon:      '⏳',
+    context:   'La garde à vue de droit commun dure 24 heures, prolongeables une seule fois de 24 heures sur autorisation écrite et motivée du procureur de la République (art. 63 CPP). La prolongation suppose que l\'infraction soupçonnée soit punie d\'au moins un an d\'emprisonnement et qu\'elle soit l\'unique moyen de poursuivre l\'enquête. En principe, tu dois être présenté au procureur (le cas échéant par visioconférence) avant la prolongation. Chacune de ces conditions est un point de contrôle : une prolongation irrégulière (autorisation tardive, défaut de motivation, infraction contraventionnelle) fonde une nullité.',
+    actions:   [
+      'Demande la notification formelle de la prolongation et son heure exacte : elle doit intervenir avant la fin des premières 24 heures.',
+      'Demande un nouvel entretien avec ton avocat : la prolongation rouvre le droit à l\'entretien et à l\'assistance.',
+      'Demande un nouvel examen médical si ton état le justifie (fatigue, traitement, blessure).',
+      'Maintiens ta ligne : le silence reste ton droit pendant toute la prolongation ; la fatigue est précisément ce que la durée cherche à exploiter.',
+    ],
+    rights:    [
+      'La prolongation exige une autorisation écrite et motivée du procureur et, en principe, ta présentation préalable.',
+      'Elle n\'est possible que pour les infractions punies d\'au moins un an d\'emprisonnement.',
+      'Tu conserves tous tes droits : silence, avocat, médecin, information d\'un proche.',
+      'Une prolongation irrégulière peut entraîner la nullité des actes accomplis pendant celle-ci.',
+    ],
+    pitfalls:  [
+      '"Craquer" à la 30e heure : les auditions tardives visent l\'épuisement ; demande des temps de repos et garde ta ligne.',
+      'Ne pas noter l\'heure de notification de la prolongation : c\'est elle qui permet de vérifier la régularité.',
+      'Renoncer au nouvel entretien avocat "parce qu\'il est déjà venu" : chaque phase compte.',
+    ],
+    resources: [
+      { label: 'Contacts & Alliés (avocats)', href: '/wiki/Contacts-Allies',    type: 'contact' },
+      { label: 'Recours juridiques',          href: '/wiki/recours-juridiques', type: 'wiki'    },
+      { label: 'Art. 63 CPP (Légifrance)',    href: 'https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000032655507', type: 'external' },
+    ],
+    next_phase: { label: '→ Après : Sortie de GAV', next: 'apr_gav' },
+  },
+
   pdt_gav_proche: {
     id:        'pdt_gav_proche',
     text:      'Un proche est en GAV',
@@ -1012,6 +1218,7 @@ export const tree: Record<string, DecisionNode> = {
     choices: [
       { label: 'Contrôle banal, je veux juste documenter',     next: 'apr_controle_doc'     },
       { label: 'Contrôle abusif / au faciès, je veux contester', next: 'apr_controle_abus'  },
+      { label: 'Un arrêté préfectoral m\'a été opposé',          next: 'apr_arrete_prefectoral' },
     ],
   },
 
@@ -1075,38 +1282,152 @@ export const tree: Record<string, DecisionNode> = {
     ],
   },
 
+  apr_arrete_prefectoral: {
+    id:        'apr_arrete_prefectoral',
+    text:      'Contester un arrêté préfectoral',
+    type:      'result',
+    phase:     'apres',
+    situation: 'controle',
+    severity:  'orange',
+    icon:      '⚖️',
+    context:   'Trois voies existent devant le tribunal administratif. Le référé-liberté (art. L521-2 CJA) obtient une décision en 48 heures : il exige une urgence et une atteinte grave et manifestement illégale à une liberté fondamentale (la liberté de réunion, art. 11 CESDH, s\'applique aux rassemblements culturels). Le référé-suspension (art. L521-1 CJA) est moins exigeant mais plus lent. Le recours pour excès de pouvoir attaque l\'arrêté au fond dans un délai de 2 mois : même après l\'événement, une annulation pèse sur les arrêtés futurs et fonde une éventuelle action en responsabilité. Les motifs qui gagnent : défaut de motivation concrète, champ trop large, disproportion dans la durée ou l\'étendue géographique.',
+    actions:   [
+      'Récupère le texte intégral de l\'arrêté sur le recueil des actes administratifs de la préfecture.',
+      'Analyse les quatre points faibles : motivation concrète ? champ limité aux rassemblements non déclarés ? durée proportionnée ? périmètre justifié ?',
+      'Avant l\'événement : dépose un référé-liberté (saisine électronique possible, audience sous 48h) avec un avocat ou une permanence LDH/SAF.',
+      'Après l\'événement : engage un recours pour excès de pouvoir dans les 2 mois pour faire annuler l\'arrêté et créer un précédent.',
+    ],
+    rights:    [
+      'Tout arrêté doit être motivé par des éléments de fait précis ; une formule stéréotypée est un motif d\'annulation.',
+      'La liberté de réunion (art. 11 CESDH) couvre les rassemblements culturels et fonde le contrôle de proportionnalité.',
+      'Le référé-liberté est jugé en 48 heures ; le REP est ouvert pendant 2 mois après publication.',
+      'L\'annulation d\'un arrêté ouvre la voie à une action en responsabilité si un préjudice est démontré.',
+    ],
+    pitfalls:  [
+      'Attendre la veille de l\'événement pour saisir le juge : le référé-liberté exige un dossier construit ; chaque jour compte.',
+      'Sous-estimer la marge laissée au préfet : la jurisprudence Montpellier (février 2025) montre qu\'un arrêté bien motivé et limité résiste ; il faut attaquer les défauts précis, pas le principe.',
+      'Négliger le REP "parce que l\'événement est passé" : c\'est lui qui construit la jurisprudence contre les arrêtés systématiques.',
+    ],
+    resources: [
+      { label: 'Recours juridiques (voie administrative)', href: '/wiki/recours-juridiques', type: 'wiki'     },
+      { label: 'Templates recours',                        href: '/wiki/Templates-Recours',  type: 'template' },
+      { label: 'Jurisprudence',                            href: '/wiki/jurisprudence',      type: 'wiki'     },
+      { label: 'Télérecours citoyens (saisine TA)',        href: 'https://citoyens.telerecours.fr', type: 'external' },
+    ],
+  },
+
   // ═══════════════════════════════════════════════════════════════════════════
   // APRÈS : FOUILLE / PERQUISITION
   // ═══════════════════════════════════════════════════════════════════════════
 
   apr_fouille: {
     id:        'apr_fouille',
-    text:      'Suite d\'une fouille / perquisition',
+    text:      'Que s\'est-il passé pendant la fouille / perquisition ?',
+    type:      'question',
+    phase:     'apres',
+    situation: 'fouille',
+    choices: [
+      { label: 'La mesure me semble irrégulière, je veux la contester', next: 'apr_fouille_irreguliere' },
+      { label: 'Des objets ont été saisis, je veux les récupérer',      next: 'apr_fouille_restitution' },
+      { label: 'Rien de saisi, je veux documenter',                     next: 'apr_fouille_doc'         },
+    ],
+  },
+
+  apr_fouille_irreguliere: {
+    id:        'apr_fouille_irreguliere',
+    text:      'Contester la régularité de la mesure',
     type:      'result',
     phase:     'apres',
     situation: 'fouille',
     severity:  'orange',
-    icon:      '📋',
-    context:   'Après une fouille ou une perquisition, deux leviers existent : la contestation de la régularité de la mesure (qui peut entraîner la nullité des actes et des preuves obtenues) et, le cas échéant, la restitution des objets saisis. La nullité de procédure se soulève devant le juge, souvent par l\'avocat, dans les délais de la procédure pénale.',
+    icon:      '⚖️',
+    context:   'Une fouille ou une perquisition irrégulière peut être annulée par le juge, ce qui entraîne l\'écartement des preuves qui en découlent (théorie du "support nécessaire"). La nullité suppose en principe un grief, c\'est-à-dire une atteinte à tes intérêts (art. 802 CPP). Elle se soulève par requête pendant l\'instruction (art. 170 et suivants CPP) ou, devant le tribunal correctionnel, avant toute défense au fond (art. 385 CPP) : c\'est un travail d\'avocat, mais il repose entièrement sur les irrégularités que tu auras documentées.',
     actions:   [
-      'Récupère et conserve tout PV (de fouille, de perquisition, de saisie) avec inventaire.',
-      'Note les irrégularités constatées : absence de cadre légal, défaut d\'inventaire, fouille de nuit, absence du concerné.',
-      'Transmets ces éléments à un avocat pour soulever une éventuelle nullité.',
-      'Engage une demande de restitution pour les objets saisis non confisqués.',
+      'Liste par écrit, à chaud, chaque irrégularité : absence de cadre annoncé, pas d\'accord demandé en préliminaire, horaires de nuit, absence d\'inventaire, fouille intégrale sans fondement.',
+      'Récupère et conserve tous les PV remis (fouille, perquisition, saisie) : ils fixent la version officielle à confronter à la tienne.',
+      'Rassemble les éléments de preuve extérieurs : témoins, horodatage de messages, photos.',
+      'Transmets le tout à un avocat rapidement : la nullité doit être soulevée dans les formes et délais de la procédure, avant toute défense au fond devant le tribunal.',
     ],
     rights:    [
-      'Une fouille ou perquisition irrégulière peut être annulée, entraînant l\'écartement des preuves.',
-      'Tu peux demander la restitution des objets saisis en l\'absence de confiscation.',
-      'Tu as droit à l\'inventaire des objets saisis.',
+      'Une mesure irrégulière qui te fait grief peut être annulée, et les preuves dérivées écartées (art. 802 CPP).',
+      'La nullité se soulève pendant l\'instruction (art. 170 CPP) ou in limine litis devant le tribunal (art. 385 CPP).',
+      'Tu as droit à copie des PV te concernant via ton avocat.',
     ],
     pitfalls:  [
-      'Ne pas conserver les PV : sans eux, la contestation est très difficile.',
-      'Laisser filer les délais procéduraux pour soulever la nullité.',
+      'Attendre l\'audience pour parler des irrégularités à ton avocat : soulevée après les défenses au fond, la nullité est irrecevable.',
+      'Ne retenir que ton ressenti ("c\'était abusif") sans faits datés et précis : le juge contrôle des actes, pas des impressions.',
+      'Jeter ou égarer les PV : sans eux, la démonstration devient très difficile.',
     ],
     resources: [
-      { label: 'Templates recours',  href: '/wiki/Templates-Recours',  type: 'template' },
       { label: 'Recours juridiques', href: '/wiki/recours-juridiques', type: 'wiki'     },
-      { label: 'Prescription et délais', href: '/wiki/Prescription-et-Delais', type: 'wiki' },
+      { label: 'Templates recours',  href: '/wiki/Templates-Recours',  type: 'template' },
+      { label: 'Contacts & Alliés (avocats)', href: '/wiki/Contacts-Allies', type: 'contact' },
+    ],
+  },
+
+  apr_fouille_restitution: {
+    id:        'apr_fouille_restitution',
+    text:      'Obtenir la restitution des objets saisis',
+    type:      'result',
+    phase:     'apres',
+    situation: 'fouille',
+    severity:  'orange',
+    icon:      '📦',
+    context:   'Tant qu\'aucune confiscation n\'est prononcée par une juridiction, les objets saisis ont vocation à être restitués. En cours de procédure, la demande de restitution s\'adresse au procureur de la République ou au juge saisi (art. 41-4 CPP) ; pour le matériel son saisi sur le fondement de l\'article L211-15 CSI, la saisie conservatoire est limitée à 6 mois et se conteste devant le JLD ou le tribunal correctionnel. Les trois arguments porteurs : propriété d\'un tiers de bonne foi, disproportion entre la valeur saisie et la gravité de l\'infraction, défaut de régularité de la saisie. Le FSJS obtient la restitution dans environ 90% des dossiers suivis.',
+    actions:   [
+      'Vérifie que tu détiens le PV de saisie avec l\'inventaire complet (numéros de série) ; sinon, demandes-en copie via avocat.',
+      'Rassemble les preuves de propriété antérieures à la saisie : factures, photos datées, attestation de prêt si le matériel appartient à un tiers.',
+      'Adresse la demande de restitution au procureur ou au juge compétent (art. 41-4 CPP), en recommandé, avec copie des justificatifs.',
+      'Pour un sound system : contacte le FSJS (contact@fsjs.fr) en parallèle, son avocate spécialisée connaît ces procédures.',
+    ],
+    rights:    [
+      'Sans confiscation prononcée, la restitution est le principe (art. 41-4 CPP).',
+      'La saisie L211-15 CSI est conservatoire et limitée à 6 mois.',
+      'Un tiers de bonne foi propriétaire peut obtenir restitution même si le détenteur est poursuivi.',
+      'Le refus de restitution du procureur peut être contesté devant le juge.',
+    ],
+    pitfalls:  [
+      'Attendre la fin de la procédure pénale pour réclamer : la demande peut être faite en cours de procédure et le délai de contestation de la saisie est court.',
+      'Demander la restitution sans preuves de propriété jointes : le dossier doit être complet dès le premier envoi.',
+      'Ignorer le refus implicite : l\'absence de réponse se conteste aussi ; fais suivre les délais par l\'avocat.',
+    ],
+    resources: [
+      { label: 'Recours juridiques (saisies)', href: '/wiki/recours-juridiques', type: 'wiki'     },
+      { label: 'Templates recours',            href: '/wiki/Templates-Recours',  type: 'template' },
+      { label: 'Contacts & Alliés',            href: '/wiki/Contacts-Allies',    type: 'contact'  },
+      { label: 'FSJS (saisies sound system)',  href: 'https://www.facebook.com/association.fsjs/', type: 'external' },
+    ],
+  },
+
+  apr_fouille_doc: {
+    id:        'apr_fouille_doc',
+    text:      'Documenter la fouille',
+    type:      'result',
+    phase:     'apres',
+    situation: 'fouille',
+    severity:  'green',
+    icon:      '📋',
+    context:   'Même sans saisie ni poursuite, une fouille mérite d\'être documentée. La trace écrite sert trois objectifs : preuve en cas de procédure ultérieure (une convocation peut arriver des semaines après), élément d\'un faisceau en cas de contrôles répétés, et alimentation de la veille collective sur les pratiques de terrain. La mémoire des détails (cadre annoncé, consentement demandé ou non) se dégrade en quelques jours.',
+    actions:   [
+      'Rédige à chaud un récit factuel : date, heure, lieu, unité, matricules (RIO), cadre légal annoncé, déroulé exact, consentement demandé ou non.',
+      'Conserve et duplique toute photo ou vidéo prise pendant ou après les faits.',
+      'Si un PV a été établi, demandes-en copie et archive-le.',
+      'Signale l\'incident sur la carte collective s\'il s\'inscrit dans une vague de contrôles.',
+    ],
+    rights:    [
+      'Tu peux conserver et utiliser tes propres enregistrements.',
+      'Tu peux demander copie d\'un PV établi à ton encontre.',
+      'Documenter un contrôle ou une fouille est licite et ne constitue pas une entrave.',
+    ],
+    pitfalls:  [
+      'Reporter la rédaction du récit : après 48 heures, les détails exploitables (heures, formulations) sont perdus.',
+      'Ne garder qu\'une copie unique des fichiers sur le téléphone qui pourrait être saisi plus tard.',
+      'Publier le récit sur les réseaux : il peut servir contre toi ; archive-le en privé.',
+    ],
+    resources: [
+      { label: 'Documentation préemptive', href: '/wiki/Documentation-Preemptive', type: 'wiki' },
+      { label: 'Carte de la répression',   href: '/map',                           type: 'wiki' },
+      { label: 'Prescription et délais',   href: '/wiki/Prescription-et-Delais',   type: 'wiki' },
     ],
   },
 
@@ -1151,21 +1472,24 @@ export const tree: Record<string, DecisionNode> = {
     situation: 'interpellation',
     severity:  'orange',
     icon:      '⚠️',
-    context:   'L\'amende forfaitaire délictuelle te permet d\'éteindre les poursuites en payant immédiatement. Payer vaut reconnaissance de l\'infraction et ferme la voie de la contestation sur le fond. Sur le terrain, rien ne t\'oblige à payer immédiatement : tu peux refuser le paiement comptant et te réserver le droit de contester.',
+    context:   'L\'amende forfaitaire délictuelle éteint les poursuites par le paiement : payer vaut reconnaissance de l\'infraction et ferme la voie de la contestation sur le fond. Sur le terrain, rien ne t\'oblige à payer immédiatement : tu peux refuser le paiement comptant et te réserver le droit de former une requête en exonération dans le délai mentionné sur l\'avis (en principe 45 jours, art. 495-19 et suivants CPP). Point de vigilance majeur : l\'AFD de 1 500 euros pour participation est créée par le texte RIPOST, qui est en navette parlementaire et non promulgué à ce jour. Une AFD délivrée sans base légale en vigueur est contestable sur ce seul motif.',
     actions:   [
       'Ne paie pas sur le coup : le paiement vaut reconnaissance et éteint ton droit de contester.',
-      'Demande et conserve l\'avis d\'AFD avec son numéro et la qualification exacte.',
+      'Demande et conserve l\'avis d\'AFD avec son numéro, la qualification exacte et le texte d\'incrimination visé.',
+      'Vérifie le fondement légal mentionné : si le texte invoqué n\'est pas en vigueur à la date des faits, c\'est un moyen de contestation décisif.',
       'Note l\'identité de l\'agent, l\'heure et les circonstances.',
       'Consulte le FSJS ou un avocat avant toute décision de paiement.',
     ],
     rights:    [
       'Tu peux refuser le paiement immédiat et choisir de contester ensuite.',
-      'Tu disposes d\'un délai pour formuler une requête en exonération.',
-      'Tu peux contester la qualification d\'organisateur (art. R211-27 CSI).',
+      'Tu disposes d\'un délai de requête en exonération (en principe 45 jours, vérifie ton avis).',
+      'Nul ne peut être puni en vertu d\'un texte non entré en vigueur à la date des faits (principe de légalité, art. 112-1 CP).',
+      'Tu peux contester la qualification retenue (participant, organisateur).',
     ],
     pitfalls:  [
       'Payer "pour en finir" : tu perds tout recours sur le fond.',
       'Égarer l\'avis d\'AFD : son numéro conditionne la contestation.',
+      'Ne pas vérifier la base légale et sa date d\'entrée en vigueur : c\'est souvent le moyen le plus simple et le plus solide.',
     ],
     resources: [
       { label: 'RIPOST',            href: '/wiki/ripost',            type: 'wiki'     },
@@ -1182,12 +1506,12 @@ export const tree: Record<string, DecisionNode> = {
     situation: 'interpellation',
     severity:  'orange',
     icon:      '⚠️',
-    context:   'Tu es dans la fenêtre favorable. En contestant rapidement (requête en exonération avec l\'avis et son numéro), tu évites la majoration et tu portes le dossier devant l\'officier du ministère public, puis le cas échéant le tribunal. La contestation suspend l\'obligation de payer le montant majoré.',
+    context:   'Tu es dans la fenêtre favorable : le délai de requête en exonération (en principe 45 jours à compter de l\'envoi de l\'avis, art. 495-19 et suivants CPP) court encore largement. En contestant maintenant, tu évites la majoration et tu portes le dossier devant l\'officier du ministère public, puis le cas échéant le tribunal. La contestation régulière fait obstacle au recouvrement forfaitaire. Vérifie aussi la base légale visée sur l\'avis : l\'AFD pour participation est issue du texte RIPOST, en navette parlementaire ; si le texte n\'était pas en vigueur à la date des faits, c\'est un moyen décisif.',
     actions:   [
-      'Rédige et envoie la requête en exonération dans les délais, en recommandé.',
+      'Rédige et envoie la requête en exonération dans le délai mentionné sur l\'avis, en recommandé avec AR.',
       'Joins une consignation si elle est exigée (elle est restituée si tu obtiens gain de cause).',
       'Conserve une copie complète de ton envoi et l\'accusé de réception.',
-      'Prépare tes arguments : qualification d\'organisateur, régularité de la procédure, proportionnalité.',
+      'Prépare tes arguments : base légale en vigueur ou non à la date des faits, qualification retenue, régularité de la procédure, proportionnalité.',
     ],
     rights:    [
       'Tu peux contester par requête en exonération avant majoration.',
@@ -1405,6 +1729,7 @@ export const tree: Record<string, DecisionNode> = {
     situation: 'gav',
     choices: [
       { label: 'Je viens de sortir de GAV',                    next: 'apr_gav_sortie'      },
+      { label: 'On me propose une alternative aux poursuites',  next: 'apr_gav_alternatives' },
       { label: 'J\'ai une convocation / je dois comparaître',   next: 'apr_gav_convocation' },
       { label: 'J\'ai été condamné, je veux faire appel',       next: 'apr_gav_appel'       },
     ],
@@ -1439,6 +1764,39 @@ export const tree: Record<string, DecisionNode> = {
       { label: 'Recours juridiques', href: '/wiki/recours-juridiques', type: 'wiki'    },
       { label: 'Contacts & Alliés',  href: '/wiki/Contacts-Allies',    type: 'contact' },
       { label: 'Prescription et délais', href: '/wiki/Prescription-et-Delais', type: 'wiki' },
+    ],
+  },
+
+  apr_gav_alternatives: {
+    id:        'apr_gav_alternatives',
+    text:      'Alternative aux poursuites proposée',
+    type:      'result',
+    phase:     'apres',
+    situation: 'gav',
+    severity:  'orange',
+    icon:      '🧾',
+    context:   'Le procureur peut proposer une alternative aux poursuites : avertissement pénal probatoire (qui a remplacé le rappel à la loi en 2023), composition pénale (art. 41-2 CPP : amende de composition, stage, remise d\'objets), ou médiation. Ces mesures évitent le procès mais ne sont pas anodines : accepter une composition pénale implique de reconnaître les faits, et son exécution est inscrite au casier judiciaire (bulletin n°1). Elles éteignent l\'action publique une fois exécutées, ce qui peut être un bon calcul pour un dossier solide côté accusation, et un mauvais pour un dossier fragile où la relaxe était plausible. La décision se prend avec un avocat, jamais seul au guichet.',
+    actions:   [
+      'Ne signe rien le jour même : demande le délai de réflexion et la consultation d\'un avocat (la composition pénale prévoit cette assistance).',
+      'Fais évaluer le dossier par l\'avocat : la qualification d\'organisateur tient-elle ? Les preuves sont-elles régulières ? Une relaxe est-elle plausible ?',
+      'Compare les conséquences concrètes : inscription au casier, montant, remise du matériel saisi éventuellement incluse dans la mesure.',
+      'Si tu refuses, prépare la suite : le procureur peut alors poursuivre devant le tribunal ; le refus n\'est pas une infraction.',
+    ],
+    rights:    [
+      'Tu as le droit de refuser une composition pénale ou une CRPC ; le refus n\'aggrave pas légalement ta situation, il rouvre la voie du procès.',
+      'Tu as droit à l\'assistance d\'un avocat avant d\'accepter une composition pénale.',
+      'La composition pénale exécutée éteint l\'action publique pour les faits visés.',
+      'L\'avertissement pénal probatoire ne constitue pas une condamnation.',
+    ],
+    pitfalls:  [
+      'Accepter "pour en finir" sans mesurer l\'inscription au casier (bulletin n°1) et la reconnaissance des faits qu\'implique la composition.',
+      'Croire que refuser est interdit ou puni : c\'est un droit, le dossier retourne simplement au circuit classique.',
+      'Négliger de négocier le sort du matériel saisi dans la discussion : sa restitution peut faire partie de l\'équation.',
+    ],
+    resources: [
+      { label: 'Recours juridiques', href: '/wiki/recours-juridiques', type: 'wiki'    },
+      { label: 'Contacts & Alliés (avocats)', href: '/wiki/Contacts-Allies', type: 'contact' },
+      { label: 'Composition pénale (Service-Public)', href: 'https://www.service-public.fr/particuliers/vosdroits/F1824', type: 'external' },
     ],
   },
 

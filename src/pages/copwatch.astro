@@ -1,0 +1,432 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+  title="CopWatch"
+  description="Observatoire documentaire des tactiques policières observées contre le mouvement free party et les sound systems. Fiches sourcées, heatmap tactique x phase, liens vers l'Outil Décision."
+  category="OUTILS"
+>
+  <h1 class="mb-2">◎ COPWATCH</h1>
+  <p class="text-dedsec-muted text-sm mb-2 font-mono leading-relaxed">
+    Observatoire documentaire · Tactiques, méthodes et moyens observés des forces de l'ordre
+  </p>
+  <p class="text-dedsec-muted/75 text-xs mb-6 font-mono leading-relaxed">
+    Documentation publique et factuelle. Chaque fiche est un retour d'observation sourcé et gradué.
+    Le seul registre actif est défensif et juridique : droits applicables et voies de recours, via
+    des renvois vers l'<a href="/decision" class="text-neon-green no-underline hover:underline">Outil Décision</a>.
+  </p>
+
+  <!-- Charte documentaire -->
+  <div class="cw-charte mb-10">
+    <span class="cw-charte-tag">Charte documentaire</span>
+    <p>
+      Cet outil décrit ce qui est observé, le source et en gradue la fiabilité. Il ne fournit aucun
+      conseil d'évitement ou de contournement d'un contrôle, ni aucune instruction susceptible
+      d'entraver l'action des forces de l'ordre. Les fiches servent la connaissance des droits,
+      la documentation des pratiques et la préparation des recours.
+    </p>
+  </div>
+
+  <!-- Bandeau de synthèse (injecté) -->
+  <div id="cw-stats" class="cw-stats mb-10"></div>
+
+  <!-- HEATMAP -->
+  <div class="section-divider"><span class="font-mono text-[11px] tracking-[0.2em] text-neon-green/70 uppercase">Heatmap · Tactique × Phase × Menace</span></div>
+  <p class="text-dedsec-muted/75 text-xs mb-5 font-mono leading-relaxed">
+    Lecture analytique : chaque ligne est une tactique, chaque colonne une phase du cycle
+    (avant / pendant / après). L'intensité de la case reflète le niveau de menace documenté
+    lorsque la tactique est observée dans cette phase. Complément de la
+    <a href="/map" class="text-neon-green no-underline hover:underline">carte géographique</a> des incidents.
+  </p>
+  <div id="cw-heatmap" class="cw-heatmap-wrap mb-4"></div>
+  <div class="cw-legend mb-14" id="cw-legend"></div>
+
+  <!-- FICHES -->
+  <div class="section-divider"><span class="font-mono text-[11px] tracking-[0.2em] text-neon-green/70 uppercase">Fiches tactiques</span></div>
+
+  <!-- Filtres -->
+  <div id="cw-filters" class="cw-filters mb-8"></div>
+
+  <!-- Liste des fiches (injectée) -->
+  <div id="cw-fiches"></div>
+
+  <p class="text-dedsec-muted/60 text-[11px] mb-10 font-mono leading-relaxed mt-12">
+    Contribuer : un cas observé, une source, une correction ? Voir
+    <a href="/contribuer" class="text-neon-green no-underline hover:underline">Contribuer</a>.
+    Méthodologie complète : <a href="/wiki/CopWatch" class="text-neon-green no-underline hover:underline">wiki CopWatch</a>.
+  </p>
+</Layout>
+
+<style is:global>
+  /* Styles globaux (non scoped) : indispensable car la heatmap, les fiches,
+     les filtres et le bandeau de synthèse sont injectés au runtime via
+     innerHTML. Une feuille scoped ne s'appliquerait pas à ce contenu dynamique
+     (même contrainte que decision.astro). Préfixe .cw- pour éviter les collisions. */
+  .cw-charte {
+    border-left: 2px solid var(--color-green, #00ff9f);
+    background: rgba(0, 255, 159, 0.04);
+    padding: 14px 18px;
+  }
+  .cw-charte-tag {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--color-green, #00ff9f);
+    margin-bottom: 6px;
+  }
+  .cw-charte p {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    line-height: 1.7;
+    color: rgba(232, 232, 240, 0.78);
+    margin: 0;
+  }
+
+  /* Bandeau de synthèse */
+  .cw-stats { display: flex; flex-wrap: wrap; gap: 10px; }
+  .cw-stat {
+    border: 1px solid var(--color-border, #2a2a3a);
+    padding: 10px 14px;
+    min-width: 92px;
+    background: rgba(42, 42, 58, 0.18);
+  }
+  .cw-stat-num {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 22px; font-weight: 700; line-height: 1;
+    color: var(--color-green, #00ff9f);
+  }
+  .cw-stat-lbl {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em;
+    color: var(--color-muted, #7a7a8a); margin-top: 6px;
+  }
+
+  /* Heatmap */
+  .cw-heatmap-wrap { overflow-x: auto; }
+  .cw-heatmap { border-collapse: collapse; width: 100%; min-width: 560px; }
+  .cw-heatmap th, .cw-heatmap td {
+    border: 1px solid var(--color-border, #2a2a3a);
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .cw-heatmap thead th {
+    font-size: 10px; text-transform: uppercase; letter-spacing: 0.14em;
+    color: var(--color-muted, #7a7a8a); padding: 8px 10px; text-align: center;
+    background: rgba(42, 42, 58, 0.3);
+  }
+  .cw-heatmap thead th.cw-rowhead { text-align: left; min-width: 240px; }
+  .cw-heatmap tbody td.cw-rowhead {
+    padding: 9px 10px; text-align: left; font-size: 11.5px;
+    color: rgba(232, 232, 240, 0.86); white-space: nowrap;
+  }
+  .cw-heatmap tbody td.cw-rowhead .cw-code {
+    color: var(--color-muted, #7a7a8a); font-size: 10px; margin-right: 8px;
+  }
+  .cw-cell {
+    text-align: center; font-size: 10px; font-weight: 700;
+    color: #08080c; height: 34px; min-width: 86px;
+    transition: outline 0.12s;
+  }
+  .cw-cell.cw-empty { color: rgba(122, 122, 138, 0.35); background: transparent; font-weight: 400; }
+  .cw-cell:not(.cw-empty) { cursor: default; }
+
+  /* Légende */
+  .cw-legend { display: flex; flex-wrap: wrap; gap: 18px; align-items: center; }
+  .cw-legend-group {
+    display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    color: var(--color-muted, #7a7a8a); text-transform: uppercase; letter-spacing: 0.1em;
+  }
+  .cw-swatch { display: inline-flex; align-items: center; gap: 6px; }
+  .cw-swatch i { width: 14px; height: 14px; display: inline-block; }
+
+  /* Filtres */
+  .cw-filters { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .cw-chip {
+    font-family: 'JetBrains Mono', monospace; font-size: 10.5px;
+    text-transform: uppercase; letter-spacing: 0.08em;
+    padding: 6px 11px; border: 1px solid var(--color-border, #2a2a3a);
+    color: var(--color-muted, #7a7a8a); background: transparent;
+    cursor: pointer; transition: all 0.12s;
+  }
+  .cw-chip:hover { color: rgba(232, 232, 240, 0.9); border-color: rgba(0,255,159,0.4); }
+  .cw-chip.cw-active {
+    color: #08080c; background: var(--color-green, #00ff9f);
+    border-color: var(--color-green, #00ff9f); font-weight: 700;
+  }
+
+  /* Fiche */
+  .cw-fiche {
+    border: 1px solid var(--color-border, #2a2a3a);
+    border-left-width: 3px;
+    margin-bottom: 14px; background: rgba(42, 42, 58, 0.14);
+  }
+  .cw-fiche summary {
+    list-style: none; cursor: pointer; padding: 16px 18px;
+    display: flex; align-items: flex-start; gap: 14px;
+  }
+  .cw-fiche summary::-webkit-details-marker { display: none; }
+  .cw-fiche-ico { font-size: 20px; line-height: 1.2; flex-shrink: 0; }
+  .cw-fiche-head { flex: 1; min-width: 0; }
+  .cw-fiche-code {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    color: var(--color-muted, #7a7a8a); letter-spacing: 0.1em;
+  }
+  .cw-fiche-nom {
+    font-family: 'Space Grotesk', sans-serif; font-weight: 700;
+    font-size: 15px; color: rgba(232, 232, 240, 0.95); margin: 3px 0 6px;
+  }
+  .cw-fiche-resume {
+    font-family: 'JetBrains Mono', monospace; font-size: 11.5px;
+    line-height: 1.6; color: rgba(232, 232, 240, 0.66);
+  }
+  .cw-badges { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 9px; }
+  .cw-badge {
+    font-family: 'JetBrains Mono', monospace; font-size: 9.5px;
+    text-transform: uppercase; letter-spacing: 0.08em;
+    padding: 3px 7px; border: 1px solid var(--color-border, #2a2a3a);
+    color: var(--color-muted, #7a7a8a);
+  }
+  .cw-badge b { color: #08080c; padding: 0 3px; }
+  .cw-fiche-arrow {
+    font-family: 'JetBrains Mono', monospace; color: var(--color-muted, #7a7a8a);
+    flex-shrink: 0; transition: transform 0.15s;
+  }
+  .cw-fiche[open] .cw-fiche-arrow { transform: rotate(90deg); color: var(--color-green, #00ff9f); }
+
+  .cw-body { padding: 0 18px 18px 18px; border-top: 1px solid rgba(42,42,58,0.5); margin-top: 2px; }
+  .cw-sec { margin-top: 16px; }
+  .cw-sec-lbl {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    text-transform: uppercase; letter-spacing: 0.14em;
+    color: var(--color-green, #00ff9f); margin-bottom: 7px;
+  }
+  .cw-sec p, .cw-sec li {
+    font-family: 'JetBrains Mono', monospace; font-size: 11.5px;
+    line-height: 1.65; color: rgba(232, 232, 240, 0.78);
+  }
+  .cw-sec ul { list-style: none; padding: 0; margin: 0; }
+  .cw-sec li { padding-left: 16px; position: relative; margin-bottom: 5px; }
+  .cw-sec li::before { content: '▸'; position: absolute; left: 0; color: rgba(0,255,159,0.55); }
+  .cw-grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 24px; }
+  @media (max-width: 640px) { .cw-grid2 { grid-template-columns: 1fr; } }
+  .cw-link {
+    color: var(--color-green, #00ff9f); text-decoration: none;
+    border-bottom: 1px dotted rgba(0,255,159,0.4);
+  }
+  .cw-link:hover { border-bottom-style: solid; }
+  .cw-fragile li::before { content: '⚖'; color: rgba(255,138,0,0.7); }
+  .cw-case {
+    border-left: 2px solid var(--color-border, #2a2a3a);
+    padding: 2px 0 2px 12px; margin-bottom: 8px;
+  }
+  .cw-case .cw-case-date {
+    color: var(--color-muted, #7a7a8a); font-size: 10px;
+  }
+  .cw-note {
+    font-style: italic; color: rgba(122,122,138,0.85);
+    border-top: 1px dashed rgba(42,42,58,0.7); padding-top: 10px; margin-top: 14px;
+  }
+  .cw-hidden { display: none !important; }
+</style>
+
+<script>
+import {
+  fiches, buildHeatmap, copwatchStats,
+  PHASE_LABELS, PHASE_ORDER, CATEGORIE_LABELS, CATEGORIE_ICONS, CATEGORIE_ORDER,
+  MENACE_META, FREQUENCE_LABELS, TENDANCE_META, FIABILITE_LABELS,
+  type Categorie, type Phase, type NiveauMenace, type FicheTactique,
+} from '../data/copwatch';
+
+const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+// ─── SYNTHÈSE ─────────────────────────────────────────────────────────────────
+function renderStats(): void {
+  const s = copwatchStats();
+  const dateFR = s.derniere
+    ? new Date(s.derniere).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' })
+    : '-';
+  const items = [
+    { num: String(s.total), lbl: 'Fiches' },
+    { num: String(s.parCategorie.length), lbl: 'Catégories' },
+    { num: String(s.systematiques), lbl: 'Systématiques' },
+    { num: String(s.critiques), lbl: 'Menace critique' },
+    { num: String(s.enHausse), lbl: 'En hausse' },
+    { num: dateFR, lbl: 'Dernière obs.' },
+  ];
+  const el = document.getElementById('cw-stats');
+  if (el) el.innerHTML = items.map(i =>
+    `<div class="cw-stat"><div class="cw-stat-num">${i.num}</div><div class="cw-stat-lbl">${i.lbl}</div></div>`
+  ).join('');
+}
+
+// ─── HEATMAP ──────────────────────────────────────────────────────────────────
+function renderHeatmap(): void {
+  const rows = buildHeatmap();
+  const head = `<tr><th class="cw-rowhead">Tactique</th>${
+    PHASE_ORDER.map(p => `<th>${PHASE_LABELS[p]}</th>`).join('')
+  }</tr>`;
+
+  const body = rows.map(r => {
+    const cells = r.cells.map(c => {
+      if (!c.active) return `<td class="cw-cell cw-empty">·</td>`;
+      const m = MENACE_META[c.menace as NiveauMenace];
+      return `<td class="cw-cell" style="background:${m.color}" title="${esc(r.nom)} · ${PHASE_LABELS[c.phase]} · ${m.label}">${c.menace}</td>`;
+    }).join('');
+    return `<tr>
+      <td class="cw-rowhead"><span class="cw-code">${r.code}</span>${esc(r.nom)}</td>
+      ${cells}
+    </tr>`;
+  }).join('');
+
+  const el = document.getElementById('cw-heatmap');
+  if (el) el.innerHTML = `<table class="cw-heatmap"><thead>${head}</thead><tbody>${body}</tbody></table>`;
+}
+
+function renderLegend(): void {
+  const menace = ([1, 2, 3, 4] as NiveauMenace[]).map(n => {
+    const m = MENACE_META[n];
+    return `<span class="cw-swatch"><i style="background:${m.color}"></i>${n} ${m.label}</span>`;
+  }).join('');
+  const fia = (['A', 'B', 'C', 'D'] as const).map(g => `<span>${FIABILITE_LABELS[g]}</span>`).join(' · ');
+  const el = document.getElementById('cw-legend');
+  if (el) el.innerHTML = `
+    <div class="cw-legend-group"><span style="color:var(--color-green)">Menace :</span>${menace}</div>
+    <div class="cw-legend-group" style="flex-basis:100%"><span style="color:var(--color-green)">Fiabilité :</span><span style="text-transform:none">${fia}</span></div>
+  `;
+}
+
+// ─── FILTRES ──────────────────────────────────────────────────────────────────
+type Filter = { type: 'all' } | { type: 'cat'; value: Categorie } | { type: 'phase'; value: Phase };
+let activeFilter: Filter = { type: 'all' };
+
+function renderFilters(): void {
+  const cats = CATEGORIE_ORDER.filter(c => fiches.some(f => f.categorie === c));
+  const chips: string[] = [`<button class="cw-chip cw-active" data-f="all">Toutes</button>`];
+  PHASE_ORDER.forEach(p => chips.push(`<button class="cw-chip" data-f="phase:${p}">${PHASE_LABELS[p]}</button>`));
+  cats.forEach(c => chips.push(`<button class="cw-chip" data-f="cat:${c}">${CATEGORIE_ICONS[c]} ${CATEGORIE_LABELS[c]}</button>`));
+  const el = document.getElementById('cw-filters');
+  if (!el) return;
+  el.innerHTML = chips.join('');
+  el.querySelectorAll<HTMLButtonElement>('.cw-chip').forEach(btn => {
+    btn.addEventListener('click', () => {
+      el.querySelectorAll('.cw-chip').forEach(b => b.classList.remove('cw-active'));
+      btn.classList.add('cw-active');
+      const f = btn.dataset.f!;
+      if (f === 'all') activeFilter = { type: 'all' };
+      else if (f.startsWith('phase:')) activeFilter = { type: 'phase', value: f.slice(6) as Phase };
+      else activeFilter = { type: 'cat', value: f.slice(4) as Categorie };
+      applyFilter();
+    });
+  });
+}
+
+function matches(f: FicheTactique): boolean {
+  if (activeFilter.type === 'all') return true;
+  if (activeFilter.type === 'cat') return f.categorie === activeFilter.value;
+  return f.phases.includes(activeFilter.value);
+}
+
+function applyFilter(): void {
+  document.querySelectorAll<HTMLElement>('.cw-fiche').forEach(el => {
+    const id = el.dataset.id!;
+    const f = fiches.find(x => x.id === id)!;
+    el.classList.toggle('cw-hidden', !matches(f));
+  });
+}
+
+// ─── FICHES ───────────────────────────────────────────────────────────────────
+function ul(items: string[], cls = ''): string {
+  return `<ul class="${cls}">${items.map(i => `<li>${esc(i)}</li>`).join('')}</ul>`;
+}
+
+function renderFiche(f: FicheTactique): string {
+  const m = MENACE_META[f.niveau_menace];
+  const t = TENDANCE_META[f.tendance];
+  const phases = f.phases.map(p => PHASE_LABELS[p]).join(' · ');
+
+  const badges = [
+    `<span class="cw-badge" style="border-color:${m.color}">Menace <b style="background:${m.color}">${f.niveau_menace} ${m.label}</b></span>`,
+    `<span class="cw-badge">${FREQUENCE_LABELS[f.frequence]}</span>`,
+    `<span class="cw-badge">${t.symbol} ${t.label}</span>`,
+    `<span class="cw-badge">Fiab. ${f.fiabilite}</span>`,
+    `<span class="cw-badge">${phases}</span>`,
+  ].join('');
+
+  const decision = f.liens_decision.length
+    ? `<div class="cw-sec"><div class="cw-sec-lbl">Réponse défensive · Outil Décision</div>${
+        ul(f.liens_decision.map(l => l.label))
+      }<p style="margin-top:6px"><a class="cw-link" href="/decision">→ Ouvrir l'Outil Décision</a></p></div>`
+    : '';
+
+  const wiki = f.liens_wiki.length
+    ? `<div class="cw-sec"><div class="cw-sec-lbl">Références wiki</div><p>${
+        f.liens_wiki.map(l => `<a class="cw-link" href="${l.href}">${esc(l.label)}</a>`).join(' · ')
+      }</p></div>`
+    : '';
+
+  const cas = f.cas_observes.map(c => {
+    const link = c.incident_id ? ` · <a class="cw-link" href="/map">voir sur la carte</a>` : '';
+    const src = c.source ? ` · <a class="cw-link" href="${c.source}">source</a>` : '';
+    return `<div class="cw-case"><span class="cw-case-date">${c.date} · ${esc(c.lieu)}</span><br>${esc(c.resume)}${link}${src}</div>`;
+  }).join('');
+
+  const sources = f.sources.map(s =>
+    `<a class="cw-link" href="${s.href}">${esc(s.label)}</a>`).join(' · ');
+
+  const note = f.note_documentation
+    ? `<p class="cw-note">Note documentaire : ${esc(f.note_documentation)}</p>` : '';
+
+  return `
+    <details class="cw-fiche" data-id="${f.id}" style="border-left-color:${m.color}">
+      <summary>
+        <span class="cw-fiche-ico">${CATEGORIE_ICONS[f.categorie]}</span>
+        <span class="cw-fiche-head">
+          <span class="cw-fiche-code">${f.code} · ${CATEGORIE_LABELS[f.categorie]}</span>
+          <div class="cw-fiche-nom">${esc(f.nom)}</div>
+          <div class="cw-fiche-resume">${esc(f.resume)}</div>
+          <div class="cw-badges">${badges}</div>
+        </span>
+        <span class="cw-fiche-arrow">▸</span>
+      </summary>
+      <div class="cw-body">
+        <div class="cw-sec"><div class="cw-sec-lbl">Description observée</div><p>${esc(f.description)}</p></div>
+        <div class="cw-sec"><div class="cw-sec-lbl">Objectif opérationnel apparent</div><p>${esc(f.objectif_observe)}</p></div>
+        <div class="cw-sec"><div class="cw-sec-lbl">Indicateurs observables</div>${ul(f.indicateurs)}</div>
+        <div class="cw-grid2">
+          <div class="cw-sec"><div class="cw-sec-lbl">Unités / services</div>${ul(f.unites)}</div>
+          <div class="cw-sec"><div class="cw-sec-lbl">Moyens observés</div>${ul(f.moyens)}</div>
+        </div>
+        <div class="cw-grid2">
+          <div class="cw-sec"><div class="cw-sec-lbl">Cadre juridique invoqué</div>${ul(f.cadre_invoque)}</div>
+          <div class="cw-sec"><div class="cw-sec-lbl">Points de fragilité juridique</div>${ul(f.points_fragiles, 'cw-fragile')}</div>
+        </div>
+        ${decision}
+        ${wiki}
+        <div class="cw-sec"><div class="cw-sec-lbl">Cas observés</div>${cas}</div>
+        <div class="cw-sec"><div class="cw-sec-lbl">Sources</div><p>${sources}</p></div>
+        ${note}
+      </div>
+    </details>
+  `;
+}
+
+function renderFiches(): void {
+  const ordered = [...fiches].sort((a, b) =>
+    CATEGORIE_ORDER.indexOf(a.categorie) - CATEGORIE_ORDER.indexOf(b.categorie)
+    || a.code.localeCompare(b.code));
+  const el = document.getElementById('cw-fiches');
+  if (el) el.innerHTML = ordered.map(renderFiche).join('');
+}
+
+// ─── BOOTSTRAP ────────────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  renderStats();
+  renderHeatmap();
+  renderLegend();
+  renderFiches();
+  renderFilters();
+});
+</script>
