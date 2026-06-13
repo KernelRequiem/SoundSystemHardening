@@ -1,0 +1,742 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+  title="Compliance-Shield"
+  description="Générateur de dossier de sécurité. Formulaire structuré, 100% local : statut foncier, incendie, accès secours, acoustique, photos avant/après. Export PDF prêt à remettre aux forces de l'ordre."
+  category="OUTILS"
+  categoryHref="/tools"
+>
+
+  <!-- ═══════════════════════════════════════════════════════
+       EN-TÊTE
+  ═══════════════════════════════════════════════════════ -->
+  <div class="rl-header">
+    <div class="rl-badge">⛨ OUTIL TERRAIN</div>
+    <h1 class="rl-title">Compliance-Shield</h1>
+    <p class="rl-subtitle">Dossier de sécurité automatisé — preuve de bonne foi pénalement opposable</p>
+    <div class="rl-local-notice">
+      <span class="notice-icon">⚿</span>
+      <span>Tout le traitement s'exécute <strong>localement dans ton navigateur</strong>. Coordonnées, photos et données d'événement ne sont jamais envoyées à un serveur. Le brouillon est sauvegardé automatiquement en local.</span>
+    </div>
+
+    <button id="guideToggle" class="rl-guide-btn" aria-expanded="false" aria-controls="guidePanel">
+      <span id="guideArrow">▸</span> GUIDE D'UTILISATION
+    </button>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       GUIDE
+  ═══════════════════════════════════════════════════════ -->
+  <div id="guidePanel" class="rl-guide-panel" aria-hidden="true">
+    <div class="rl-guide-inner">
+
+      <div class="rl-guide-col">
+        <div class="rl-guide-section-title">⛨ CE QUE C'EST</div>
+        <p class="rl-guide-text">Compliance-Shield génère un <strong>dossier de sécurité professionnel</strong> documentant les mesures de prévention et de protection effectives sur ton site. Ce PDF est conçu pour être remis aux autorités en cas d'intervention. Il ne demande pas une autorisation — il documente ce qui est en place.</p>
+        <p class="rl-guide-text" style="margin-top:10px">La logique est simple : le chef d'infraction <em>mise en danger de la vie d'autrui</em> (art. 223-1 CP) suppose une violation <em>manifeste et délibérée</em> d'une obligation de sécurité. Un dossier technique béton conteste factuellement cet argument.</p>
+      </div>
+
+      <div class="rl-guide-col">
+        <div class="rl-guide-section-title">⊙ WORKFLOW</div>
+        <ol class="rl-guide-steps">
+          <li><span class="rl-guide-num">01</span><span>Remplis les sections : seules commune, département, date et effectif sont obligatoires. Documente ce qui <em>existe réellement</em>.</span></li>
+          <li><span class="rl-guide-num">02</span><span>Importe ton rapport SoundCheck (.md exporté depuis l'outil) pour la section acoustique.</span></li>
+          <li><span class="rl-guide-num">03</span><span>Ajoute les photos avant/après (EXIF/GPS automatiquement supprimés).</span></li>
+          <li><span class="rl-guide-num">04</span><span>Génère le PDF. Imprime-le en plusieurs exemplaires. Remets-le à l'OPJ avec la page de remise signée.</span></li>
+        </ol>
+      </div>
+
+      <div class="rl-guide-col">
+        <div class="rl-guide-section-title">⊘ CONFIDENTIALITÉ</div>
+        <p class="rl-guide-text">Le champ GPS est optionnel et peut être masqué dans le PDF. Les photos sont ré-encodées via canvas : toutes les métadonnées EXIF (dont les coordonnées GPS) sont détruites avant de s'afficher ou d'être intégrées au document.</p>
+        <p class="rl-guide-text" style="margin-top:8px">L'export JSON permet de sauvegarder et de transférer le dossier complet (avec photos) entre appareils.</p>
+        <div class="rl-guide-warn" style="margin-top:12px">
+          <strong>Limite légale :</strong> ce dossier est un outil de documentation. Il ne supprime pas l'infraction déclarative (R211-27 CSI) ni le risque de saisie conservatoire (L211-15 CSI). Il arme les recours ultérieurs et conteste l'argument de mise en danger.
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       BARRE DE PROGRESSION
+  ═══════════════════════════════════════════════════════ -->
+  <div class="cs-progress-wrap">
+    <div class="cs-progress-header">
+      <span class="cs-progress-title">COMPLÉTUDE DU DOSSIER</span>
+      <span id="csProgressLabel" class="cs-progress-label">0/9 volets documentés</span>
+    </div>
+    <div class="cs-progress-track">
+      <div id="csProgressBar" class="cs-progress-bar" style="width:0%"></div>
+    </div>
+    <ul id="csProgressList" class="cs-progress-list"></ul>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       PERSISTANCE
+  ═══════════════════════════════════════════════════════ -->
+  <div class="cs-persist-bar">
+    <span id="autosaveStatus" class="cs-autosave-status"></span>
+    <div class="cs-persist-actions">
+      <button type="button" id="btnExportJson" class="cs-btn-xs">↓ Export JSON</button>
+      <button type="button" id="btnImportJson" class="cs-btn-xs">↑ Import JSON</button>
+      <input type="file" id="importJsonFile" accept=".json" style="display:none" />
+      <button type="button" id="btnPurge" class="cs-btn-xs cs-btn-danger">✕ Purger</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       FORMULAIRE PRINCIPAL
+  ═══════════════════════════════════════════════════════ -->
+  <form id="csForm" autocomplete="off" novalidate>
+
+    <!-- ── S00 : Phase ─────────────────────────────────────────── -->
+    <fieldset class="rl-section">
+      <legend class="rl-legend"><span class="rl-num">00</span> Phase de l'événement</legend>
+      <p class="cs-field-hint" style="margin-bottom:14px">Sélectionne la phase pour adapter les sections affichées.</p>
+      <div class="rl-radio-group">
+        <label class="rl-radio"><input type="radio" name="phase" value="pre" checked /><span>AVANT — dossier préventif</span></label>
+        <label class="rl-radio"><input type="radio" name="phase" value="post" /><span>APRÈS — bilan de sortie (inclut état des lieux de restitution)</span></label>
+      </div>
+    </fieldset>
+
+    <!-- ── S01 : Fiche événement ───────────────────────────────── -->
+    <fieldset class="rl-section">
+      <legend class="rl-legend"><span class="rl-num">01</span> Fiche événement</legend>
+      <div class="rl-grid-2">
+        <div class="rl-field">
+          <label for="f-nom" class="rl-label">Nom ou intitulé de l'événement</label>
+          <input id="f-nom" name="nom" type="text" placeholder="ex: Free tekno estivale" class="rl-input" />
+        </div>
+        <div class="rl-field">
+          <label for="f-effectif" class="rl-label">Effectif attendu (personnes) <span class="req">*</span></label>
+          <input id="f-effectif" name="effectif" type="number" min="1" max="50000" placeholder="ex: 300" class="rl-input" required />
+        </div>
+        <div class="rl-field">
+          <label for="f-commune" class="rl-label">Commune <span class="req">*</span></label>
+          <input id="f-commune" name="commune" type="text" placeholder="ex: Saint-Malo" class="rl-input" required />
+        </div>
+        <div class="rl-field">
+          <label for="f-dept" class="rl-label">Département <span class="req">*</span></label>
+          <input id="f-dept" name="dept" type="text" placeholder="ex: 35 - Ille-et-Vilaine" class="rl-input" required />
+        </div>
+        <div class="rl-field">
+          <label for="f-date-debut" class="rl-label">Date de début <span class="req">*</span></label>
+          <input id="f-date-debut" name="date-debut" type="date" class="rl-input" required />
+        </div>
+        <div class="rl-field">
+          <label for="f-date-fin" class="rl-label">Date de fin prévue</label>
+          <input id="f-date-fin" name="date-fin" type="date" class="rl-input" />
+        </div>
+        <div class="rl-field">
+          <label for="f-heure-debut" class="rl-label">Heure de début</label>
+          <input id="f-heure-debut" name="heure-debut" type="time" class="rl-input" />
+        </div>
+        <div class="rl-field">
+          <label for="f-heure-fin" class="rl-label">Fin prévue (heure)</label>
+          <input id="f-heure-fin" name="heure-fin" type="time" class="rl-input" />
+        </div>
+      </div>
+
+      <div class="rl-grid-2" style="margin-top:14px">
+        <div class="rl-field">
+          <label for="f-lieu-dit" class="rl-label">Lieu-dit / référence cadastrale</label>
+          <input id="f-lieu-dit" name="lieu-dit" type="text" placeholder="ex: Les Bruyères, parcelle ZA 42" class="rl-input" />
+        </div>
+        <div class="rl-field">
+          <label for="f-gps" class="rl-label">Coordonnées GPS (optionnel)</label>
+          <input id="f-gps" name="gps" type="text" placeholder="ex: 48.1234, -1.9876" class="rl-input" />
+          <p class="cs-field-hint">Option masquage disponible avant export.</p>
+        </div>
+        <div class="rl-field">
+          <label for="f-surface" class="rl-label">Surface utilisée</label>
+          <input id="f-surface" name="surface" type="text" placeholder="ex: 2 hectares" class="rl-input" />
+        </div>
+        <div class="rl-field">
+          <label for="f-terrain" class="rl-label">Nature du terrain</label>
+          <input id="f-terrain" name="terrain" type="text" placeholder="ex: Prairie, sol stable, pas de culture" class="rl-input" />
+        </div>
+      </div>
+
+      <div class="rl-field" style="margin-top:14px">
+        <label for="f-acces-desc" class="rl-label">Description des accès au site</label>
+        <textarea id="f-acces-desc" name="acces-desc" rows="3" placeholder="ex: Accès par la D112, chemin agricole carrossable sur 400 m, portail ouvert, largeur 4 m..." class="rl-textarea"></textarea>
+      </div>
+
+      <!-- Seuil R211-2 CSI -->
+      <div id="seuilInfo" class="info-box" style="display:none;margin-top:14px">
+        <strong>Effectif inférieur à 500 pers.</strong> L'article R211-2 CSI fixe le seuil de déclaration à 500 personnes. En dessous, l'obligation déclarative de l'art. L211-5 CSI ne s'applique pas. Ce dossier documente ta démarche de sécurité volontaire.
+      </div>
+      <div id="seuilCritical" class="warning-box" style="display:none;margin-top:14px">
+        <strong>Effectif ≥ 500 pers.</strong> La déclaration préalable en préfecture (art. L211-5 CSI) est obligatoire. Documente-la en section 03.
+      </div>
+    </fieldset>
+
+    <!-- ── S02 : Statut foncier ───────────────────────────────── -->
+    <fieldset class="rl-section">
+      <legend class="rl-legend"><span class="rl-num">02</span> Statut d'occupation du terrain</legend>
+      <p class="cs-field-hint">Documentée, l'occupation légitime neutralise l'art. 226-4 CP (violation de domicile).</p>
+
+      <div class="rl-radio-group" style="margin-top:12px">
+        <label class="rl-radio"><input type="radio" name="foncier" value="ecrit" /><span>Accord écrit du propriétaire</span></label>
+        <label class="rl-radio"><input type="radio" name="foncier" value="verbal" /><span>Accord verbal du propriétaire</span></label>
+        <label class="rl-radio"><input type="radio" name="foncier" value="public" /><span>Espace public / domaine public</span></label>
+        <label class="rl-radio"><input type="radio" name="foncier" value="demarche" /><span>Démarches d'identification du propriétaire engagées</span></label>
+        <label class="rl-radio"><input type="radio" name="foncier" value="aucun" /><span>Non renseigné</span></label>
+      </div>
+
+      <!-- Accord écrit ou verbal -->
+      <div id="foncierEcritWrap" style="display:none;margin-top:16px">
+        <div class="rl-grid-2">
+          <div class="rl-field">
+            <label for="f-proprio-nom" class="rl-label">Nom du propriétaire</label>
+            <input id="f-proprio-nom" name="proprio-nom" type="text" placeholder="Nom / raison sociale" class="rl-input" />
+          </div>
+          <div class="rl-field">
+            <label for="f-proprio-date" class="rl-label">Date de l'accord</label>
+            <input id="f-proprio-date" name="proprio-date" type="date" class="rl-input" />
+          </div>
+        </div>
+        <div class="rl-field" style="margin-top:12px">
+          <label for="f-proprio-modalites" class="rl-label">Modalités convenues (horaires, remise en état, compensation...)</label>
+          <textarea id="f-proprio-modalites" name="proprio-modalites" rows="3" class="rl-textarea" placeholder="ex: Restitution du terrain nettoyé avant le lundi à 12h, compensation de 200 € versée..."></textarea>
+        </div>
+        <div class="rl-field" style="margin-top:12px">
+          <label class="rl-label">Joindre l'accord écrit en annexe (scan / photo)</label>
+          <div class="rl-upload-zone" id="zoneFoncier">
+            <input type="file" id="f-piece-foncier" accept="image/*" multiple class="rl-file-input" />
+            <div class="rl-upload-label">
+              <span class="upload-icon">⊕</span>
+              <span>Sélectionner une photo ou un scan</span>
+              <span class="upload-sub">EXIF / GPS supprimés automatiquement</span>
+            </div>
+          </div>
+          <div id="previewFoncier" class="photo-preview-grid" style="display:none"></div>
+        </div>
+      </div>
+
+      <div id="foncierVerbalWrap" style="display:none;margin-top:16px">
+        <div class="rl-grid-2">
+          <div class="rl-field">
+            <label for="f-proprio-nom" class="rl-label">Nom du propriétaire</label>
+            <input id="f-proprio-nom-v" name="proprio-nom" type="text" placeholder="Nom / raison sociale" class="rl-input" />
+          </div>
+          <div class="rl-field">
+            <label for="f-proprio-date" class="rl-label">Date de l'accord</label>
+            <input id="f-proprio-date-v" name="proprio-date" type="date" class="rl-input" />
+          </div>
+        </div>
+        <div class="rl-field" style="margin-top:12px">
+          <label for="f-proprio-modalites-v" class="rl-label">Conditions convenues</label>
+          <textarea id="f-proprio-modalites-v" name="proprio-modalites-v" rows="3" class="rl-textarea" placeholder="ex: Accord téléphonique le..., conditions : remise en état, pas de dégâts..."></textarea>
+        </div>
+      </div>
+
+      <div id="foncierDemarcheWrap" style="display:none;margin-top:16px">
+        <div class="rl-field">
+          <label for="f-demarche-detail" class="rl-label">Détail des démarches effectuées</label>
+          <textarea id="f-demarche-detail" name="demarche-detail" rows="4" class="rl-textarea" placeholder="ex: Consultation du cadastre le X, tentative de contact le Y, propriétaire introuvable / non joignable..."></textarea>
+        </div>
+      </div>
+
+      <div id="foncierWarn" class="warning-box" style="display:none;margin-top:12px">
+        Sans accord ni démarche documentée, le risque d'incrimination sur l'art. 226-4 CP (violation de domicile ou de terrain d'autrui) est réel. Documente tout contact ou démarche pour contester cet argument.
+      </div>
+    </fieldset>
+
+    <!-- ── S03 : Déclaration et dialogue ─────────────────────── -->
+    <fieldset class="rl-section">
+      <legend class="rl-legend"><span class="rl-num">03</span> Information des autorités et riverains</legend>
+
+      <div class="rl-field" style="margin-bottom:16px">
+        <label class="rl-label">Déclaration préalable en préfecture (art. L211-5 CSI)</label>
+        <div class="rl-radio-group">
+          <label class="rl-radio"><input type="radio" name="declaration" value="sansobjet" checked /><span>Sans objet (effectif sous le seuil)</span></label>
+          <label class="rl-radio"><input type="radio" name="declaration" value="faite" /><span>Déclaration déposée</span></label>
+          <label class="rl-radio"><input type="radio" name="declaration" value="encours" /><span>Dossier transmis, en cours</span></label>
+        </div>
+      </div>
+
+      <div id="declFaiteWrap" style="display:none">
+        <div class="rl-grid-2">
+          <div class="rl-field">
+            <label for="f-decl-date" class="rl-label">Date de dépôt / transmission</label>
+            <input id="f-decl-date" name="decl-date" type="date" class="rl-input" />
+          </div>
+          <div class="rl-field">
+            <label for="f-decl-pref" class="rl-label">Préfecture destinataire</label>
+            <input id="f-decl-pref" name="decl-pref" type="text" placeholder="ex: Préfecture d'Ille-et-Vilaine" class="rl-input" />
+          </div>
+        </div>
+        <div class="rl-field" style="margin-top:12px">
+          <label class="rl-label">Joindre le récépissé en annexe</label>
+          <div class="rl-upload-zone" id="zoneRecepisse">
+            <input type="file" id="f-piece-recepisse" accept="image/*" multiple class="rl-file-input" />
+            <div class="rl-upload-label">
+              <span class="upload-icon">⊕</span>
+              <span>Photo du récépissé / accusé de réception</span>
+              <span class="upload-sub">EXIF / GPS supprimés automatiquement</span>
+            </div>
+          </div>
+          <div id="previewRecepisse" class="photo-preview-grid" style="display:none"></div>
+        </div>
+      </div>
+
+      <div class="rl-field" style="margin-top:16px">
+        <label class="rl-label">Interlocuteurs contactés ou informés</label>
+        <div class="rl-type-grid" style="margin-top:8px">
+          <label class="rl-check"><input type="checkbox" id="f-ct-mairie" /><span>Mairie</span></label>
+          <label class="rl-check"><input type="checkbox" id="f-ct-gendarmerie" /><span>Gendarmerie / Police locale</span></label>
+          <label class="rl-check"><input type="checkbox" id="f-ct-sdis" /><span>SDIS (pompiers)</span></label>
+          <label class="rl-check"><input type="checkbox" id="f-ct-riverains" /><span>Riverains / habitations proches</span></label>
+        </div>
+      </div>
+
+      <div class="rl-field" style="margin-top:14px">
+        <label for="f-ct-detail" class="rl-label">Détail des échanges (dates, interlocuteurs, réponses obtenues)</label>
+        <textarea id="f-ct-detail" name="ct-detail" rows="5" class="rl-textarea" placeholder="ex: Appel mairie le DD/MM à HHhMM - M. Dupont, secrétariat - informé de l'événement, pas d'opposition formulée. Mail brigade gendarmerie le... Attestation riverains annexée..."></textarea>
+      </div>
+    </fieldset>
+
+    <!-- ── S04 : Sécurité incendie ─────────────────────────────── -->
+    <fieldset class="rl-section">
+      <legend class="rl-legend"><span class="rl-num">04</span> Prévention incendie et risques électriques</legend>
+
+      <div class="rl-grid-2">
+        <div class="rl-field">
+          <label for="f-ext-nb" class="rl-label">Nombre d'extincteurs</label>
+          <input id="f-ext-nb" name="ext-nb" type="number" min="0" placeholder="ex: 6" class="rl-input" />
+        </div>
+        <div class="rl-field">
+          <label for="f-ext-types" class="rl-label">Types d'extincteurs</label>
+          <input id="f-ext-types" name="ext-types" type="text" placeholder="ex: 6 kg CO2, 9 L eau pulvérisée" class="rl-input" />
+        </div>
+      </div>
+
+      <div class="rl-field" style="margin-top:12px">
+        <label for="f-ext-emplacements" class="rl-label">Emplacements des extincteurs</label>
+        <textarea id="f-ext-emplacements" name="ext-emplacements" rows="2" class="rl-textarea" placeholder="ex: 2 aux générateurs, 2 en régie son, 1 aux accès, 1 espace secours..."></textarea>
+      </div>
+
+      <div class="rl-field" style="margin-top:12px">
+        <label for="f-point-eau" class="rl-label">Point d'eau ou ressource incendie accessible</label>
+        <input id="f-point-eau" name="point-eau" type="text" placeholder="ex: Citerne 1000 L à 50 m de la régie / cours d'eau à 200 m" class="rl-input" />
+      </div>
+
+      <div class="rl-type-grid" style="margin-top:14px">
+        <label class="rl-check"><input type="checkbox" id="f-interdit-feux" /><span>Feux ouverts interdits sur site</span></label>
+        <label class="rl-check"><input type="checkbox" id="f-zone-fumeur" /><span>Zone fumeur délimitée</span></label>
+        <label class="rl-check"><input type="checkbox" id="f-debroussaillage" /><span>Abords dégagés (végétation sèche)</span></label>
+      </div>
+
+      <!-- Groupes électrogènes -->
+      <div class="rl-grid-2" style="margin-top:16px">
+        <div class="rl-field">
+          <label for="f-gen-nb" class="rl-label">Groupes électrogènes</label>
+          <input id="f-gen-nb" name="gen-nb" type="number" min="0" placeholder="0" class="rl-input" />
+        </div>
+        <div class="rl-field" id="genDetailWrap" style="display:none">
+          <label for="f-gen-distance" class="rl-label">Distance minimum public / groupe</label>
+          <input id="f-gen-distance" name="gen-distance" type="text" placeholder="ex: 10 m, barrière Nadar" class="rl-input" />
+        </div>
+      </div>
+
+      <div id="genDetailWrap" style="display:none;margin-top:8px">
+        <div class="rl-type-grid">
+          <label class="rl-check"><input type="checkbox" id="f-gen-retention" /><span>Bac de rétention carburant</span></label>
+          <label class="rl-check"><input type="checkbox" id="f-gen-extincteur" /><span>Extincteur dédié par groupe</span></label>
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- ── S05 : Accès secours ─────────────────────────────────── -->
+    <fieldset class="rl-section">
+      <legend class="rl-legend"><span class="rl-num">05</span> Accès des secours et évacuation</legend>
+      <p class="cs-field-hint">C'est le point central de l'argument SDIS. Une voie dégagée + un point de rencontre = l'argument "mise en danger" tombe.</p>
+
+      <div class="rl-type-grid" style="margin-top:12px">
+        <label class="rl-check"><input type="checkbox" id="f-voie-acces" /><span>Voie d'accès maintenue libre en permanence (largeur ≥ 3 m)</span></label>
+        <label class="rl-check"><input type="checkbox" id="f-balisage" /><span>Itinéraire accès secours balisé depuis la voie publique</span></label>
+      </div>
+
+      <div class="rl-grid-2" style="margin-top:14px">
+        <div class="rl-field">
+          <label for="f-point-rencontre" class="rl-label">Point de rencontre secours (GPS ou description)</label>
+          <input id="f-point-rencontre" name="point-rencontre" type="text" placeholder="ex: Portail route D112, coordonnées 48.XX, -1.XX" class="rl-input" />
+        </div>
+        <div class="rl-field">
+          <label for="f-point-rassemblement" class="rl-label">Point de rassemblement évacuation</label>
+          <input id="f-point-rassemblement" name="point-rassemblement" type="text" placeholder="ex: Virage D112 à 300 m nord du site" class="rl-input" />
+        </div>
+      </div>
+
+      <div class="rl-field" style="margin-top:12px">
+        <label for="f-itineraire" class="rl-label">Itinéraire d'accès depuis la route principale (description ou carnet)</label>
+        <textarea id="f-itineraire" name="itineraire" rows="3" class="rl-textarea" placeholder="ex: D112 direction Bruz, 1er chemin à gauche après le calvaire, 400 m tout droit, portail vert..."></textarea>
+      </div>
+
+      <div class="rl-field" style="margin-top:12px">
+        <label for="f-referent-secours" class="rl-label">Référent secours joignable sur site (rôle + moyen de contact)</label>
+        <input id="f-referent-secours" name="referent-secours" type="text" placeholder="ex: Prénom NOM — talkies-walkies canal 6 ou indiquer à l'entrée" class="rl-input" />
+      </div>
+    </fieldset>
+
+    <!-- ── S06 : Dispositif sanitaire ────────────────────────── -->
+    <fieldset class="rl-section">
+      <legend class="rl-legend"><span class="rl-num">06</span> Dispositif sanitaire et réduction des risques</legend>
+
+      <div class="rl-grid-2">
+        <div class="rl-field">
+          <label for="f-secouristes" class="rl-label">Personnes formées aux premiers secours sur site</label>
+          <input id="f-secouristes" name="secouristes" type="number" min="0" placeholder="0" class="rl-input" />
+        </div>
+        <div class="rl-field">
+          <label for="f-formation" class="rl-label">Formation(s) détenue(s)</label>
+          <input id="f-formation" name="formation" type="text" placeholder="ex: PSC1, SST, BNSSA" class="rl-input" />
+        </div>
+      </div>
+
+      <div class="rl-type-grid" style="margin-top:14px">
+        <label class="rl-check"><input type="checkbox" id="f-poste-secours" /><span>Poste de premiers soins identifié et signalé</span></label>
+        <label class="rl-check"><input type="checkbox" id="f-trousse" /><span>Trousses de premiers secours disponibles</span></label>
+        <label class="rl-check"><input type="checkbox" id="f-eau-gratuite" /><span>Eau potable en accès libre et gratuit</span></label>
+        <label class="rl-check"><input type="checkbox" id="f-bouchons" /><span>Protections auditives disponibles</span></label>
+        <label class="rl-check"><input type="checkbox" id="f-chill-out" /><span>Espace chill-out aménagé</span></label>
+        <label class="rl-check"><input type="checkbox" id="f-affichage-urgence" /><span>Numéros urgences affichés (15 / 18 / 112)</span></label>
+      </div>
+
+      <div class="rl-field" style="margin-top:14px">
+        <label for="f-assoc-rdr" class="rl-label">Association de réduction des risques présente</label>
+        <input id="f-assoc-rdr" name="assoc-rdr" type="text" placeholder="ex: Techno+, ASUD, Aides, CAARUD local..." class="rl-input" />
+      </div>
+    </fieldset>
+
+    <!-- ── S07 : Acoustique ───────────────────────────────────── -->
+    <fieldset class="rl-section">
+      <legend class="rl-legend"><span class="rl-num">07</span> Maîtrise de l'impact acoustique</legend>
+      <p class="cs-field-hint">Importe ton rapport SoundCheck pour générer la section acoustique automatiquement, ou renseigne les champs manuellement.</p>
+
+      <!-- Import SoundCheck -->
+      <div class="cs-soundcheck-import">
+        <div class="cs-sc-title">↳ Import rapport SoundCheck (.md)</div>
+        <div class="cs-sc-actions">
+          <label class="cs-btn-xs" style="cursor:pointer">
+            ↑ Charger fichier .md
+            <input type="file" id="sc-file" accept=".md,.txt" style="display:none" />
+          </label>
+          <span style="opacity:0.4;font-size:11px">ou coller :</span>
+        </div>
+        <div style="margin-top:8px">
+          <textarea id="sc-paste" rows="3" class="rl-textarea" placeholder="Colle ici le contenu du rapport .md exporté depuis SoundCheck..."></textarea>
+          <button type="button" id="sc-paste-btn" class="cs-btn-xs" style="margin-top:6px">Analyser le contenu collé</button>
+        </div>
+        <div id="sc-import-status" class="cs-import-status"></div>
+      </div>
+
+      <!-- Fallback manuel -->
+      <div class="rl-grid-2" style="margin-top:16px">
+        <div class="rl-field">
+          <label for="f-dist-habitation" class="rl-label">Distance première habitation (si pas de rapport SoundCheck)</label>
+          <input id="f-dist-habitation" name="dist-habitation" type="text" placeholder="ex: 1,2 km, pas d'habitation dans le rayon de 2 km" class="rl-input" />
+        </div>
+        <div class="rl-field">
+          <label for="f-orientation-stack" class="rl-label">Orientation du stack / façade principale</label>
+          <input id="f-orientation-stack" name="orientation-stack" type="text" placeholder="ex: Orienté nord-ouest, dos aux habitations" class="rl-input" />
+        </div>
+      </div>
+
+      <div class="rl-field" style="margin-top:12px">
+        <label for="f-engagement-horaire" class="rl-label">Engagements de modération (horaires, niveaux, mesures baffle wall)</label>
+        <textarea id="f-engagement-horaire" name="engagement-horaire" rows="3" class="rl-textarea" placeholder="ex: Réduction de puissance de 30 % entre 6h et 10h, baffle wall orienté 270°, contrôle SPL mobile..."></textarea>
+      </div>
+    </fieldset>
+
+    <!-- ── S08 : Environnement ────────────────────────────────── -->
+    <fieldset class="rl-section">
+      <legend class="rl-legend"><span class="rl-num">08</span> Gestion environnementale du site</legend>
+
+      <div class="rl-field">
+        <label for="f-toilettes" class="rl-label">Sanitaires / toilettes</label>
+        <input id="f-toilettes" name="toilettes" type="text" placeholder="ex: 6 sanitaires mobiles pour 300 pers., vidange organisée" class="rl-input" />
+      </div>
+
+      <div class="rl-type-grid" style="margin-top:14px">
+        <label class="rl-check"><input type="checkbox" id="f-sacs" /><span>Sacs poubelle distribués à l'entrée</span></label>
+        <label class="rl-check"><input type="checkbox" id="f-tri-dechets" /><span>Points de collecte et tri installés</span></label>
+        <label class="rl-check"><input type="checkbox" id="f-remise-etat" /><span>Engagement de remise en état + évacuation totale des déchets</span></label>
+      </div>
+    </fieldset>
+
+    <!-- ── S09 : Photos état des lieux (avant) ───────────────── -->
+    <fieldset class="rl-section">
+      <legend class="rl-legend"><span class="rl-num">09</span> État des lieux d'entrée (photos avant installation)</legend>
+      <p class="cs-field-hint">Documente l'état initial du terrain avant l'arrivée du matériel. Ces photos sont les preuves les plus fortes contre toute accusation de dégradation. EXIF / GPS supprimés automatiquement.</p>
+
+      <div class="rl-upload-zone" id="zoneAvant">
+        <input type="file" id="f-photos-avant" accept="image/*" multiple class="rl-file-input" />
+        <div class="rl-upload-label">
+          <span class="upload-icon">⊕</span>
+          <span>Ajouter des photos (état initial du terrain)</span>
+          <span class="upload-sub">Jusqu'à 12 photos · JPG, PNG, WEBP · EXIF / GPS supprimés</span>
+        </div>
+      </div>
+      <div id="previewAvant" class="photo-preview-grid" style="display:none"></div>
+    </fieldset>
+
+    <!-- ── S10 : Organisation interne ────────────────────────── -->
+    <fieldset class="rl-section">
+      <legend class="rl-legend"><span class="rl-num">10</span> Organisation interne et gestion du site</legend>
+
+      <div class="rl-field">
+        <label for="f-referents" class="rl-label">Référents et rôles (sécurité, son, entrée, secours...)</label>
+        <textarea id="f-referents" name="referents" rows="4" class="rl-textarea" placeholder="ex: SÉCURITÉ - Prénom NOM, joignable talkie canal 6. RÉGIE SON - Prénom NOM, consignes SPL. ENTRÉE - Prénom NOM, infoline..."></textarea>
+      </div>
+
+      <div class="rl-type-grid" style="margin-top:12px">
+        <label class="rl-check"><input type="checkbox" id="f-brief-secu" /><span>Briefing sécurité réalisé avant ouverture du site</span></label>
+      </div>
+
+      <div class="rl-field" style="margin-top:12px">
+        <label for="f-procedure-incident" class="rl-label">Procédure en cas d'incident</label>
+        <textarea id="f-procedure-incident" name="procedure-incident" rows="3" class="rl-textarea" placeholder="ex: Tout incident = contacter le référent sécurité, appel 15 / 18 / 112 sans attendre, arrêt sono si évacuation demandée..."></textarea>
+      </div>
+
+      <div class="rl-field" style="margin-top:12px">
+        <label for="f-parking" class="rl-label">Gestion du stationnement et des flux véhicules</label>
+        <textarea id="f-parking" name="parking" rows="2" class="rl-textarea" placeholder="ex: Parking organisé à 300 m du site, fléchage, voiture de parking, voie d'accès maintenue libre..."></textarea>
+      </div>
+    </fieldset>
+
+    <!-- ── S11 : Bilan de sortie (phase post) ────────────────── -->
+    <fieldset class="rl-section" id="sectionBilan" style="display:none">
+      <legend class="rl-legend"><span class="rl-num">11</span> Bilan et restitution du site</legend>
+      <p class="cs-field-hint">Section active en phase "Après". Documente la sortie propre : contre-propagande médiatique et politique la plus efficace.</p>
+
+      <div class="rl-grid-2">
+        <div class="rl-field">
+          <label for="f-fin-effective" class="rl-label">Heure de fin effective de la diffusion sonore</label>
+          <input id="f-fin-effective" name="fin-effective" type="time" class="rl-input" />
+        </div>
+        <div class="rl-field">
+          <label for="f-demontage" class="rl-label">Durée du démontage</label>
+          <input id="f-demontage" name="demontage" type="text" placeholder="ex: 6h, terminé à 14h" class="rl-input" />
+        </div>
+      </div>
+
+      <div class="rl-type-grid" style="margin-top:14px">
+        <label class="rl-check"><input type="checkbox" id="f-dechets-evacues" /><span>Intégralité des déchets collectés et évacués</span></label>
+        <label class="rl-check"><input type="checkbox" id="f-restitution" /><span>Site restitué nettoyé (photos en annexe B)</span></label>
+      </div>
+
+      <div class="rl-field" style="margin-top:12px">
+        <label for="f-etat-sortie" class="rl-label">État des lieux de sortie (description)</label>
+        <textarea id="f-etat-sortie" name="etat-sortie" rows="3" class="rl-textarea" placeholder="ex: Terrain rendu dans son état initial, herbe couchée refoulée, aucune dégradation de clôture, propriétaire contacté et satisfait..."></textarea>
+      </div>
+
+      <div class="rl-field" style="margin-top:12px">
+        <label for="f-incidents" class="rl-label">Récapitulatif d'incidents ou observations</label>
+        <textarea id="f-incidents" name="incidents" rows="3" class="rl-textarea" placeholder="ex: 0 incident grave. 1 maladie alcool prise en charge par secouristes à 4h, transfert ambulance. 0 interpellation, 0 saisie..."></textarea>
+      </div>
+
+      <!-- Photos après -->
+      <div class="rl-field" style="margin-top:16px">
+        <label class="rl-label">Photos état des lieux de sortie (après démontage et nettoyage)</label>
+        <div class="rl-upload-zone" id="zoneApres">
+          <input type="file" id="f-photos-apres" accept="image/*" multiple class="rl-file-input" />
+          <div class="rl-upload-label">
+            <span class="upload-icon">⊕</span>
+            <span>Ajouter des photos (terrain nettoyé, prêt à rendre)</span>
+            <span class="upload-sub">Jusqu'à 12 photos · EXIF / GPS supprimés</span>
+          </div>
+        </div>
+        <div id="previewApres" class="photo-preview-grid" style="display:none"></div>
+      </div>
+    </fieldset>
+
+    <!-- ── Options d'export ───────────────────────────────────── -->
+    <fieldset class="rl-section">
+      <legend class="rl-legend"><span class="rl-num">⊙</span> Options du document généré</legend>
+
+      <div class="rl-type-grid">
+        <label class="rl-check"><input type="checkbox" id="f-opt-remise" checked /><span>Inclure la page de remise (signatures, identification de l'agent)</span></label>
+        <label class="rl-check"><input type="checkbox" id="f-opt-annexe-juridique" checked /><span>Inclure l'annexe juridique (références légales)</span></label>
+        <label class="rl-check"><input type="checkbox" id="f-opt-hide-gps" /><span>Masquer les coordonnées GPS dans le PDF</span></label>
+      </div>
+    </fieldset>
+
+    <!-- ── Erreur + boutons ───────────────────────────────────── -->
+    <p id="csError" class="rl-error" style="display:none"></p>
+
+    <div class="rl-actions">
+      <button type="button" id="btnReset" class="rl-btn-secondary">↺ Réinitialiser</button>
+      <button type="submit" id="btnGenerate" class="rl-btn-primary">
+        <span id="btnLabel">⛨ GÉNÉRER LE DOSSIER PDF</span>
+      </button>
+    </div>
+
+  </form>
+
+  <!-- ─────────────────────────────────────────────────────────
+       AVERTISSEMENT LÉGAL
+  ───────────────────────────────────────────────────────── -->
+  <div class="rl-legal">
+    <p><strong>Usage :</strong> Ce dossier est un outil de documentation personnelle. Il ne se substitue à aucune obligation légale et ne constitue pas un conseil juridique. Il ne supprime pas le risque de saisie conservatoire prévu par l'art. L211-15 CSI mais constitue une pièce pour tout recours ultérieur (référé L521-2 CJA, recours indemnitaire). Conservez-le avec l'ensemble de vos preuves.</p>
+  </div>
+
+  <!-- jsPDF -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" is:inline></script>
+
+  <script>
+    import '../scripts/compliance-shield.ts';
+
+    // Guide toggle
+    const guideToggle = document.getElementById('guideToggle');
+    const guidePanel  = document.getElementById('guidePanel');
+    const guideArrow  = document.getElementById('guideArrow');
+    if (guideToggle && guidePanel && guideArrow) {
+      guideToggle.addEventListener('click', () => {
+        const open = guidePanel.classList.toggle('open');
+        guidePanel.setAttribute('aria-hidden', String(!open));
+        guideToggle.setAttribute('aria-expanded', String(open));
+        guideArrow.textContent = open ? '▾' : '▸';
+      });
+    }
+
+    // Reset
+    document.getElementById('btnReset')?.addEventListener('click', () => {
+      if (!confirm('Réinitialiser le formulaire ? (le brouillon localStorage n\'est pas purgé)')) return;
+      (document.getElementById('csForm') as HTMLFormElement)?.reset();
+    });
+  </script>
+
+</Layout>
+
+<style is:global>
+
+  /* ══════════════════════════════════════════════════════════
+     Compliance-Shield – Design System
+     Base : classes rl-* de TimeSeal + extensions cs-*
+  ══════════════════════════════════════════════════════════ */
+
+  /* ── En-tête (reprend TimeSeal) ─────────────────────────── */
+  .rl-header { margin-bottom:36px; padding-bottom:28px; border-bottom:1px solid rgba(42,42,58,.6); position:relative; }
+  .rl-header::before { content:''; position:absolute; left:-28px; top:0; bottom:0; width:2px; background:linear-gradient(180deg,#00ff9f 0%,rgba(0,255,159,.03) 100%); }
+  .rl-badge { display:inline-flex; align-items:center; gap:6px; font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:.22em; text-transform:uppercase; color:#00ff9f; border:1px solid rgba(0,255,159,.28); background:rgba(0,255,159,.04); padding:4px 12px; margin-bottom:14px; }
+  .rl-title { font-family:'Bebas Neue','JetBrains Mono',sans-serif !important; font-size:52px !important; color:#e8e8f0 !important; letter-spacing:.08em !important; line-height:1 !important; margin:0 0 10px !important; padding:0 !important; border:none !important; text-shadow:0 0 40px rgba(0,255,159,.12); }
+  .rl-subtitle { font-family:'Space Grotesk',sans-serif; font-size:14px; font-weight:400; color:rgba(122,122,138,.88); letter-spacing:.01em; line-height:1.55; margin-bottom:20px; }
+  .rl-local-notice { display:flex; align-items:flex-start; gap:12px; background:rgba(0,255,159,.035); border:1px solid rgba(0,255,159,.16); border-left:3px solid rgba(0,255,159,.55); padding:12px 16px; font-family:'Space Grotesk',sans-serif; font-size:12px; color:rgba(200,200,216,.82); line-height:1.65; }
+  .notice-icon { color:#00ff9f; font-size:15px; flex-shrink:0; line-height:1.6; }
+  .rl-local-notice strong { color:#00ff9f; }
+
+  /* ── Guide ──────────────────────────────────────────────── */
+  .rl-guide-btn { margin-top:18px; background:transparent; border:1px solid rgba(42,42,58,.7); color:rgba(232,232,240,.65); font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:.14em; padding:7px 14px; cursor:pointer; transition:all .2s; display:flex; align-items:center; gap:8px; }
+  .rl-guide-btn:hover { border-color:rgba(0,255,159,.4); color:#e8e8f0; }
+  .rl-guide-panel { overflow:hidden; max-height:0; transition:max-height .35s ease; }
+  .rl-guide-panel.open { max-height:900px; }
+  .rl-guide-inner { display:grid; grid-template-columns:repeat(3,1fr); gap:0; border:1px solid rgba(42,42,58,.55); margin-top:18px; }
+  .rl-guide-col { padding:20px 22px; border-right:1px solid rgba(42,42,58,.45); background:rgba(8,8,12,.6); }
+  .rl-guide-col:last-child { border-right:none; }
+  .rl-guide-section-title { font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:.2em; color:#00ff9f; text-transform:uppercase; margin-bottom:12px; }
+  .rl-guide-text { font-family:'Space Grotesk',sans-serif; font-size:11.5px; color:rgba(200,200,216,.8); line-height:1.65; }
+  .rl-guide-steps { list-style:none; padding:0; margin:0; }
+  .rl-guide-steps li { display:flex; gap:10px; align-items:baseline; font-family:'Space Grotesk',sans-serif; font-size:11.5px; color:rgba(200,200,216,.8); margin-bottom:10px; line-height:1.55; }
+  .rl-guide-num { display:inline-flex; align-items:center; justify-content:center; width:20px; height:20px; flex-shrink:0; border:1px solid rgba(0,255,159,.32); color:#00ff9f; font-family:'JetBrains Mono',monospace; font-size:9px; font-weight:700; }
+  .rl-guide-warn { background:rgba(255,100,0,.06); border:1px solid rgba(255,100,0,.25); border-left:3px solid rgba(255,100,0,.55); padding:10px 14px; font-family:'Space Grotesk',sans-serif; font-size:11px; color:rgba(255,160,80,.9); line-height:1.6; }
+
+  /* ── Progression ─────────────────────────────────────────── */
+  .cs-progress-wrap { margin-bottom:24px; padding:16px 20px; background:rgba(8,8,12,.55); border:1px solid rgba(42,42,58,.6); border-left:3px solid rgba(0,255,159,.3); }
+  .cs-progress-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+  .cs-progress-title { font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:.18em; color:rgba(0,255,159,.75); text-transform:uppercase; }
+  .cs-progress-label { font-family:'JetBrains Mono',monospace; font-size:10px; color:rgba(232,232,240,.7); }
+  .cs-progress-track { height:3px; background:rgba(42,42,58,.8); overflow:hidden; margin-bottom:12px; }
+  .cs-progress-bar { height:100%; background:#00ff9f; transition:width .4s ease; }
+  .cs-progress-list { list-style:none; padding:0; margin:0; display:flex; flex-wrap:wrap; gap:4px 16px; }
+  .cs-progress-list li { font-family:'JetBrains Mono',monospace; font-size:9px; color:rgba(110,110,130,.8); letter-spacing:.06em; }
+  .cs-progress-list li.ok { color:rgba(0,255,159,.7); }
+
+  /* ── Barre persistance ───────────────────────────────────── */
+  .cs-persist-bar { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:22px; padding:10px 16px; background:rgba(8,8,12,.45); border:1px solid rgba(42,42,58,.5); }
+  .cs-autosave-status { font-family:'JetBrains Mono',monospace; font-size:9px; color:rgba(110,110,130,.8); letter-spacing:.06em; }
+  .cs-persist-actions { display:flex; gap:8px; flex-wrap:wrap; }
+  .cs-btn-xs { background:transparent; border:1px solid rgba(42,42,58,.8); color:rgba(200,200,216,.7); font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:.1em; padding:5px 10px; cursor:pointer; transition:all .15s; text-decoration:none; display:inline-flex; align-items:center; }
+  .cs-btn-xs:hover { border-color:rgba(0,255,159,.45); color:#e8e8f0; }
+  .cs-btn-danger { border-color:rgba(255,60,60,.3); color:rgba(255,100,80,.7); }
+  .cs-btn-danger:hover { border-color:rgba(255,60,60,.65); color:rgba(255,120,100,1); }
+
+  /* ── Formulaire : bases ──────────────────────────────────── */
+  .rl-section { border:1px solid rgba(42,42,58,.65); border-left:3px solid rgba(0,255,159,.22); padding:26px 24px 22px; margin-bottom:20px; background:rgba(8,8,12,.55); transition:border-left-color .2s; }
+  .rl-section:focus-within { border-left-color:rgba(0,255,159,.55); }
+  .rl-legend { display:flex; align-items:center; gap:12px; font-family:'Space Grotesk',sans-serif; font-size:13px; font-weight:600; color:rgba(232,232,240,.92); letter-spacing:.05em; text-transform:uppercase; padding:0; margin-bottom:22px; border:none; }
+  .rl-num { display:inline-flex; align-items:center; justify-content:center; width:26px; height:26px; flex-shrink:0; border:1px solid rgba(0,255,159,.32); color:#00ff9f; font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:700; }
+  .rl-opt { font-weight:400; font-size:11px; color:rgba(110,110,130,.7); letter-spacing:.03em; text-transform:none; }
+  .rl-grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  .rl-field { display:flex; flex-direction:column; gap:6px; }
+  .rl-label { font-family:'Space Grotesk',sans-serif; font-size:11.5px; font-weight:500; color:rgba(200,200,216,.78); letter-spacing:.03em; }
+  .req { color:#00ff9f; }
+  .rl-input, .rl-textarea { background:rgba(12,12,18,.7); border:1px solid rgba(42,42,58,.8); color:#e8e8f0; font-family:'Space Grotesk',sans-serif; font-size:13px; padding:9px 12px; outline:none; transition:border-color .2s; width:100%; box-sizing:border-box; }
+  .rl-input:focus, .rl-textarea:focus { border-color:rgba(0,255,159,.5); }
+  .rl-textarea { resize:vertical; min-height:70px; line-height:1.55; }
+  .rl-type-grid { display:flex; flex-wrap:wrap; gap:8px 16px; }
+  .rl-check { display:flex; align-items:center; gap:8px; cursor:pointer; font-family:'Space Grotesk',sans-serif; font-size:12px; color:rgba(200,200,216,.8); user-select:none; }
+  .rl-check input[type="checkbox"] { width:14px; height:14px; accent-color:#00ff9f; flex-shrink:0; }
+  .rl-radio-group { display:flex; flex-wrap:wrap; gap:10px; }
+  .rl-radio { display:flex; align-items:center; gap:8px; cursor:pointer; font-family:'Space Grotesk',sans-serif; font-size:12px; color:rgba(200,200,216,.8); user-select:none; }
+  .rl-radio input[type="radio"] { accent-color:#00ff9f; width:14px; height:14px; }
+
+  /* ── Hint ────────────────────────────────────────────────── */
+  .cs-field-hint { font-family:'Space Grotesk',sans-serif; font-size:11px; color:rgba(110,110,130,.75); line-height:1.5; margin:0; }
+
+  /* ── Info / warning boxes ────────────────────────────────── */
+  .info-box { background:rgba(0,160,255,.05); border:1px solid rgba(0,160,255,.22); border-left:3px solid rgba(0,160,255,.5); padding:12px 16px; font-family:'Space Grotesk',sans-serif; font-size:12px; color:rgba(160,210,255,.85); line-height:1.6; }
+  .warning-box { background:rgba(255,140,0,.05); border:1px solid rgba(255,140,0,.22); border-left:3px solid rgba(255,140,0,.55); padding:12px 16px; font-family:'Space Grotesk',sans-serif; font-size:12px; color:rgba(255,180,80,.85); line-height:1.6; }
+  .info-box strong, .warning-box strong { font-weight:600; }
+
+  /* ── Upload zones ────────────────────────────────────────── */
+  .rl-upload-zone { border:1px dashed rgba(42,42,58,.9); padding:18px; cursor:pointer; transition:border-color .2s; }
+  .rl-upload-zone:hover { border-color:rgba(0,255,159,.4); }
+  .rl-file-input { position:absolute; opacity:0; pointer-events:none; width:0; height:0; }
+  .rl-upload-label { display:flex; flex-direction:column; align-items:center; gap:5px; pointer-events:none; }
+  .upload-icon { font-size:20px; color:rgba(0,255,159,.6); }
+  .rl-upload-label span:nth-child(2) { font-family:'Space Grotesk',sans-serif; font-size:12px; color:rgba(200,200,216,.75); }
+  .upload-sub { font-family:'JetBrains Mono',monospace; font-size:9px; color:rgba(110,110,130,.7); letter-spacing:.08em; }
+
+  /* ── Photo preview ───────────────────────────────────────── */
+  .photo-preview-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(120px,1fr)); gap:10px; margin-top:12px; }
+  .photo-thumb { position:relative; background:rgba(12,12,18,.7); border:1px solid rgba(42,42,58,.7); padding:6px; display:flex; flex-direction:column; gap:4px; }
+  .photo-thumb img { width:100%; aspect-ratio:4/3; object-fit:cover; display:block; }
+  .photo-thumb span { font-family:'JetBrains Mono',monospace; font-size:8px; color:rgba(110,110,130,.7); word-break:break-all; line-height:1.3; }
+  .photo-del { position:absolute; top:4px; right:4px; background:rgba(200,40,40,.75); border:none; color:#fff; font-size:10px; width:18px; height:18px; cursor:pointer; display:flex; align-items:center; justify-content:center; padding:0; }
+  .photo-del:hover { background:rgba(220,60,60,1); }
+
+  /* ── SoundCheck import ───────────────────────────────────── */
+  .cs-soundcheck-import { background:rgba(0,255,159,.02); border:1px solid rgba(0,255,159,.12); padding:16px 18px; margin-bottom:4px; }
+  .cs-sc-title { font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:.15em; color:rgba(0,255,159,.7); text-transform:uppercase; margin-bottom:12px; }
+  .cs-sc-actions { display:flex; align-items:center; gap:10px; }
+  .cs-import-status { margin-top:10px; font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:.06em; }
+  .cs-import-status.ok { color:rgba(0,255,159,.85); }
+  .cs-import-status.err { color:rgba(255,100,80,.85); }
+
+  /* ── Actions + erreur ────────────────────────────────────── */
+  .rl-error { font-family:'Space Grotesk',sans-serif; font-size:12px; color:rgba(255,100,80,.9); background:rgba(255,60,60,.06); border:1px solid rgba(255,60,60,.2); padding:10px 14px; margin-bottom:14px; }
+  .rl-actions { display:flex; gap:12px; justify-content:flex-end; margin-top:8px; flex-wrap:wrap; }
+  .rl-btn-primary { background:rgba(0,255,159,.08); border:1px solid rgba(0,255,159,.55); color:#00ff9f; font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.14em; padding:13px 28px; cursor:pointer; transition:all .2s; }
+  .rl-btn-primary:hover { background:rgba(0,255,159,.15); border-color:#00ff9f; }
+  .rl-btn-primary:disabled { opacity:.4; cursor:not-allowed; }
+  .rl-btn-secondary { background:transparent; border:1px solid rgba(42,42,58,.8); color:rgba(200,200,216,.55); font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.12em; padding:13px 20px; cursor:pointer; transition:all .2s; }
+  .rl-btn-secondary:hover { border-color:rgba(200,200,216,.4); color:rgba(200,200,216,.8); }
+
+  /* ── Avertissement légal ─────────────────────────────────── */
+  .rl-legal { margin-top:32px; padding:16px 20px; background:rgba(42,42,58,.15); border:1px solid rgba(42,42,58,.45); font-family:'Space Grotesk',sans-serif; font-size:11px; color:rgba(110,110,130,.75); line-height:1.6; }
+  .rl-legal strong { color:rgba(160,160,175,.8); }
+
+  /* ── Responsive ──────────────────────────────────────────── */
+  @media (max-width:700px) {
+    .rl-grid-2 { grid-template-columns:1fr; }
+    .rl-guide-inner { grid-template-columns:1fr; }
+    .rl-guide-col { border-right:none; border-bottom:1px solid rgba(42,42,58,.45); }
+    .rl-guide-panel.open { max-height:2200px; }
+  }
+
+</style>

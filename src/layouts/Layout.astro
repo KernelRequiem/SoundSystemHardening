@@ -129,12 +129,13 @@ const navigation = [
     { href: '/wiki/compartimentation', label: 'Compartimentation', emoji: '🧩' },
     { href: '/wiki/wiki-ports-reseau', label: 'Ports réseau', emoji: '🔌' },
   ], tools: [
-    { href: '/tools',       label: 'Index outils',  icon: '⊛' },
-    { href: '/soundcheck',  label: 'SoundCheck',     icon: '≋' },
-    { href: '/copwatch',    label: 'CopWatch',       icon: '◎' },
-    { href: '/opsec-tools', label: 'OpSec Tools',   icon: '⊠' },
-    { href: '/timeseal',    label: 'TimeSeal',       icon: '⊡' },
-    { href: '/infocrypt',   label: 'InfoCrypt',      icon: '⊕' },
+    { href: '/tools',              label: 'Index outils',        icon: '⊛' },
+    { href: '/soundcheck',         label: 'SoundCheck',          icon: '≋' },
+    { href: '/copwatch',           label: 'CopWatch',            icon: '◎' },
+    { href: '/opsec-tools',        label: 'OpSec Tools',         icon: '⊠' },
+    { href: '/timeseal',           label: 'TimeSeal',            icon: '⊡' },
+    { href: '/compliance-shield',  label: 'Compliance-Shield',   icon: '⛨' },
+    { href: '/infocrypt',          label: 'InfoCrypt',           icon: '⊕' },
     { href: '/stripmeta',   label: 'StripMeta',      icon: '⊘' },
   ]},
 ];
@@ -741,12 +742,13 @@ const navigation = [
               <!-- Lien OUTILS → /tools  (dropdown au hover, géré par JS ci-dessous) -->
               {(() => {
                 const toolItems = [
-                  { href: '/soundcheck', label: 'SoundCheck', icon: '≋', desc: 'Empreinte acoustique topographique' },
-                  { href: '/copwatch',   label: 'CopWatch',  icon: '◎', desc: 'Observatoire des tactiques policières' },
-                  { href: '/opsec-tools', label: 'OpSec Tools', icon: '⊠', desc: 'Modèle de menace + Rig Splitting' },
-                  { href: '/timeseal',   label: 'TimeSeal',  icon: '⊡', desc: 'Manifeste de saisie horodaté' },
-                  { href: '/infocrypt',  label: 'InfoCrypt', icon: '⊕', desc: 'Chiffrement AES-GCM de fiches' },
-                  { href: '/stripmeta',  label: 'StripMeta', icon: '⊘', desc: 'Épuration EXIF/XMP/GPS' },
+                  { href: '/soundcheck',         label: 'SoundCheck',         icon: '≋', desc: 'Empreinte acoustique topographique' },
+                  { href: '/copwatch',           label: 'CopWatch',           icon: '◎', desc: 'Observatoire des tactiques policières' },
+                  { href: '/opsec-tools',        label: 'OpSec Tools',        icon: '⊠', desc: 'Modèle de menace + Rig Splitting' },
+                  { href: '/timeseal',           label: 'TimeSeal',           icon: '⊡', desc: 'Manifeste de saisie horodaté' },
+                  { href: '/compliance-shield',  label: 'Compliance-Shield',  icon: '⛨', desc: 'Dossier de sécurité automatisé' },
+                  { href: '/infocrypt',          label: 'InfoCrypt',          icon: '⊕', desc: 'Chiffrement AES-GCM de fiches' },
+                  { href: '/stripmeta',          label: 'StripMeta',          icon: '⊘', desc: 'Épuration EXIF/XMP/GPS' },
                 ];
                 const isActive = currentPath === '/tools' || toolItems.some(t => currentPath === t.href);
                 return (
@@ -784,12 +786,13 @@ const navigation = [
           style="position:fixed;z-index:300;min-width:240px;background:#08080c;border:1px solid rgba(42,42,58,0.95);border-top:2px solid rgba(0,255,159,0.5);box-shadow:0 8px 32px rgba(0,0,0,0.7);"
         >
           {[
-            { href: '/soundcheck', label: 'SoundCheck', icon: '≋', desc: 'Empreinte acoustique topographique' },
-            { href: '/copwatch',   label: 'CopWatch',  icon: '◎', desc: 'Observatoire des tactiques policières' },
-            { href: '/opsec-tools', label: 'OpSec Tools', icon: '⊠', desc: 'Modèle de menace + Rig Splitting' },
-            { href: '/timeseal',   label: 'TimeSeal',  icon: '⊡', desc: 'Manifeste de saisie horodaté' },
-            { href: '/infocrypt',  label: 'InfoCrypt', icon: '⊕', desc: 'Chiffrement AES-GCM de fiches' },
-            { href: '/stripmeta',  label: 'StripMeta', icon: '⊘', desc: 'Épuration EXIF/XMP/GPS' },
+            { href: '/soundcheck',         label: 'SoundCheck',         icon: '≋', desc: 'Empreinte acoustique topographique' },
+            { href: '/copwatch',           label: 'CopWatch',           icon: '◎', desc: 'Observatoire des tactiques policières' },
+            { href: '/opsec-tools',        label: 'OpSec Tools',        icon: '⊠', desc: 'Modèle de menace + Rig Splitting' },
+            { href: '/timeseal',           label: 'TimeSeal',           icon: '⊡', desc: 'Manifeste de saisie horodaté' },
+            { href: '/compliance-shield',  label: 'Compliance-Shield',  icon: '⛨', desc: 'Dossier de sécurité automatisé' },
+            { href: '/infocrypt',          label: 'InfoCrypt',          icon: '⊕', desc: 'Chiffrement AES-GCM de fiches' },
+            { href: '/stripmeta',          label: 'StripMeta',          icon: '⊘', desc: 'Épuration EXIF/XMP/GPS' },
           ].map(t => (
             <a
               href={t.href}
