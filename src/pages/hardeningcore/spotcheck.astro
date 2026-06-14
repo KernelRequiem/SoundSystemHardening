@@ -1,6 +1,6 @@
 ---
 /**
- * /terrain/spotcheck — SpotCheck SPA (auth-gated)
+ * /hardeningcore/spotcheck — SpotCheck SPA (auth-gated)
  *
  * Cette page vérifie l'authentification puis retourne le HTML de SpotCheck
  * directement comme Response, sans layout Astro.
@@ -14,7 +14,7 @@ import { join }           from 'path';
 // ── Auth check ───────────────────────────────────────────────────────
 const auth = checkAdminAuth(Astro.cookies);
 if (!auth.valid) {
-  return Astro.redirect('/terrain/auth?r=/terrain/spotcheck', 302);
+  return Astro.redirect('/hardeningcore/auth?r=/hardeningcore/spotcheck', 302);
 }
 
 // ── Charger SpotCheck HTML ───────────────────────────────────────────
@@ -36,7 +36,7 @@ try {
      <body><h1>⚠️ SpotCheck non trouvé</h1>
      <p>spotcheck/index.html manquant à la racine du projet.</p>
      <p>Vérifier que le dossier spotcheck/ est présent dans le répertoire de déploiement.</p>
-     <a href="/terrain" style="color:#6c63ff;margin-top:8px">← Retour au dashboard</a>
+     <a href="/hardeningcore" style="color:#6c63ff;margin-top:8px">← Retour au dashboard</a>
      </body></html>`,
     { status: 500, headers: { 'Content-Type': 'text/html; charset=utf-8' } }
   );
@@ -46,7 +46,7 @@ try {
 // On injecte un bouton de retour discret avant </body> pour ne pas casser le SPA
 const backButton = `
 <div style="position:fixed;bottom:14px;left:14px;z-index:9999">
-  <a href="/terrain" style="
+  <a href="/hardeningcore" style="
     display:flex;align-items:center;gap:6px;padding:6px 12px;
     background:rgba(14,14,24,0.92);border:1px solid rgba(255,255,255,0.1);
     border-radius:7px;color:#a0a0c0;text-decoration:none;font-family:Inter,system-ui,sans-serif;

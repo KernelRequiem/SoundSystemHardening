@@ -1,0 +1,271 @@
+---
+/**
+ * /hardeningcore/wiki/edit — Éditeur Markdown (création / modification d'une page wiki)
+ * ?slug=<slug> pour éditer une page existante ; sans slug = création.
+ */
+import HardeningCore from '../../../layouts/HardeningCore.astro';
+import { checkAdminAuth } from '../../../lib/adminAuth';
+import { readWikiPage, isSafeSlug } from '../../../lib/adminStore';
+
+const auth = checkAdminAuth(Astro.cookies);
+if (!auth.valid) return Astro.redirect('/hardeningcore/auth?r=/hardeningcore/wiki', 302);
+
+const { role, email } = auth;
+const nonce = Astro.locals.cspNonce;
+
+const slug = Astro.url.searchParams.get('slug') || '';
+const editing = isSafeSlug(slug);
+const content = editing ? (readWikiPage(slug) ?? '') : '';
+const exists = editing && content !== '';
+
+// Gabarit pour une nouvelle page : en-tête méta cohérent avec le reste du wiki.
+const template = `# Titre de la page
+
+> Résumé : une phrase qui décrit le contenu de la page.
+> Statut : brouillon
+> Mise à jour : ${new Date().toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' })}
+
+## Section
+
+Rédige ton contenu ici.
+`;
+const initial = exists ? content : template;
+---
+<HardeningCore title={exists ? 'Modifier une page' : 'Nouvelle page'} active="wiki" email={email} role={role} nonce={nonce}>
+
+  <div class="page-head" style="display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap">
+    <div>
+      <div class="kick"><a href="/hardeningcore/wiki" style="color:var(--t2)">← Wiki</a> · {exists ? 'Édition' : 'Création'}</div>
+      <h3 id="head-title">{exists ? 'Modifier une page' : 'Nouvelle page'}</h3>
+    </div>
+    <div style="display:flex;gap:10px">
+      <button class="btn ghost" id="btn-fmt" title="Insérer un gabarit méta">Gabarit</button>
+      <button class="btn primary" id="btn-save">
+        <svg viewBox="0 0 24 24" set:html="<path d='M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2Z'/><path d='M17 21v-8H7v8M7 3v5h8'/>" /> Enregistrer
+      </button>
+    </div>
+  </div>
+
+  <div class="ed-meta card" style="padding:16px 18px;margin-bottom:16px">
+    <div class="field" style="margin:0">
+      <label for="slug">Slug (identifiant d’URL) <span class="req">*</span></label>
+      <div style="display:flex;align-items:center;gap:0">
+        <span class="slug-prefix">/wiki/</span>
+        <input id="slug" class="inp" value={slug} placeholder="mon-nouvel-article"
+               style="border-top-left-radius:0;border-bottom-left-radius:0"
+               readonly={exists} />
+      </div>
+      <div class="hint" id="slug-hint">Lettres, chiffres et tirets. Le slug d’une page existante n’est pas modifiable ici.</div>
+    </div>
+  </div>
+
+  <div class="editor">
+    <div class="ed-pane">
+      <div class="ed-bar" id="toolbar">
+        <button data-md="h2" title="Titre">H2</button>
+        <button data-md="h3" title="Sous-titre">H3</button>
+        <span class="sep"></span>
+        <button data-md="bold" title="Gras"><b>B</b></button>
+        <button data-md="italic" title="Italique"><i>I</i></button>
+        <span class="sep"></span>
+        <button data-md="ul" title="Liste à puces"><svg viewBox="0 0 24 24" set:html="<path d='M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01'/>"/></button>
+        <button data-md="ol" title="Liste numérotée"><svg viewBox="0 0 24 24" set:html="<path d='M10 6h11M10 12h11M10 18h11M4 6h1v4M4 10h2M6 16a2 2 0 1 0-2 2'/>"/></button>
+        <button data-md="quote" title="Citation"><svg viewBox="0 0 24 24" set:html="<path d='M3 21c3-1 5-3 5-9V5H3v8h3M14 21c3-1 5-3 5-9V5h-5v8h3'/>"/></button>
+        <span class="sep"></span>
+        <button data-md="link" title="Lien"><svg viewBox="0 0 24 24" set:html="<path d='M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1.5 1.5M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1.5-1.5'/>"/></button>
+        <button data-md="code" title="Code"><svg viewBox="0 0 24 24" set:html="<path d='m16 18 6-6-6-6M8 6l-6 6 6 6'/>"/></button>
+        <button data-md="table" title="Tableau"><svg viewBox="0 0 24 24" set:html="<rect x='3' y='3' width='18' height='18' rx='1'/><path d='M3 9h18M3 15h18M9 3v18M15 3v18'/>"/></button>
+        <span class="sep"></span>
+        <button data-md="wikilink" title="Lien wiki interne">[[…]]</button>
+        <span class="ed-stat" id="stat"></span>
+      </div>
+      <textarea id="md" class="ta" spellcheck="false">{initial}</textarea>
+    </div>
+    <div class="ed-pane">
+      <div class="ed-bar">
+        <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--t2)">Aperçu</span>
+      </div>
+      <div class="preview prose-mini" id="preview"></div>
+    </div>
+  </div>
+
+  <style is:inline>
+    .slug-prefix{font-family:var(--mono);font-size:13px;color:var(--t2);background:var(--bg3);border:1px solid var(--line2);border-right:none;border-radius:8px 0 0 8px;padding:9px 11px}
+    .hint{font-size:11px;color:var(--t2);margin-top:7px}
+    .editor{display:grid;grid-template-columns:1fr 1fr;gap:16px;height:calc(100vh - 290px);min-height:440px}
+    .ed-pane{display:flex;flex-direction:column;background:var(--panel);border:1px solid var(--line2);border-radius:var(--r);overflow:hidden}
+    .ed-bar{display:flex;align-items:center;gap:3px;padding:8px 10px;border-bottom:1px solid var(--line);background:var(--bg1);flex-wrap:wrap}
+    .ed-bar button{width:30px;height:28px;border-radius:6px;border:1px solid transparent;background:transparent;color:var(--t1);cursor:pointer;font-size:12.5px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;transition:.12s}
+    .ed-bar button[data-md='h2'],.ed-bar button[data-md='h3'],.ed-bar button[data-md='wikilink']{width:auto;padding:0 8px;font-family:var(--mono);font-size:11px}
+    .ed-bar button:hover{background:var(--bg3);color:var(--t0)}
+    .ed-bar button svg{width:15px;height:15px;stroke:currentColor;stroke-width:2;fill:none}
+    .ed-bar .sep{width:1px;height:18px;background:var(--line2);margin:0 4px}
+    .ed-stat{margin-left:auto;font-family:var(--mono);font-size:10.5px;color:var(--t3)}
+    #md{flex:1;border:none;border-radius:0;resize:none;background:var(--panel)}
+    .preview{flex:1;overflow-y:auto;padding:20px 22px}
+    /* Mini prose */
+    .prose-mini h1{font-size:22px;font-weight:800;margin:0 0 14px;letter-spacing:-.4px}
+    .prose-mini h2{font-size:17px;font-weight:700;margin:22px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--line)}
+    .prose-mini h3{font-size:14.5px;font-weight:700;margin:18px 0 8px}
+    .prose-mini p{margin:0 0 12px;line-height:1.7;color:var(--t1)}
+    .prose-mini ul,.prose-mini ol{margin:0 0 12px;padding-left:22px;color:var(--t1)}
+    .prose-mini li{margin-bottom:5px;line-height:1.6}
+    .prose-mini a{color:var(--acc2);text-decoration:underline;text-underline-offset:2px}
+    .prose-mini strong{color:var(--t0)}
+    .prose-mini blockquote{border-left:3px solid var(--acc);background:var(--acc-g);padding:10px 14px;margin:0 0 14px;border-radius:0 8px 8px 0;font-size:13px;color:var(--t1)}
+    .prose-mini code{font-family:var(--mono);font-size:12px;background:var(--bg2);padding:1px 6px;border-radius:5px;color:var(--acc2)}
+    .prose-mini pre{background:var(--bg2);border:1px solid var(--line2);border-radius:8px;padding:14px;overflow-x:auto;margin:0 0 14px}
+    .prose-mini pre code{background:none;padding:0;color:var(--t1)}
+    .prose-mini table{margin:0 0 14px;font-size:12.5px}
+    .prose-mini th,.prose-mini td{border:1px solid var(--line2);padding:7px 10px;text-align:left}
+    .prose-mini th{background:var(--bg2);color:var(--t0)}
+    .prose-mini hr{border:none;border-top:1px solid var(--line2);margin:18px 0}
+    @media (max-width:980px){.editor{grid-template-columns:1fr;height:auto}.ed-pane{min-height:340px}}
+  </style>
+
+  <script nonce={nonce} is:inline>
+    (function(){
+      var md = document.getElementById('md'),
+          preview = document.getElementById('preview'),
+          stat = document.getElementById('stat'),
+          slugInput = document.getElementById('slug'),
+          slugHint = document.getElementById('slug-hint'),
+          headTitle = document.getElementById('head-title'),
+          editing = slugInput.readOnly;
+
+      // ── Échappement HTML (le rendu serveur fait pareil ; ici c'est l'aperçu) ──
+      function esc(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+      function safeUrl(u){
+        u = u.trim();
+        if(/^[a-z][a-z0-9+.-]*:/i.test(u) && !/^(https?:|mailto:)/i.test(u)) return '#';
+        return u.replace(/"/g,'&quot;');
+      }
+      // ── Mini renderer Markdown pour l'aperçu uniquement ──
+      function render(src){
+        var blocks = [], inline = [];
+        src = src.replace(/```([\s\S]*?)```/g, function(_,c){ blocks.push(c); return ' B'+(blocks.length-1)+' '; });
+        src = src.replace(/`([^`]+)`/g, function(_,c){ inline.push(c); return ' I'+(inline.length-1)+' '; });
+        src = esc(src);
+        // tables
+        src = src.replace(/^\|(.+)\|\s*\n\|[\s\-:|]+\|\s*\n((?:\|.+\|\s*\n?)+)/gm, function(_,h,rows){
+          var hs = h.split('|').map(function(x){return x.trim();}).filter(Boolean);
+          var head = '<tr>'+hs.map(function(x){return '<th>'+x+'</th>';}).join('')+'</tr>';
+          var body = rows.trim().split('\n').map(function(r){
+            var cs = r.split('|').map(function(x){return x.trim();}).filter(function(_,i,a){return i>0&&i<a.length-1;});
+            return '<tr>'+cs.map(function(x){return '<td>'+x+'</td>';}).join('')+'</tr>';
+          }).join('');
+          return '<table><thead>'+head+'</thead><tbody>'+body+'</tbody></table>';
+        });
+        src = src.replace(/^######\s+(.+)$/gm,'<h6>$1</h6>').replace(/^#####\s+(.+)$/gm,'<h5>$1</h5>')
+                 .replace(/^####\s+(.+)$/gm,'<h4>$1</h4>').replace(/^###\s+(.+)$/gm,'<h3>$1</h3>')
+                 .replace(/^##\s+(.+)$/gm,'<h2>$1</h2>').replace(/^#\s+(.+)$/gm,'<h1>$1</h1>');
+        src = src.replace(/\*\*\*(.+?)\*\*\*/g,'<strong><em>$1</em></strong>')
+                 .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\*(.+?)\*/g,'<em>$1</em>');
+        src = src.replace(/\[\[([^\]]+)\]\]/g, function(_,p){ return '<a href="/wiki/'+encodeURIComponent(p.trim().replace(/\s+/g,'-'))+'">'+p+'</a>'; });
+        src = src.replace(/\[([^\]]+)\]\(([^)]+)\)/g, function(_,t,u){ return '<a href="'+safeUrl(u)+'">'+t+'</a>'; });
+        src = src.replace(/^---+$/gm,'<hr>');
+        src = src.replace(/^>\s+(.+)$/gm,'<blockquote>$1</blockquote>').replace(/(<\/blockquote>\n<blockquote>)/g,'<br>');
+        src = src.replace(/^[-*+]\s+(.+)$/gm,'<li>$1</li>').replace(/(<li>.*<\/li>\n?)+/g, function(m){return '<ul>'+m.replace(/\n/g,'')+'</ul>';});
+        src = src.replace(/^\d+\.\s+(.+)$/gm,'<oli>$1</oli>').replace(/(<oli>.*<\/oli>\n?)+/g, function(m){return '<ol>'+m.replace(/<oli>/g,'<li>').replace(/<\/oli>/g,'</li>').replace(/\n/g,'')+'</ol>';});
+        src = src.split('\n\n').map(function(b){ b=b.trim(); if(!b) return ''; if(/^<(h[1-6]|ul|ol|li|blockquote|hr|table|pre)/.test(b)) return b; return '<p>'+b+'</p>'; }).join('\n');
+        src = src.replace(/ B(\d+) /g, function(_,i){ return '<pre><code>'+esc(blocks[i])+'</code></pre>'; });
+        src = src.replace(/ I(\d+) /g, function(_,i){ return '<code>'+esc(inline[i])+'</code>'; });
+        return src;
+      }
+      function update(){
+        preview.innerHTML = render(md.value);
+        var words = md.value.trim().split(/\s+/).filter(Boolean).length;
+        stat.textContent = words + ' mots · ' + md.value.length + ' car.';
+        // Auto-slug en création depuis le 1er H1
+        if(!editing && !slugInput.value){
+          var h1 = md.value.match(/^#\s+(.+)$/m);
+          if(h1){ slugHint.textContent = 'Suggestion : ' + slugify(h1[1]); }
+        }
+      }
+      function slugify(s){
+        return s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'')
+          .replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,70);
+      }
+      md.addEventListener('input', update);
+      update();
+
+      // ── Toolbar ──
+      function wrap(before, after, placeholder){
+        var s = md.selectionStart, e = md.selectionEnd, val = md.value;
+        var sel = val.slice(s,e) || placeholder || '';
+        md.value = val.slice(0,s) + before + sel + after + val.slice(e);
+        md.focus();
+        md.selectionStart = s + before.length;
+        md.selectionEnd = s + before.length + sel.length;
+        update();
+      }
+      function linePrefix(prefix){
+        var s = md.selectionStart, val = md.value;
+        var lineStart = val.lastIndexOf('\n', s-1) + 1;
+        md.value = val.slice(0,lineStart) + prefix + val.slice(lineStart);
+        md.focus(); md.selectionStart = md.selectionEnd = s + prefix.length;
+        update();
+      }
+      document.getElementById('toolbar').addEventListener('click', function(ev){
+        var btn = ev.target.closest('button[data-md]'); if(!btn) return;
+        ev.preventDefault();
+        switch(btn.getAttribute('data-md')){
+          case 'h2': linePrefix('## '); break;
+          case 'h3': linePrefix('### '); break;
+          case 'bold': wrap('**','**','texte'); break;
+          case 'italic': wrap('*','*','texte'); break;
+          case 'ul': linePrefix('- '); break;
+          case 'ol': linePrefix('1. '); break;
+          case 'quote': linePrefix('> '); break;
+          case 'link': wrap('[','](https://)','libellé'); break;
+          case 'code': wrap('`','`','code'); break;
+          case 'wikilink': wrap('[[',']]','Nom-de-page'); break;
+          case 'table': insert('\n| Colonne A | Colonne B |\n|-----------|-----------|\n| valeur 1  | valeur 2  |\n'); break;
+        }
+      });
+      function insert(text){
+        var s = md.selectionStart, val = md.value;
+        md.value = val.slice(0,s) + text + val.slice(s);
+        md.focus(); md.selectionStart = md.selectionEnd = s + text.length; update();
+      }
+
+      // Gabarit
+      document.getElementById('btn-fmt').addEventListener('click', function(){
+        insert('\n> Résumé : \n> Statut : brouillon\n> Mise à jour : ' +
+          new Date().toLocaleDateString('fr-FR',{month:'long',year:'numeric'}) + '\n');
+      });
+
+      // ── Enregistrement ──
+      document.getElementById('btn-save').addEventListener('click', async function(){
+        var slug = slugInput.value.trim();
+        if(!slug && !editing){
+          var h1 = md.value.match(/^#\s+(.+)$/m);
+          if(h1){ slug = slugify(h1[1]); slugInput.value = slug; }
+        }
+        if(!/^[\p{L}\p{N}_'&-]+$/u.test(slug)){
+          window.hcToast('Slug invalide (lettres, chiffres, tirets).', false); return;
+        }
+        var btn = this; btn.disabled = true;
+        var res = await window.hcPost('/api/admin/wiki', { action:'save', slug:slug, content: md.value });
+        btn.disabled = false;
+        if(res.ok){
+          window.hcToast(res.data.created ? 'Page créée.' : 'Page enregistrée.');
+          if(res.data.created){
+            // Bascule en mode édition de la nouvelle page.
+            history.replaceState(null,'','/hardeningcore/wiki/edit?slug='+encodeURIComponent(slug));
+            slugInput.readOnly = true; editing = true;
+            headTitle.textContent = 'Modifier une page';
+          }
+        } else {
+          window.hcToast(res.data.error || 'Échec de l’enregistrement.', false);
+        }
+      });
+
+      // Ctrl/Cmd+S
+      document.addEventListener('keydown', function(e){
+        if((e.metaKey||e.ctrlKey) && e.key.toLowerCase()==='s'){ e.preventDefault(); document.getElementById('btn-save').click(); }
+      });
+    })();
+  </script>
+
+</HardeningCore>

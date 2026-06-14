@@ -1,0 +1,219 @@
+---
+/**
+ * /hardeningcore/carte-admin — Gestion des incidents de la carte (CRUD)
+ */
+import HardeningCore from '../../layouts/HardeningCore.astro';
+import { checkAdminAuth } from '../../lib/adminAuth';
+import { listIncidents } from '../../lib/adminStore';
+
+const auth = checkAdminAuth(Astro.cookies);
+if (!auth.valid) return Astro.redirect('/hardeningcore/auth?r=/hardeningcore/carte-admin', 302);
+
+const { role, email } = auth;
+const nonce = Astro.locals.cspNonce;
+const incidents = listIncidents();
+
+const TYPES = ['autre', 'saisie', 'interdiction', 'blessure', 'charge', 'gav'];
+const typeBadge: Record<string, string> = {
+  saisie: 'b-blue', interdiction: 'b-amber', blessure: 'b-red', charge: 'b-red', gav: 'b-violet', autre: 'b-gray',
+};
+const fmtDate = (d: string) => { try { return new Date(d).toLocaleDateString('fr-FR', { day:'2-digit', month:'short', year:'numeric' }); } catch { return d; } };
+---
+<HardeningCore title="Carte / alertes" active="carte" email={email} role={role} nonce={nonce}>
+
+  <div class="page-head" style="display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap">
+    <div>
+      <div class="kick">Incidents · {incidents.length} entrées</div>
+      <h3>Gestion de la carte</h3>
+      <p>Ajoutez, modifiez ou supprimez les incidents répressifs affichés sur la carte publique. Les coordonnées alimentent directement les marqueurs.</p>
+    </div>
+    <button class="btn primary" id="btn-new">
+      <svg viewBox="0 0 24 24" set:html="<path d='M12 5v14M5 12h14'/>" /> Ajouter un incident
+    </button>
+  </div>
+
+  <div class="card" style="padding:0">
+    <div style="padding:13px 18px;border-bottom:1px solid var(--line);display:flex;gap:12px;align-items:center">
+      <input id="q" class="inp" placeholder="Filtrer par lieu, titre, département…" style="max-width:380px" />
+      <span class="mono" id="count" style="color:var(--t2);font-size:11px;margin-left:auto">{incidents.length} entrées</span>
+    </div>
+    <div style="overflow-x:auto">
+      <table>
+        <thead>
+          <tr><th>Incident</th><th>Type</th><th>Date</th><th>Coordonnées</th><th>Dép.</th><th style="text-align:right">Actions</th></tr>
+        </thead>
+        <tbody id="rows">
+          {incidents.map(i => (
+            <tr data-id={i.id} data-search={`${i.titre} ${i.lieu} ${i.departement ?? ''} ${i.prefecture ?? ''}`.toLowerCase()} data-json={JSON.stringify(i)}>
+              <td>
+                <div class="t-strong">{i.titre}</div>
+                <div style="font-size:11px;color:var(--t2);margin-top:2px">{i.lieu}</div>
+              </td>
+              <td><span class={`badge ${typeBadge[i.type] ?? 'b-gray'}`}>{i.type}</span></td>
+              <td class="mono" style="font-size:12px;color:var(--t1)">{fmtDate(i.date)}</td>
+              <td class="mono" style="font-size:11px;color:var(--t2)">{Number(i.lat).toFixed(3)}, {Number(i.lng).toFixed(3)}</td>
+              <td class="mono" style="font-size:12px">{i.departement ?? '—'}</td>
+              <td style="text-align:right;white-space:nowrap">
+                <button class="btn sm act-edit" data-id={i.id}>
+                  <svg viewBox="0 0 24 24" set:html="<path d='M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7'/><path d='M18.5 2.5a2.1 2.1 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5Z'/>" />
+                </button>
+                <button class="btn sm danger act-del" data-id={i.id} data-titre={i.titre}>
+                  <svg viewBox="0 0 24 24" set:html="<path d='M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2'/>" />
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Modal éditeur -->
+  <div class="modal-bg" id="modal" style="display:none">
+    <div class="modal">
+      <div class="modal-h">
+        <h4 id="modal-title">Nouvel incident</h4>
+        <button class="icon-btn" id="modal-close"><svg viewBox="0 0 24 24" set:html="<path d='M18 6 6 18M6 6l12 12'/>"/></button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="f-id" />
+        <div class="grid2">
+          <div class="field"><label>Titre <span class="req">*</span></label><input id="f-titre" class="inp" placeholder="Intitulé de l'incident" /></div>
+          <div class="field"><label>Lieu <span class="req">*</span></label><input id="f-lieu" class="inp" placeholder="Commune (dép.)" /></div>
+        </div>
+        <div class="grid3">
+          <div class="field"><label>Latitude <span class="req">*</span></label><input id="f-lat" class="inp mono" type="number" step="any" placeholder="48.85" /></div>
+          <div class="field"><label>Longitude <span class="req">*</span></label><input id="f-lng" class="inp mono" type="number" step="any" placeholder="2.35" /></div>
+          <div class="field"><label>Date <span class="req">*</span></label><input id="f-date" class="inp" type="date" /></div>
+        </div>
+        <div class="grid3">
+          <div class="field"><label>Type</label>
+            <select id="f-type" class="sel">{TYPES.map(t => <option value={t}>{t}</option>)}</select>
+          </div>
+          <div class="field"><label>Département</label><input id="f-dep" class="inp" placeholder="75" /></div>
+          <div class="field"><label>Préfecture</label><input id="f-pref" class="inp" placeholder="Paris" /></div>
+        </div>
+        <div class="field"><label>Description</label><textarea id="f-desc" class="ta" style="min-height:90px" placeholder="Contexte et déroulé"></textarea></div>
+        <div class="field"><label>Bilan</label><textarea id="f-bilan" class="ta" style="min-height:70px" placeholder="Issue, bilan opérationnel"></textarea></div>
+        <div class="grid2">
+          <div class="field"><label>Type d'opération</label><input id="f-op" class="inp" placeholder="Saisie, intervention…" /></div>
+          <div class="field"><label>Statut juridique</label><input id="f-statut" class="inp" placeholder="En cours, classé…" /></div>
+        </div>
+        <div class="grid2">
+          <div class="field"><label>Source (URL)</label><input id="f-source" class="inp" placeholder="https://…" /></div>
+          <div class="field"><label>Page wiki liée</label><input id="f-wiki" class="inp" placeholder="/wiki/Repression" /></div>
+        </div>
+        <div class="grid3">
+          <div class="field"><label>Effectifs</label><input id="f-eff" class="inp mono" type="number" placeholder="—" /></div>
+          <div class="field"><label>Hélicoptères</label><input id="f-heli" class="inp mono" type="number" placeholder="0" /></div>
+          <div class="field"><label>Drones</label><input id="f-drones" class="inp mono" type="number" placeholder="0" /></div>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button class="btn ghost" id="modal-cancel">Annuler</button>
+        <button class="btn primary" id="modal-save">Enregistrer</button>
+      </div>
+    </div>
+  </div>
+
+  <style is:inline>
+    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+    .modal-bg{position:fixed;inset:0;background:rgba(4,5,9,.78);backdrop-filter:blur(3px);z-index:200;display:flex;align-items:flex-start;justify-content:center;padding:40px 20px;overflow-y:auto}
+    .modal{background:var(--bg1);border:1px solid var(--line2);border-radius:14px;width:100%;max-width:720px;box-shadow:0 30px 80px -20px rgba(0,0,0,.7);animation:pop .18s ease}
+    @keyframes pop{from{transform:translateY(12px);opacity:0}to{transform:translateY(0);opacity:1}}
+    .modal-h{display:flex;align-items:center;justify-content:space-between;padding:18px 22px;border-bottom:1px solid var(--line)}
+    .modal-h h4{font-size:16px;font-weight:700}
+    .modal-body{padding:20px 22px;max-height:62vh;overflow-y:auto}
+    .modal-foot{display:flex;justify-content:flex-end;gap:10px;padding:16px 22px;border-top:1px solid var(--line)}
+    @media (max-width:680px){.grid2,.grid3{grid-template-columns:1fr}}
+  </style>
+
+  <script nonce={nonce} is:inline>
+    (function(){
+      var modal = document.getElementById('modal');
+      var $ = function(id){ return document.getElementById(id); };
+      var fields = ['id','titre','lieu','lat','lng','date','type','dep','pref','desc','bilan','op','statut','source','wiki','eff','heli','drones'];
+
+      function open(data){
+        data = data || {};
+        $('modal-title').textContent = data.id ? 'Modifier l\'incident' : 'Nouvel incident';
+        $('f-id').value = data.id || '';
+        $('f-titre').value = data.titre || '';
+        $('f-lieu').value = data.lieu || '';
+        $('f-lat').value = data.lat != null ? data.lat : '';
+        $('f-lng').value = data.lng != null ? data.lng : '';
+        $('f-date').value = data.date || '';
+        $('f-type').value = data.type || 'autre';
+        $('f-dep').value = data.departement || '';
+        $('f-pref').value = data.prefecture || '';
+        $('f-desc').value = data.desc || '';
+        $('f-bilan').value = data.bilan || '';
+        $('f-op').value = data.type_operation || '';
+        $('f-statut').value = data.statut_juridique || '';
+        $('f-source').value = data.source || '';
+        $('f-wiki').value = data.wiki || '';
+        $('f-eff').value = data.effectifs != null ? data.effectifs : '';
+        $('f-heli').value = data.helicopteres != null ? data.helicopteres : '';
+        $('f-drones').value = data.drones != null ? data.drones : '';
+        modal.style.display = 'flex';
+      }
+      function close(){ modal.style.display = 'none'; }
+
+      $('btn-new').addEventListener('click', function(){ open({}); });
+      $('modal-close').addEventListener('click', close);
+      $('modal-cancel').addEventListener('click', close);
+      modal.addEventListener('click', function(e){ if(e.target === modal) close(); });
+
+      document.addEventListener('click', function(e){
+        var ed = e.target.closest('.act-edit');
+        if(ed){
+          var row = document.querySelector('tr[data-id="'+ed.getAttribute('data-id')+'"]');
+          open(JSON.parse(row.getAttribute('data-json')));
+        }
+        var del = e.target.closest('.act-del');
+        if(del){
+          var id = del.getAttribute('data-id'), titre = del.getAttribute('data-titre');
+          if(confirm('Supprimer définitivement « ' + titre + ' » ?')) doDelete(id);
+        }
+      });
+
+      async function doDelete(id){
+        var res = await window.hcPost('/api/admin/incidents', { action:'delete', id:id });
+        if(res.ok){ window.hcToast('Incident supprimé.'); setTimeout(function(){ location.reload(); }, 500); }
+        else window.hcToast(res.data.error || 'Échec.', false);
+      }
+
+      $('modal-save').addEventListener('click', async function(){
+        var id = $('f-id').value.trim();
+        var num = function(v){ v = v.trim(); return v === '' ? null : Number(v); };
+        var data = {
+          titre: $('f-titre').value.trim(), lieu: $('f-lieu').value.trim(),
+          lat: num($('f-lat').value), lng: num($('f-lng').value), date: $('f-date').value,
+          type: $('f-type').value, departement: $('f-dep').value.trim(), prefecture: $('f-pref').value.trim(),
+          desc: $('f-desc').value.trim(), bilan: $('f-bilan').value.trim(),
+          type_operation: $('f-op').value.trim(), statut_juridique: $('f-statut').value.trim(),
+          source: $('f-source').value.trim(), wiki: $('f-wiki').value.trim(),
+          effectifs: num($('f-eff').value), helicopteres: num($('f-heli').value), drones: num($('f-drones').value),
+        };
+        var btn = this; btn.disabled = true;
+        var res = await window.hcPost('/api/admin/incidents', id ? { action:'update', id:id, data:data } : { action:'create', data:data });
+        btn.disabled = false;
+        if(res.ok){ window.hcToast(id ? 'Incident modifié.' : 'Incident ajouté.'); setTimeout(function(){ location.reload(); }, 500); }
+        else window.hcToast(res.data.error || 'Validation échouée.', false);
+      });
+
+      // Filtre
+      var q = $('q'), rows = $('rows'), count = $('count');
+      q.addEventListener('input', function(){
+        var term = q.value.toLowerCase().trim(), n = 0;
+        rows.querySelectorAll('tr').forEach(function(tr){
+          var m = tr.getAttribute('data-search').indexOf(term) !== -1;
+          tr.style.display = m ? '' : 'none'; if(m) n++;
+        });
+        count.textContent = n + ' entrées';
+      });
+    })();
+  </script>
+
+</HardeningCore>

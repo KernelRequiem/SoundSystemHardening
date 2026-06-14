@@ -110,6 +110,107 @@ import Layout from '../layouts/Layout.astro';
     </div>
   </section>
 
+  <!-- PROPOSER DIRECTEMENT (file de modération interne) -->
+  <section class="mb-12">
+    <h2 class="mb-2">▸ PROPOSER DIRECTEMENT</h2>
+    <p class="text-xs text-dedsec-muted font-mono mb-6">Sans compte GitHub. Ta proposition entre dans la file de modération et sera relue avant publication.</p>
+
+    <div class="card-neon px-5 py-6 max-w-3xl">
+      <form id="contrib-form" class="space-y-4">
+        <!-- Honeypot anti-bot (caché) -->
+        <input type="text" name="bot-field" tabindex="-1" autocomplete="off"
+               style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0" aria-hidden="true" />
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="block font-mono text-[10px] text-neon-green/70 tracking-widest mb-2">TYPE DE CONTRIBUTION</label>
+            <select name="type" class="contrib-input">
+              <option value="wiki">Nouvelle page / section wiki</option>
+              <option value="correction">Correction d'une page existante</option>
+              <option value="incident">Signaler un incident pour la carte</option>
+              <option value="juridique">Apport juridique / source</option>
+              <option value="autre">Autre</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-mono text-[10px] text-neon-green/70 tracking-widest mb-2">PAGE CONCERNÉE <span class="text-dedsec-muted/40">(optionnel)</span></label>
+            <input type="text" name="page" class="contrib-input" placeholder="ex : /wiki/Repression" />
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-mono text-[10px] text-neon-green/70 tracking-widest mb-2">TITRE <span class="text-red-400">*</span></label>
+          <input type="text" name="title" required maxlength="200" class="contrib-input" placeholder="Résume ta proposition en une ligne" />
+        </div>
+
+        <div>
+          <label class="block font-mono text-[10px] text-neon-green/70 tracking-widest mb-2">CONTENU <span class="text-red-400">*</span></label>
+          <textarea name="body" required maxlength="8000" rows="7" class="contrib-input font-mono"
+            placeholder="Décris ta contribution. Markdown accepté. Source toute affirmation factuelle. N'inclus aucun nom ni lieu identifiant."></textarea>
+        </div>
+
+        <div>
+          <label class="block font-mono text-[10px] text-neon-green/70 tracking-widest mb-2">PSEUDO <span class="text-dedsec-muted/40">(optionnel)</span></label>
+          <input type="text" name="author" maxlength="80" class="contrib-input" placeholder="Comment te créditer (laisse vide pour anonyme)" />
+        </div>
+
+        <div class="border border-red-500/30 bg-red-500/5 px-4 py-3 font-mono text-[11px] text-dedsec-muted">
+          <span class="text-red-400 font-bold">Avant d'envoyer :</span> anonymise tout (aucun nom, lieu précis ou date identifiante). Cette proposition n'est pas publiée immédiatement, elle passe par la modération.
+        </div>
+
+        <div class="flex items-center gap-4 flex-wrap">
+          <button type="submit" id="contrib-submit" class="btn-neon no-underline text-xs">▸ Envoyer en modération</button>
+          <span id="contrib-status" class="font-mono text-[11px]"></span>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <style>
+    .contrib-input{
+      width:100%;background:rgba(0,0,0,.4);border:1px solid rgba(0,255,159,.18);
+      color:#d8dce4;font-family:'JetBrains Mono',monospace;font-size:12.5px;
+      padding:10px 12px;border-radius:4px;transition:border .15s;
+    }
+    .contrib-input:focus{outline:none;border-color:rgba(0,255,159,.55)}
+    .contrib-input::placeholder{color:rgba(122,122,138,.5)}
+    select.contrib-input{appearance:none;cursor:pointer}
+  </style>
+
+  <script>
+    (function(){
+      const form = document.getElementById('contrib-form');
+      const btn = document.getElementById('contrib-submit');
+      const status = document.getElementById('contrib-status');
+      if(!form) return;
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const fd = new FormData(form);
+        const payload = Object.fromEntries(fd.entries());
+        btn.disabled = true; status.textContent = 'Envoi…'; status.style.color = '#7a7a8a';
+        try{
+          const r = await fetch('/api/contribuer', {
+            method:'POST',
+            headers:{'Content-Type':'application/json'},
+            body: JSON.stringify(payload),
+          });
+          const d = await r.json().catch(()=>({}));
+          if(r.ok && d.ok){
+            status.textContent = '✓ Reçu. Ta contribution est en file de modération.';
+            status.style.color = '#00ff9f';
+            form.reset();
+          } else {
+            status.textContent = '✗ ' + (d.error || 'Échec de l\'envoi.');
+            status.style.color = '#ff6b7a';
+          }
+        }catch{
+          status.textContent = '✗ Réseau indisponible.';
+          status.style.color = '#ff6b7a';
+        }finally{ btn.disabled = false; }
+      });
+    })();
+  </script>
+
   <!-- CONTACT DIRECT -->
   <section class="mb-12">
     <h2 class="mb-2">▸ CONTACT DIRECT</h2>

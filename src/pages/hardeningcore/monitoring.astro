@@ -1,21 +1,21 @@
 ---
 /**
- * /terrain/monitoring — Vue admin de supervision (admin uniquement)
+ * /hardeningcore/monitoring — Vue admin de supervision (admin uniquement)
  *
  * Séparée de la vue opérationnelle visiteur : agrège santé système, trafic,
  * journal de sécurité et signalements. Aucune donnée ne transite par une API
  * publique — tout est rendu côté serveur après double vérification d'auth
  * (middleware + page). Aucun lien public ne pointe ici.
  *
- * Rôle requis : admin. Un modérateur authentifié est redirigé vers /terrain.
+ * Rôle requis : admin. Un modérateur authentifié est redirigé vers /hardeningcore.
  */
 import { checkAdminAuth } from '../../lib/adminAuth';
 import { getMonitoringSnapshot } from '../../lib/monitoring';
 
 const auth = checkAdminAuth(Astro.cookies);
-if (!auth.valid) return Astro.redirect('/terrain/auth?r=/terrain/monitoring', 302);
+if (!auth.valid) return Astro.redirect('/hardeningcore/auth?r=/hardeningcore/monitoring', 302);
 // Cloisonnement par rôle : la supervision est réservée à l'admin.
-if (auth.role !== 'admin') return Astro.redirect('/terrain', 302);
+if (auth.role !== 'admin') return Astro.redirect('/hardeningcore', 302);
 
 const nonce = Astro.locals.cspNonce;
 const snap = getMonitoringSnapshot();
@@ -123,7 +123,7 @@ const sec = snap.security;
     <span class="role-pill">★ Admin</span>
     <div class="hdr-spacer"></div>
     <span class="refresh-note" id="refresh-note">auto-refresh 30s</span>
-    <a href="/terrain" class="btn-back">← Console</a>
+    <a href="/hardeningcore" class="btn-back">← Console</a>
   </header>
 
   <main class="main">
@@ -134,7 +134,7 @@ const sec = snap.security;
     <div class="metrics">
       <div class="metric"><div class="mv">{t.totalRequests}</div><div class="ml">Requêtes</div></div>
       <div class="metric"><div class="mv">{t.apiPosts}</div><div class="ml">POST /api</div></div>
-      <div class="metric"><div class="mv">{t.terrainHits}</div><div class="ml">Accès /terrain</div></div>
+      <div class="metric"><div class="mv">{t.terrainHits}</div><div class="ml">Accès /hardeningcore</div></div>
       <div class={`metric ${t.blockedCsrf > 0 ? 'alert' : ''}`}><div class="mv">{t.blockedCsrf}</div><div class="ml">Rejets CSRF</div></div>
       <div class={`metric ${t.blockedRate > 0 ? 'alert' : ''}`}><div class="mv">{t.blockedRate}</div><div class="ml">429 limit</div></div>
       <div class={`metric ${sec.counters.login_failure > 0 ? 'alert' : ''}`}><div class="mv">{sec.counters.login_failure}</div><div class="ml">Login KO</div></div>

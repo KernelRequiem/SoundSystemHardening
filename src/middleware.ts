@@ -7,13 +7,15 @@ import { logSecurityEvent } from './lib/securityLog';
 // ─── Origine canonique du site ────────────────────────────────────────────────
 const ORIGIN = 'https://soundsystemhardening.fr';
 
-// ─── Routes opérationnelles internes (obfusquées) ─────────────────────────────
+// ─── Routes opérationnelles internes (console HardeningCore) ──────────────────
 // Ne pas modifier sans mettre à jour les pages correspondantes.
-// Ne JAMAIS lier ces routes depuis une page publique.
-const TERRAIN_PREFIX    = '/terrain';
-const TERRAIN_AUTH_PATH = '/terrain/auth';
-const TERRAIN_AUTH_API  = '/api/terrain-auth';
-const TERRAIN_LOGOUT    = '/api/terrain-logout';
+// Ne JAMAIS lier ces routes depuis une page publique (zone admin, noindex).
+// Le préfixe est centralisé ici : changer TERRAIN_PREFIX suffit à déplacer toute
+// la zone (le filtrage, les redirections et le Path du cookie s'alignent dessus).
+const TERRAIN_PREFIX    = '/hardeningcore';
+const TERRAIN_AUTH_PATH = '/hardeningcore/auth';
+const TERRAIN_AUTH_API  = '/api/terrain-auth';   // nom d'API obfusqué, inchangé
+const TERRAIN_LOGOUT    = '/api/terrain-logout'; // nom d'API obfusqué, inchangé
 
 // ─── Content Security Policy ──────────────────────────────────────────────────
 // Le nonce par requête remplace 'unsafe-inline' sur script-src : seuls les
@@ -26,7 +28,7 @@ const TERRAIN_LOGOUT    = '/api/terrain-logout';
 // inline n'exécute pas de code : risque résiduel (exfiltration CSS / défaçage),
 // pas une exécution JS. Le retirer imposerait de migrer tous les style= en classes.
 
-// SpotCheck (/terrain/spotcheck) est un HTML brut externe (87 Ko) qui s'appuie
+// SpotCheck (/hardeningcore/spotcheck) est un HTML brut externe (87 Ko) qui s'appuie
 // sur ~35 handlers d'événements inline (onclick=, onchange=, oninput=) et un gros
 // <script> inline. Un nonce ne peut PAS couvrir des handlers inline : il faudrait
 // 'unsafe-inline'. Comme 'nonce-...' et 'unsafe-inline' sont mutuellement exclusifs
@@ -36,7 +38,7 @@ const TERRAIN_LOGOUT    = '/api/terrain-logout';
 // Arbitrage de sécurité assumé : on rouvre le vecteur XSS inline UNIQUEMENT sur
 // cette page, qui est (1) derrière l'authentification admin, (2) un outil interne
 // non public, (3) du contenu statique que nous maîtrisons (pas d'entrée utilisateur
-// réfléchie dans le DOM). Le reste du site et de /terrain garde le nonce strict.
+// réfléchie dans le DOM). Le reste du site et de /hardeningcore garde le nonce strict.
 function buildCsp(nonce: string, terrain: boolean, spotcheck = false): string {
   const styleSrc = terrain
     ? "style-src 'self' 'unsafe-inline' https://unpkg.com https://fonts.googleapis.com"
@@ -101,8 +103,8 @@ export const onRequest = defineMiddleware(async (context, next) => {
 
   // ── Normalisation du pathname (anti-bypass URL encoding) ───────────────────────
   // CVE GHSA-ggxq-hp9w-j794 / GHSA-whqg-ppgf-wp8c : Astro 4.x peut passer un
-  // pathname non-décodé au middleware. Un attaquant envoie /%74errain/spotcheck
-  // (ou /%2Fterrain) pour contourner les vérifications startsWith('/terrain').
+  // pathname non-décodé au middleware. Un attaquant envoie /%68ardeningcore/spotcheck
+  // (ou /%2Fhardeningcore) pour contourner les vérifications startsWith('/hardeningcore').
   // On normalise ici pour que toutes les comparaisons portent sur le chemin réel.
   let pathname: string;
   try {
@@ -114,7 +116,7 @@ export const onRequest = defineMiddleware(async (context, next) => {
   }
   const isTerrainRoute = pathname.startsWith(TERRAIN_PREFIX);
 
-  // ── Protection zone opérationnelle /terrain/* ───────────────────────────────
+  // ── Protection zone opérationnelle /hardeningcore/* ───────────────────────────────
   if (isTerrainRoute) {
     bumpTraffic('terrainHits');
     const isAuthPage    = pathname === TERRAIN_AUTH_PATH || pathname === TERRAIN_AUTH_PATH + '/';
@@ -149,8 +151,8 @@ export const onRequest = defineMiddleware(async (context, next) => {
     const response = await next();
 
     // SpotCheck a besoin de 'unsafe-inline' (handlers onclick=, gros script inline).
-    // Exception ciblée, cf. buildCsp(). Toutes les autres routes /terrain gardent le nonce.
-    const isSpotcheck = pathname === '/terrain/spotcheck' || pathname === '/terrain/spotcheck/';
+    // Exception ciblée, cf. buildCsp(). Toutes les autres routes /hardeningcore gardent le nonce.
+    const isSpotcheck = pathname === `${TERRAIN_PREFIX}/spotcheck` || pathname === `${TERRAIN_PREFIX}/spotcheck/`;
     response.headers.set('Content-Security-Policy', buildCsp(nonce, true, isSpotcheck));
     response.headers.set('X-Frame-Options',         'DENY');
     response.headers.set('X-Content-Type-Options',  'nosniff');
@@ -203,10 +205,24 @@ export const onRequest = defineMiddleware(async (context, next) => {
   // le login en développement local (origin = http://localhost:4321 ≠ ORIGIN).
   const isTerrainAuthEndpoint = pathname === TERRAIN_AUTH_API || pathname === TERRAIN_LOGOUT;
 
+  // Les endpoints d'administration (/api/admin/*) ont leur propre barrière forte
+  // (checkAdminAuth + vérification d'Origin interne). On ne leur applique pas le
+  // rate limit public (un admin qui enchaîne les enregistrements ne doit pas être
+  // throttlé comme un visiteur anonyme), mais le check CSRF générique ci-dessous
+  // reste appliqué : un POST cross-site sans cookie de session échouera de toute
+  // façon à l'auth, et l'Origin est revérifiée dans l'endpoint.
+  const isAdminApi = pathname.startsWith('/api/admin/');
+
   if (context.request.method === 'POST' && pathname.startsWith('/api/') && !isTerrainAuthEndpoint) {
     bumpTraffic('apiPosts');
     const origin = context.request.headers.get('origin');
-    if (origin !== ORIGIN) {
+    // En production, seule l'origine canonique est acceptée (anti-CSRF strict).
+    // En développement (astro dev), on accepte aussi localhost/127.0.0.1 : sinon
+    // tout POST /api (formulaire de contribution, endpoints admin) renverrait 403
+    // en local, exactement comme l'exemption déjà en place pour terrain-auth.
+    const isDevOrigin = !import.meta.env.PROD && !!origin
+      && /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin);
+    if (origin !== ORIGIN && !isDevOrigin) {
       bumpTraffic('blockedCsrf');
       logSecurityEvent('csrf_reject', ip, pathname, `origin=${origin ?? 'absent'}`);
       return new Response(
@@ -215,7 +231,7 @@ export const onRequest = defineMiddleware(async (context, next) => {
       );
     }
 
-    if (isRateLimited(ip)) {
+    if (!isAdminApi && isRateLimited(ip)) {
       bumpTraffic('blockedRate');
       logSecurityEvent('rate_limit', ip, pathname);
       return new Response(

@@ -8,10 +8,12 @@ dist/
 # OS
 .DS_Store
 Thumbs.db
+.fuse_hidden*
 
 # Env
 .env
 .env.local
+.env.bak*
 
 # Logs
 npm-debug.log*
@@ -25,3 +27,9 @@ npm-debug.log*
 # Documentation infra sensible (jamais publiée sur GitHub)
 private/
 scripts/smtp-test.mjs
+
+# HardeningCore — données mutables d'administration (runtime)
+# Modération, validation légale et historique. Persistées sur volume en prod,
+# jamais versionnées (PII potentielle, état d'exploitation).
+data/admin/
+src/content/wiki/.trash/

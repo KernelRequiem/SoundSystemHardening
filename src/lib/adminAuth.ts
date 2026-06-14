@@ -109,7 +109,9 @@ export function makeSessionCookieHeader(email: string, role: AdminRole, secret: 
 
   const parts = [
     `${ADMIN_COOKIE}=${token}`,
-    'Path=/terrain',
+    // Path limité à la console admin : le cookie de session n'est jamais envoyé
+    // sur les pages publiques. Doit rester aligné sur TERRAIN_PREFIX (middleware).
+    'Path=/hardeningcore',
     'HttpOnly',
     'SameSite=Strict',
     `Max-Age=${maxAge}`,
@@ -122,7 +124,7 @@ export function makeSessionCookieHeader(email: string, role: AdminRole, secret: 
 /** Construit le header Set-Cookie pour invalider la session. */
 export function clearSessionCookieHeader(): string {
   const isProduction = process.env.NODE_ENV === 'production';
-  const base = `${ADMIN_COOKIE}=; Path=/terrain; HttpOnly; SameSite=Strict; Max-Age=0`;
+  const base = `${ADMIN_COOKIE}=; Path=/hardeningcore; HttpOnly; SameSite=Strict; Max-Age=0`;
   return isProduction ? base + '; Secure' : base;
 }
 

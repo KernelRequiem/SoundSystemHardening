@@ -1,0 +1,171 @@
+---
+/**
+ * /hardeningcore/legal-review — Validation des contenus légaux (admin uniquement)
+ *
+ * Croise les pages wiki juridiques + les modèles legal-docs avec leur statut de
+ * relecture (draft / review / validated / flagged) stocké via adminStore.
+ */
+import HardeningCore from '../../layouts/HardeningCore.astro';
+import { checkAdminAuth } from '../../lib/adminAuth';
+import { listWikiPages, listLegalReviews } from '../../lib/adminStore';
+import { LEGAL_DOCS } from '../../data/legal-docs';
+
+const auth = checkAdminAuth(Astro.cookies);
+if (!auth.valid) return Astro.redirect('/hardeningcore/auth?r=/hardeningcore/legal-review', 302);
+if (auth.role !== 'admin') return Astro.redirect('/hardeningcore', 302);
+
+const { role, email } = auth;
+const nonce = Astro.locals.cspNonce;
+
+// Slugs des pages wiki à portée juridique (relecture obligatoire).
+const LEGAL_WIKI = new Set([
+  'arsenal-legislatif', 'jurisprudence', 'recours-juridiques', 'ripost', 'Strategie-contre-ripost',
+  'Juridique', 'Contestation', 'Lois-En-Cours', 'Prescription-et-Delais', 'Templates-Recours',
+  'Declaration-Preuve-Legitimite', 'Rassemblement-vs-Manifestation', 'Definition-Ambigue-Organisateur',
+]);
+
+const reviews = listLegalReviews();
+const reviewMap = new Map(reviews.map(r => [`${r.kind}:${r.ref}`, r]));
+
+// Item de relecture = (ref, label, kind) + statut courant (défaut draft).
+type Item = { ref: string; label: string; kind: 'wiki' | 'legal-doc'; status: string; updatedAt?: string; validator?: string; note?: string };
+
+const wikiItems: Item[] = listWikiPages()
+  .filter(p => LEGAL_WIKI.has(p.slug))
+  .map(p => {
+    const r = reviewMap.get(`wiki:${p.slug}`);
+    return { ref: p.slug, label: p.title, kind: 'wiki', status: r?.status ?? 'draft', updatedAt: r?.updatedAt, validator: r?.validator, note: r?.note };
+  });
+
+const docItems: Item[] = Object.entries(LEGAL_DOCS).map(([key, doc]) => {
+  const r = reviewMap.get(`legal-doc:${key}`);
+  return { ref: key, label: `${doc.docType} · ${doc.title}`, kind: 'legal-doc', status: r?.status ?? 'draft', updatedAt: r?.updatedAt, validator: r?.validator, note: r?.note };
+});
+
+const allItems = [...wikiItems, ...docItems];
+const counts = {
+  validated: allItems.filter(i => i.status === 'validated').length,
+  review:    allItems.filter(i => i.status === 'review').length,
+  flagged:   allItems.filter(i => i.status === 'flagged').length,
+  draft:     allItems.filter(i => i.status === 'draft').length,
+};
+
+const statusMeta: Record<string, { label: string; badge: string }> = {
+  draft:     { label: 'Brouillon',  badge: 'b-gray' },
+  review:    { label: 'En revue',   badge: 'b-amber' },
+  validated: { label: 'Validé',     badge: 'b-green' },
+  flagged:   { label: 'À corriger', badge: 'b-red' },
+};
+const fmtDate = (iso?: string) => iso ? new Date(iso).toLocaleDateString('fr-FR', { day:'2-digit', month:'short' }) : '—';
+---
+<HardeningCore title="Validation légale" active="legal" email={email} role={role} nonce={nonce}>
+
+  <div class="page-head">
+    <div class="kick">Qualité juridique · {allItems.length} contenus suivis</div>
+    <h3>Validation des contenus légaux</h3>
+    <p>Suivi de relecture juridique des pages sensibles et des modèles d’actes. Chaque contenu passe de <strong>brouillon</strong> à <strong>en revue</strong>, puis <strong>validé</strong> par toi ou un juriste, ou est <strong>signalé</strong> à corriger.</p>
+  </div>
+
+  <div class="kpis">
+    <div class="kpi"><div class="kn" style="color:var(--green)">{counts.validated}</div><div class="kl">Validés</div></div>
+    <div class="kpi"><div class="kn" style="color:var(--amber)">{counts.review}</div><div class="kl">En revue</div></div>
+    <div class="kpi"><div class="kn" style="color:var(--red)">{counts.flagged}</div><div class="kl">À corriger</div></div>
+    <div class="kpi"><div class="kn" style="color:var(--t2)">{counts.draft}</div><div class="kl">Brouillons</div></div>
+  </div>
+
+  <div class="card" style="padding:0;margin-top:22px">
+    <div class="lr-head">Pages wiki juridiques</div>
+    <div style="overflow-x:auto">
+      <table>
+        <thead><tr><th>Contenu</th><th>Statut</th><th>Validé par</th><th>Maj</th><th style="text-align:right">Changer le statut</th></tr></thead>
+        <tbody>
+          {wikiItems.map(i => (
+            <tr data-ref={i.ref} data-kind="wiki" data-label={i.label}>
+              <td><div class="t-strong">{i.label}</div><div class="mono" style="font-size:10.5px;color:var(--t3);margin-top:2px">/wiki/{i.ref}</div></td>
+              <td><span class={`badge ${statusMeta[i.status].badge} st-badge`}>{statusMeta[i.status].label}</span></td>
+              <td class="mono" style="font-size:11px;color:var(--t2)">{i.validator || '—'}</td>
+              <td class="mono" style="font-size:11px;color:var(--t3)">{fmtDate(i.updatedAt)}</td>
+              <td style="text-align:right">
+                <div class="st-actions">
+                  <button class="st-set" data-s="review" title="En revue">⟳</button>
+                  <button class="st-set" data-s="validated" title="Valider">✓</button>
+                  <button class="st-set" data-s="flagged" title="Signaler">!</button>
+                </div>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="lr-head" style="border-top:1px solid var(--line2)">Modèles d’actes (legal-docs)</div>
+    <div style="overflow-x:auto;max-height:420px;overflow-y:auto">
+      <table>
+        <thead><tr><th>Modèle</th><th>Statut</th><th>Validé par</th><th>Maj</th><th style="text-align:right">Changer le statut</th></tr></thead>
+        <tbody>
+          {docItems.map(i => (
+            <tr data-ref={i.ref} data-kind="legal-doc" data-label={i.label}>
+              <td><div class="t-strong" style="font-size:13px">{i.label}</div><div class="mono" style="font-size:10.5px;color:var(--t3);margin-top:2px">{i.ref}</div></td>
+              <td><span class={`badge ${statusMeta[i.status].badge} st-badge`}>{statusMeta[i.status].label}</span></td>
+              <td class="mono" style="font-size:11px;color:var(--t2)">{i.validator || '—'}</td>
+              <td class="mono" style="font-size:11px;color:var(--t3)">{fmtDate(i.updatedAt)}</td>
+              <td style="text-align:right">
+                <div class="st-actions">
+                  <button class="st-set" data-s="review" title="En revue">⟳</button>
+                  <button class="st-set" data-s="validated" title="Valider">✓</button>
+                  <button class="st-set" data-s="flagged" title="Signaler">!</button>
+                </div>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <style is:inline>
+    .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+    .kpi{background:var(--panel);border:1px solid var(--line2);border-radius:var(--r);padding:16px 18px}
+    .kn{font-size:24px;font-weight:800;font-family:var(--mono);line-height:1}
+    .kl{font-size:11px;color:var(--t2);margin-top:5px}
+    .lr-head{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--t2);padding:14px 18px;background:var(--bg1)}
+    .st-actions{display:inline-flex;gap:5px}
+    .st-set{width:28px;height:26px;border-radius:6px;border:1px solid var(--line2);background:var(--bg2);color:var(--t1);cursor:pointer;font-size:13px;font-weight:700;transition:.12s}
+    .st-set[data-s="validated"]:hover{border-color:rgba(46,213,115,.5);color:var(--green);background:rgba(46,213,115,.08)}
+    .st-set[data-s="review"]:hover{border-color:rgba(255,176,46,.5);color:var(--amber);background:rgba(255,176,46,.08)}
+    .st-set[data-s="flagged"]:hover{border-color:rgba(255,77,94,.5);color:var(--red);background:rgba(255,77,94,.08)}
+    @media (max-width:680px){.kpis{grid-template-columns:repeat(2,1fr)}}
+  </style>
+
+  <script nonce={nonce} is:inline>
+    (function(){
+      var META = {
+        draft:{label:'Brouillon',cls:'b-gray'}, review:{label:'En revue',cls:'b-amber'},
+        validated:{label:'Validé',cls:'b-green'}, flagged:{label:'À corriger',cls:'b-red'}
+      };
+      document.addEventListener('click', async function(e){
+        var btn = e.target.closest('.st-set'); if(!btn) return;
+        var tr = btn.closest('tr');
+        var status = btn.getAttribute('data-s');
+        var validator = '';
+        if(status === 'validated'){
+          validator = prompt('Qui valide ce contenu ? (toi, ou nom du juriste)', '') || '';
+        }
+        var note = status === 'flagged' ? (prompt('Qu\'est-ce qui doit être corrigé ?') || '') : undefined;
+        var res = await window.hcPost('/api/admin/legal', {
+          action:'set', ref:tr.getAttribute('data-ref'), label:tr.getAttribute('data-label'),
+          kind:tr.getAttribute('data-kind'), status:status, validator:validator, note:note
+        });
+        if(res.ok){
+          var badge = tr.querySelector('.st-badge');
+          badge.className = 'badge ' + META[status].cls + ' st-badge';
+          badge.textContent = META[status].label;
+          if(validator){ tr.children[2].textContent = validator; }
+          tr.children[3].textContent = new Date().toLocaleDateString('fr-FR',{day:'2-digit',month:'short'});
+          window.hcToast('Statut mis à jour : ' + META[status].label);
+        } else window.hcToast(res.data.error || 'Échec.', false);
+      });
+    })();
+  </script>
+
+</HardeningCore>

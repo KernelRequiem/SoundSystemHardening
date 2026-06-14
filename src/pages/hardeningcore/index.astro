@@ -1,0 +1,190 @@
+---
+/**
+ * /hardeningcore — Tableau de bord HardeningCore
+ * Console d'administration : pilotage du wiki, modération, carte, validation
+ * légale et historique. Accès réservé aux rôles admin et moderator.
+ */
+import HardeningCore from '../../layouts/HardeningCore.astro';
+import { checkAdminAuth } from '../../lib/adminAuth';
+import { getAdminStats, readHistory } from '../../lib/adminStore';
+
+const auth = checkAdminAuth(Astro.cookies);
+if (!auth.valid) return Astro.redirect('/hardeningcore/auth?r=/hardeningcore', 302);
+
+const { role, email } = auth;
+const isAdmin = role === 'admin';
+const nonce = Astro.locals.cspNonce;
+
+const stats = getAdminStats();
+const recent = readHistory(6);
+
+const now = new Date().toLocaleString('fr-FR', {
+  weekday: 'long', day: 'numeric', month: 'long', year: 'numeric',
+  hour: '2-digit', minute: '2-digit',
+});
+
+const actionLabels: Record<string, string> = {
+  'wiki.create': 'Page wiki créée', 'wiki.update': 'Page wiki modifiée', 'wiki.delete': 'Page wiki supprimée',
+  'incident.create': 'Incident ajouté', 'incident.update': 'Incident modifié', 'incident.delete': 'Incident supprimé',
+  'moderation.approved': 'Contribution validée', 'moderation.rejected': 'Contribution rejetée',
+  'legal.validated': 'Contenu validé (juridique)', 'legal.review': 'Mis en relecture',
+  'legal.flagged': 'Contenu signalé', 'legal.draft': 'Repassé en brouillon',
+};
+const fmtAgo = (iso: string) => {
+  const s = Math.floor((Date.now() - new Date(iso).getTime()) / 1000);
+  if (s < 60) return 'à l’instant';
+  if (s < 3600) return `il y a ${Math.floor(s/60)} min`;
+  if (s < 86400) return `il y a ${Math.floor(s/3600)} h`;
+  return `il y a ${Math.floor(s/86400)} j`;
+};
+
+const modules = [
+  { href:'/hardeningcore/wiki', icon:'doc', color:'var(--acc)', name:'Édition du wiki',
+    desc:'Créer et modifier les pages Markdown du wiki via l’interface, avec aperçu en direct.',
+    metric: `${stats.wikiPages} pages`, prio:'Priorité haute', admin:false },
+  { href:'/hardeningcore/moderation', icon:'check', color:'var(--violet)', name:'Modération',
+    desc:'File unifiée des contributions : formulaire interne et issues GitHub à valider ou rejeter.',
+    metric: stats.pendingContrib > 0 ? `${stats.pendingContrib} en attente` : 'À jour', prio:'Priorité haute',
+    alert: stats.pendingContrib > 0, admin:false },
+  { href:'/hardeningcore/carte-admin', icon:'map', color:'var(--blue)', name:'Carte / alertes',
+    desc:'Ajouter, modifier ou supprimer les incidents répressifs affichés sur la carte publique.',
+    metric: `${stats.incidents} incidents`, prio:'Priorité haute', admin:false },
+  { href:'/hardeningcore/legal-review', icon:'scale', color:'var(--amber)', name:'Validation légale',
+    desc:'Workflow de relecture juridique : brouillon, en revue, validé. Sécurise la qualité légale.',
+    metric: stats.legalToReview > 0 ? `${stats.legalToReview} à relire` : 'À jour', prio:'Priorité haute',
+    alert: stats.legalToReview > 0, admin:true },
+  { href:'/hardeningcore/historique', icon:'clock', color:'var(--green)', name:'Historique',
+    desc:'Journal des modifications : qui a modifié quoi et quand. Transparence et traçabilité.',
+    metric: 'Traçabilité', prio:'Priorité moyenne', admin:false },
+];
+---
+<HardeningCore title="Tableau de bord" active="dashboard" email={email} role={role} nonce={nonce}>
+
+  <div class="page-head">
+    <div class="kick">Console opérationnelle</div>
+    <h3>Bonjour {email ? email.split('@')[0] : ''}</h3>
+    <p>Bienvenue dans <strong style="color:var(--acc)">HardeningCore</strong>, le poste de pilotage de SoundSystem Hardening. Tout part d’ici : contenu du wiki, modération des contributions, carte des alertes et qualité juridique.</p>
+    <div class="ts">{now}</div>
+  </div>
+
+  <!-- KPIs -->
+  <div class="kpis">
+    <div class="kpi">
+      <div class="kpi-ico" style="background:rgba(0,231,176,.1);color:var(--acc)"><svg viewBox="0 0 24 24" set:html="<path d='M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z'/><path d='M14 2v6h6'/>" /></svg></div>
+      <div><div class="kpi-v">{stats.wikiPages}</div><div class="kpi-l">Pages wiki</div></div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-ico" style="background:rgba(59,130,246,.1);color:var(--blue)"><svg viewBox="0 0 24 24" set:html="<path d='M9 3 3 6v15l6-3 6 3 6-3V3l-6 3-6-3Z'/>" /></svg></div>
+      <div><div class="kpi-v">{stats.incidents}</div><div class="kpi-l">Incidents carte</div></div>
+    </div>
+    <div class={`kpi ${stats.pendingContrib > 0 ? 'hot' : ''}`}>
+      <div class="kpi-ico" style="background:rgba(139,123,255,.1);color:var(--violet)"><svg viewBox="0 0 24 24" set:html="<path d='M9 11l3 3L22 4'/><path d='M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11'/>" /></svg></div>
+      <div><div class="kpi-v">{stats.pendingContrib}</div><div class="kpi-l">Contributions à modérer</div></div>
+    </div>
+    <div class={`kpi ${stats.legalToReview > 0 ? 'hot' : ''}`}>
+      <div class="kpi-ico" style="background:rgba(255,176,46,.1);color:var(--amber)"><svg viewBox="0 0 24 24" set:html="<path d='M12 3v18M5 7h14M7 7l-3 7h6l-3-7Z'/>" /></svg></div>
+      <div><div class="kpi-v">{stats.legalToReview}</div><div class="kpi-l">À valider juridiquement</div></div>
+    </div>
+  </div>
+
+  <div class="dash-grid">
+    <!-- Modules -->
+    <div>
+      <div class="card-h">Modules</div>
+      <div class="mod-grid">
+        {modules.filter(m => !m.admin || isAdmin).map(m => (
+          <a href={m.href} class="mod">
+            <div class="mod-top">
+              <div class="mod-ico" style={`background:color-mix(in srgb, ${m.color} 12%, transparent);color:${m.color}`}>
+                <svg viewBox="0 0 24 24" set:html={{
+                  doc:"<path d='M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z'/><path d='M14 2v6h6'/><path d='M8 13h8M8 17h8'/>",
+                  check:"<path d='M9 11l3 3L22 4'/><path d='M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11'/>",
+                  map:"<path d='M9 3 3 6v15l6-3 6 3 6-3V3l-6 3-6-3Z'/><path d='M9 3v15M15 6v15'/>",
+                  scale:"<path d='M12 3v18M5 7h14M7 7l-3 7h6l-3-7Zm10 0-3 7h6l-3-7Z'/><path d='M8 21h8'/>",
+                  clock:"<circle cx='12' cy='12' r='9'/><path d='M12 7v5l3 2'/>",
+                }[m.icon]} />
+              </div>
+              {m.admin && <span class="badge b-amber">Admin</span>}
+              {m.alert && <span class="badge b-red" style="margin-left:auto">Action requise</span>}
+            </div>
+            <div class="mod-name">{m.name}</div>
+            <div class="mod-desc">{m.desc}</div>
+            <div class="mod-foot">
+              <span class="mod-metric">{m.metric}</span>
+              <span class="mod-arrow"><svg viewBox="0 0 24 24" set:html="<path d='M5 12h14M13 6l6 6-6 6'/>"/></span>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+
+    <!-- Activité récente -->
+    <div>
+      <div class="card-h">Activité récente</div>
+      <div class="card">
+        {recent.length === 0 ? (
+          <div class="empty">
+            <svg viewBox="0 0 24 24" set:html="<circle cx='12' cy='12' r='9'/><path d='M12 7v5l3 2'/>" />
+            <div>Aucune activité pour l’instant.</div>
+          </div>
+        ) : (
+          <div class="feed">
+            {recent.map(h => (
+              <div class="feed-i">
+                <div class="feed-dot" style={`background:${
+                  h.action.startsWith('wiki') ? 'var(--acc)' :
+                  h.action.startsWith('incident') ? 'var(--blue)' :
+                  h.action.startsWith('moderation') ? 'var(--violet)' :
+                  h.action.startsWith('legal') ? 'var(--amber)' : 'var(--t2)'
+                }`}></div>
+                <div class="feed-body">
+                  <div class="feed-act">{actionLabels[h.action] ?? h.action}</div>
+                  <div class="feed-meta"><span class="mono">{h.target}</span> · {h.actor.split('@')[0]}</div>
+                </div>
+                <div class="feed-ago">{fmtAgo(h.ts)}</div>
+              </div>
+            ))}
+          </div>
+        )}
+        <a href="/hardeningcore/historique" class="feed-all">Voir tout l’historique →</a>
+      </div>
+    </div>
+  </div>
+
+  <style is:inline>
+    .ts{font-family:var(--mono);font-size:11.5px;color:var(--t2);margin-top:12px;text-transform:capitalize}
+    .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:30px}
+    .kpi{background:var(--panel);border:1px solid var(--line2);border-radius:var(--r);padding:17px 18px;display:flex;align-items:center;gap:14px;transition:.15s}
+    .kpi.hot{border-color:rgba(255,176,46,.35);background:linear-gradient(135deg,rgba(255,176,46,.04),var(--panel))}
+    .kpi-ico{width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .kpi-ico svg{width:21px;height:21px;stroke:currentColor;stroke-width:2;fill:none}
+    .kpi-v{font-size:26px;font-weight:800;letter-spacing:-.5px;line-height:1;font-family:var(--mono)}
+    .kpi-l{font-size:11px;color:var(--t2);margin-top:4px;letter-spacing:.01em}
+    .dash-grid{display:grid;grid-template-columns:1fr 340px;gap:24px}
+    .mod-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    .mod{background:var(--panel);border:1px solid var(--line2);border-radius:var(--r);padding:18px;display:flex;flex-direction:column;gap:9px;transition:.18s;min-height:172px}
+    .mod:hover{border-color:rgba(255,255,255,.2);transform:translateY(-2px);background:var(--bg2)}
+    .mod-top{display:flex;align-items:center;gap:9px;margin-bottom:2px}
+    .mod-ico{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center}
+    .mod-ico svg{width:20px;height:20px;stroke:currentColor;stroke-width:1.9;fill:none}
+    .mod-name{font-size:15px;font-weight:700;letter-spacing:-.2px}
+    .mod-desc{font-size:12px;color:var(--t1);line-height:1.55;flex:1}
+    .mod-foot{display:flex;align-items:center;justify-content:space-between;margin-top:4px}
+    .mod-metric{font-family:var(--mono);font-size:11px;color:var(--t2);font-weight:600}
+    .mod-arrow{color:var(--t2);transition:.15s}
+    .mod-arrow svg{width:18px;height:18px;stroke:currentColor;stroke-width:2;fill:none}
+    .mod:hover .mod-arrow{color:var(--acc);transform:translateX(3px)}
+    .feed{display:flex;flex-direction:column}
+    .feed-i{display:flex;gap:11px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--line)}
+    .feed-i:first-child{padding-top:0}
+    .feed-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:5px}
+    .feed-body{flex:1;min-width:0}
+    .feed-act{font-size:12.5px;color:var(--t0);font-weight:600}
+    .feed-meta{font-size:10.5px;color:var(--t2);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .feed-ago{font-size:10px;color:var(--t3);font-family:var(--mono);flex-shrink:0;white-space:nowrap;margin-top:1px}
+    .feed-all{display:block;margin-top:14px;font-size:12px;color:var(--acc);font-weight:600}
+    @media (max-width:1100px){.dash-grid{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(2,1fr)}}
+    @media (max-width:620px){.mod-grid{grid-template-columns:1fr}.kpis{grid-template-columns:1fr}}
+  </style>
+
+</HardeningCore>

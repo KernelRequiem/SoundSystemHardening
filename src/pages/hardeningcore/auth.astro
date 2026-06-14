@@ -1,6 +1,6 @@
 ---
 /**
- * /terrain/auth — Page d'accès opérationnel (login admin/modérateur)
+ * /hardeningcore/auth — Page d'accès opérationnel (login admin/modérateur)
  * Page minimaliste — ne mentionne pas "admin" ou "panel"
  * Aucune navigation vers cette page depuis le site public
  */
@@ -8,9 +8,9 @@ import { checkAdminAuth } from '../../lib/adminAuth';
 
 // Déjà authentifié → rediriger directement
 const auth = checkAdminAuth(Astro.cookies);
-if (auth.valid) return Astro.redirect('/terrain', 302);
+if (auth.valid) return Astro.redirect('/hardeningcore', 302);
 
-const redirectTo = Astro.url.searchParams.get('r') || '/terrain';
+const redirectTo = Astro.url.searchParams.get('r') || '/hardeningcore';
 const loginFailed = Astro.url.searchParams.has('e');
 const nonce = Astro.locals.cspNonce;
 ---

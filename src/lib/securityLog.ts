@@ -13,12 +13,12 @@
 
 // ── Types ─────────────────────────────────────────────────────────────
 export type SecurityEventType =
-  | 'login_success'    // authentification réussie sur /terrain
+  | 'login_success'    // authentification réussie sur /hardeningcore
   | 'login_failure'    // identifiants rejetés
   | 'logout'           // déconnexion explicite
   | 'csrf_reject'      // POST /api rejeté (Origin non autorisée)
   | 'rate_limit'       // 429 — seuil de requêtes dépassé
-  | 'terrain_denied'   // accès /terrain/* sans token valide → redirigé login
+  | 'terrain_denied'   // accès /hardeningcore/* sans token valide → redirigé login
   | 'bad_request';     // URI malformée, payload invalide
 
 export interface SecurityEvent {

@@ -1,0 +1,177 @@
+---
+/**
+ * /hardeningcore/moderation — File unifiée de modération (formulaire interne + Issues GitHub)
+ */
+import HardeningCore from '../../layouts/HardeningCore.astro';
+import { checkAdminAuth } from '../../lib/adminAuth';
+import { listContributions } from '../../lib/adminStore';
+
+const auth = checkAdminAuth(Astro.cookies);
+if (!auth.valid) return Astro.redirect('/hardeningcore/auth?r=/hardeningcore/moderation', 302);
+
+const { role, email } = auth;
+const nonce = Astro.locals.cspNonce;
+const all = listContributions();
+
+const pending  = all.filter(c => c.status === 'pending');
+const approved = all.filter(c => c.status === 'approved');
+const rejected = all.filter(c => c.status === 'rejected');
+
+const fmtDate = (iso: string) => new Date(iso).toLocaleString('fr-FR', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' });
+const typeLabel: Record<string, string> = {
+  wiki: 'Wiki', correction: 'Correction', incident: 'Incident', juridique: 'Juridique',
+  'github-issue': 'Issue GitHub', autre: 'Autre',
+};
+
+// Défense en profondeur : le c.url ne provient que de l'API GitHub (html_url) et
+// le formulaire public ne peut pas le renseigner, mais on filtre quand même le
+// schéma avant de le poser en href. Un javascript:/data: s'exécuterait dans la
+// session admin au clic. Seuls les liens GitHub en HTTPS sont autorisés ici.
+const safeGithubUrl = (u: string | undefined): string | null => {
+  if (!u) return null;
+  try {
+    const parsed = new URL(u);
+    return parsed.protocol === 'https:' && parsed.hostname === 'github.com' ? parsed.href : null;
+  } catch { return null; }
+};
+---
+<HardeningCore title="Modération" active="moderation" email={email} role={role} nonce={nonce}>
+
+  <div class="page-head" style="display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap">
+    <div>
+      <div class="kick">File unifiée · {pending.length} en attente</div>
+      <h3>Modération des contributions</h3>
+      <p>Contributions du formulaire interne et issues GitHub réunies dans une seule file. Valide pour intégrer au flux de publication, ou rejette avec une note.</p>
+    </div>
+    <button class="btn" id="btn-import">
+      <svg viewBox="0 0 24 24" set:html="<path d='M21 12a9 9 0 1 1-2.6-6.4M21 3v6h-6'/>" /> Importer les issues GitHub
+    </button>
+  </div>
+
+  <div class="seg" id="seg">
+    <button class="seg-i on" data-tab="pending">En attente <span class="seg-n">{pending.length}</span></button>
+    <button class="seg-i" data-tab="approved">Validées <span class="seg-n">{approved.length}</span></button>
+    <button class="seg-i" data-tab="rejected">Rejetées <span class="seg-n">{rejected.length}</span></button>
+  </div>
+
+  {[['pending', pending], ['approved', approved], ['rejected', rejected]].map(([tab, list]) => (
+    <div class="tab-panel" data-panel={tab} style={tab === 'pending' ? '' : 'display:none'}>
+      {(list as typeof all).length === 0 ? (
+        <div class="card empty">
+          <svg viewBox="0 0 24 24" set:html="<path d='M9 11l3 3L22 4'/><path d='M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11'/>" />
+          <div>{tab === 'pending' ? 'Aucune contribution en attente. File propre.' : tab === 'approved' ? 'Aucune contribution validée pour l’instant.' : 'Aucune contribution rejetée.'}</div>
+        </div>
+      ) : (
+        <div class="contrib-list">
+          {(list as typeof all).map(c => (
+            <div class="contrib" data-id={c.id}>
+              <div class="contrib-h">
+                <span class={`badge ${c.source === 'github' ? 'b-blue' : 'b-violet'}`}>
+                  {c.source === 'github' ? 'GitHub' : 'Formulaire'}
+                </span>
+                <span class="badge b-gray">{typeLabel[c.type] ?? c.type}</span>
+                {c.page && <span class="contrib-page mono">{c.page}</span>}
+                <span class="contrib-date mono">{fmtDate(c.createdAt)}</span>
+              </div>
+              <div class="contrib-title">{c.title}</div>
+              <div class="contrib-body">{c.body.length > 320 ? c.body.slice(0, 320) + '…' : c.body}</div>
+              <div class="contrib-foot">
+                <span class="contrib-author">
+                  {c.author ? `par ${c.author}` : 'anonyme'}
+                  {safeGithubUrl(c.url) && <a href={safeGithubUrl(c.url)} target="_blank" rel="noopener noreferrer" class="contrib-link"> · voir sur GitHub →</a>}
+                  {c.reviewedBy && <span class="mono" style="color:var(--t3)"> · relu par {c.reviewedBy.split('@')[0]}</span>}
+                </span>
+                {c.status === 'pending' && (
+                  <span class="contrib-actions">
+                    <button class="btn sm danger act-reject" data-id={c.id}>Rejeter</button>
+                    <button class="btn sm primary act-approve" data-id={c.id}>Valider</button>
+                  </span>
+                )}
+                {c.status !== 'pending' && (
+                  <span class={`badge ${c.status === 'approved' ? 'b-green' : 'b-red'}`}>
+                    {c.status === 'approved' ? 'Validée' : 'Rejetée'}
+                  </span>
+                )}
+              </div>
+              {c.note && <div class="contrib-note">Note : {c.note}</div>}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  ))}
+
+  <style is:inline>
+    .seg{display:inline-flex;background:var(--bg1);border:1px solid var(--line2);border-radius:10px;padding:4px;gap:3px;margin-bottom:20px}
+    .seg-i{display:inline-flex;align-items:center;gap:7px;padding:7px 15px;border-radius:7px;border:none;background:transparent;color:var(--t1);font-family:var(--sans);font-size:12.5px;font-weight:600;cursor:pointer;transition:.14s}
+    .seg-i:hover{color:var(--t0)}
+    .seg-i.on{background:var(--bg3);color:var(--t0)}
+    .seg-n{font-family:var(--mono);font-size:10px;background:var(--bg4);color:var(--t1);padding:1px 6px;border-radius:10px}
+    .seg-i.on .seg-n{background:var(--acc);color:#04110d}
+    .contrib-list{display:flex;flex-direction:column;gap:12px}
+    .contrib{background:var(--panel);border:1px solid var(--line2);border-radius:var(--r);padding:16px 18px;transition:.2s}
+    .contrib.removing{opacity:0;transform:translateX(20px)}
+    .contrib-h{display:flex;align-items:center;gap:8px;margin-bottom:9px;flex-wrap:wrap}
+    .contrib-page{font-size:10.5px;color:var(--acc2)}
+    .contrib-date{font-size:10.5px;color:var(--t3);margin-left:auto}
+    .contrib-title{font-size:15px;font-weight:700;letter-spacing:-.2px;margin-bottom:6px}
+    .contrib-body{font-size:12.5px;color:var(--t1);line-height:1.6;white-space:pre-wrap;margin-bottom:12px}
+    .contrib-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+    .contrib-author{font-size:11.5px;color:var(--t2)}
+    .contrib-link{color:var(--blue)}
+    .contrib-actions{display:flex;gap:8px}
+    .contrib-note{margin-top:10px;padding:8px 12px;background:var(--bg2);border-radius:8px;font-size:11.5px;color:var(--t1);border-left:2px solid var(--amber)}
+  </style>
+
+  <script nonce={nonce} is:inline>
+    (function(){
+      // Onglets
+      var seg = document.getElementById('seg');
+      seg.addEventListener('click', function(e){
+        var b = e.target.closest('.seg-i'); if(!b) return;
+        seg.querySelectorAll('.seg-i').forEach(function(x){ x.classList.remove('on'); });
+        b.classList.add('on');
+        var tab = b.getAttribute('data-tab');
+        document.querySelectorAll('.tab-panel').forEach(function(p){
+          p.style.display = p.getAttribute('data-panel') === tab ? '' : 'none';
+        });
+      });
+
+      // Actions valider / rejeter
+      async function review(id, decision){
+        var note = '';
+        if(decision === 'rejected'){
+          note = prompt('Note de rejet (optionnelle) :') || '';
+        }
+        var res = await window.hcPost('/api/admin/moderation', { action:'review', id:id, decision:decision, note:note });
+        if(res.ok){
+          var el = document.querySelector('.contrib[data-id="'+id+'"]');
+          if(el){ el.classList.add('removing'); setTimeout(function(){ location.reload(); }, 280); }
+          window.hcToast(decision === 'approved' ? 'Contribution validée.' : 'Contribution rejetée.');
+        } else {
+          window.hcToast(res.data.error || 'Échec.', false);
+        }
+      }
+      document.addEventListener('click', function(e){
+        var a = e.target.closest('.act-approve'), r = e.target.closest('.act-reject');
+        if(a) review(a.getAttribute('data-id'), 'approved');
+        if(r) review(r.getAttribute('data-id'), 'rejected');
+      });
+
+      // Import GitHub
+      document.getElementById('btn-import').addEventListener('click', async function(){
+        var btn = this; btn.disabled = true; var prev = btn.innerHTML;
+        btn.innerHTML = 'Import en cours…';
+        var res = await window.hcPost('/api/admin/moderation', { action:'import-github' });
+        btn.disabled = false; btn.innerHTML = prev;
+        if(res.ok){
+          window.hcToast(res.data.added + ' nouvelle(s) issue(s) importée(s) sur ' + res.data.fetched + ' ouverte(s).');
+          if(res.data.added > 0) setTimeout(function(){ location.reload(); }, 900);
+        } else {
+          window.hcToast(res.data.error || 'Import indisponible.', false);
+        }
+      });
+    })();
+  </script>
+
+</HardeningCore>

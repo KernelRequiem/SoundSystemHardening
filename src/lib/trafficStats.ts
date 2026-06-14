@@ -16,7 +16,7 @@ const rlBuckets = new Map<string, number[]>();
 interface TrafficState {
   totalRequests:   number;   // toutes requêtes vues par le middleware
   apiPosts:        number;   // POST /api/*
-  terrainHits:     number;   // accès /terrain/* (authentifiés ou non)
+  terrainHits:     number;   // accès /hardeningcore/* (authentifiés ou non)
   blockedCsrf:     number;   // POST rejetés (Origin invalide)
   blockedRate:     number;   // 429 émis
   bootTs:          number;
