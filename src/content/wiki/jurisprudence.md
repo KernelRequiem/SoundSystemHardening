@@ -36,7 +36,7 @@ La question était : les participants peuvent-ils être sanctionnés au titre de
 * Ils ne peuvent être poursuivis que pour des infractions concomitantes (stupéfiants, tapage, dégradations, etc.).
 
 **Après la PPL 1133 (2026) :**
-* Cette décision devient obsolète. La PPL 1133 crée un nouveau régime où les participants eux-mêmes peuvent être sanctionnés d'une amende de 1 500 € ou d'un délit (6 mois prison + 30 000 € selon RIPOST).
+* Cette distinction perdrait de sa portée. La PPL 1133 crée un régime où les participants peuvent être sanctionnés d'une amende de 1 500 €, et le texte RIPOST un délit de participation à un rassemblement interdit (6 mois prison + 7 500 €). Ces textes ne sont pas encore promulgués.
 
 ### Portée pour la défense
 
@@ -59,7 +59,7 @@ Le 3 janvier 2025, le Préfet de l'Hérault a pris un arrêté interdisant sur l
 * Tout rassemblement festif à caractère musical non déclaré ou non autorisé.
 * La circulation de tout véhicule transportant du matériel de son destiné à de tels rassemblements.
 
-Trois recours ont été déposés via le mécanisme de référé-liberté (urgence et violation grave d'une liberté fondamentale) :
+Des recours en référé (un référé-liberté et un référé-suspension) ont été déposés par trois requérants :
 * Deux particuliers.
 * L'association Fonds de soutien juridique des sons.
 
@@ -192,7 +192,7 @@ Les juges administratifs contrôlent la légalité des arrêtés préfectoraux d
 
 1. **Définition d'organisateur :** La PPL 1133 élargit massément le périmètre ("contribuant directement ou indirectement"). Les tribunaux devront tracer une ligne : à partir de quand devient-on "contributeur" ? Les litiges futurs porteront sur cette démarcation.
 
-2. **Immunité des associations de réduction des risques :** L'amendement CL34 (adopté) exclut les acteurs de RdRD de l'infraction. Mais cette exception sera testée. Les juges devront évaluer quand une action "dépasse" la RdRD.
+2. **Immunité des associations de réduction des risques :** L'amendement n°29 (Andy Kerbrat, LFI, adopté) sanctuarise les espaces de RdR et exclut ces acteurs de l'infraction. Mais cette exception sera testée. Les juges devront évaluer quand une action "dépasse" la RdR.
 
 3. **Pénal vs administratif :** La création d'un délit crée une bifurcation : le préfet continue à interdire (police administrative), le parquet poursuit (voie pénale). La question de la cumulabilité des deux se posera.
 
@@ -247,7 +247,7 @@ Certaines juridictions européennes (Cour de Strasbourg) sont plus restrictives 
 
 2. **Pénalisation des participants.** Pour la première fois, être présent devient un risque pénal (6 mois prison + 7 500 € selon RIPOST).
 
-3. **Présomption de connaissance du caractère illicite.** L'amendement CL34 crée une présomption : si tu participes à l'installation, tu savais que c'était illégal. Inverse la charge de preuve.
+3. **Risque de présomption de connaissance du caractère illicite.** La définition large de la "contribution directe ou indirecte" fait craindre qu'un contributeur soit présumé avoir connu le caractère illégal du rassemblement, ce qui allégerait de fait la charge de preuve pesant sur l'accusation. Cette lecture est contestable au regard de la présomption d'innocence.
 
 4. **Seuil baissé à 250 personnes.** Double le nombre de rassemblements soumis à déclaration obligatoire.
 

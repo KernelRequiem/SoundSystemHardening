@@ -289,10 +289,10 @@ Documenter les échecs est aussi important que documenter les succès.
 * Suivi des textes et actualités → [[Vue-d'ensemble-veille]]
 * Histoire et argument patrimonial → [[Histoire-&-Culture]]
 
-## Liens vers le repo
+## Liens connexes
 
-* Textes législatifs → [`droits-libertes/arsenal-legislatif.md`](https://github.com/KernelRequiem/digital-rights/blob/main/droits-libertes/arsenal-legislatif.md)
-* Sécurité des communications pour les coordinateurs → [`cyber-opsec/`](https://github.com/KernelRequiem/digital-rights/tree/main/cyber-opsec)
+* Textes législatifs → [Arsenal législatif](/wiki/arsenal-legislatif)
+* Sécurité des communications pour les coordinateurs → [Sécurité numérique](/wiki/Sécurite-Numerique)
 
 ---
 

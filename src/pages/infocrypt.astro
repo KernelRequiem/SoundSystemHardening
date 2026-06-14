@@ -5,6 +5,7 @@ import dicewareWords from '../data/diceware-fr.json';
 const dicewareJson = JSON.stringify(dicewareWords);
 const dicewareCount = dicewareWords.length;
 const bitsPerWord = Math.log2(dicewareCount);
+const nonce = Astro.locals.cspNonce;
 ---
 
 <Layout
@@ -942,7 +943,7 @@ const bitsPerWord = Math.log2(dicewareCount);
 <!-- ══════════════════════════════════════════════════════════════
      SCRIPT CRYPTO (client-side uniquement)
 ══════════════════════════════════════════════════════════════ -->
-<script is:inline>
+<script nonce={nonce} is:inline>
 (function () {
   // ── GUIDE MODAL ───────────────────────────────────────────────
   window.icGuideOpen = function () {

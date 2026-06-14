@@ -263,7 +263,7 @@ La liberté de réunion est protégée par la Constitution (bloc de constitution
 
 **Argument 3 : présomption d'innocence**
 
-L'amendement CL34 instaure une présomption de connaissance du caractère illicite pour tout "contributeur". Cette présomption peut être contestée comme violant la présomption d'innocence (art. 9 DDHC).
+L'extension de la responsabilité à tout "contributeur direct ou indirect" fait craindre une présomption de connaissance du caractère illicite. Une telle présomption pourrait être contestée comme contraire à la présomption d'innocence (art. 9 DDHC).
 
 ### Procédure
 

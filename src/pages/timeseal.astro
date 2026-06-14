@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+const nonce = Astro.locals.cspNonce;
 ---
 
 <Layout title="TimeSeal" category="OUTILS">
@@ -203,7 +204,7 @@ import Layout from '../layouts/Layout.astro';
   <!-- jsPDF via CDN -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" is:inline></script>
 
-  <script is:inline>
+  <script nonce={nonce} is:inline>
   (function () {
 
     // ── Helpers ──────────────────────────────────────────────────────────────
@@ -568,7 +569,7 @@ import Layout from '../layouts/Layout.astro';
   })();
   </script>
 
-  <script is:inline>
+  <script nonce={nonce} is:inline>
   (function() {
     var btn   = document.getElementById('guideToggle');
     var panel = document.getElementById('guidePanel');

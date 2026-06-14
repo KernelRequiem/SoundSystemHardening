@@ -1,5 +1,8 @@
 import { defineMiddleware } from 'astro:middleware';
+import { randomBytes } from 'crypto';
 import { verifyToken, ADMIN_COOKIE } from './lib/adminAuth';
+import { isRateLimited, bumpTraffic } from './lib/trafficStats';
+import { logSecurityEvent } from './lib/securityLog';
 
 // ─── Origine canonique du site ────────────────────────────────────────────────
 const ORIGIN = 'https://soundsystemhardening.fr';
@@ -13,82 +16,89 @@ const TERRAIN_AUTH_API  = '/api/terrain-auth';
 const TERRAIN_LOGOUT    = '/api/terrain-logout';
 
 // ─── Content Security Policy ──────────────────────────────────────────────────
-// NOTE sécurité : 'unsafe-inline' dans script-src est un vecteur XSS résiduel.
-// À remplacer par des nonces Astro lors de la migration vers Astro 6+.
-// Voir : https://docs.astro.build/en/reference/configuration-reference/
+// Le nonce par requête remplace 'unsafe-inline' sur script-src : seuls les
+// <script nonce="..."> émis par nos pages s'exécutent. Un payload XSS injecté
+// dans le DOM ne porte pas le nonce courant (régénéré à chaque requête) et est
+// donc refusé par le navigateur — c'est la fermeture du vecteur XSS exécutable.
+//
+// NOTE : style-src conserve 'unsafe-inline'. Un nonce ne couvre PAS les attributs
+// style="..." (nombreux dans le site), seulement les balises <style>. Le style
+// inline n'exécute pas de code : risque résiduel (exfiltration CSS / défaçage),
+// pas une exécution JS. Le retirer imposerait de migrer tous les style= en classes.
 
-// CSP élargie pour /terrain/* — SpotCheck a besoin de polices Google + tuiles satellite
-const CSP_TERRAIN = [
-  "default-src 'self'",
-  "script-src 'self' 'unsafe-inline' https://unpkg.com https://cdnjs.cloudflare.com",
-  // SpotCheck charge Inter + JetBrains Mono depuis fonts.googleapis.com
-  "style-src 'self' 'unsafe-inline' https://unpkg.com https://fonts.googleapis.com",
-  // Polices woff2 depuis fonts.gstatic.com
-  "font-src 'self' https://fonts.gstatic.com",
-  // Tuiles CartoDB (dark) + OSM + ArcGIS (satellite) + SpotCheck markers data:
-  "img-src 'self' data: https://*.tile.openstreetmap.org https://*.basemaps.cartocdn.com https://server.arcgisonline.com https://*.tile.opentopomap.org",
-  // Overpass API pour l'analyse OSM depuis SpotCheck
-  "connect-src 'self' https://overpass-api.de https://overpass.kumi.systems https://api.open-elevation.com",
-  "worker-src 'self'",
-  // Terrain : frame-ancestors 'none' conservé
-  "frame-ancestors 'none'",
-].join('; ');
+// SpotCheck (/terrain/spotcheck) est un HTML brut externe (87 Ko) qui s'appuie
+// sur ~35 handlers d'événements inline (onclick=, onchange=, oninput=) et un gros
+// <script> inline. Un nonce ne peut PAS couvrir des handlers inline : il faudrait
+// 'unsafe-inline'. Comme 'nonce-...' et 'unsafe-inline' sont mutuellement exclusifs
+// (dès qu'un nonce est présent, les navigateurs ignorent 'unsafe-inline'), cette
+// route reçoit un script-src SANS nonce et AVEC 'unsafe-inline'.
+//
+// Arbitrage de sécurité assumé : on rouvre le vecteur XSS inline UNIQUEMENT sur
+// cette page, qui est (1) derrière l'authentification admin, (2) un outil interne
+// non public, (3) du contenu statique que nous maîtrisons (pas d'entrée utilisateur
+// réfléchie dans le DOM). Le reste du site et de /terrain garde le nonce strict.
+function buildCsp(nonce: string, terrain: boolean, spotcheck = false): string {
+  const styleSrc = terrain
+    ? "style-src 'self' 'unsafe-inline' https://unpkg.com https://fonts.googleapis.com"
+    : "style-src 'self' 'unsafe-inline' https://unpkg.com";
 
-// CSP du site public
-const CSP = [
-  "default-src 'self'",
-  "script-src 'self' 'unsafe-inline' https://unpkg.com https://cdnjs.cloudflare.com",
-  "style-src 'self' 'unsafe-inline' https://unpkg.com",
-  "img-src 'self' data: https://*.tile.openstreetmap.org https://*.basemaps.cartocdn.com",
-  "font-src 'self'",
-  // api.open-elevation.com : profils topographiques de l'outil SoundCheck
-  "connect-src 'self' https://overpass-api.de https://overpass.kumi.systems https://api.open-elevation.com",
-  // Web Worker local (acousticWorker.js de SoundCheck)
-  "worker-src 'self'",
-  "frame-ancestors 'none'",
-  "base-uri 'self'",
-  "form-action 'self'",
-  "object-src 'none'",
-  "upgrade-insecure-requests",
-].join('; ');
+  const imgSrc = terrain
+    ? "img-src 'self' data: https://*.tile.openstreetmap.org https://*.basemaps.cartocdn.com https://server.arcgisonline.com https://*.tile.opentopomap.org"
+    : "img-src 'self' data: https://*.tile.openstreetmap.org https://*.basemaps.cartocdn.com";
 
-// ─── Rate limiting applicatif (defense en profondeur) ─────────────────────────
-// Le rate limiting principal doit vivre au reverse proxy (Traefik), mais tant
-// qu'il n'est pas en place ce garde-fou en memoire limite l'abus des endpoints
-// POST (/api/contact, /api/signalement, /api/report) : relais de spam SMTP,
-// inondation de la base Airtable, deni de service applicatif.
-// Portee : par instance de conteneur. Fenetre glissante simple.
-const RL_WINDOW_MS = 10 * 60 * 1000; // 10 minutes
-const RL_MAX = 8;                    // 8 POST /api par IP et par fenetre
-const rlBuckets = new Map<string, number[]>();
+  const fontSrc = terrain
+    ? "font-src 'self' https://fonts.gstatic.com"
+    : "font-src 'self'";
 
+  // Exception SpotCheck : 'unsafe-inline' au lieu du nonce (cf. note ci-dessus).
+  const scriptSrc = spotcheck
+    ? "script-src 'self' 'unsafe-inline' https://unpkg.com https://cdnjs.cloudflare.com"
+    : `script-src 'self' 'nonce-${nonce}' https://unpkg.com https://cdnjs.cloudflare.com`;
+
+  const base = [
+    "default-src 'self'",
+    scriptSrc,
+    styleSrc,
+    fontSrc,
+    imgSrc,
+    "connect-src 'self' https://overpass-api.de https://overpass.kumi.systems https://api.open-elevation.com",
+    "worker-src 'self'",
+    "frame-ancestors 'none'",
+    "base-uri 'self'",
+    "form-action 'self'",
+    "object-src 'none'",
+  ];
+  if (!terrain) base.push("upgrade-insecure-requests");
+  return base.join('; ');
+}
+
+// ─── Détermination de l'IP cliente ────────────────────────────────────────────
 function clientIp(context: { clientAddress?: string }, request: Request): string {
   // Priorité à context.clientAddress (IP réelle injectée par le runtime Astro/Node
   // depuis la connexion TCP — non falsifiable par le client).
   // X-Forwarded-For n'est lu qu'en l'absence de clientAddress car ce header
   // peut être forgé par n'importe quel client HTTP (bypass de rate limit).
-  if (context.clientAddress) return context.clientAddress;
+  try {
+    if (context.clientAddress) return context.clientAddress;
+  } catch {
+    // clientAddress peut jeter si l'adapter ne l'expose pas — on retombe sur XFF.
+  }
   const xff = request.headers.get('x-forwarded-for');
   if (xff) return xff.split(',')[0].trim();
   return 'unknown';
 }
 
-function isRateLimited(ip: string): boolean {
-  const now = Date.now();
-  const hits = (rlBuckets.get(ip) || []).filter((t) => now - t < RL_WINDOW_MS);
-  hits.push(now);
-  rlBuckets.set(ip, hits);
-  // Purge opportuniste pour borner la memoire.
-  if (rlBuckets.size > 5000) {
-    for (const [k, v] of rlBuckets) {
-      if (v.every((t) => now - t >= RL_WINDOW_MS)) rlBuckets.delete(k);
-    }
-  }
-  return hits.length > RL_MAX;
-}
-
 // ─── Middleware ───────────────────────────────────────────────────────────────
 export const onRequest = defineMiddleware(async (context, next) => {
+  bumpTraffic('totalRequests');
+
+  // ── Nonce CSP : 128 bits aléatoires, régénéré à CHAQUE requête ──────────────
+  // Exposé aux pages via Astro.locals.cspNonce pour être posé sur les <script>.
+  const nonce = randomBytes(16).toString('base64');
+  (context.locals as { cspNonce?: string }).cspNonce = nonce;
+
+  const ip = clientIp(context, context.request);
+
   // ── Normalisation du pathname (anti-bypass URL encoding) ───────────────────────
   // CVE GHSA-ggxq-hp9w-j794 / GHSA-whqg-ppgf-wp8c : Astro 4.x peut passer un
   // pathname non-décodé au middleware. Un attaquant envoie /%74errain/spotcheck
@@ -99,14 +109,14 @@ export const onRequest = defineMiddleware(async (context, next) => {
     pathname = decodeURIComponent(context.url.pathname);
   } catch {
     // URI malformée (ex. %80) → refus 400
+    logSecurityEvent('bad_request', ip, context.url.pathname, 'URI malformee');
     return new Response(JSON.stringify({ error: 'Bad Request' }), { status: 400 });
   }
   const isTerrainRoute = pathname.startsWith(TERRAIN_PREFIX);
 
   // ── Protection zone opérationnelle /terrain/* ───────────────────────────────
-  // Toutes les routes /terrain/* nécessitent un token de session valide,
-  // sauf /terrain/auth (page de login) et les endpoints d'authentification.
   if (isTerrainRoute) {
+    bumpTraffic('terrainHits');
     const isAuthPage    = pathname === TERRAIN_AUTH_PATH || pathname === TERRAIN_AUTH_PATH + '/';
     const isAuthApi     = pathname === TERRAIN_AUTH_API;
     const isLogoutApi   = pathname === TERRAIN_LOGOUT;
@@ -125,8 +135,9 @@ export const onRequest = defineMiddleware(async (context, next) => {
       }
 
       if (!isAuthed) {
-        // Pas de token ou token invalide → redirection vers la page de login
-        // On encode la destination pour revenir après auth
+        // Accès à une route interne sans session valide → on journalise (un balayage
+        // d'URL obfusquées par un scanner apparaîtra ici) puis on redirige vers login.
+        logSecurityEvent('terrain_denied', ip, pathname);
         const dest = encodeURIComponent(pathname);
         return Response.redirect(
           new URL(`${TERRAIN_AUTH_PATH}?r=${dest}`, context.url),
@@ -135,14 +146,15 @@ export const onRequest = defineMiddleware(async (context, next) => {
       }
     }
 
-    // Traitement de la requête terrain, puis headers sécurité spécifiques
     const response = await next();
 
-    // CSP élargie pour /terrain (Google Fonts, ArcGIS satellite, etc.)
-    response.headers.set('Content-Security-Policy', CSP_TERRAIN);
+    // SpotCheck a besoin de 'unsafe-inline' (handlers onclick=, gros script inline).
+    // Exception ciblée, cf. buildCsp(). Toutes les autres routes /terrain gardent le nonce.
+    const isSpotcheck = pathname === '/terrain/spotcheck' || pathname === '/terrain/spotcheck/';
+    response.headers.set('Content-Security-Policy', buildCsp(nonce, true, isSpotcheck));
     response.headers.set('X-Frame-Options',         'DENY');
     response.headers.set('X-Content-Type-Options',  'nosniff');
-    response.headers.set('Referrer-Policy',         'no-referrer');  // Plus strict sur zone interne
+    response.headers.set('Referrer-Policy',         'no-referrer');
     response.headers.set('X-Robots-Tag',            'noindex, nofollow, noarchive');
     response.headers.set('Cache-Control',           'no-store, no-cache, must-revalidate');
     if (import.meta.env.PROD) {
@@ -155,8 +167,7 @@ export const onRequest = defineMiddleware(async (context, next) => {
   const isMaintenance = process.env.MAINTENANCE_MODE === 'true';
   // Flux publics en lecture seule : syndication ouverte (CORS *) et accessibles
   // meme en maintenance, pour ne pas casser les bots/sites allies qui les consomment.
-  const isPublicFeed =
-    pathname === '/api/news.json';
+  const isPublicFeed = pathname === '/api/news.json';
 
   const isAllowed =
     pathname === '/maintenance' ||
@@ -193,15 +204,20 @@ export const onRequest = defineMiddleware(async (context, next) => {
   const isTerrainAuthEndpoint = pathname === TERRAIN_AUTH_API || pathname === TERRAIN_LOGOUT;
 
   if (context.request.method === 'POST' && pathname.startsWith('/api/') && !isTerrainAuthEndpoint) {
+    bumpTraffic('apiPosts');
     const origin = context.request.headers.get('origin');
     if (origin !== ORIGIN) {
+      bumpTraffic('blockedCsrf');
+      logSecurityEvent('csrf_reject', ip, pathname, `origin=${origin ?? 'absent'}`);
       return new Response(
         JSON.stringify({ ok: false, error: 'Origine non autorisée.' }),
         { status: 403, headers: { 'Content-Type': 'application/json' } }
       );
     }
 
-    if (isRateLimited(clientIp(context, context.request))) {
+    if (isRateLimited(ip)) {
+      bumpTraffic('blockedRate');
+      logSecurityEvent('rate_limit', ip, pathname);
       return new Response(
         JSON.stringify({ ok: false, error: 'Trop de requêtes. Réessayez plus tard.' }),
         {
@@ -220,7 +236,7 @@ export const onRequest = defineMiddleware(async (context, next) => {
   const response = await next();
 
   // Security headers — appliqués sur toutes les réponses
-  response.headers.set('Content-Security-Policy',   CSP);
+  response.headers.set('Content-Security-Policy',   buildCsp(nonce, false));
   response.headers.set('X-Frame-Options',            'DENY');
   response.headers.set('X-Content-Type-Options',     'nosniff');
   response.headers.set('Referrer-Policy',            'strict-origin-when-cross-origin');

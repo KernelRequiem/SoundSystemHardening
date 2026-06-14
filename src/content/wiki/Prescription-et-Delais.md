@@ -22,7 +22,7 @@ Cette prescription s'applique à l'action publique, c'est-à-dire à la capacit�
 
 ### Catégorie 2 : Le délit (avec la PPL 1133 en navette)
 
-La PPL 1133, adoptée par l'Assemblée nationale le 9 avril 2026, transforme l'infraction d'organisation de rassemblement festif sans déclaration en **délit** passible de 6 mois à 2 ans d'emprisonnement et de 30 000 euros d'amende selon les sources. Le texte est actuellement en navette parlementaire au Sénat.
+La PPL 1133, adoptée par l'Assemblée nationale le 9 avril 2026, transforme l'infraction d'organisation de rassemblement festif sans déclaration en **délit** : 6 mois d'emprisonnement et 30 000 euros d'amende dans le texte 1133, jusqu'à 2 ans dans le texte RIPOST. Les deux textes sont en navette parlementaire et ne sont pas encore promulgués.
 
 Si ce texte aboutit, il change fondamentalement l'équilibre des délais.
 
@@ -119,7 +119,7 @@ Les implications pratiques sont les suivantes : si un événement se déroule le
 | Type infraction | Délai prescription | Tribunal compétent | Peines actuelles | Peines PPL 1133 |
 |---|---|---|---|---|
 | Contravention 5e classe (organisation) | 1 an | Tribunal de police | 1 500 € amende | Disparaît (devient délit) |
-| Délit (PPL 1133) | 6 ans | Tribunal correctionnel | N/A actuellement | 6 mois à 2 ans prison + 30 000 € |
+| Délit (PPL 1133 / RIPOST) | 6 ans | Tribunal correctionnel | N/A actuellement | 6 mois (1133) à 2 ans (RIPOST) + 30 000 € |
 | Saisie du matériel | 6 mois max | Tribunal judiciaire | Confiscation | Confiscation (renforcée) |
 | Confiscation du matériel | Immédiate après jugement | Tribunal judiciaire | Possible | Possible |
 

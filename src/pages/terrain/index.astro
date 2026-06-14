@@ -10,6 +10,7 @@ if (!auth.valid) return Astro.redirect('/terrain/auth?r=/terrain', 302);
 
 const { role, email } = auth;
 const isAdmin = role === 'admin';
+const nonce = Astro.locals.cspNonce;
 const now = new Date().toLocaleString('fr-FR', {
   weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
   hour: '2-digit', minute: '2-digit',
@@ -212,6 +213,19 @@ const now = new Date().toLocaleString('fr-FR', {
         <div class="tc-desc">Simulation acoustique terrain, propagation sonore, analyse des contraintes de voisinage.</div>
       </div>
 
+      <!-- Supervision — admin only -->
+      {isAdmin && (
+        <a href="/terrain/monitoring" class="tool-card">
+          <div class="tc-head">
+            <div class="tc-icon" style="background:rgba(46,213,115,.10)">📊</div>
+            <span class="tc-badge badge-admin">Admin</span>
+          </div>
+          <div class="tc-name">Supervision</div>
+          <div class="tc-desc">Santé système, trafic, journal de sécurité et file des signalements. Vue temps quasi réel.</div>
+          <div class="tc-arrow">→</div>
+        </a>
+      )}
+
       <!-- CopWatch admin — admin only -->
       {isAdmin && (
         <div class="tool-card disabled">
@@ -253,7 +267,7 @@ const now = new Date().toLocaleString('fr-FR', {
 
   </main>
 
-  <script>
+  <script nonce={nonce}>
     document.getElementById('logout-btn').addEventListener('click', async () => {
       await fetch('/api/terrain-logout', { method: 'POST' });
       window.location.href = '/terrain/auth';

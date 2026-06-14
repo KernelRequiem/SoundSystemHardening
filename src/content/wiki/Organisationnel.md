@@ -239,7 +239,7 @@ Documenter les erreurs organisationnelles est aussi important que documenter les
 
 **Ne pas traiter chaque événement comme un acte politique isolé.** Chaque teuf mal gérée affecte tous les collectifs. Chaque teuf bien gérée renforce la position de l'ensemble.
 
-**Ne pas concentrer le risque légal sur des individus identifiables.** Post-loi 1133, la diffusion d'informations pratiques suffit à constituer une participation à l'organisation. Les pratiques de compartimentage de l'information (voir [`cyber-opsec/compartimentation.md`](https://github.com/KernelRequiem/digital-rights/blob/main/cyber-opsec/compartimentation.md)) ne sont plus optionnelles.
+**Ne pas concentrer le risque légal sur des individus identifiables.** Post-loi 1133, la diffusion d'informations pratiques suffit à constituer une participation à l'organisation. Les pratiques de compartimentage de l'information (voir [Compartimentation](/wiki/compartimentation)) ne sont plus optionnelles.
 
 ---
 
@@ -250,7 +250,7 @@ Documenter les erreurs organisationnelles est aussi important que documenter les
 * Axe politique (manifestives, coalitions) → [[Politique]]
 * Axe sanitaire (RdR, gestion des incidents) → [[Axe-sanitaire]]
 * Annuaire des structures → [[Coalitions]]
-* Sécurité numérique du mouvement → repo [`cyber-opsec/`](https://github.com/KernelRequiem/digital-rights/tree/main/cyber-opsec)
+* Sécurité numérique du mouvement → [Sécurité numérique](/wiki/Sécurite-Numerique)
 
 ---
 

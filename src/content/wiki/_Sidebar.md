@@ -98,31 +98,29 @@
 ---
 
 ## 🔐 Cyber-OPSEC
-*Contenu dans le [repo code](https://github.com/KernelRequiem/digital-rights/tree/main/cyber-opsec)*
 
-* [Modèle de menace](https://github.com/KernelRequiem/digital-rights/blob/main/cyber-opsec/threat-model.md)
-* [Messagerie chiffrée](https://github.com/KernelRequiem/digital-rights/blob/main/cyber-opsec/messagerie-chiffree.md)
-* [Métadonnées EXIF](https://github.com/KernelRequiem/digital-rights/blob/main/cyber-opsec/metadonnees-exif.md)
-* [Surveillance mobile](https://github.com/KernelRequiem/digital-rights/blob/main/cyber-opsec/surveillance-mobile.md)
-* [Réseau et anonymisation](https://github.com/KernelRequiem/digital-rights/blob/main/cyber-opsec/reseau-anonymisation.md)
-* [Identités numériques](https://github.com/KernelRequiem/digital-rights/blob/main/cyber-opsec/identites-numeriques.md)
-* [Compartimentation](https://github.com/KernelRequiem/digital-rights/blob/main/cyber-opsec/compartimentation.md)
+* [Modèle de menace](threat-model)
+* [Messagerie chiffrée](messagerie-chiffree)
+* [Métadonnées EXIF](metadonnees-exif)
+* [Surveillance mobile](surveillance-mobile)
+* [Réseau et anonymisation](reseau-anonymisation)
+* [Identités numériques](identites-numeriques)
+* [Compartimentation](compartimentation)
 
 ---
 
 ## 📚 Droits et libertés
-*Contenu dans le [repo code](https://github.com/KernelRequiem/digital-rights/tree/main/droits-libertes)*
 
-* [Arsenal législatif](https://github.com/KernelRequiem/digital-rights/blob/main/droits-libertes/arsenal-legislatif.md)
-* [Jurisprudence](https://github.com/KernelRequiem/digital-rights/blob/main/droits-libertes/jurisprudence.md)
-* [Recours juridiques](https://github.com/KernelRequiem/digital-rights/blob/main/droits-libertes/recours-juridiques.md)
+* [Arsenal législatif](arsenal-legislatif)
+* [Jurisprudence](jurisprudence)
+* [Recours juridiques](recours-juridiques)
 * [Répression](Repression)
 
 ---
 
 ## ℹ️ À propos du projet
 
-* [README](https://github.com/KernelRequiem/digital-rights#readme)
-* [Contribuer](https://github.com/KernelRequiem/digital-rights/blob/main/CONTRIBUTING.md)
-* [Code de conduite](https://github.com/KernelRequiem/digital-rights/blob/main/CODE_OF_CONDUCT.md)
-* [Licence CC BY-SA 4.0](https://github.com/KernelRequiem/digital-rights/blob/main/LICENSE.md)
+* [README](https://github.com/KernelRequiem/SoundSystemHardening#readme)
+* [Contribuer](https://github.com/KernelRequiem/SoundSystemHardening/blob/main/CONTRIBUTING.md)
+* [Code de conduite](https://github.com/KernelRequiem/SoundSystemHardening/blob/main/CODE_OF_CONDUCT.md)
+* [Licence CC BY-SA 4.0](https://github.com/KernelRequiem/SoundSystemHardening/blob/main/LICENSE.md)

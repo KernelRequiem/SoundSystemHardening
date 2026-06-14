@@ -27,6 +27,7 @@ const lastUpdateFR = lastUpdate
   ? new Date(lastUpdate).toLocaleDateString('fr-FR', { day:'numeric', month:'long', year:'numeric' })
   : '-';
 const totalIncidents = incidents.length;
+const nonce = Astro.locals.cspNonce;
 ---
 
 <Layout title="MAP" category="OUTILS">
@@ -301,7 +302,7 @@ const totalIncidents = incidents.length;
   ═══════════════════════════════════════════════════════════════ -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin="" is:inline></script>
 
-  <script define:vars={{ INCIDENTS: incidents, TYPES, DEPT_NAMES, TOTAL: totalIncidents }}>
+  <script nonce={nonce} define:vars={{ INCIDENTS: incidents, TYPES, DEPT_NAMES, TOTAL: totalIncidents }}>
   (function () {
 
     // ── Constantes ──────────────────────────────────────────────────────────

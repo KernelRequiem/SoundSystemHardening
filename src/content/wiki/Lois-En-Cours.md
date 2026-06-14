@@ -19,7 +19,7 @@ Le texte s'appuie sur une rhétorique liant directement les free parties à la c
 
 ### Impacts opérationnels et juridiques (Ce qui change)
 
-* **Le délit de présence :** C'est le point de bascule historique du texte. La simple présence sur le site d'un rassemblement non déclaré, même sans action d'organisation, suffit à caractériser une infraction.
+* **La sanction des participants :** C'est le point de bascule historique du texte. Pour la première fois, la simple participation à un rassemblement non déclaré devient sanctionnable, par une amende de 1 500 euros (jusqu'ici, seuls les organisateurs étaient visés). Le délit de participation assorti de prison relève, lui, du texte RIPOST (6 mois et 7 500 euros).
 * **La notion de "complicité logistique" :** Le texte élargit le spectre des responsables. Le prêt de matériel (camions, groupes électrogènes) ou la diffusion d'infolines peuvent être qualifiés de complicité directe.
 * **La question de la Réduction des Risques (RdR) :** Les premières moutures du texte menaçaient d'assimiler les associations de RdR (Techno+, Korzéâme, etc.) à des co-organisateurs. Un intense lobbying associatif a permis d'arracher des garanties, mais la frontière reste fragile sur le terrain en cas de perquisition ou de garde à vue des bénévoles.
 

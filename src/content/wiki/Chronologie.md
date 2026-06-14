@@ -293,5 +293,5 @@ Tribune de 30 artistes de la scène techno dans Télérama contre la PPL 1133, d
 
 * Contexte historique → [[Histoire-&-Culture]]
 * Incidents détaillés → [[Histoire-&-Culture#les-incidents-répressifs-marquants]]
-* Textes législatifs → repo [`droits-libertes/arsenal-legislatif.md`](https://github.com/KernelRequiem/digital-rights/blob/main/droits-libertes/arsenal-legislatif.md)
+* Textes législatifs → [Arsenal législatif](/wiki/arsenal-legislatif)
 * Actualités récentes → [[Vue-d'ensemble-veille]]

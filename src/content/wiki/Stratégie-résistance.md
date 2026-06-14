@@ -73,7 +73,7 @@ Les incidents documentés sont nombreux : Redon en juin 2021 (un jeune homme a e
 Chaque incident majeur doit faire l'objet d'un dossier structuré :
 
 * Collecte de témoignages écrits avec dates, heures, descriptions précises
-* Éléments vidéo et photos (en respectant les règles de nettoyage des métadonnées, voir [`cyber-opsec/metadonnees-exif.md`](https://github.com/KernelRequiem/digital-rights/blob/main/cyber-opsec/metadonnees-exif.md))
+* Éléments vidéo et photos (en respectant les règles de nettoyage des métadonnées, voir [Métadonnées EXIF](/wiki/metadonnees-exif))
 * Dépôt de plainte systématique, même si le parquet classe sans suite
 * Saisine de l'IGPN ou IGGN avec copie aux médias partenaires
 * Transmission à Amnesty International et à la Ligue des droits de l'homme
@@ -169,8 +169,8 @@ La tekno française est reconnue mondialement. Des producteurs issus du mouvemen
 
 ## Liens connexes
 
-* Base légale détaillée → [`droits-libertes/arsenal-legislatif.md`](https://github.com/KernelRequiem/digital-rights/blob/main/droits-libertes/arsenal-legislatif.md)
-* Sécurité numérique des acteurs → [`cyber-opsec/`](https://github.com/KernelRequiem/digital-rights/tree/main/cyber-opsec)
+* Base légale détaillée → [Arsenal législatif](/wiki/arsenal-legislatif)
+* Sécurité numérique des acteurs → [Sécurité numérique](/wiki/Sécurite-Numerique)
 * Outils d'action concrets → [[Mobilisation]]
 * Suivi des textes en cours → [[Vue-d'ensemble-veille]]
 * Histoire et mémoire → [[Histoire-&-Culture]]

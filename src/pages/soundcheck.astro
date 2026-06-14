@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import SoundCheck from '../components/SoundCheck.astro';
+const nonce = Astro.locals.cspNonce;
 ---
 
 <Layout
@@ -112,7 +113,7 @@ import SoundCheck from '../components/SoundCheck.astro';
   </div>
 
   <!-- ── Toggle guide ── -->
-  <script is:inline>
+  <script nonce={nonce} is:inline>
   (function () {
     const btn = document.getElementById('guideToggle');
     const panel = document.getElementById('guidePanel');

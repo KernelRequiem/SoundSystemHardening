@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+const nonce = Astro.locals.cspNonce;
 ---
 
 <Layout
@@ -500,7 +501,7 @@ import Layout from '../layouts/Layout.astro';
 <!-- ═══════════════════════════════════════════════════════════════
      SCRIPT PRINCIPAL
 ═══════════════════════════════════════════════════════════════ -->
-<script is:inline>
+<script nonce={nonce} is:inline>
 /* ============================================================
    STRIPMETA - Moteur de nettoyage 100% client-side
    Architecture :

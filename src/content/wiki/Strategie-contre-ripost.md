@@ -140,11 +140,11 @@ Si tu refuses de signer :
 - Cela **crée un doute** sur la validité du PV
 - Cela complique ultérieurement la preuve contre toi
 
-### Stratégie 4 : Contester auprès du Procureur (dans les 30 jours)
+### Stratégie 4 : Contester auprès du Procureur (dans les 45 jours)
 
 #### Si tu reçois l'avis d'AFD
 
-Tu as **30 jours** pour contester. Cela relance une procédure judiciaire normale.
+Tu as **45 jours** pour former une requête en exonération (art. 495-19 et suivants du Code de procédure pénale). Cela relance une procédure judiciaire normale.
 
 #### Les risques
 
@@ -256,7 +256,7 @@ Validité de l'AFD :
 ### Mobilisation
 
 - **Tekno Anti Rep** : coordination mobilisations @teknoantirep
-- **FSJS** (Fédération Syndicale Jeunes en Solidarité) : https://drive.google.com/file/d/1LQp8x98UdDRAgh6cpCDCNhb2Py1EaKpl/
+- **FSJS** (Fonds de Soutien Juridique des Sons) : https://drive.google.com/file/d/1LQp8x98UdDRAgh6cpCDCNhb2Py1EaKpl/
 - **Pétition AN** : https://petitions.assemblee-nationale.fr/initiatives/i-5428
 
 ### Documentation
@@ -271,7 +271,7 @@ Validité de l'AFD :
 
 | Action | Effet légal | Risque | Si collectif |
 |---|---|---|---|
-| Refuser de payer AFD immédiatement | Droit de contester dans 30j | Majoration possible | Paralyse l'État |
+| Refuser de payer AFD immédiatement | Droit de contester dans 45j | Majoration possible | Paralyse l'État |
 | Refuser adresse / signer | Notification bloquée | Non-notification ≠ invalidation | Logistique État échoue |
 | Droit du silence | Policier ne peut imposer parole | Zéro effet | Force collective |
 | Contester auprès Procureur | Jugement classique | Risque sanction plus élevée | Responsabilité politique |

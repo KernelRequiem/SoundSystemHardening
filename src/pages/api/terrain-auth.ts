@@ -5,12 +5,20 @@
 
 import type { APIRoute } from 'astro';
 import { checkCredentials, makeSessionCookieHeader } from '../../lib/adminAuth';
+import { logSecurityEvent } from '../../lib/securityLog';
 
 // Délai anti-brute-force constant (masque le timing d'une recherche en DB)
 const AUTH_DELAY_MS = 400;
 
-export const POST: APIRoute = async ({ request }) => {
+function reqIp(request: Request, clientAddress?: string): string {
+  if (clientAddress) return clientAddress;
+  const xff = request.headers.get('x-forwarded-for');
+  return xff ? xff.split(',')[0].trim() : 'unknown';
+}
+
+export const POST: APIRoute = async ({ request, clientAddress }) => {
   const start = Date.now();
+  const ip = reqIp(request, clientAddress);
 
   // Assure un délai minimum pour résister aux timing attacks
   const enforceDelay = async () => {
@@ -46,11 +54,17 @@ export const POST: APIRoute = async ({ request }) => {
     if (email.length > 254 || password.length > 256) return fail(400);
 
     const result = checkCredentials(email, password);
-    if (!result.valid || !result.role) return fail(401);
+    if (!result.valid || !result.role) {
+      // Échec d'auth journalisé (sans le mot de passe). Une rafale de
+      // login_failure sur une même IP/24 = signal de brute-force.
+      logSecurityEvent('login_failure', ip, '/api/terrain-auth', `email=${email.slice(0, 64)}`);
+      return fail(401);
+    }
 
     const secret = process.env.ADMIN_SECRET!;
     const cookieHeader = makeSessionCookieHeader(email, result.role as 'admin' | 'moderator', secret);
 
+    logSecurityEvent('login_success', ip, '/api/terrain-auth', `role=${result.role}`);
     await enforceDelay();
     return new Response(JSON.stringify({ ok: true, role: result.role }), {
       status: 200,

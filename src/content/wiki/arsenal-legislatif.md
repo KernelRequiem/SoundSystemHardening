@@ -118,6 +118,10 @@ Cette formulation couvre potentiellement :
 
 Pour la première fois, les participants peuvent être sanctionnés d'une **amende de 1 500 €**, doublée en cas de récidive.
 
+**Seuil de déclaration abaissé :**
+
+Un article 2, ajouté en commission par l'amendement CL36 de la rapporteure Laetitia Saint-Paul, abaisse le seuil de déclaration de 500 à **250 personnes** et l'inscrit directement dans la loi (voir [Seuil 250-500 personnes](/wiki/Seuil-250-500-Personnes)).
+
 **Source :** TSUGI, 10 avril 2026. https://www.tsugi.fr/free-party-la-repression-se-durcit-pour-les-fetes-libres/
 
 ### Statut au moment de la rédaction
@@ -169,7 +173,7 @@ Adopté au Sénat le 26 mai 2026. **En attente d'examen par l'Assemblée nationa
 | Organisation sans déclaration | Contravention 5e classe : 1 500 € | Délit : 6 mois prison + 30 000 € | Délit : 2 ans prison + 30 000 € |
 | Participation | Aucune sanction spécifique | Amende 1 500 € (+ récidive) | Délit : 6 mois prison + 7 500 € |
 | Saisie matériel | Possible (L211-15 CSI) | Maintenu | Maintenu |
-| Seuil déclaration | 500 personnes | Non modifié | 250 personnes |
+| Seuil déclaration | 500 personnes | 250 personnes (art. 2, amdt CL36) | 250 personnes |
 
 ---
 
@@ -283,7 +287,7 @@ Adopté au Sénat (26 mai 2026), en attente de l'Assemblée nationale. Délai es
 
 **Seuil de déclaration :**
 
-RIPOST abaisse le seuil de 500 à 250 personnes. Si adopté définitivement, cela double approximativement le nombre de rassemblements soumis à déclaration obligatoire.
+Les deux textes abaissent le seuil de 500 à 250 personnes (PPL 1133, art. 2 ; RIPOST). Si l'un d'eux est adopté définitivement, cela double approximativement le nombre de rassemblements soumis à déclaration obligatoire.
 
 **Questions ouvertes :**
 * Quelle définition finale de "l'organisateur" après CMP ?

@@ -1,6 +1,6 @@
 # Incidents répressifs
 
-> Page rattachée à : [[Histoire-&-Culture](https://github.com/KernelRequiem/digital-rights/wiki/Histoire-&-Culture)
+> Page rattachée à : [[Histoire-&-Culture]]
 > Statut : actif, mis à jour en continu
 > Dernière mise à jour : mai 2026
 
@@ -234,7 +234,7 @@ Pour contribuer : ouvrir une PR avec le label `incidents` et citer systématique
 * Chronologie des événements → [[Chronologie]]
 * Axe juridique (comment porter plainte) → [[Juridique]]
 * Suivi des affaires en cours → [[Vue-d'ensemble-veille]]
-* Cadre légal des interventions → repo [`droits-libertes/violences-policieres.md`](https://github.com/KernelRequiem/digital-rights/blob/main/droits-libertes/violences-policieres.md)
+* Cadre légal des interventions et documentation des violences → [[Repression]]
 
 ---
 

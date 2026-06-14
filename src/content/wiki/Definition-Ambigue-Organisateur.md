@@ -125,7 +125,7 @@ L'escalade pénale n'est pas seulement une sanction, c'est une technique d'enqu�
 
 ### L'amendement RdR : Une reconnaissance implicite de l'autogestion
 
-L'amendement CL34 adopté dans le cadre de la PPL 1133 exclut les acteurs de réduction des risques (Techno+, associations) du périmètre de l'infraction. C'est une reconnaissance légale que la présence de ces acteurs dans un événement non déclaré ne fait pas d'eux des organisateurs.
+L'amendement n°29 (Andy Kerbrat, LFI), adopté dans le cadre de la PPL 1133, sanctuarise les espaces de repos et de RdR et exclut les acteurs de réduction des risques (Techno+, associations) du périmètre de l'infraction. C'est une reconnaissance légale que la présence de ces acteurs dans un événement non déclaré ne fait pas d'eux des organisateurs.
 
 C'est un précédent utilisable : si les acteurs RdR peuvent être présents sans être organisateurs, la logique s'étend. La présence à un événement, même active, ne suffit pas à qualifier quelqu'un d'organisateur.
 

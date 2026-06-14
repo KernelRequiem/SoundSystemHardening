@@ -12,6 +12,7 @@ if (auth.valid) return Astro.redirect('/terrain', 302);
 
 const redirectTo = Astro.url.searchParams.get('r') || '/terrain';
 const loginFailed = Astro.url.searchParams.has('e');
+const nonce = Astro.locals.cspNonce;
 ---
 <!DOCTYPE html>
 <html lang="fr">
@@ -152,7 +153,7 @@ const loginFailed = Astro.url.searchParams.has('e');
     </div>
   </div>
 
-  <script define:vars={{ redirectTo }}>
+  <script nonce={nonce} define:vars={{ redirectTo }}>
     const form    = document.getElementById('login-form');
     const errEl   = document.getElementById('form-error');
     const btn     = document.getElementById('submit-btn');

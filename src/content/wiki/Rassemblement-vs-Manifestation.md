@@ -30,7 +30,7 @@ La [section 2 du même chapitre du CSI](https://www.legifrance.gouv.fr/codes/sec
 
 Ce régime est déclaratif, mais ses obligations et ses sanctions sont beaucoup plus lourdes que celles du régime de la manifestation revendicative.
 
-**Délai de déclaration :** Un mois avant l'événement, auprès de la préfecture (ou de la mairie si moins de 500 participants attendus).
+**Délai de déclaration :** Un mois avant l'événement, auprès de la préfecture du département (en deçà du seuil de 500 participants, le régime ne s'applique pas et aucune déclaration n'est due au titre de l'article L211-5).
 
 **Seuil d'application :** Quatre conditions cumulatives, dont le nombre prévisible de participants supérieur à 500 (article R211-2 CSI). Sans ce seuil, le régime ne s'applique pas.
 

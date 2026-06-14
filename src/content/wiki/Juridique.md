@@ -40,7 +40,7 @@ Avant d'engager une procédure, il faut identifier précisément le type d'acte 
 | Violence lors d'une intervention | Policiers / gendarmes | Plainte pénale, IGPN/IGGN, Défenseur des droits |
 | Poursuites pénales pour organisation | Parquet | Défense pénale, avocat spécialisé |
 
-Les textes de référence applicables aux rassemblements festifs sont détaillés dans [`droits-libertes/arsenal-legislatif.md`](https://github.com/KernelRequiem/digital-rights/blob/main/droits-libertes/arsenal-legislatif.md).
+Les textes de référence applicables aux rassemblements festifs sont détaillés dans [Arsenal législatif](/wiki/arsenal-legislatif).
 
 ---
 
@@ -152,9 +152,9 @@ Deux recours (un référé-liberté et un référé-suspension) ont été examin
 
 **Argument clé soulevé lors de l'audience** : l'interdiction de transport de matériel sonore posait une difficulté pratique documentée par les requérants, comment prouver qu'un équipement est destiné à une soirée de plus de 500 personnes (soumise à déclaration) plutôt qu'à un événement sous ce seuil (non soumis à déclaration) [9] ? Cet argument de l'impossibilité de preuve a priori constitue un moyen juridique solide pour les recours ultérieurs.
 
-### Arrêté Hérault 2023 : succès en référé-liberté
+### Hérault 2023 : succès en référé-liberté (autre contentieux)
 
-En revanche, concernant les mêmes préfectures, deux décisions du tribunal administratif rendues en référé-liberté les 21 et 26 octobre 2023 avaient annulé les effets d'un autre arrêté préfectoral, permettant à des organisations d'exercer leurs droits sans incident [10].
+À titre de comparaison, dans le même département, deux décisions du tribunal administratif rendues en référé-liberté les 21 et 26 octobre 2023 ont annulé les effets d'arrêtés préfectoraux d'interdiction visant des manifestations (notamment pro-palestiniennes) [10]. Ces affaires ne concernaient pas des free parties, mais elles documentent que le juge des référés suspend un arrêté lorsqu'il est jugé disproportionné.
 
 **Leçon des deux affaires.** Le résultat d'un référé dépend fortement des circonstances précises de l'arrêté attaqué et de la qualité du dossier présenté. Un arrêté identique peut être suspendu ou maintenu selon le contexte. L'accompagnement par un avocat spécialisé est déterminant.
 
@@ -193,7 +193,7 @@ Le guide pratique de la LDH [12] identifie les étapes suivantes, à engager rap
 
 **Dans les jours suivants :**
 * Rassembler les témoignages de personnes présentes (écrits, datés, signés)
-* Collecter les vidéos et photos disponibles (en nettoyant les métadonnées EXIF avant tout partage, voir [`cyber-opsec/metadonnees-exif.md`](https://github.com/KernelRequiem/digital-rights/blob/main/cyber-opsec/metadonnees-exif.md))
+* Collecter les vidéos et photos disponibles (en nettoyant les métadonnées EXIF avant tout partage, voir [Métadonnées EXIF](/wiki/metadonnees-exif))
 * Identifier les caméras de surveillance susceptibles d'avoir filmé la scène (demander leur conservation avant effacement, délai habituel de 30 jours)
 * Constituer une copie papier ET numérique de l'intégralité du dossier
 
@@ -245,16 +245,16 @@ Un rapport de l'ONG Flagrant Déni publié en novembre 2025 documente les dysfon
 
 ### Impact sur la défense pénale
 
-Depuis l'adoption de la loi 1133 le 9 avril 2026 [17], la notion de "participation à l'organisation" couvre désormais :
+La PPL 1133, adoptée en première lecture à l'Assemblée nationale le 9 avril 2026 [17] mais non encore promulguée (texte en navette parlementaire, voir [[Lois-En-Cours]]), étendrait la notion de "participation à l'organisation" à :
 * La diffusion d'informations pratiques sur l'événement
 * L'installation d'un lieu de repos ou de convivialité sur le terrain
 
-Cette extension crée de nouveaux risques pour :
+Tant que le texte n'est pas en vigueur, seule la qualification d'organisateur au sens de l'article R211-27 CSI est opposable. Si la PPL 1133 est promulguée, cette extension créerait de nouveaux risques pour :
 * Les administrateurs de groupes de diffusion d'information (Telegram, Instagram)
 * Les bénévoles RdR (partiellement protégés par l'amendement n°29, mais protection fragile)
 * Les personnes présentes physiquement avant le début de l'événement
 
-**Ce que ça change pour la défense :** toute communication numérique traçable devient un élément de preuve potentiel. La défense devra systématiquement contester la qualification d'"information pratique" et démontrer l'absence de lien de causalité entre la communication et l'organisation effective. Voir [`cyber-opsec/compartimentation.md`](https://github.com/KernelRequiem/digital-rights/blob/main/cyber-opsec/compartimentation.md) pour les contre-mesures.
+**Ce que ça change pour la défense :** toute communication numérique traçable devient un élément de preuve potentiel. La défense devra systématiquement contester la qualification d'"information pratique" et démontrer l'absence de lien de causalité entre la communication et l'organisation effective. Voir [Compartimentation](/wiki/compartimentation) pour les contre-mesures.
 
 ### RIPOST : élévation au rang de délit
 
@@ -268,10 +268,10 @@ Le projet de loi RIPOST, voté au Sénat le 26 mai 2026 [18], élève l'organisa
 * Outils de mobilisation et templates de recours → [[Mobilisation]]
 * Suivi des textes législatifs en cours → [[Vue-d'ensemble-veille]]
 
-## Liens vers le repo
+## Liens connexes
 
-* Textes législatifs détaillés → [`droits-libertes/arsenal-legislatif.md`](https://github.com/KernelRequiem/digital-rights/blob/main/droits-libertes/arsenal-legislatif.md)
-* Sécurité des communications pour la constitution de dossiers → [`cyber-opsec/`](https://github.com/KernelRequiem/digital-rights/tree/main/cyber-opsec)
+* Textes législatifs détaillés → [Arsenal législatif](/wiki/arsenal-legislatif)
+* Sécurité des communications pour la constitution de dossiers → [Sécurité des communications](/wiki/Sécurité-des-communications)
 
 ---
 

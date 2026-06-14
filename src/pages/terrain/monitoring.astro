@@ -1,0 +1,215 @@
+---
+/**
+ * /terrain/monitoring — Vue admin de supervision (admin uniquement)
+ *
+ * Séparée de la vue opérationnelle visiteur : agrège santé système, trafic,
+ * journal de sécurité et signalements. Aucune donnée ne transite par une API
+ * publique — tout est rendu côté serveur après double vérification d'auth
+ * (middleware + page). Aucun lien public ne pointe ici.
+ *
+ * Rôle requis : admin. Un modérateur authentifié est redirigé vers /terrain.
+ */
+import { checkAdminAuth } from '../../lib/adminAuth';
+import { getMonitoringSnapshot } from '../../lib/monitoring';
+
+const auth = checkAdminAuth(Astro.cookies);
+if (!auth.valid) return Astro.redirect('/terrain/auth?r=/terrain/monitoring', 302);
+// Cloisonnement par rôle : la supervision est réservée à l'admin.
+if (auth.role !== 'admin') return Astro.redirect('/terrain', 302);
+
+const nonce = Astro.locals.cspNonce;
+const snap = getMonitoringSnapshot();
+
+const fmtUptime = (s: number) => {
+  const d = Math.floor(s / 86400);
+  const h = Math.floor((s % 86400) / 3600);
+  const m = Math.floor((s % 3600) / 60);
+  return d > 0 ? `${d}j ${h}h ${m}m` : h > 0 ? `${h}h ${m}m` : `${m}m`;
+};
+
+const fmtTime = (iso: string) =>
+  iso ? new Date(iso).toLocaleString('fr-FR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }) : '—';
+
+const eventLabels: Record<string, string> = {
+  login_success:  'Connexion réussie',
+  login_failure:  'Échec de connexion',
+  logout:         'Déconnexion',
+  csrf_reject:    'Rejet CSRF',
+  rate_limit:     'Rate limit (429)',
+  terrain_denied: 'Accès interne refusé',
+  bad_request:    'Requête invalide',
+};
+const eventColors: Record<string, string> = {
+  login_success:  'var(--green)',
+  login_failure:  'var(--orange)',
+  logout:         'var(--text2)',
+  csrf_reject:    'var(--red)',
+  rate_limit:     'var(--red)',
+  terrain_denied: 'var(--orange)',
+  bad_request:    'var(--orange)',
+};
+
+const h = snap.health;
+const t = snap.traffic;
+const r = snap.reports;
+const sec = snap.security;
+---
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Supervision · SSH</title>
+  <meta name="robots" content="noindex, nofollow, noarchive" />
+  <meta name="referrer" content="no-referrer" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg0:#07070d; --bg1:#0e0e18; --bg2:#14141f; --bg3:#1b1b2a; --bg4:#222235;
+      --border:rgba(255,255,255,0.07); --border2:rgba(255,255,255,0.13);
+      --accent:#6c63ff; --accent2:#9b94ff;
+      --green:#2ed573; --orange:#ffa502; --red:#ff4757; --cyan:#1ed8f7;
+      --text0:#f0f0fa; --text1:#a0a0c0; --text2:#606080;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{min-height:100vh;font-family:'Inter',system-ui,sans-serif;background:var(--bg0);color:var(--text0);font-size:14px}
+    .hdr{background:var(--bg1);border-bottom:1px solid var(--border);padding:0 24px;height:54px;display:flex;align-items:center;gap:14px}
+    .hdr-logo{display:flex;align-items:center;gap:8px}
+    .hdr-logo .ico{width:28px;height:28px;border-radius:7px;background:linear-gradient(135deg,var(--accent),var(--cyan));font-size:11px;font-weight:800;color:#fff;display:flex;align-items:center;justify-content:center}
+    .hdr-logo h1{font-size:14px;font-weight:700;letter-spacing:-.2px}
+    .hdr-logo sub{color:var(--text2);font-size:9px;display:block;margin-top:-2px}
+    .hdr-sep{width:1px;height:18px;background:var(--border)}
+    .role-pill{padding:3px 10px;border-radius:20px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;background:rgba(245,197,66,.12);color:#f5c542;border:1px solid rgba(245,197,66,.3)}
+    .hdr-spacer{flex:1}
+    .refresh-note{font-size:10px;color:var(--text2);font-family:'JetBrains Mono',monospace}
+    .btn-back{font-size:11px;color:var(--text2);text-decoration:none;padding:4px 10px;border-radius:5px;border:1px solid var(--border2);background:var(--bg3)}
+    .btn-back:hover{color:var(--text0);background:var(--bg4)}
+    .main{max-width:1180px;margin:0 auto;padding:28px 24px 60px}
+    .page-title{font-size:20px;font-weight:800;letter-spacing:-.4px;margin-bottom:2px}
+    .page-sub{font-size:11px;color:var(--text2);font-family:'JetBrains Mono',monospace;margin-bottom:26px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-bottom:16px}
+    .card{background:var(--bg2);border:1px solid var(--border2);border-radius:12px;padding:18px 20px}
+    .card-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text2);margin-bottom:14px;display:flex;align-items:center;gap:7px}
+    .dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+    .kv{display:flex;justify-content:space-between;align-items:baseline;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px}
+    .kv:last-child{border-bottom:none}
+    .kv .k{color:var(--text1)}
+    .kv .v{font-family:'JetBrains Mono',monospace;font-weight:600;color:var(--text0)}
+    .v.ok{color:var(--green)} .v.warn{color:var(--orange)} .v.bad{color:var(--red)}
+    .metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:1px;background:var(--border);border:1px solid var(--border2);border-radius:10px;overflow:hidden;margin-bottom:16px}
+    .metric{background:var(--bg2);padding:14px 16px}
+    .metric .mv{font-size:22px;font-weight:700;font-family:'JetBrains Mono',monospace;color:var(--accent2)}
+    .metric .ml{font-size:9px;color:var(--text2);text-transform:uppercase;letter-spacing:.4px;margin-top:3px}
+    .metric.alert .mv{color:var(--red)}
+    table{width:100%;border-collapse:collapse;font-size:12px}
+    th{text-align:left;color:var(--text2);font-size:9px;text-transform:uppercase;letter-spacing:.5px;padding:6px 8px;border-bottom:1px solid var(--border2)}
+    td{padding:7px 8px;border-bottom:1px solid var(--border);color:var(--text1)}
+    tr:last-child td{border-bottom:none}
+    .mono{font-family:'JetBrains Mono',monospace;font-size:11px}
+    .evt-type{display:inline-flex;align-items:center;gap:6px;font-weight:600;color:var(--text0)}
+    .badge{font-size:9px;font-weight:700;padding:2px 7px;border-radius:10px;text-transform:uppercase}
+    .empty{color:var(--text2);font-size:12px;padding:14px 0;text-align:center}
+    .full{grid-column:1/-1}
+    .scroll{max-height:340px;overflow-y:auto}
+  </style>
+</head>
+<body>
+  <header class="hdr">
+    <div class="hdr-logo">
+      <div class="ico">SSH</div>
+      <div><h1>Supervision</h1><sub>SoundSystem Hardening · Admin</sub></div>
+    </div>
+    <div class="hdr-sep"></div>
+    <span class="role-pill">★ Admin</span>
+    <div class="hdr-spacer"></div>
+    <span class="refresh-note" id="refresh-note">auto-refresh 30s</span>
+    <a href="/terrain" class="btn-back">← Console</a>
+  </header>
+
+  <main class="main">
+    <div class="page-title">Tableau de supervision</div>
+    <div class="page-sub">Instantané · {fmtTime(snap.generatedAt)} · portée : instance conteneur (volatile)</div>
+
+    <!-- Métriques clés -->
+    <div class="metrics">
+      <div class="metric"><div class="mv">{t.totalRequests}</div><div class="ml">Requêtes</div></div>
+      <div class="metric"><div class="mv">{t.apiPosts}</div><div class="ml">POST /api</div></div>
+      <div class="metric"><div class="mv">{t.terrainHits}</div><div class="ml">Accès /terrain</div></div>
+      <div class={`metric ${t.blockedCsrf > 0 ? 'alert' : ''}`}><div class="mv">{t.blockedCsrf}</div><div class="ml">Rejets CSRF</div></div>
+      <div class={`metric ${t.blockedRate > 0 ? 'alert' : ''}`}><div class="mv">{t.blockedRate}</div><div class="ml">429 limit</div></div>
+      <div class={`metric ${sec.counters.login_failure > 0 ? 'alert' : ''}`}><div class="mv">{sec.counters.login_failure}</div><div class="ml">Login KO</div></div>
+    </div>
+
+    <div class="grid">
+      <!-- Santé système -->
+      <div class="card">
+        <div class="card-title"><span class="dot" style="background:var(--green)"></span>Santé système</div>
+        <div class="kv"><span class="k">Uptime process</span><span class="v">{fmtUptime(h.processUptimeS)}</span></div>
+        <div class="kv"><span class="k">Node</span><span class="v">{h.nodeVersion}</span></div>
+        <div class="kv"><span class="k">Plateforme</span><span class="v">{h.platform}</span></div>
+        <div class="kv"><span class="k">Mémoire RSS</span><span class="v">{h.memory.rssMb} Mo</span></div>
+        <div class="kv"><span class="k">Heap</span><span class="v">{h.memory.heapUsedMb} / {h.memory.heapTotalMb} Mo</span></div>
+        <div class="kv"><span class="k">Environnement</span><span class={`v ${h.env.isProd ? 'ok' : 'warn'}`}>{h.env.nodeEnv}</span></div>
+        <div class="kv"><span class="k">Maintenance</span><span class={`v ${h.env.maintenance ? 'warn' : 'ok'}`}>{h.env.maintenance ? 'ACTIVE' : 'off'}</span></div>
+      </div>
+
+      <!-- Config & secrets (présence uniquement) -->
+      <div class="card">
+        <div class="card-title"><span class="dot" style={`background:${h.env.hasAdminSecret && h.env.hasAdminCreds ? 'var(--green)' : 'var(--red)'}`}></span>Configuration critique</div>
+        <div class="kv"><span class="k">ADMIN_SECRET</span><span class={`v ${h.env.hasAdminSecret ? 'ok' : 'bad'}`}>{h.env.hasAdminSecret ? 'présent' : 'ABSENT'}</span></div>
+        <div class="kv"><span class="k">ADMIN_CREDS</span><span class={`v ${h.env.hasAdminCreds ? 'ok' : 'bad'}`}>{h.env.hasAdminCreds ? 'présent' : 'ABSENT'}</span></div>
+        <div class="kv"><span class="k">SMTP (signalement)</span><span class={`v ${h.env.hasSmtp ? 'ok' : 'warn'}`}>{h.env.hasSmtp ? 'configuré' : 'absent'}</span></div>
+        <div class="kv"><span class="k">CONTACT_TO</span><span class={`v ${h.env.hasContactTo ? 'ok' : 'warn'}`}>{h.env.hasContactTo ? 'présent' : 'absent'}</span></div>
+        <div class="kv"><span class="k">IP actives (fenêtre)</span><span class="v">{t.activeIps}</span></div>
+        <div class="kv"><span class="k">IP throttlées</span><span class={`v ${t.throttledIps > 0 ? 'warn' : ''}`}>{t.throttledIps}</span></div>
+      </div>
+
+      <!-- Signalements -->
+      <div class="card">
+        <div class="card-title"><span class="dot" style="background:var(--cyan)"></span>Signalements (file d'attente)</div>
+        <div class="kv"><span class="k">Total reçus</span><span class="v">{r.total}</span></div>
+        <div class="kv"><span class="k">En attente de validation</span><span class={`v ${r.pending > 0 ? 'warn' : 'ok'}`}>{r.pending}</span></div>
+        <div class="kv"><span class="k">Dernier reçu</span><span class="v" style="font-size:11px">{fmtTime(r.lastReceived || '')}</span></div>
+        {Object.entries(r.byType).map(([type, n]) => (
+          <div class="kv"><span class="k">· {type}</span><span class="v">{n}</span></div>
+        ))}
+        {r.total === 0 && <div class="empty">Aucun signalement en file.</div>}
+      </div>
+    </div>
+
+    <!-- Journal de sécurité -->
+    <div class="card full">
+      <div class="card-title"><span class="dot" style="background:var(--orange)"></span>Journal de sécurité · {sec.total} événements en mémoire</div>
+      <div class="scroll">
+        <table>
+          <thead><tr><th>Horodatage</th><th>Événement</th><th>IP (préfixe)</th><th>Route</th><th>Détail</th></tr></thead>
+          <tbody>
+            {sec.recent.map((e) => (
+              <tr>
+                <td class="mono">{fmtTime(new Date(e.ts).toISOString())}</td>
+                <td><span class="evt-type"><span class="dot" style={`background:${eventColors[e.type] || 'var(--text2)'}`}></span>{eventLabels[e.type] || e.type}</span></td>
+                <td class="mono">{e.ip}</td>
+                <td class="mono">{e.path || '—'}</td>
+                <td class="mono" style="color:var(--text2)">{e.meta || '—'}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        {sec.recent.length === 0 && <div class="empty">Journal vide depuis le dernier redémarrage.</div>}
+      </div>
+    </div>
+  </main>
+
+  <script nonce={nonce}>
+    // Auto-refresh doux : recharge la page toutes les 30s pour un instantané frais.
+    // Pas de fetch d'API (la donnée est rendue côté serveur, derrière l'auth).
+    let secs = 30;
+    const note = document.getElementById('refresh-note');
+    setInterval(() => {
+      secs -= 1;
+      if (secs <= 0) { window.location.reload(); return; }
+      if (note) note.textContent = `auto-refresh ${secs}s`;
+    }, 1000);
+  </script>
+</body>
+</html>

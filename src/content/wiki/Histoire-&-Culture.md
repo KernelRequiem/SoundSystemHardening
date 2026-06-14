@@ -221,7 +221,7 @@ Les free parties et la French Touch commerciale ne sont pas deux mondes séparé
 
 * Stratégie de résistance → [[Stratégie-résistance]]
 * Axe culturel et patrimonial → [[Culturel]]
-* Cadre légal de la répression → repo [`droits-libertes/arsenal-legislatif.md`](https://github.com/KernelRequiem/digital-rights/blob/main/droits-libertes/arsenal-legislatif.md)
+* Cadre légal de la répression → [Arsenal législatif](/wiki/arsenal-legislatif)
 * Suivi des incidents récents → [[Vue-d'ensemble-veille]]
 
 ---

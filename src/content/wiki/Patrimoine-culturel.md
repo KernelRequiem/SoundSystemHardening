@@ -1,6 +1,6 @@
 # Patrimoine culturel
 
-> Page rattachée à : [[Histoire-&-Culture](https://github.com/KernelRequiem/digital-rights/wiki/Histoire-&-Culture)
+> Page rattachée à : [[Histoire-&-Culture]]
 > Statut : stable
 > Dernière mise à jour : mai 2026
 
